@@ -28,18 +28,11 @@ jQuery(function($){
 	$("#result_details").dataTable( {
 		"ajax": "results_details.json",
 		"columns": [
-			{ data: "year" },
-			{ data: "game" },
-			{ data: "ranks" },
-			{ data: "score" },
-			{ data: "result" }
-		],
-		"columnDefs": [
-			{ className: "dt-body-center", "targets": [ 0 ] },
-			{ className: "dt-body-left", "targets": [ 1 ] },
-			{ className: "dt-body-left", "targets": [ 2 ] },
-			{ className: "dt-body-right", "targets": [ 3 ] },
-			{ className: "dt-body-center", "targets": [ 4 ] }
+			{ data: "year", className: "dt-body-center" },
+			{ data: "game", className: "dt-body-left" },
+			{ data: "ranks", className: "dt-body-left" },
+			{ data: "score", className: "dt-body-right" },
+			{ data: "result", className: "dt-body-center" }
 		],
 		"lengthMenu": [ [10, 25, 100, -1], [10, 25, 100, "All"] ],
 		"order": [ [ 0, "desc" ] ]
@@ -48,7 +41,7 @@ jQuery(function($){
 </script>
 </head>
 <body>
-<p>成績</p>
+<p><a href="index.html>"トップ</a> > 成績</p>
 <table id="result_summary" class="display compact">
 <thead>
 <tr><th>年</th><th>総得点</th><th>平均着順</th><th>トップ率</th><th>4着回避率</th><th>半荘数</th></tr>
