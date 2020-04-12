@@ -17,15 +17,24 @@ jQuery(function($){
 			{ data: "year", className: "dt-body-center" },
 			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
 					if(row.score >= 0) {
-						return '+' + row.score
+						return '+' + data.toFixed(1)
 					} else {
-						return '▲' + Math.abs(row.score)
+						return '▲' + (Math.abs(data)).toFixed(1)
 					}
 				}
 			},
-			{ data: "average_rank", className: "dt-body-center" },
-			{ data: "1st_ratio", className: "dt-body-center" },
-			{ data: "non_4th_ratio", className: "dt-body-center" },
+			{ data: "average_rank", className: "dt-body-center", render: function(data,type,row,meta) {
+					return data.toFixed(2)
+				}
+			},
+			{ data: "1st_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
+					return data.toFixed(3)
+				}
+			},
+			{ data: "non_4th_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
+					return data.toFixed(3)
+				}
+			},			
 			{ data: "number_of_games", className: "dt-body-right" }
 		],
 		"info": false,
@@ -42,9 +51,9 @@ jQuery(function($){
 			{ data: "title", className: "dt-body-left" },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
 					if(row.twitter_url) {
-						return row.game + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></a>'
+						return data + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></a>'
 					} else {
-						return row.game
+						return data
 					}
 				}
 			},
@@ -52,9 +61,9 @@ jQuery(function($){
 			{ data: "ranks", className: "dt-body-left" },
 			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) {
 					if(row.score >= 0) {
-						return '+' + row.score
+						return '+' + data.toFixed(1)
 					} else {
-						return '▲' + Math.abs(row.score)
+						return '▲' + (Math.abs(data)).toFixed(1)
 					}
 				}
 			},
