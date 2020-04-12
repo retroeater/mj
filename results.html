@@ -34,7 +34,11 @@ jQuery(function($){
 			{ data: "organization", className: "dt-body-left" },
 			{ data: "title", className: "dt-body-left" },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
-					return row.game + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></a>'
+					if(row.twitter_url) {
+						return row.game + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></a>'
+					} else {
+						return row.game
+					}
 				}
 			},
 			{ data: "players", className: "dt-body-left" },
@@ -74,7 +78,7 @@ jQuery(function($){
 			<th>団体</th>
 			<th>タイトル</th>
 			<th>対局</th>
-			<th>対局者</th>
+			<th>対局者（敬称略）</th>
 			<th>着順</th>
 			<th>得点</th>
 			<th>結果</th>
