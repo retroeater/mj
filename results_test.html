@@ -30,7 +30,7 @@ jQuery(function($){
 		"ajax": "results_details_test.json",
 		"columns": [
 			{ data: "date", className: "dt-body-center" },
-			{ data: "game_id", visible: false },
+			{ data: "game_id", visible: true },
 			{ data: "organization", className: "dt-body-left" },
 			{ data: "title", className: "dt-body-left" },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
@@ -70,6 +70,7 @@ jQuery(function($){
 	<thead>
 		<tr>
 			<th>日付</th>
+			<th>#</th>
 			<th>団体</th>
 			<th>タイトル</th>
 			<th>対局</th>
