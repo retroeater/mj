@@ -30,7 +30,7 @@ jQuery(function($){
 		"ajax": "results_details_test.json",
 		"columns": [
 			{ data: "date", className: "dt-body-center" },
-			{ data: "game_id", visible: true },
+			{ data: "game_id", visible: false },
 			{ data: "organization", className: "dt-body-left" },
 			{ data: "title", className: "dt-body-left" },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
@@ -43,7 +43,7 @@ jQuery(function($){
 			{ data: "result", className: "dt-body-center" }
 		],
 		"fixedHeader": true,
-		"lengthMenu": [ [10, 25, 100, -1], [10, 25, 100, "All"] ],
+		"lengthMenu": [ [20, 50, -1], [20, 50, "全"] ],
 		"order": [ [ 1, "desc" ] ]
 	} ); 
 });
@@ -66,7 +66,7 @@ jQuery(function($){
 	</tbody>
 </table>
 <br />
-<table id="result_details" class="display compact" data-page-length="25">
+<table id="result_details" class="display compact" data-page-length="20">
 	<thead>
 		<tr>
 			<th>日付</th>
