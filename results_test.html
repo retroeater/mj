@@ -27,13 +27,17 @@ jQuery(function($){
 		"searching": false
 	} );
 	$("#result_details").dataTable( {
-		"ajax": "results_details.json",
+		"ajax": "results_details_test.json",
 		"columns": [
-			{ data: "year", className: "dt-body-center" },
+			{ data: "date", className: "dt-body-center" },
+			{ data: "game_id", visible: false },
+			{ data: "organization", className: "dt-body-left" },
+			{ data: "title", className: "dt-body-left" },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
-					return row.game + ' <a href="http://www.twitter.com/retroeater"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></a>'
+					return row.game + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></a>'
 				}
 			},
+			{ data: "players", className: "dt-body-left" },
 			{ data: "ranks", className: "dt-body-left" },
 			{ data: "score", className: "dt-body-right" },
 			{ data: "result", className: "dt-body-center" }
@@ -48,19 +52,34 @@ jQuery(function($){
 <body>
 <p><a href="index.html">ホーム</a> > 成績</p>
 <table id="result_summary" class="display compact">
-<thead>
-<tr><th>年</th><th>総得点</th><th>平均着順</th><th>トップ率</th><th>4着回避率</th><th>半荘数</th></tr>
-</thead>
-<tbody>
-</tbody>
+	<thead>
+		<tr>
+			<th>年</th>
+			<th>総得点</th>
+			<th>平均着順</th>
+			<th>トップ率</th>
+			<th>4着回避率</th>
+			<th>半荘数</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
 </table>
 <br />
 <table id="result_details" class="display compact" data-page-length="25">
-<thead>
-<tr><th>日付</th><th>対局</th><th>着順</th><th>得点</th><th>結果</th></tr>
-</thead>
-<tbody>
-</tbody>
+	<thead>
+		<tr>
+			<th>日付</th>
+			<th>団体</th>
+			<th>タイトル</th>
+			<th>対局</th>
+			<th>対局者</th>
+			<th>着順</th>
+			<th>得点</th>
+			<th>結果</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
 </body>
 </html>
-
