@@ -4,7 +4,6 @@
 <meta charset="utf-8"/>
 <title>成績</title>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/datatables.min.css"/>
-<link rel="stylesheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/datatables.min.js"></script>
 <script>
 jQuery(function($){
@@ -21,6 +20,14 @@ jQuery(function($){
 			{ data: "non_4th_ratio" },
 			{ data: "number_of_games" }
 		],
+		"columnDefs": [
+			{ className: "dt-body-center", "targets": [ 0 ] },
+			{ className: "dt-body-right", "targets": [ 1 ] },
+			{ className: "dt-body-center", "targets": [ 2 ] },
+			{ className: "dt-body-center", "targets": [ 3 ] },
+			{ className: "dt-body-center", "targets": [ 4 ] },
+			{ className: "dt-body-right", "targets": [ 5 ] }
+		],
 		"info": false,
 		"paging": false,
 		"searching": false,
@@ -35,6 +42,13 @@ jQuery(function($){
 			{ data: "score" },
 			{ data: "result" }
 		],
+		"columnDefs": [
+			{ className: "dt-body-center", "targets": [ 0 ] },
+			{ className: "dt-body-left", "targets": [ 1 ] },
+			{ className: "dt-body-left", "targets": [ 2 ] },
+			{ className: "dt-body-right", "targets": [ 3 ] },
+			{ className: "dt-body-center", "targets": [ 4 ] }
+		],
 		"lengthMenu": [ [10, 25, 100, -1], [10, 25, 100, "All"] ],
 		"order": [ [ 0, "desc" ] ]
 	} ); 
@@ -43,7 +57,7 @@ jQuery(function($){
 </head>
 <body>
 <p>成績</p>
-<table id="result_summary" border="1" cellpadding="10">
+<table id="result_summary" class="display compact">
 <thead>
 <tr><th>年</th><th>総得点</th><th>平均着順</th><th>トップ率</th><th>4着回避率</th><th>半荘数</th></tr>
 </thead>
@@ -51,7 +65,7 @@ jQuery(function($){
 </tbody>
 </table>
 <br />
-<table id="result_details" border="1" cellpadding="10" data-page-length='25'>
+<table id="result_details" class="display compact" data-page-length="25">
 <thead>
 <tr><th>日付</th><th>対局</th><th>着順</th><th>得点</th><th>結果</th></tr>
 </thead>

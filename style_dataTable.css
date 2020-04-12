@@ -1,0 +1,18 @@
+table {
+  border-collapse: collapse;
+}
+table th, table td {
+  border: solid 1px black;
+
+}
+.sticky_table thead th {
+  /* 縦スクロール時に固定する */
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  /* tbody内のセルより手前に表示する */
+  z-index: 1;
+}
+.date td {
+  text-align: right;
+}
