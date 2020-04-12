@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <title>成績</title>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/fh-3.1.6/r-2.2.3/datatables.min.css"/>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/fh-3.1.6/r-2.2.3/datatables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/fh-3.1.6/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/fh-3.1.6/datatables.min.js"></script>
 <script>
 jQuery(function($){
 	$.extend( $.fn.dataTable.defaults, { 
@@ -23,7 +23,6 @@ jQuery(function($){
 		"info": false,
 		"order": [ [ 0, "desc" ] ],
 		"paging": false,
-		"responsive": true,
 		"searching": false
 	} );
 	$("#result_details").dataTable( {
@@ -37,8 +36,7 @@ jQuery(function($){
 		],
 		"fixedHeader": true,
 		"lengthMenu": [ [10, 25, 100, -1], [10, 25, 100, "All"] ],
-		"order": [ [ 0, "desc" ] ],
-		"responsive": true
+		"order": [ [ 0, "desc" ] ]
 	} ); 
 });
 </script>
