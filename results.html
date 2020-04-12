@@ -17,7 +17,7 @@ jQuery(function($){
 			{ data: "year", className: "dt-body-center" },
 			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
 					if(row.score >= 0) {
-						return '+' + (data.toFixed(1)).toLocaleString()
+						return '+' + data.toFixed(1)
 					} else {
 						return '▲' + (Math.abs(data)).toFixed(1)
 					}
