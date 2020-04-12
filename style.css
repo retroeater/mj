@@ -16,3 +16,7 @@ table th, table td {
 .date td {
   text-align: right;
 }
+
+img.twitter {
+   vertical-align: middle;
+}
