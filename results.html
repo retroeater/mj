@@ -13,27 +13,19 @@ jQuery(function($){
 	$('#result_summary').DataTable( {
 		"ajax": "results_summary.json",
 		"columns": [
-			{ data: "year" },
-			{ data: "score" },
-			{ data: "average_rank" },
-			{ data: "1st_ratio" },
-			{ data: "non_4th_ratio" },
-			{ data: "number_of_games" }
-		],
-		"columnDefs": [
-			{ className: "dt-body-center", "targets": [ 0 ] },
-			{ className: "dt-body-right", "targets": [ 1 ] },
-			{ className: "dt-body-center", "targets": [ 2 ] },
-			{ className: "dt-body-center", "targets": [ 3 ] },
-			{ className: "dt-body-center", "targets": [ 4 ] },
-			{ className: "dt-body-right", "targets": [ 5 ] }
+			{ data: "year", className: "dt-body-center" },
+			{ data: "score", className: "dt-body-right" },
+			{ data: "average_rank", className: "dt-body-center" },
+			{ data: "1st_ratio", className: "dt-body-center" },
+			{ data: "non_4th_ratio", className: "dt-body-center" },
+			{ data: "number_of_games", className: "dt-body-right" }
 		],
 		"info": false,
+		"order": [ [ 0, "desc" ] ],
 		"paging": false,
-		"searching": false,
-		"order": [ [ 0, "desc" ] ]
+		"searching": false
 	} );
-	    $("#result_details").dataTable( {
+	$("#result_details").dataTable( {
 		"ajax": "results_details.json",
 		"columns": [
 			{ data: "year" },
