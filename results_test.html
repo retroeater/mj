@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<title>成績（テスト）</title>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/datatables.min.css"/>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/datatables.min.js"></script>
+<script>
+jQuery(function($){
+	$.extend( $.fn.dataTable.defaults, { 
+		language: { url: "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json" } 
+    });
+	$('#summary').DataTable( {
+		"ajax": "results.json",
+		"columns": [
+			{ data: "year" },
+			{ data: "score" },
+			{ data: "average_rank" },
+			{ data: "1st_ratio" },
+			{ data: "non_4th_ratio" },
+			{ data: "number_of_games" }
+		],
+		"info": false,
+		"paging": false,
+		"searching": false,
+		"order": [ [ 0, "desc" ] ]
+	} );
+});
+</script>
+</head>
+<body>
+<p>成績（テスト）</p>
+<table id="summary" border="1" cellpadding="10">
+<thead>
+<tr><th>年</th><th>総得点</th><th>平均着順</th><th>トップ率</th><th>4着回避率</th><th>半荘数</th></tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</body>
+</html>
+
