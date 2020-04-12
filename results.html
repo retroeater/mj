@@ -47,7 +47,7 @@ jQuery(function($){
 					if(row.score >= 0) {
 						return '+' + row.score
 					} else {
-						return '▲' + row.score
+						return '▲' + Math.abs(row.score)
 					}
 				}
 			},
