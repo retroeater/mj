@@ -43,7 +43,14 @@ jQuery(function($){
 			},
 			{ data: "players", className: "dt-body-left" },
 			{ data: "ranks", className: "dt-body-left" },
-			{ data: "score", className: "dt-body-right" },
+			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) {
+					if(row.score >= 0) {
+						return '+' + row.score
+					} else {
+						return '▲' + row.score
+					}
+				}
+			},
 			{ data: "result", className: "dt-body-center" }
 		],
 		"fixedHeader": true,
@@ -55,7 +62,7 @@ jQuery(function($){
 </head>
 <body>
 <p><a href="index.html">ホーム</a> > 成績</p>
-<table id="result_summary" class="display compact">
+<table id="result_summary" align="left" class="display compact" style="width:50%">
 	<thead>
 		<tr>
 			<th>年</th>
@@ -70,7 +77,7 @@ jQuery(function($){
 	</tbody>
 </table>
 <br />
-<table id="result_details" class="display compact" data-page-length="20">
+<table id="result_details" class="display compact" data-page-length="20" style="width:100%">
 	<thead>
 		<tr>
 			<th>日付</th>
