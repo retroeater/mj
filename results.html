@@ -15,7 +15,14 @@ jQuery(function($){
 		"ajax": "results_summary.json",
 		"columns": [
 			{ data: "year", className: "dt-body-center" },
-			{ data: "score", className: "dt-body-right" },
+			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
+					if(row.score >= 0) {
+						return '+' + row.score
+					} else {
+						return '▲' + Math.abs(row.score)
+					}
+				}
+			},
 			{ data: "average_rank", className: "dt-body-center" },
 			{ data: "1st_ratio", className: "dt-body-center" },
 			{ data: "non_4th_ratio", className: "dt-body-center" },
