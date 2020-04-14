@@ -12,8 +12,8 @@ jQuery(function($){
 		language: { url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json" } 
     });
 	$('#result_summary').DataTable( {
-		"ajax": "results_summary.json",
-		"columns": [
+		ajax: "results_summary.json",
+		columns: [
 			{ data: "year", className: "dt-body-center" },
 			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
 					if(row.score >= 0) {
@@ -37,14 +37,14 @@ jQuery(function($){
 			},			
 			{ data: "number_of_games", className: "dt-body-right" }
 		],
-		"info": false,
-		"order": [ [ 0, "desc" ] ],
-		"paging": false,
-		"searching": false
+		info: false,
+		order: [ [ 0, "desc" ] ],
+		paging: false,
+		searching: false
 	} );
 	$("#result_details").dataTable( {
-		"ajax": "results_details.json",
-		"columns": [
+		ajax: "results_details.json",
+		columns: [
 			{ data: "date", className: "dt-body-center" },
 			{ data: "game_id", visible: false },
 			{ data: "organization", className: "dt-body-left" },
@@ -69,9 +69,9 @@ jQuery(function($){
 			},
 			{ data: "result", className: "dt-body-center" }
 		],
-		"fixedHeader": true,
-		"lengthMenu": [ [20, 50, -1], [20, 50, "全"] ],
-		"order": [ [ 1, "desc" ] ]
+		fixedHeader: true,
+		lengthMenu: [ [20, 50, -1], [20, 50, "全"] ],
+		order: [ [ 1, "desc" ] ]
 	} ); 
 });
 </script>
