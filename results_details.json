@@ -1,6 +1,18 @@
 {
 	"data": [
 	{
+		"date": "2019-08-24",
+		"game_id": "2019-08-24-01",
+		"organization": "日本プロ麻雀連盟",
+		"title": "新人王戦",
+		"game": "第33期新人王戦予選",
+		"players": "",
+		"ranks": 31224,
+		"score": 1.3,
+		"result": "敗退",
+		"twitter_url": "https://twitter.com/retroeater/status/1170695155797544961"
+	},
+	{
 		"date": "2019-08-18",
 		"game_id": "2019-08-18-01",
 		"organization": "竹書房",
@@ -22,7 +34,7 @@
 		"ranks": 4122,
 		"score": 5.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1161793950224535552"
 	},
 	{
 		"date": "2019-08-03",
@@ -34,7 +46,7 @@
 		"ranks": 3233,
 		"score": 1.8,
 		"result": "残留",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1161476536639377409"
 	},
 	{
 		"date": "2019-07-06",
@@ -46,7 +58,7 @@
 		"ranks": 1223,
 		"score": 18.5,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1150684621903814656"
 	},
 	{
 		"date": "2019-06-01",
@@ -58,7 +70,7 @@
 		"ranks": 3442,
 		"score": -64.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1137673416201269248"
 	},
 	{
 		"date": "2019-05-26",
@@ -70,7 +82,7 @@
 		"ranks": 4112,
 		"score": 18.9,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1149821435910578176"
 	},
 	{
 		"date": "2019-05-25",
@@ -82,7 +94,7 @@
 		"ranks": 3411,
 		"score": 14.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1137541943255113728"
 	},
 	{
 		"date": "2019-05-19",
@@ -94,7 +106,7 @@
 		"ranks": 331,
 		"score": 14.9,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1130455391551119360"
 	},
 	{
 		"date": "2019-05-19",
@@ -106,7 +118,7 @@
 		"ranks": 144,
 		"score": -28.6,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1130752001896116229"
 	},
 	{
 		"date": "2019-05-11",
@@ -118,7 +130,7 @@
 		"ranks": 2122,
 		"score": 56.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1127390067620597760"
 	},
 	{
 		"date": "2019-05-05",
@@ -130,7 +142,7 @@
 		"ranks": 4113,
 		"score": 21.3,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1127383813506473986"
 	},
 	{
 		"date": "2019-05-04",
@@ -178,7 +190,7 @@
 		"ranks": 1341,
 		"score": 31.1,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1124107490394877959"
 	},
 	{
 		"date": "2019-04-14",
@@ -190,7 +202,7 @@
 		"ranks": 1133,
 		"score": 35.2,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1124006082915991552"
 	},
 	{
 		"date": "2019-04-06",
@@ -202,7 +214,7 @@
 		"ranks": 4124,
 		"score": -21.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1114430997896896512"
 	},
 	{
 		"date": "2019-03-09",
@@ -214,7 +226,7 @@
 		"ranks": 4243,
 		"score": -69,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1108927746342711296"
 	},
 	{
 		"date": "2019-03-02",
@@ -226,7 +238,19 @@
 		"ranks": 331,
 		"score": 37.8,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1104726507593691136"
+	},
+	{
+		"date": "2019-01-26",
+		"game_id": "2019-01-26-01",
+		"organization": "麻将連合μ",
+		"title": "BIG1カップ",
+		"game": "第22回BIG1カッププロ予選",
+		"players": "",
+		"ranks": 1432,
+		"score": 4.1,
+		"result": "敗退",
+		"twitter_url": "https://twitter.com/retroeater/status/1089321002943692801"
 	},
 	{
 		"date": "2019-01-19",
@@ -238,7 +262,7 @@
 		"ranks": 11,
 		"score": 87.2,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1086794404705103872"
 	},
 	{
 		"date": "2019-01-19",
@@ -250,7 +274,7 @@
 		"ranks": 12,
 		"score": 63.1,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1086797395944366081"
 	},
 	{
 		"date": "2019-01-19",
@@ -262,7 +286,7 @@
 		"ranks": 32,
 		"score": -1.3,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1086802951937511426"
 	},
 	{
 		"date": "2019-01-12",
@@ -274,7 +298,7 @@
 		"ranks": 2414,
 		"score": -30.3,
 		"result": "昇級",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1085146046777311235"
 	},
 	{
 		"date": "2019-01-06",
@@ -286,7 +310,7 @@
 		"ranks": 2111,
 		"score": 147.3,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1081895747476279297"
 	},
 	{
 		"date": "2018-12-16",
@@ -298,7 +322,7 @@
 		"ranks": 243,
 		"score": -25.6,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1076682600637321219"
 	},
 	{
 		"date": "2018-12-08",
@@ -310,7 +334,7 @@
 		"ranks": 2434,
 		"score": -93.4,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1073808800128200705"
 	},
 	{
 		"date": "2018-12-01",
@@ -322,7 +346,7 @@
 		"ranks": 4131,
 		"score": 13.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1069213801545818114"
 	},
 	{
 		"date": "2018-11-24",
@@ -334,7 +358,7 @@
 		"ranks": 4113,
 		"score": 17.6,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1066329601645830144"
 	},
 	{
 		"date": "2018-11-18",
@@ -346,7 +370,7 @@
 		"ranks": 3441,
 		"score": -43.1,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1064053479067418624"
 	},
 	{
 		"date": "2018-11-17",
@@ -358,7 +382,7 @@
 		"ranks": 42211,
 		"score": 30.6,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1063747725945036800"
 	},
 	{
 		"date": "2018-11-10",
@@ -370,7 +394,7 @@
 		"ranks": 13213,
 		"score": 41.1,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1061611287602294786"
 	},
 	{
 		"date": "2018-11-03",
@@ -382,7 +406,7 @@
 		"ranks": 1411,
 		"score": 34.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1058766325676335105"
 	},
 	{
 		"date": "2018-10-14",
@@ -394,7 +418,7 @@
 		"ranks": 4222,
 		"score": 5,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1051486565946413059"
 	},
 	{
 		"date": "2018-10-06",
@@ -406,7 +430,7 @@
 		"ranks": 2111,
 		"score": 96.4,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1049304600421969920"
 	},
 	{
 		"date": "2018-09-30",
@@ -466,7 +490,7 @@
 		"ranks": 422,
 		"score": -19.8,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1046189899085426689"
 	},
 	{
 		"date": "2018-09-17",
@@ -478,7 +502,7 @@
 		"ranks": 311,
 		"score": 60.1,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1041679072437231616"
 	},
 	{
 		"date": "2018-09-15",
@@ -490,7 +514,7 @@
 		"ranks": 1222,
 		"score": 64.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1041570381285355520"
 	},
 	{
 		"date": "2018-09-09",
@@ -502,7 +526,7 @@
 		"ranks": 341,
 		"score": -5.8,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1040775398835945472"
 	},
 	{
 		"date": "2018-09-01",
@@ -514,7 +538,7 @@
 		"ranks": 4111,
 		"score": 138.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1036216138059767809"
 	},
 	{
 		"date": "2018-08-25",
@@ -526,7 +550,7 @@
 		"ranks": 14224,
 		"score": -9.6,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1036107807248928768"
 	},
 	{
 		"date": "2018-08-21",
@@ -538,7 +562,7 @@
 		"ranks": 2121,
 		"score": 65.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1033344180448194562"
 	},
 	{
 		"date": "2018-08-04",
@@ -550,7 +574,7 @@
 		"ranks": 3323,
 		"score": -9.1,
 		"result": "残留",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1030631498418810882"
 	},
 	{
 		"date": "2018-07-14",
@@ -562,7 +586,7 @@
 		"ranks": 3244,
 		"score": -62.8,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1018133340593901568"
 	},
 	{
 		"date": "2018-07-07",
@@ -574,7 +598,7 @@
 		"ranks": 2134,
 		"score": -5.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1016446393693569024"
 	},
 	{
 		"date": "2018-07-01",
@@ -598,7 +622,7 @@
 		"ranks": 3443,
 		"score": -103.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1013424060364042240"
 	},
 	{
 		"date": "2018-06-02",
@@ -610,7 +634,7 @@
 		"ranks": 3431,
 		"score": -14.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1003999174788960256"
 	},
 	{
 		"date": "2018-05-28",
@@ -622,7 +646,7 @@
 		"ranks": 3112,
 		"score": 35.6,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1003992605711949824"
 	},
 	{
 		"date": "2018-05-20",
@@ -634,7 +658,7 @@
 		"ranks": 431,
 		"score": -13.7,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1000009707942100992"
 	},
 	{
 		"date": "2018-05-19",
@@ -646,7 +670,7 @@
 		"ranks": 122,
 		"score": 39.5,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/1000005583104290816"
 	},
 	{
 		"date": "2018-05-12",
@@ -658,7 +682,7 @@
 		"ranks": 3321,
 		"score": 1.2,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/995347322274918401"
 	},
 	{
 		"date": "2018-04-28",
@@ -670,7 +694,7 @@
 		"ranks": 2424,
 		"score": -40.6,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/993259459924213760"
 	},
 	{
 		"date": "2018-04-22",
@@ -682,7 +706,7 @@
 		"ranks": 4111,
 		"score": 65.2,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/988065470099046402"
 	},
 	{
 		"date": "2018-04-22",
@@ -694,7 +718,7 @@
 		"ranks": 1212,
 		"score": 95.2,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/988060641511464960"
 	},
 	{
 		"date": "2018-04-21",
@@ -718,7 +742,7 @@
 		"ranks": 2112,
 		"score": 54.8,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/985498004088999936"
 	},
 	{
 		"date": "2018-04-07",
@@ -730,7 +754,7 @@
 		"ranks": 3334,
 		"score": -44.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/982677553402920961"
 	},
 	{
 		"date": "2018-03-24",
@@ -754,7 +778,7 @@
 		"ranks": 1144,
 		"score": 3.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/977567318778658820"
 	},
 	{
 		"date": "2018-01-27",
@@ -766,7 +790,7 @@
 		"ranks": 4144,
 		"score": -51.4,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/957272417755308034"
 	},
 	{
 		"date": "2018-01-06",
@@ -778,7 +802,7 @@
 		"ranks": 4322,
 		"score": -7.9,
 		"result": "残留",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/952363575422607360"
 	},
 	{
 		"date": "2017-12-09",
@@ -790,7 +814,7 @@
 		"ranks": 3114,
 		"score": 19.4,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/942757823980584960"
 	},
 	{
 		"date": "2017-12-09",
@@ -802,7 +826,7 @@
 		"ranks": 2441,
 		"score": -36,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/942763113056583680"
 	},
 	{
 		"date": "2017-12-02",
@@ -814,7 +838,7 @@
 		"ranks": 4433,
 		"score": -75.4,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/937321275185283072"
 	},
 	{
 		"date": "2017-11-12",
@@ -826,7 +850,7 @@
 		"ranks": 34232,
 		"score": -44.2,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/931810639399477248"
 	},
 	{
 		"date": "2017-11-12",
@@ -838,7 +862,7 @@
 		"ranks": 3342,
 		"score": -65.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/933956388497145857"
 	},
 	{
 		"date": "2017-11-04",
@@ -850,7 +874,7 @@
 		"ranks": 2143,
 		"score": 17.8,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/927163213438894081"
 	},
 	{
 		"date": "2017-10-14",
@@ -862,7 +886,7 @@
 		"ranks": 3241,
 		"score": -12.4,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/919119512355487744"
 	},
 	{
 		"date": "2017-10-05",
@@ -874,7 +898,7 @@
 		"ranks": 231324242,
 		"score": 0,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/916898213449187328"
 	},
 	{
 		"date": "2017-09-30",
@@ -886,7 +910,7 @@
 		"ranks": 2323,
 		"score": -2.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/914118078920667137"
 	},
 	{
 		"date": "2017-09-23",
@@ -910,7 +934,7 @@
 		"ranks": 1243,
 		"score": 7.4,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/909609109166501888"
 	},
 	{
 		"date": "2017-09-09",
@@ -922,7 +946,7 @@
 		"ranks": 1321,
 		"score": 42.6,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/907740073059270656"
 	},
 	{
 		"date": "2017-09-02",
@@ -934,7 +958,7 @@
 		"ranks": 3443,
 		"score": -55.1,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/904346106603094017"
 	},
 	{
 		"date": "2017-08-27",
@@ -946,7 +970,7 @@
 		"ranks": 2144,
 		"score": -12,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/901821157422252032"
 	},
 	{
 		"date": "2017-08-06",
@@ -958,7 +982,7 @@
 		"ranks": 1423,
 		"score": 18.7,
 		"result": "昇級",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/894415741948108800"
 	},
 	{
 		"date": "2017-07-30",
@@ -970,7 +994,7 @@
 		"ranks": 3323,
 		"score": -18.2,
 		"result": "3位",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/893625968983552000"
 	},
 	{
 		"date": "2017-07-16",
@@ -982,7 +1006,7 @@
 		"ranks": 4113,
 		"score": 13.1,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/890591704499109889"
 	},
 	{
 		"date": "2017-07-09",
@@ -994,7 +1018,7 @@
 		"ranks": 4114,
 		"score": -12.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/884085380722507776"
 	},
 	{
 		"date": "2017-07-08",
@@ -1018,7 +1042,7 @@
 		"ranks": 3111,
 		"score": 69.3,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/883721289571028992"
 	},
 	{
 		"date": "2017-07-02",
@@ -1030,7 +1054,7 @@
 		"ranks": 2212,
 		"score": 49.5,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/883710803689353216"
 	},
 	{
 		"date": "2017-06-18",
@@ -1042,7 +1066,7 @@
 		"ranks": 1431,
 		"score": 8.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/880089015013097474"
 	},
 	{
 		"date": "2017-06-18",
@@ -1054,7 +1078,7 @@
 		"ranks": 1331,
 		"score": 23.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/880091186601500672"
 	},
 	{
 		"date": "2017-06-04",
@@ -1066,7 +1090,7 @@
 		"ranks": 3232,
 		"score": 1.2,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/877178055143243777"
 	},
 	{
 		"date": "2017-05-27",
@@ -1078,7 +1102,7 @@
 		"ranks": 2433,
 		"score": -25,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/869903763418431488"
 	},
 	{
 		"date": "2017-05-20",
@@ -1090,7 +1114,7 @@
 		"ranks": 434,
 		"score": -57.7,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/866229472348979200"
 	},
 	{
 		"date": "2017-05-14",
@@ -1102,7 +1126,7 @@
 		"ranks": 3243,
 		"score": -50.8,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/863766636133703680"
 	},
 	{
 		"date": "2017-05-06",
@@ -1114,7 +1138,7 @@
 		"ranks": 3123,
 		"score": 14.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/861166694860849152"
 	},
 	{
 		"date": "2017-05-06",
@@ -1126,7 +1150,7 @@
 		"ranks": 1412,
 		"score": 24.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/862877410269605888"
 	},
 	{
 		"date": "2017-04-16",
@@ -1138,7 +1162,7 @@
 		"ranks": 3422,
 		"score": -14.1,
 		"result": "",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/853615207280648193"
 	},
 	{
 		"date": "2017-04-10",
@@ -1150,7 +1174,7 @@
 		"ranks": 2141,
 		"score": 7.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/853569841420161024"
 	},
 	{
 		"date": "2017-04-09",
@@ -1162,7 +1186,7 @@
 		"ranks": 1434,
 		"score": -42.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/851307372001640448"
 	},
 	{
 		"date": "2017-04-09",
@@ -1174,7 +1198,7 @@
 		"ranks": 3234,
 		"score": -17.7,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/851312727595208704"
 	},
 	{
 		"date": "2017-04-02",
@@ -1186,7 +1210,7 @@
 		"ranks": 2114,
 		"score": 21.6,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/848564682252107776"
 	},
 	{
 		"date": "2017-01-22",
@@ -1210,7 +1234,7 @@
 		"ranks": 4131,
 		"score": 20.9,
 		"result": "昇級",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/820984269585559552"
 	},
 	{
 		"date": "2016-12-12",
@@ -1222,7 +1246,7 @@
 		"ranks": 2233,
 		"score": -21.3,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/810030449493819392"
 	},
 	{
 		"date": "2016-12-10",
@@ -1234,7 +1258,7 @@
 		"ranks": 4224,
 		"score": -39.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/808324989883588608"
 	},
 	{
 		"date": "2016-12-04",
@@ -1246,7 +1270,7 @@
 		"ranks": 2241,
 		"score": 30.4,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/805912456417509376"
 	},
 	{
 		"date": "2016-11-20",
@@ -1258,7 +1282,7 @@
 		"ranks": 3444,
 		"score": -59,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/801777872453058560"
 	},
 	{
 		"date": "2016-11-19",
@@ -1270,7 +1294,7 @@
 		"ranks": 22222,
 		"score": 38.2,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/799943962899296256"
 	},
 	{
 		"date": "2016-11-13",
@@ -1282,7 +1306,7 @@
 		"ranks": 13221,
 		"score": 49.8,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/797767580119244800"
 	},
 	{
 		"date": "2016-11-06",
@@ -1294,7 +1318,7 @@
 		"ranks": 1222,
 		"score": 43.4,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/795297745154109440"
 	},
 	{
 		"date": "2016-10-11",
@@ -1306,7 +1330,7 @@
 		"ranks": 4144,
 		"score": -46.6,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/787196018840383488"
 	},
 	{
 		"date": "2016-10-09",
@@ -1318,7 +1342,7 @@
 		"ranks": 1132,
 		"score": 71,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/785831187344306178"
 	},
 	{
 		"date": "2016-10-02",
@@ -1330,7 +1354,7 @@
 		"ranks": 1443,
 		"score": -27.5,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/782599837556445184"
 	},
 	{
 		"date": "2016-09-10",
@@ -1366,7 +1390,7 @@
 		"ranks": 3431,
 		"score": 35.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/772439765283057665"
 	},
 	{
 		"date": "2016-08-27",
@@ -1378,7 +1402,7 @@
 		"ranks": 134314,
 		"score": 4.9,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/769517396985995264"
 	},
 	{
 		"date": "2016-08-14",
@@ -1402,7 +1426,7 @@
 		"ranks": 1311,
 		"score": 75.9,
 		"result": "残留",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/762281160235884544"
 	},
 	{
 		"date": "2016-07-10",
@@ -1414,7 +1438,7 @@
 		"ranks": 2323,
 		"score": 1.2,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/753901156783357952"
 	},
 	{
 		"date": "2016-07-03",
@@ -1426,7 +1450,7 @@
 		"ranks": 3331,
 		"score": 11.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/749619446726037504"
 	},
 	{
 		"date": "2016-06-14",
@@ -1438,7 +1462,7 @@
 		"ranks": 4122,
 		"score": 2.8,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/742735852162322432"
 	},
 	{
 		"date": "2016-05-21",
@@ -1450,7 +1474,7 @@
 		"ranks": 4243,
 		"score": -81.7,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/733909096366116864"
 	},
 	{
 		"date": "2016-05-15",
@@ -1462,7 +1486,7 @@
 		"ranks": 4433,
 		"score": -76.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/731838616532475904"
 	},
 	{
 		"date": "2016-05-10",
@@ -1474,7 +1498,7 @@
 		"ranks": 2241,
 		"score": 24,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/730032525955858432"
 	},
 	{
 		"date": "2016-05-07",
@@ -1486,7 +1510,7 @@
 		"ranks": 4412,
 		"score": -16.8,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/728959409108328448"
 	},
 	{
 		"date": "2016-04-23",
@@ -1498,7 +1522,7 @@
 		"ranks": 32131,
 		"score": 44.3,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/723824499217440768"
 	},
 	{
 		"date": "2016-04-16",
@@ -1510,7 +1534,7 @@
 		"ranks": 3332,
 		"score": -28.3,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/721400960845676545"
 	},
 	{
 		"date": "2016-04-11",
@@ -1522,7 +1546,7 @@
 		"ranks": 4344,
 		"score": -87.5,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/719916037647376384"
 	},
 	{
 		"date": "2016-04-02",
@@ -1534,7 +1558,7 @@
 		"ranks": 3241,
 		"score": -12.8,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/716630307772862464"
 	},
 	{
 		"date": "2016-01-10",
@@ -1546,7 +1570,7 @@
 		"ranks": 3411,
 		"score": 8.7,
 		"result": "昇級",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/686184014487552000"
 	},
 	{
 		"date": "2015-12-14",
@@ -1558,7 +1582,7 @@
 		"ranks": 3412,
 		"score": -9.5,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/689722163822235648"
 	},
 	{
 		"date": "2015-12-12",
@@ -1570,7 +1594,7 @@
 		"ranks": 3321,
 		"score": 9.8,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/675613443450253313"
 	},
 	{
 		"date": "2015-12-06",
@@ -1582,7 +1606,7 @@
 		"ranks": 1412,
 		"score": 32.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/673476008528359424"
 	},
 	{
 		"date": "2015-11-21",
@@ -1594,7 +1618,7 @@
 		"ranks": 3443,
 		"score": -57,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/668055410981539840"
 	},
 	{
 		"date": "2015-11-17",
@@ -1606,7 +1630,7 @@
 		"ranks": 1111,
 		"score": 115.1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/666611886096384000"
 	},
 	{
 		"date": "2015-11-15",
@@ -1618,7 +1642,7 @@
 		"ranks": 3312,
 		"score": 20.3,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/665805779471958016"
 	},
 	{
 		"date": "2015-11-08",
@@ -1630,7 +1654,7 @@
 		"ranks": 3124,
 		"score": 1,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/663319740069232640"
 	},
 	{
 		"date": "2015-10-20",
@@ -1642,7 +1666,7 @@
 		"ranks": 4443,
 		"score": -64.6,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/656458460268118016"
 	},
 	{
 		"date": "2015-10-12",
@@ -1654,7 +1678,7 @@
 		"ranks": 1321,
 		"score": 41,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/653561002563252224"
 	},
 	{
 		"date": "2015-09-23",
@@ -1678,7 +1702,7 @@
 		"ranks": 41144,
 		"score": -48.9,
 		"result": "4位",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/645307753007747072"
 	},
 	{
 		"date": "2015-09-13",
@@ -1690,7 +1714,7 @@
 		"ranks": 4344,
 		"score": -113.8,
 		"result": "敗退",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/643058469470257152"
 	},
 	{
 		"date": "2015-09-05",
@@ -1702,7 +1726,7 @@
 		"ranks": 3321,
 		"score": 36.3,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/640503507611553792"
 	},
 	{
 		"date": "2015-08-30",
@@ -1714,7 +1738,7 @@
 		"ranks": 2233,
 		"score": -4.5,
 		"result": "2位",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/638015829859155968"
 	},
 	{
 		"date": "2015-08-29",
@@ -1726,7 +1750,7 @@
 		"ranks": 2112141,
 		"score": 113.4,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/637596193816621057"
 	},
 	{
 		"date": "2015-08-22",
@@ -1738,7 +1762,7 @@
 		"ranks": 411,
 		"score": 15.3,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/635136404893229057"
 	},
 	{
 		"date": "2015-08-22",
@@ -1750,7 +1774,7 @@
 		"ranks": 411,
 		"score": 26.4,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/635137840754524165"
 	},
 	{
 		"date": "2015-08-22",
@@ -1762,7 +1786,7 @@
 		"ranks": 214,
 		"score": 13.3,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/635146195015327744"
 	},
 	{
 		"date": "2015-08-10",
@@ -1774,7 +1798,7 @@
 		"ranks": 4311,
 		"score": 54.1,
 		"result": "通過",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/630782528928878592"
 	},
 	{
 		"date": "2015-08-02",
@@ -1786,7 +1810,7 @@
 		"ranks": 4243,
 		"score": -66.6,
 		"result": "残留",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/627822137135378432"
 	},
 	{
 		"date": "2015-07-13",
@@ -1798,7 +1822,7 @@
 		"ranks": 3212,
 		"score": 33,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/620596810608832512"
 	},
 	{
 		"date": "2015-07-05",
@@ -1810,7 +1834,7 @@
 		"ranks": 4431,
 		"score": -44.9,
 		"result": "-",
-		"twitter_url": ""
+		"twitter_url": "https://twitter.com/retroeater/status/617644981096820736"
 	},
 	{
 		"date": "2015-06-15",

@@ -2,11 +2,11 @@
 	"data": [
 	{
 		"year": "2019",
-		"score": 408.0,
-		"average_rank": 2.30,
-		"1st_ratio": 0.342,
-		"non_4th_ratio": 0.797,
-		"number_of_games": 79
+		"score": 413.4,
+		"average_rank": 2.32,
+		"1st_ratio": 0.330,
+		"non_4th_ratio": 0.795,
+		"number_of_games": 88
 	},
 	{
 		"year": "2018",
@@ -50,11 +50,11 @@
 	},
 	{
 		"year": "通算",
-		"score": 1158.5,
+		"score": 1163.8,
 		"average_rank": 2.43,
-		"1st_ratio": 0.293,
+		"1st_ratio": 0.292,
 		"non_4th_ratio": 0.764,
-		"number_of_games": 652
+		"number_of_games": 661
 	}
 	]
 }
