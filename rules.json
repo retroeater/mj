@@ -858,11 +858,11 @@
     "category": "ウマ",
     "subcategory": "1着",
     "nipponclub": "-",
-    "jpml": "#ERROR!",
-    "jpmlwrc": "#ERROR!",
-    "wrc": "#ERROR!",
-    "saikyosen": "#ERROR!",
-    "mleague": "#ERROR!"
+    "jpml": "+8000点（※）	",
+    "jpmlwrc": "+15000点",
+    "wrc": "+15000点",
+    "saikyosen": "+30000点",
+    "mleague": "+30000点"
   },
   {
     "game": "終了後",
@@ -870,11 +870,11 @@
     "category": "ウマ",
     "subcategory": "2着",
     "nipponclub": "-",
-    "jpml": "#ERROR!",
-    "jpmlwrc": "#ERROR!",
-    "wrc": "#ERROR!",
-    "saikyosen": "#ERROR!",
-    "mleague": "#ERROR!"
+    "jpml": "+4000点（※）",
+    "jpmlwrc": "+5000点",
+    "wrc": "+5000点",
+    "saikyosen": "+10000点",
+    "mleague": "+10000点"
   },
   {
     "game": "終了後",
