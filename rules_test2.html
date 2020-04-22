@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<title>ルール早見表</title>
+<link rel="stylesheet" type="text/css" href="datatables.min.css" />
+<script type="text/javascript" src="datatables.min.js"></script>
+<script>
+jQuery(function($){
+	$.extend( $.fn.dataTable.defaults, { 
+		language: { url: "Japanese.json" } 
+    });
+	$('#rules').DataTable( {
+		ajax: "rules_test.json",
+		columns: [
+			{ data: "game", className: "dt-body-center" },
+			{ data: "hand", className: "dt-body-center" },
+			{ data: "category", className: "dt-body-center" },
+			{ data: "subcategory", className: "dt-body-center" },
+			{ data: "nipponclub", className: "dt-body-center" },
+			{ data: "jpml", className: "dt-body-center" },
+			{ data: "jpmlwrc", className: "dt-body-center" },
+			{ data: "saikyosen", className: "dt-body-center" },
+			{ data: "mleague", className: "dt-body-center" }
+		],
+		info: false,
+		order: [ [ 0, "desc" ] ],
+		paging: false,
+		searching: false
+	} );
+});
+</script>
+</head>
+<body>
+<p><a href="index.html">ホーム</a> > ルール早見表</p>
+<p>（※） 個人的にまとめているだけで正確性を保証するものではありません。でも間違いを見つけたらお知らせいただけるとうれしいです。</p>
+<br />
+<table id="rules" class="display compact">
+<thead>
+<tr>
+	<th>半荘</th>
+	<th>局</th>
+	<th>大項目</th>
+	<th>中項目</th>
+	<th>
+		日本クラブ<br>
+		麻雀部<br>
+		2019-02-01
+	</th>
+	<th>
+		日本プロ麻雀連盟<br>
+		公式ルール
+		<a href="http://www.ma-jan.or.jp/guide/game_rule.html"><img src="125_arr_hoso.png" height="20" width="20" /></a><br>
+		2020-04-05
+	</th>
+	<th>
+		日本プロ麻雀連盟<br>
+		WRCルール
+		<a href="http://www.ma-jan.or.jp/guide/game_rule.html"><img src="125_arr_hoso.png" height="20" width="20" /></a><br>
+		2020-04-05
+	</th>
+	<th>
+		WRC<br>
+		WRC 2017
+		<a href="http://wrc2017vegas.com/documents/World_Riichi_Championship_Rules.pdf"><img src="125_arr_hoso.png" height="20" width="20" /></a><br>
+		2017-10-08
+	</th>
+	<th>
+		竹書房<br>
+		麻雀最強戦
+		<a href="https://www.mahjong-saikyosen.com/rule/"><img src="125_arr_hoso.png" height="20" width="20" /></a><br>
+		2020-04-05
+	</th>
+	<th>
+		Mリーグ<br>
+		公式戦ルール
+		<a href="https://m-league.jp/about/"><img src="125_arr_hoso.png" height="20" width="20" /></a><br>
+		2020-04-05
+	</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</body>
+</html>
