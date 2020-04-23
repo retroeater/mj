@@ -13,6 +13,7 @@ jQuery(function($){
 	$('#rules').DataTable( {
 		ajax: "rules.json",
 		columns: [
+			{ data: "id", visible: false },
 			{ data: "game", className: "dt-body-center" },
 			{ data: "hand", className: "dt-body-center" },
 			{ data: "category", className: "dt-body-left" },
@@ -39,6 +40,7 @@ jQuery(function($){
 <table id="rules" class="display compact">
 <thead>
 <tr>
+	<th>#</th>
 	<th>半荘</th>
 	<th>局</th>
 	<th>大項目</th>
