@@ -1,10 +1,51 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8"/>
+<meta charset="utf-8" />
 <title>麻雀</title>
-<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" type="text/css" href="datatables.min.css" />
+<script type="text/javascript" src="datatables.min.js"></script>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script>
+jQuery(function($){
+	$('#events').DataTable({
+		data: [
+			{
+				"date": "2017-07-30",
+				"event": "第22期特別昇級リーグ3位"
+			},
+			{
+				"date": "2015-09-19",
+				"event": "第28期チャンピオンズリーグ4位"
+			},
+			{
+				"date": "2015-08-30",
+				"event": "第29期新人王戦準優勝"
+			},
+			{
+				"date": "2014-09-07",
+				"event": "日本プロ麻雀連盟入会（第30期後期）"
+			},
+			{
+				"date": "?",
+				"event": "第5期無双位戦4位"
+			},
+			{
+				"date": "?",
+				"event": "第?期麻雀学生名人戦3位"
+			}
+		],
+		columns: [
+			{ data: "date", className: "dt-body-center" },
+			{ data: "event", className: "dt-body-left" }
+		],
+		info: false,
+		paging: false,
+		sort: false,
+		searching: false
+	});
+});
+</script>
 </head>
 <body>
 <div style="position:absolute; right:0"><a class="twitter-timeline" data-chrome=”noheader" data-lang="en" data-width="220" data-height="1000" data-theme="light" href="https://twitter.com/retroeater">@retroeater</a></div>
@@ -13,17 +54,11 @@
 <p><a href="league.html">所属リーグ</a></p>
 <p><a href="media.html">メディア</a></p>
 <p><a href="rules.html">ルール早見表</a></p>
-<table border="1" cellpadding="10">
+<table id="events" class="display compact" align="left" style="width:50%">
 <thead>
 <tr><th>日付</th><th>イベント</th></tr>
 </thead>
 <tbody>
-<tr><td>2017年07年30日</td><td>第22期特別昇級リーグ3位</td></tr>
-<tr><td>2015年09年19日</td><td>第28期チャンピオンズリーグ4位</td></tr>
-<tr><td>2015年08年30日</td><td>第29期新人王戦準優勝</td></tr>
-<tr><td>2014年09年07日</td><td>日本プロ麻雀連盟入会（第30期後期）</td></tr>
-<tr><td>?</td><td>第5期無双位戦4位</td></tr>
-<tr><td>?</td><td>第?期麻雀学生名人戦3位</td></tr>
 </tbody>
 </body>
 </html>
