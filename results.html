@@ -52,7 +52,7 @@ jQuery(function($){
 			{ data: "title", className: "dt-body-left" },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
 					if(row.twitter_url) {
-						return data + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></a>'
+						return data + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"><\/a>'
 					} else {
 						return data
 					}
