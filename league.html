@@ -2,16 +2,42 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>所属リーグ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>リーグ</title>
 <link rel="shortcut icon" href="favicon.ico" />
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<!-- c3 CSS -->
 <link href="c3.min.css" rel="stylesheet" />
+<!-- c3 -- d3.js, c3.js -->
 <script src="d3.v5.min.js"></script>
 <script src="c3.min.js"></script>
 </head>
 <body>
-<p><a href="index.html">ホーム</a> &gt; 所属リーグ</p>
-<br />
-<div id="chart"></div>
+<!-- Bootstrap Navigation Bar -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
+	<a class="navbar-brand" href="#">麻雀</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="index.html">ホーム</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="results.html">成績</a></li>
+			<li class="nav-item"><a class="nav-link active" href="league.html">リーグ</a></li>
+			<li class="nav-item"><a class="nav-link" href="media.html">メディア</a></li>
+			<li class="nav-item"><a class="nav-link" href="rules.html">ルール</a></li>
+			<li class="nav-item"><a class="nav-link" href="links.html">リンク</a></li>
+		</ul>
+	</div>
+</nav>
+
+<!-- Bootstrap - jQuery, Popper.js, Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
+
+<div id="chart" align="center"></div>
 <script>
 var chart = c3.generate({
 	size: {
@@ -442,27 +468,7 @@ var chart = c3.generate({
 		x: {
 			type: 'timeseries',
 			tick: {
-				format: '%Y-%m-%d'
-			}
-		},
-		y: {
-			tick: {
-				format: function(d) {
-					switch(d) {
-						case 0: return "E"; break;
-						case 1: return "D3"; break;
-						case 2: return "D2"; break;
-						case 3: return "D1"; break;
-						case 4: return "C3"; break;
-						case 5: return "C2"; break;
-						case 6: return "C1"; break;
-						case 7: return "B2"; break;
-						case 8: return "B1"; break;
-						case 9: return "A2"; break;
-						case 10: return "A1"; break;
-							default: return d;
-					}
-				}
+				format: '%Y/%m'
 			}
 		}
 	}
