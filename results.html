@@ -13,7 +13,7 @@ jQuery(function($){
 		language: { url: "Japanese.json" } 
     });
 	$('#result_summary').DataTable( {
-		ajax: "results_summary.json",
+		ajax: "https://retroeater.github.io/mj/results_summary.json",
 		columns: [
 			{ data: "year", className: "dt-body-center" },
 			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
@@ -44,7 +44,7 @@ jQuery(function($){
 		searching: false
 	} );
 	$("#result_details").dataTable( {
-		ajax: "results_details.json",
+		ajax: "https://retroeater.github.io/mj/results_details.json",
 		columns: [
 			{ data: "date", className: "dt-body-center" },
 			{ data: "game_id", visible: false },
@@ -80,7 +80,7 @@ jQuery(function($){
 <body>
 <p><a href="index.html">ホーム</a> > 成績</p>
 <br />
-<table id="result_summary" align="left" class="display compact" style="width:50%">
+<table id="result_summary" class="compact display" style="width:50%">
 	<thead>
 		<tr>
 			<th>年</th>
@@ -95,7 +95,7 @@ jQuery(function($){
 	</tbody>
 </table>
 <br />
-<table id="result_details" class="display compact" data-page-length="20" style="width:100%">
+<table id="result_details" class="compact display" data-page-length="20" style="width:100%">
 	<thead>
 		<tr>
 			<th>日付</th>

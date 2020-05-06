@@ -12,7 +12,7 @@ jQuery(function($){
 		language: { url: "Japanese.json" } 
     });
 	$('#rules').DataTable( {
-		ajax: "rules.json",
+		ajax: "https://retroeater.github.io/mj/rules.json",
 		columns: [
 			{ data: "id", visible: false },
 			{ data: "game", className: "dt-body-center" },
@@ -37,9 +37,9 @@ jQuery(function($){
 </head>
 <body>
 <p><a href="index.html">ホーム</a> > ルール早見表</p>
-<p>（※） 個人的にまとめているだけで正確性を保証するものではありません。でも間違いを見つけたらお知らせいただけるとうれしいです。</p>
+（※） 個人的にまとめているだけで正確性を保証するものではありません。でも間違いを見つけたらお知らせいただけるとうれしいです。<br />
 <br />
-<table id="rules" class="display compact">
+<table id="rules" class="display compact" style="width:100%">
 <thead>
 <tr>
 	<th>#</th>
