@@ -54,7 +54,7 @@ jQuery(function($){
 			{ data: "date", className: "dt-body-center" },
 			{ data: "game_id", visible: false },
 			{ data: "organization", className: "dt-body-left" },
-			{ data: "title", className: "dt-body-left" },
+			{ data: "title", className: "dt-body-left", visible: false },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
 					if(row.twitter_url) {
 						return data + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"><\/a>'
@@ -92,6 +92,7 @@ jQuery(function($){
 	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link" href="index.html">ホーム</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="bio.html">略歴</a></li>
 			<li class="nav-item"><a class="nav-link active" href="results.html">成績</a></li>
 			<li class="nav-item"><a class="nav-link" href="league.html">リーグ</a></li>
 			<li class="nav-item"><a class="nav-link" href="media.html">メディア</a></li>

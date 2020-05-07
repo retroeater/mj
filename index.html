@@ -7,88 +7,12 @@
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="datatables.min.css" />
-<!-- DataTables JS -->
-<script type="text/javascript" src="datatables.min.js"></script>
 <!-- Twitter JS -->
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<script>
-jQuery(function($){
-	$('#events').DataTable({
-		data: [
-			{
-				"date": "2018-12-09",
-				"event": "国士無双放銃（第5期JPML WRCリーグ最終節）"
-			},
-			{
-				"date": "2018-09-01",
-				"event": "国士無双和了（第35期後期C2リーグ第1節）"
-			},
-			{
-				"date": "2018-07-01",
-				"event": "四暗刻和了（麻雀最強戦2018全日本プロ代表決定戦予選）"
-			},
-			{
-				"date": "2018-04-22",
-				"event": "国士無双和了（第27期麻雀マスターズプロ一次予選）"
-			},
-			{
-				"date": "2017-10-14",
-				"event": "国士無双和了（第3期JPML WRCリーグ第3節）"
-			},
-			{
-				"date": "2017-07-30",
-				"event": "第22期特別昇級リーグ3位"
-			},
-			{
-				"date": "2016-12-04",
-				"event": "大三元和了（第33期後期D2リーグ第4節）"
-			},
-			{
-				"date": "2016-09-04",
-				"event": "四暗刻和了（第33期後期D2リーグ第1節）"
-			},
-			{
-				"date": "2015-09-19",
-				"event": "第28期チャンピオンズリーグ4位"
-			},
-			{
-				"date": "2015-08-30",
-				"event": "第29期新人王戦準優勝"
-			},
-			{
-				"date": "2015-08-02",
-				"event": "国士無双放銃（第32期前期D3リーグ最終節）"
-			},
-			{
-				"date": "2014-09-07",
-				"event": "日本プロ麻雀連盟入会（第30期後期）"
-			},
-			{
-				"date": "1997-08-03",
-				"event": "第5期無双位戦4位"
-			},
-			{
-				"date": "?",
-				"event": "第?期麻雀学生名人戦3位"
-			}
-		],
-		columns: [
-			{ data: "date", className: "dt-body-center" },
-			{ data: "event", className: "dt-body-left" }
-		],
-		info: false,
-		paging: false,
-		sort: false,
-		searching: false
-	});
-});
-</script>
 </head>
 <body>
 <!-- Twitter Timeline -->
-<div style="position:absolute; right:0px; top:72px;"><a class="twitter-timeline" data-chrome=”noheader" data-lang="en" data-width="220" data-height="1000" data-theme="light" href="https://twitter.com/retroeater">@retroeater</a></div>
+<div style="position:absolute; top:72px;"><a class="twitter-timeline" data-chrome=”noheader" data-lang="en" data-width="220" data-height="1000" data-theme="light" href="https://twitter.com/retroeater">@retroeater</a></div>
 
 <!-- Bootstrap Navigation Bar -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
@@ -98,7 +22,8 @@ jQuery(function($){
 	</button>
 	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		<ul class="navbar-nav">
-			<li class="nav-item active"><a class="nav-link active" href="index.html">ホーム</span></a></li>
+			<li class="nav-item"><a class="nav-link active" href="index.html">ホーム</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="bio.html">略歴</a></li>
 			<li class="nav-item"><a class="nav-link" href="results.html">成績</a></li>
 			<li class="nav-item"><a class="nav-link" href="league.html">リーグ</a></li>
 			<li class="nav-item"><a class="nav-link" href="media.html">メディア</a></li>
@@ -112,13 +37,5 @@ jQuery(function($){
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
-
-<table id="events" class="compact display" style="width:50%">
-<thead>
-<tr><th>日付</th><th>イベント</th></tr>
-</thead>
-<tbody>
-</tbody>
-</table>
 </body>
 </html>
