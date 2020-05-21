@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>成績</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="results.css" />
+<!-- DataTables JS -->
+<script type="text/javascript" src="datatables.min.js"></script>
+<script>
+jQuery(function($){
+	$.extend( $.fn.dataTable.defaults, { 
+		language: { url: "Japanese.json" } 
+    });
+	$('#result_summary').DataTable( {
+		ajax: "https://retroeater.github.io/mj/results_summary.json",
+		columns: [
+			{ data: "year", className: "dt-body-center" },
+			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
+					if(row.score >= 0) {
+						return '+' + data.toFixed(1)
+					} else {
+						return '▲' + (Math.abs(data)).toFixed(1)
+					}
+				}
+			},
+			{ data: "average_rank", className: "dt-body-center", render: function(data,type,row,meta) {
+					return data.toFixed(2)
+				}
+			},
+			{ data: "1st_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
+					return data.toFixed(3)
+				}
+			},
+			{ data: "non_4th_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
+					return data.toFixed(3)
+				}
+			},			
+			{ data: "number_of_games", className: "dt-body-right" }
+		],
+		info: false,
+		order: [ [ 0, "desc" ] ],
+		paging: false,
+		searching: false
+	} );
+	$("#result_details").dataTable( {
+		ajax: "https://retroeater.github.io/mj/results_details.json",
+		columns: [
+			{ data: "date", className: "dt-body-center" },
+			{ data: "game_id", visible: false },
+			{ data: "organization", className: "dt-body-left" },
+			{ data: "title", className: "dt-body-left", visible: false },
+			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
+					if(row.twitter_url) {
+						return data + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"><\/a>'
+					} else {
+						return data
+					}
+				}
+			},
+			{ data: "players", className: "dt-body-left" },
+			{ data: "ranks", className: "dt-body-left" },
+			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) {
+					if(row.score >= 0) {
+						return '+' + data.toFixed(1)
+					} else {
+						return '▲' + (Math.abs(data)).toFixed(1)
+					}
+				}
+			},
+			{ data: "result", className: "dt-body-center" }
+		],
+		fixedHeader: true,
+		lengthMenu: [ [20, 50, -1], [20, 50, "全"] ],
+		order: [ [ 1, "desc" ] ]
+	} ); 
+});
+</script>
+<script>
+window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+var recognition = new webkitSpeechRecognition();
+recognition.lang = 'ja';
+ 
+recognition.onresult = function(event){
+    var results = event.results;
+    for (var i = event.resultIndex; i<results.length; i++)
+        document.getElementById('result_text').innerHTML = results[i][0].transcript;
+}
+</script>
+</head>
+<body>
+<!-- Bootstrap Navigation Bar -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
+	<a class="navbar-brand" href="#">麻雀</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	
+	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="index.html">ホーム</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="bio.html">略歴</a></li>
+			<li class="nav-item"><a class="nav-link active" href="results.html">成績</a></li>
+			<li class="nav-item"><a class="nav-link" href="league.html">リーグ</a></li>
+			<li class="nav-item"><a class="nav-link" href="media.html">メディア</a></li>
+			<li class="nav-item"><a class="nav-link" href="rules.html">ルール</a></li>
+			<li class="nav-item"><a class="nav-link" href="links.html">リンク</a></li>
+		</ul>
+	</div>
+</nav>
+
+<!-- Bootstrap -- jQuery, Popper.js, Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
+
+	<textarea id="result_text" cols="100" rows="10">
+</textarea>
+<br>
+<input type="button" onClick="recognition.start();" value="音認開始">
+
+
+<table id="result_summary" class="compact display" style="width:50%">
+	<thead>
+		<tr>
+			<th>年</th>
+			<th>総得点</th>
+			<th>平均着順</th>
+			<th>トップ率</th>
+			<th>4着回避率</th>
+			<th>半荘数</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<br />
+<table id="result_details" class="compact display" data-page-length="20" style="width:100%">
+	<thead>
+		<tr>
+			<th>日付</th>
+			<th>#</th>
+			<th>団体</th>
+			<th>タイトル</th>
+			<th>対局</th>
+			<th>対局者（敬称略）</th>
+			<th>着順</th>
+			<th>得点</th>
+			<th>結果</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+</body>
+</html>
