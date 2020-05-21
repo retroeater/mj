@@ -81,19 +81,55 @@ jQuery(function($){
 	} ); 
 });
 </script>
-<script>
-window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-var recognition = new webkitSpeechRecognition();
-recognition.lang = 'ja';
+
+    <script>
+        var flag_speech = 0;
  
-recognition.onresult = function(event){
-    var results = event.results;
-    for (var i = event.resultIndex; i<results.length; i++)
-        document.getElementById('result_text').innerHTML = results[i][0].transcript;
-}
-</script>
+        function vr_function() {
+            window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+            var recognition = new webkitSpeechRecognition();
+            recognition.lang = 'ja';
+            recognition.interimResults = true;
+            recognition.continuous = true;
+ 
+            recognition.onsoundstart = function() {
+                document.getElementById('status').innerHTML = "認識中";
+            };
+            recognition.onnomatch = function() {
+                document.getElementById('status').innerHTML = "もう一度試してください";
+            };
+            recognition.onerror = function() {
+                document.getElementById('status').innerHTML = "エラー";
+                if(flag_speech == 0)
+                  vr_function();
+            };
+            recognition.onsoundend = function() {
+                document.getElementById('status').innerHTML = "停止中";
+                  vr_function();
+            };
+ 
+            recognition.onresult = function(event) {
+                var results = event.results;
+                for (var i = event.resultIndex; i < results.length; i++) {
+                    if (results[i].isFinal)
+                    {
+                        document.getElementById('result_text').innerHTML = results[i][0].transcript;
+                        vr_function();
+                    }
+                    else
+                    {
+                        document.getElementById('result_text').innerHTML = "[途中経過] " + results[i][0].transcript;
+                        flag_speech = 1;
+                    }
+                }
+            }
+            flag_speech = 0;
+            document.getElementById('status').innerHTML = "start";
+            recognition.start();
+        }
+    </script> 
 </head>
-<body>
+ <body>
 <!-- Bootstrap Navigation Bar -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
 	<a class="navbar-brand" href="#">麻雀</a>
@@ -119,10 +155,13 @@ recognition.onresult = function(event){
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
 
-	<textarea id="result_text" cols="100" rows="10">
-</textarea>
-<br>
-<input type="button" onClick="recognition.start();" value="音認開始">
+    <textarea id="result_text" cols="100" rows="10">
+    </textarea>
+    <br>
+    <textarea id="status" cols="100" rows="1">
+    </textarea>
+    <br>
+    <input type="button" onClick="vr_function();" value="音認開始">
 
 
 <table id="result_summary" class="compact display" style="width:50%">
