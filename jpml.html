@@ -15,29 +15,59 @@
 <script>
 jQuery(function($){
 	$.extend( $.fn.dataTable.defaults, { 
-		language: { url: "Japanese.json" } 
+		language: { url: "https://retroeater.github.io/mj/Japanese.json" } 
     });
 	$('#jpml').DataTable( {
 		ajax: "https://retroeater.github.io/mj/jpml.json",
 		columns: [
-			{ data: "name_last_kanji", className: "dt-body-left" },
-			{ data: "name_first_kanji", className: "dt-body-left" },
-			{ data: "name_last_kana", className: "dt-body-left" },
-			{ data: "name_first_kana", className: "dt-body-left" },
-			{ data: "class", className: "dt-body-left" },
-			{ data: "birthplace", className: "dt-body-left" },
-			{ data: "birthday", className: "dt-body-left" },
-			{ data: "ron2_id", className: "dt-body-left", render: function(data,type,row,meta) {
+			{ data: "name_last_kanji", className: "dt-body-left", render: function(data,type,row,meta) {
+				if(row.name_first_kanji) {
+					if(row.name_first_kana) {
+						return data + ' ' + row.name_first_kanji + ' （' + row.name_last_kana + ' ' + row.name_first_kana + '）'
+					}
+					else {
+						return data + ' ' + row.name_first_kanji
+					}
+				}
+				else {
+					if(row.name_last_kana) {
+						return data + ' （' + row.name_last_kana + '）'
+					}
+					else {
+						return data
+					}
+				}
+			}},
+			{ data: "class", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
-						return ' <a href="www.ron2.jp/pro_profile.html?id=' + data + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"><\/a>'
+						return data + '期'
+					}
+					else {
+						return data
+					}
+				}
+			},
+			{ data: "birthplace", className: "dt-body-center" },
+			{ data: "birthday", className: "dt-body-center", render: function(data,type,row,meta) {
+					if(data) {
+						return data.substr(0,2) + '/' + data.substr(2,2)
+					}
+					else {
+						return data
+					}
+				}
+			},
+			{ data: "ron2_id", className: "dt-body-center", render: function(data,type,row,meta) {
+					if(data) {
+						return ' <a href="http://www.ron2.jp/pro_profile.html?id=' + data + '" target="_blank"><img alt="ロン2" src="125_arr_hoso.png" height="24" width="24" /><\/a>'
 					} else {
 						return data
 					}
 				}
 			},
-			{ data: "twitter_id", className: "dt-body-left", render: function(data,type,row,meta) {
+			{ data: "twitter_id", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
-						return ' <a href="https://twitter.com/' + data + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"><\/a>'
+						return ' <a href="https://twitter.com/' + data + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="24" width="24"><\/a>'
 					} else {
 						return data
 					}
@@ -47,7 +77,7 @@ jQuery(function($){
 		fixedHeader: true,
 		info: true,
 		lengthMenu: [ [20, 50, -1], [20, 50, "全"] ],
-		order: [ [ 0, "asc" ] ],
+		order: true,
 		paging: true,
 		searching: true
 	} );
@@ -57,13 +87,12 @@ jQuery(function($){
 <body>
 <!-- Bootstrap Navigation Bar -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
-	<a class="navbar-brand" href="#">麻雀</a>
+	<a class="navbar-brand" href="index.html">麻雀</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		<ul class="navbar-nav">
-			<li class="nav-item"><a class="nav-link" href="index.html">ホーム</span></a></li>
 			<li class="nav-item"><a class="nav-link" href="bio.html">略歴</a></li>
 			<li class="nav-item"><a class="nav-link" href="results.html">成績</a></li>
 			<li class="nav-item"><a class="nav-link" href="league.html">リーグ</a></li>
@@ -80,13 +109,14 @@ jQuery(function($){
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
 
+<p>
+（※） 第36期プロリーグの後期最終節成績表を基に、基本的に一般に公開されている情報に基づいてまとめています。（Twitter、Wikipedia等）<br>
+（※）個人的にまとめているだけで正確性を保証するものではありません。でも間違いを見つけたらお知らせいただけるとうれしいです。
+</p>
 <table id="jpml" class="compact display" style="width:100%">
 	<thead>
-		<tr>
-			<th>姓</th>
-			<th>名</th>
-			<th>姓かな</th>
-			<th>名かな</th>
+		<tr align="center">
+			<th>名前</th>
 			<th>期</th>
 			<th>出身地</th>
 			<th>誕生日</th>
