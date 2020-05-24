@@ -35,11 +35,24 @@ jQuery(function($){
 				}
 			},
 			{ data: "name_last_kanji", className: "dt-body-left", render: function(data,type,row,meta) {
-				var name = data
+				var name = null
 
+				// Twitter ある人は Twitter アイコン表示
+				if(row.twitter_id) {
+					name = '<a href="https://twitter.com/' + data + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="24" width="24"><\/a> '
+				}
+				else {
+					name = '<img alt="" src="empty.png" height="24" width="24"> '
+				}
+
+				name += data
+
+				// 名前
 				if(row.name_first_kanji) {
 					name += ' ' + row.name_first_kanji
 				}
+
+				// ふりがな
 				if(row.name_last_kana) {
 					name += ' （' + row.name_last_kana
 					if(row.name_first_kana) {
@@ -47,6 +60,8 @@ jQuery(function($){
 					}
 					name += '）'
 				}
+
+				// ロン2プロフィール
 				if(row.ron2_id) {
 					name += ' ' + ' <a href="http://www.ron2.jp/pro_profile.html?id=' + row.ron2_id + '" target="_blank"><img alt="ロン2" src="125_arr_hoso.png" height="24" width="24" /><\/a>'
 				}
@@ -63,18 +78,9 @@ jQuery(function($){
 			},
 			{ data: "birthplace", className: "dt-body-center" },
 			{ data: "birthday", className: "dt-body-center"},
-			{ data: "twitter_id", className: "dt-body-center", render: function(data,type,row,meta) {
-					if(data) {
-						return ' <a href="https://twitter.com/' + data + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="24" width="24"><\/a>'
-					}
-					else {
-						return data
-					}
-				}
-			},
 			{ data: "ameblo_id", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
-						return ' <a href="https://ameblo.jp/' + data + '" target="_blank"><img alt="アメブロ" src="125_arr_hoso.png" height="24" width="24"><\/a>'
+						return ' <a href="https://ameblo.jp/' + data + '" target="_blank"><img alt="ブログ" src="125_arr_hoso.png" height="24" width="24"><\/a>'
 					}
 					else {
 						return null
@@ -130,8 +136,7 @@ jQuery(function($){
 			<th>期</th>
 			<th>出身地</th>
 			<th>誕生日</th>
-			<th><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></th>
-			<th>アメブロ</th>
+			<th>ブログ</th>
 		</tr>
 	</thead>
 	<tbody>
