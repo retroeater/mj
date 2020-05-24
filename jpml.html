@@ -20,23 +20,37 @@ jQuery(function($){
 	$('#jpml').DataTable( {
 		ajax: "https://retroeater.github.io/mj/jpml.json",
 		columns: [
+			{ data: "league_36_2", className: "dt-body-center", render: function(data,type,row,meta) {
+					if(data) {
+						if(row.rank_36_2) {
+							return data + ' ' + row.rank_36_2 + '位'
+						}
+						else {
+							return data
+						}
+					}
+					else {
+						return null
+					}
+				}
+			},
 			{ data: "name_last_kanji", className: "dt-body-left", render: function(data,type,row,meta) {
+				var name = data
+
 				if(row.name_first_kanji) {
+					name += ' ' + row.name_first_kanji
+				}
+				if(row.name_last_kana) {
+					name += ' （' + row.name_last_kana
 					if(row.name_first_kana) {
-						return data + ' ' + row.name_first_kanji + ' （' + row.name_last_kana + ' ' + row.name_first_kana + '）'
+						name += ' ' + row.name_first_kana
 					}
-					else {
-						return data + ' ' + row.name_first_kanji
-					}
+					name += '）'
 				}
-				else {
-					if(row.name_last_kana) {
-						return data + ' （' + row.name_last_kana + '）'
-					}
-					else {
-						return data
-					}
+				if(row.ron2_id) {
+					name += ' ' + ' <a href="http://www.ron2.jp/pro_profile.html?id=' + row.ron2_id + '" target="_blank"><img alt="ロン2" src="125_arr_hoso.png" height="24" width="24" /><\/a>'
 				}
+				return name
 			}},
 			{ data: "class", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
@@ -48,31 +62,26 @@ jQuery(function($){
 				}
 			},
 			{ data: "birthplace", className: "dt-body-center" },
-			{ data: "birthday", className: "dt-body-center", render: function(data,type,row,meta) {
+			{ data: "birthday", className: "dt-body-center"},
+			{ data: "twitter_id", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
-						return data.substr(0,2) + '/' + data.substr(2,2)
+						return ' <a href="https://twitter.com/' + data + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="24" width="24"><\/a>'
 					}
 					else {
 						return data
 					}
 				}
 			},
-			{ data: "ron2_id", className: "dt-body-center", render: function(data,type,row,meta) {
+			{ data: "ameblo_id", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
-						return ' <a href="http://www.ron2.jp/pro_profile.html?id=' + data + '" target="_blank"><img alt="ロン2" src="125_arr_hoso.png" height="24" width="24" /><\/a>'
-					} else {
-						return data
+						return ' <a href="https://ameblo.jp/' + data + '" target="_blank"><img alt="アメブロ" src="125_arr_hoso.png" height="24" width="24"><\/a>'
 					}
-				}
-			},
-			{ data: "twitter_id", className: "dt-body-center", render: function(data,type,row,meta) {
-					if(data) {
-						return ' <a href="https://twitter.com/' + data + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="24" width="24"><\/a>'
-					} else {
-						return data
+					else {
+						return null
 					}
 				}
 			}
+		
 		],
 		fixedHeader: true,
 		info: true,
@@ -116,12 +125,13 @@ jQuery(function($){
 <table id="jpml" class="compact display" style="width:100%">
 	<thead>
 		<tr align="center">
+			<th>36期後期</th>
 			<th>名前</th>
 			<th>期</th>
 			<th>出身地</th>
 			<th>誕生日</th>
-			<th>ロン2</th>
 			<th><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"></th>
+			<th>アメブロ</th>
 		</tr>
 	</thead>
 	<tbody>
