@@ -35,14 +35,22 @@ jQuery(function($){
 				}
 			},
 			{ data: "name_last_kanji", className: "dt-body-left", render: function(data,type,row,meta) {
-				var name = null
+				var name = ""
 
-				// Twitter ある人は Twitter アイコン表示
-				if(row.twitter_id) {
-					name = '<a href="https://twitter.com/' + row.twitter_id + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="24" width="24"><\/a> '
+				// Instagram
+				if(row.instagram_id) {
+					name += '<a href="https://instagram.com/' + row.instagram_id + '" target="_blank"><img alt="Instagram" src="Instagram_AppIcon_Aug2017.png" height="29" width="29"><\/a> '
 				}
 				else {
-					name = '<img alt="" src="empty.png" height="24" width="24"> '
+					name += '<img alt="" src="empty.png" height="29" width="29"> '
+				}
+
+				// Twitter
+				if(row.twitter_id) {
+					name += '<a href="https://twitter.com/' + row.twitter_id + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="29" width="29"><\/a> '
+				}
+				else {
+					name += '<img alt="" src="empty.png" height="29" width="29"> '
 				}
 
 				name += data
@@ -77,17 +85,7 @@ jQuery(function($){
 				}
 			},
 			{ data: "birthplace", className: "dt-body-center" },
-			{ data: "birthday", className: "dt-body-center"},
-			{ data: "ameblo_id", className: "dt-body-center", render: function(data,type,row,meta) {
-					if(data) {
-						return ' <a href="https://ameblo.jp/' + data + '" target="_blank"><img alt="ブログ" src="125_arr_hoso.png" height="24" width="24"><\/a>'
-					}
-					else {
-						return null
-					}
-				}
-			}
-		
+			{ data: "birthday", className: "dt-body-center"}
 		],
 		fixedHeader: true,
 		info: true,
@@ -129,18 +127,17 @@ jQuery(function($){
 （※）個人的にまとめているだけで正確性を保証するものではありません。でも間違いを見つけたらお知らせいただけるとうれしいです。
 </p>
 <table id="jpml" class="compact display" style="width:100%">
-	<thead>
-		<tr align="center">
-			<th>36期後期</th>
-			<th>名前</th>
-			<th>期</th>
-			<th>出身地</th>
-			<th>誕生日</th>
-			<th>ブログ</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
+<thead>
+	<tr align="center">
+		<th>36期後期</th>
+		<th>名前</th>
+		<th>期</th>
+		<th>出身地</th>
+		<th>誕生日</th>
+	</tr>
+</thead>
+<tbody>
+</tbody>
 </table>
 </body>
 </html>
