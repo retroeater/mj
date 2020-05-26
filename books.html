@@ -24,12 +24,11 @@ jQuery(function($){
 				return data + ' （' + row.author_kana + '）'
 				}
 			},
-			{ data: "book_title", className: "dt-body-left" },
 			{ data: "publication_date", className: "dt-body-center" },
-			{ data: "amazon_id", className: "dt-body-center", render: function(data,type,row,meta) {
-				return '<a href="https://www.amazon.co.jp/dp/' + data + '/" target="_blank">Amazon</a>'
+			{ data: "book_title", className: "dt-body-left", render: function(data,type,row,meta) {
+				return data + ' <a href="https://www.amazon.co.jp/dp/' + row.amazon_id + '/" target="_blank"><img alt="Amazon" src="125_arr_hoso.png" height="24" width="24" /></a>'
 				}
-			}
+			},
 		],
 		fixedHeader: true,
 		info: true,
@@ -71,9 +70,8 @@ jQuery(function($){
 <thead>
 	<tr align="center">
 		<th>著者</th>
-		<th>書籍名</th>
 		<th>出版日</th>
-		<th>Amazon</th>
+		<th>書籍名</th>
 	</tr>
 </thead>
 <tbody>
