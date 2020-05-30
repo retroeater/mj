@@ -63,7 +63,9 @@ var layout = {
 }
 
 var config = {
-	responsive: true
+	displayModeBar: false,
+	responsive: true,
+	scrollZoom: true
 }
 
 Plotly.newPlot('myDiv', data, layout, config)
