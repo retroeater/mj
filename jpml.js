@@ -24,18 +24,18 @@ jQuery(function($){
 
 				// Instagram
 				if(row.instagram_id) {
-					name += '<a href="https://instagram.com/' + row.instagram_id + '" target="_blank"><img alt="Instagram" src="Instagram_AppIcon_Aug2017.png" height="29" width="29"><\/a> '
+					name += '<a href="https://instagram.com/' + row.instagram_id + '" target="_blank"><img alt="Instagram" src="img/Instagram_AppIcon_Aug2017.png" height="29" width="29"><\/a> '
 				}
 				else {
-					name += '<img alt="" src="empty.png" height="29" width="29"> '
+					name += '<img alt="" src="img/empty.png" height="29" width="29"> '
 				}
 
 				// Twitter
 				if(row.twitter_id) {
-					name += '<a href="https://twitter.com/' + row.twitter_id + '" target="_blank"><img alt="Twitter" src="Twitter_Logo_Blue.png" height="29" width="29"><\/a> '
+					name += '<a href="https://twitter.com/' + row.twitter_id + '" target="_blank"><img alt="Twitter" src="img/Twitter_Logo_Blue.png" height="29" width="29"><\/a> '
 				}
 				else {
-					name += '<img alt="" src="empty.png" height="29" width="29"> '
+					name += '<img alt="" src="img/empty.png" height="29" width="29"> '
 				}
 
 				name += data
@@ -56,7 +56,7 @@ jQuery(function($){
 
 				// ロン2プロフィール
 				if(row.ron2_id) {
-					name += ' ' + ' <a href="http://www.ron2.jp/pro_profile.html?id=' + row.ron2_id + '" target="_blank"><img alt="ロン2" src="125_arr_hoso.png" height="24" width="24" /><\/a>'
+					name += ' ' + ' <a href="http://www.ron2.jp/pro_profile.html?id=' + row.ron2_id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="29" width="29" /><\/a>'
 				}
 				return name
 			}},

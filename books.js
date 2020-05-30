@@ -11,7 +11,7 @@ jQuery(function($){
 			},
 			{ data: "publication_date", className: "dt-body-center" },
 			{ data: "book_title", className: "dt-body-left", render: function(data,type,row,meta) {
-				return data + ' <a href="https://www.amazon.co.jp/dp/' + row.amazon_id + '/" target="_blank"><img alt="Amazon" src="125_arr_hoso.png" height="24" width="24" /></a>'
+				return data + ' <a href="https://www.amazon.co.jp/dp/' + row.amazon_id + '/" target="_blank"><img alt="Amazon" src="img/125_arr_hoso.png" height="24" width="24" /></a>'
 				}
 			},
 		],
