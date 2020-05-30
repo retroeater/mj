@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>リーグ✕期</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<!-- c3 CSS -->
+<link href="c3.min.css" rel="stylesheet" />
+<!-- c3 -- d3.js, c3.js -->
+<script src="d3.v5.min.js"></script>
+<script src="c3.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<!-- Bootstrap Navigation Bar -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
+	<a class="navbar-brand" href="index.html">麻雀</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="bio.html">略歴</a></li>
+			<li class="nav-item"><a class="nav-link" href="results.html">成績</a></li>
+			<li class="nav-item"><a class="nav-link" href="league.html">リーグ</a></li>
+			<li class="nav-item"><a class="nav-link active" href="league-and-class.html">リーグ✕期</a></li>
+			<li class="nav-item"><a class="nav-link" href="media.html">メディア</a></li>
+			<li class="nav-item"><a class="nav-link" href="rules.html">ルール</a></li>
+			<li class="nav-item"><a class="nav-link" href="links.html">リンク</a></li>
+			<li class="nav-item"><a class="nav-link" href="jpml.html">連盟</a></li>
+			<li class="nav-item"><a class="nav-link" href="books.html">書籍</a></li>
+		</ul>
+	</div>
+</nav>
+
+<!-- Bootstrap - jQuery, Popper.js, Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
+
+<div id="myDiv"></div>
+
+<script>
+// To scale the bubble size, use the attribute sizeref. We recommend using the following formula to calculate a sizeref value:
+// sizeref = 2.0 * Math.max(...size) / (desired_maximum_marker_size**2)
+// Note that setting 'sizeref' to a value greater than 1, decreases the rendered marker sizes, while setting 'sizeref' to less than 1, increases the rendered marker sizes. See https://plotly.com/python/reference/#scatter-marker-sizeref for more information. Additionally, we recommend setting the sizemode attribute: https://plotly.com/python/reference/#scatter-marker-sizemode to area.
+
+// sizeref using above forumla
+var desired_maximum_marker_size = 40;
+
+var size = [3,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,2,3,5,1,1,1,1,1,2,4,3,1,1,2,1,1,1,1,1,1,2,2,1,3,2,1,3,2,2,1,2,6,3,2,1,1,2,1,3,4,4,1,1,1,1,4,1,1,1,1,4,5,6,2,2,1,1,1,2,3,1,3,1,1,1,2,1,2,2,1,1,1,2,2,3,5,3,8,1,1,1,2,3,2,5,2,1,2,2,4,2,1,1,1,2,3,3,5,2,1,1,2,2,3,3,1,4,7,7,4,1,3,8,4,3,1,19,6]
+
+var trace = {
+	x: [1,1,3,3,5,7,8,10,10,11,11,11,12,13,13,13,14,14,14,15,16,16,16,16,17,17,17,17,17,18,18,18,18,18,19,19,19,19,19,20,20,20,20,21,21,21,21,21,21,21,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,23,24,24,24,24,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,32,33,33,33,33,34,34,34,34,34,35,35,35],
+	y: [11,9,11,10,6,9,8,7,4,9,7,5,5,11,7,5,11,7,6,10,11,7,6,5,11,10,9,7,6,11,10,8,6,5,10,9,7,6,5,9,6,3,1,10,9,8,7,6,5,4,10,9,8,7,6,5,3,12,11,10,9,8,7,6,5,3,8,6,5,4,10,9,7,6,5,4,3,2,9,8,7,6,5,4,3,2,8,7,5,4,3,2,1,9,8,7,6,5,4,3,2,1,9,8,7,6,5,4,3,2,5,4,3,2,1,8,6,5,4,3,2,1,9,7,6,5,4,3,1,4,3,2,1,8,4,3,2,1,3,2,1],
+	mode: 'markers',
+	marker: {
+		size: size,
+		//set 'sizeref' to an 'ideal' size given by the formula sizeref = 2. * max(array_of_size_values) / (desired_maximum_marker_size ** 2)
+		sizeref: 2.0 * Math.max(...size) / (desired_maximum_marker_size**2),
+		sizemode: 'area'
+	}
+};
+
+var data = [trace];
+
+var layout = {
+	title: 'リーグ✕期（36期後期）',
+	showlegend: false,
+	height: 700,
+	width: 1000,
+	yaxis: {
+        tickmode: "array",
+        tickvals: [1,2,3,4,5,6,7,8,9,10,11,12],
+        ticktext: ['E','D3','D2','D1','C3','C2','C1','B2','B1','A2','A1','鳳凰位']
+	}
+};
+
+Plotly.newPlot('myDiv', data, layout);
+</script>
+</body>
+</html>
