@@ -12,75 +12,8 @@
 <link rel="stylesheet" type="text/css" href="results.css" />
 <!-- DataTables JS -->
 <script type="text/javascript" src="datatables.min.js"></script>
-<script>
-jQuery(function($){
-	$.extend( $.fn.dataTable.defaults, { 
-		language: { url: "Japanese.json" } 
-    });
-	$('#result_summary').DataTable( {
-		ajax: "https://retroeater.github.io/mj/results_summary.json",
-		columns: [
-			{ data: "year", className: "dt-body-center" },
-			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
-					if(row.score >= 0) {
-						return '+' + data.toFixed(1)
-					} else {
-						return '▲' + (Math.abs(data)).toFixed(1)
-					}
-				}
-			},
-			{ data: "average_rank", className: "dt-body-center", render: function(data,type,row,meta) {
-					return data.toFixed(2)
-				}
-			},
-			{ data: "1st_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
-					return data.toFixed(3)
-				}
-			},
-			{ data: "non_4th_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
-					return data.toFixed(3)
-				}
-			},			
-			{ data: "number_of_games", className: "dt-body-right" }
-		],
-		info: false,
-		order: [ [ 0, "desc" ] ],
-		paging: false,
-		searching: false
-	} );
-	$("#result_details").dataTable( {
-		ajax: "https://retroeater.github.io/mj/results_details.json",
-		columns: [
-			{ data: "date", className: "dt-body-center" },
-			{ data: "game_id", visible: false },
-			{ data: "organization", className: "dt-body-left" },
-			{ data: "title", className: "dt-body-left", visible: false },
-			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
-					if(row.twitter_url) {
-						return data + ' <a href="' + row.twitter_url + '"><img src="Twitter_Logo_Blue.png" class="twitter" height="24" width="24"><\/a>'
-					} else {
-						return data
-					}
-				}
-			},
-			{ data: "players", className: "dt-body-left" },
-			{ data: "ranks", className: "dt-body-left" },
-			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) {
-					if(row.score >= 0) {
-						return '+' + data.toFixed(1)
-					} else {
-						return '▲' + (Math.abs(data)).toFixed(1)
-					}
-				}
-			},
-			{ data: "result", className: "dt-body-center" }
-		],
-		fixedHeader: true,
-		lengthMenu: [ [20, 50, -1], [20, 50, "全"] ],
-		order: [ [ 1, "desc" ] ]
-	} ); 
-});
-</script>
+<!-- results -->
+<script src="results.js"></script>
 </head>
 <body>
 <!-- Bootstrap Navigation Bar -->
@@ -110,36 +43,36 @@ jQuery(function($){
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
 
 <table id="result_summary" class="compact display" style="width:50%">
-	<thead>
-		<tr align="center">
-			<th>年</th>
-			<th>総得点</th>
-			<th>平均着順</th>
-			<th>トップ率</th>
-			<th>4着回避率</th>
-			<th>半荘数</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
+<thead>
+<tr align="center">
+	<th>年</th>
+	<th>総得点</th>
+	<th>平均着順</th>
+	<th>トップ率</th>
+	<th>4着回避率</th>
+	<th>半荘数</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
 </table>
 <br />
 <table id="result_details" class="compact display" data-page-length="20" style="width:100%">
-	<thead>
-		<tr align="center">
-			<th>日付</th>
-			<th>#</th>
-			<th>団体</th>
-			<th>タイトル</th>
-			<th>対局</th>
-			<th>対局者（敬称略）</th>
-			<th>着順</th>
-			<th>得点</th>
-			<th>結果</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
+<thead>
+<tr align="center">
+	<th>日付</th>
+	<th>#</th>
+	<th>団体</th>
+	<th>タイトル</th>
+	<th>対局</th>
+	<th>対局者（敬称略）</th>
+	<th>着順</th>
+	<th>得点</th>
+	<th>結果</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
 </table>
 </body>
 </html>
