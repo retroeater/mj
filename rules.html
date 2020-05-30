@@ -11,34 +11,8 @@
 <link rel="stylesheet" type="text/css" href="datatables.min.css" />
 <!-- DataTables JS -->
 <script type="text/javascript" src="datatables.min.js"></script>
-<script>
-jQuery(function($){
-	$.extend( $.fn.dataTable.defaults, { 
-		language: { url: "Japanese.json" } 
-    });
-	$('#rules').DataTable( {
-		ajax: "https://retroeater.github.io/mj/rules.json",
-		columns: [
-			{ data: "id", visible: false },
-			{ data: "game", className: "dt-body-center" },
-			{ data: "hand", className: "dt-body-center" },
-			{ data: "category", className: "dt-body-left" },
-			{ data: "subcategory", className: "dt-body-left" },
-			{ data: "nipponclub", className: "dt-body-center" },
-			{ data: "jpml", className: "dt-body-center" },
-			{ data: "jpmlwrc", className: "dt-body-center" },
-			{ data: "wrc", className: "dt-body-center" },
-			{ data: "saikyosen", className: "dt-body-center" },
-			{ data: "mleague", className: "dt-body-center" }
-		],
-		fixedHeader: true,
-		info: false,
-		order: [ [ 0, "asc" ] ],
-		paging: false,
-		searching: true
-	} );
-});
-</script>
+<!-- rules -->
+<script src="rules.js"></script>
 </head>
 <body>
 <!-- Bootstrap Navigation Bar -->
