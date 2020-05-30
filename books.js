@@ -1,6 +1,6 @@
 jQuery(function($){
 	$.extend( $.fn.dataTable.defaults, { 
-		language: { url: "https://retroeater.github.io/mj/Japanese.json" } 
+		language: { url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Japanese.json" } 
     });
 	$('#books').DataTable( {
 		ajax: "https://retroeater.github.io/mj/books.json",
