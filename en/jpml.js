@@ -1,7 +1,4 @@
 jQuery(function($){
-	$.extend( $.fn.dataTable.defaults, { 
-		language: { url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Japanese.json" } 
-    })
 	$('#jpml').DataTable( {
 		ajax: "https://retroeater.github.io/mj/en/jpml.json",
 		columns: [
@@ -11,7 +8,7 @@ jQuery(function($){
 							return data + ' ' + row.rank_36_2
 						}
 						else {
-							return data
+							return "Champion"
 						}
 					}
 					else {
@@ -42,7 +39,7 @@ jQuery(function($){
 
 				// First Name
 				if(row.name_first_en) {
-					name += ' ' + row.name_first_kanji
+					name += ' ' + row.name_first_en
 				}
 
 				// Ron2 Profile
@@ -65,7 +62,7 @@ jQuery(function($){
 		],
 		fixedHeader: true,
 		info: true,
-		lengthMenu: [ [20, 50, 100, -1], [20, 50, 100, "全"] ],
+		lengthMenu: [ [20, 50, 100, -1], [20, 50, 100, "All"] ],
 		order: true,
 		paging: true,
 		searching: true

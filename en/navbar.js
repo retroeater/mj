@@ -13,7 +13,7 @@ document.write(
 //			'<li class="nav-item"><a class="nav-link" href="media.html">Media</a></li>' +
 //			'<li class="nav-item"><a class="nav-link" href="rules.html">Rules</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="links.html">Links</a></li>' +
-//			'<li class="nav-item"><a class="nav-link" href="jpml.html">JPML</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="jpml.html">JPML</a></li>' +
 //			'<li class="nav-item"><a class="nav-link" href="books.html">Books</a></li>' +
 		'</ul>' +
 	'</div>' +
