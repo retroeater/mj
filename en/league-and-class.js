@@ -24,6 +24,7 @@ var trace = {
 var data = [trace]
 
 var layout = {
+	height: 700,
 	hovermode: 'closest',
 	showlegend: false,
 	title: title,
