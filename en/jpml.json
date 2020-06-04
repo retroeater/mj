@@ -1,5 +1,5 @@
 {
-	data: [
+	"data": [
   {
     "name_last_ja_kanji": "吉田",
     "name_first_ja_kanji": "直",
@@ -318,7 +318,7 @@
     "birthplace_en": "Kanagawa",
     "birthday": "11/15",
     "ron2_id": 6,
-    "twitter_id": 16003200,
+    "twitter_id": "16003200",
     "instagram_id": "",
     "ameblo_id": "nikaidou-sisters",
     "league_36_2": "A2",
@@ -966,7 +966,7 @@
     "birthplace_en": "Yamaguchi",
     "birthday": "05/15",
     "ron2_id": 84,
-    "twitter_id": 11112233778899,
+    "twitter_id": "11112233778899",
     "instagram_id": "",
     "ameblo_id": "",
     "league_36_2": "B2",
