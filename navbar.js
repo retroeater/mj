@@ -1,20 +1,20 @@
 document.write(
 '<nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">' +
-	'<a class="navbar-brand" href="index.html">麻雀</a>' +
+	'<a class="navbar-brand" href="index.html">M</a>' +
 	'<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">' +
 		'<span class="navbar-toggler-icon"></span>' +
 	'</button>' +
 	'<div class="collapse navbar-collapse" id="navbarNavAltMarkup">' +
 		'<ul class="navbar-nav">' +
-			'<li class="nav-item"><a class="nav-link" href="bio.html">略歴</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="results.html">成績</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="league.html">リーグ</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="league-and-class.html">リーグ✕期</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="media.html">メディア</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="links.html">リンク</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="jpml.html">連盟</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="books.html">書籍</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="bio.html">略歴<br>Bio</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="results.html">成績<br>Results</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="league.html">リーグ<br>League</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="league-and-class.html">リーグ✕期<br>League/Class</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="media.html">メディア<br>Media</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="jpml.html">連盟<br>JPML</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
 		'</ul>' +
 	'</div>' +
 '</nav>' +

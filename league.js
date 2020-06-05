@@ -17,7 +17,7 @@ var	counts_e   = []
 
 // リーグ情報代入
 for(var i = 0; i < leagueDetails.length; i++) {
-	classes.push(leagueDetails[i][2])
+	classes.push(leagueDetails[i][2] + '<br>' + leagueDetails[i][1])
 	counts_a1.push(leagueDetails[i][3])
 	counts_a2.push(leagueDetails[i][4])
 	counts_b1.push(leagueDetails[i][5])
@@ -32,17 +32,17 @@ for(var i = 0; i < leagueDetails.length; i++) {
 }
 
 // リーグ情報表示設定
-var a1 = {x:classes, y:counts_a1, name:'A1リーグ', type:'bar', marker:{color:'rgb(255,204,204)'}}
-var a2 = {x:classes, y:counts_a2, name:'A2リーグ', type:'bar', marker:{color:'rgb(255,221,204)'}}
-var b1 = {x:classes, y:counts_b1, name:'B1リーグ', type:'bar', marker:{color:'rgb(255,238,204)'}}
-var b2 = {x:classes, y:counts_b2, name:'B2リーグ', type:'bar', marker:{color:'rgb(255,255,204)'}}
-var c1 = {x:classes, y:counts_c1, name:'C1リーグ', type:'bar', marker:{color:'rgb(238,255,221)'}}
-var c2 = {x:classes, y:counts_c2, name:'C2リーグ', type:'bar', marker:{color:'rgb(221,255,238)'}}
-var c3 = {x:classes, y:counts_c3, name:'C3リーグ', type:'bar', marker:{color:'rgb(204,255,255)'}}
-var d1 = {x:classes, y:counts_d1, name:'D1リーグ', type:'bar', marker:{color:'rgb(204,238,255)'}}
-var d2 = {x:classes, y:counts_d2, name:'D2リーグ', type:'bar', marker:{color:'rgb(204,221,255)'}}
-var d3 = {x:classes, y:counts_d3, name:'D3リーグ', type:'bar', marker:{color:'rgb(204,204,255)'}}
-var e  = {x:classes, y:counts_e,  name:'Eリーグ',  type:'bar', marker:{color:'rgb(204,204,204)'}}
+var a1 = {x:classes, y:counts_a1, name:'A1', type:'bar', marker:{color:'rgb(255,204,204)'}}
+var a2 = {x:classes, y:counts_a2, name:'A2', type:'bar', marker:{color:'rgb(255,221,204)'}}
+var b1 = {x:classes, y:counts_b1, name:'B1', type:'bar', marker:{color:'rgb(255,238,204)'}}
+var b2 = {x:classes, y:counts_b2, name:'B2', type:'bar', marker:{color:'rgb(255,255,204)'}}
+var c1 = {x:classes, y:counts_c1, name:'C1', type:'bar', marker:{color:'rgb(238,255,221)'}}
+var c2 = {x:classes, y:counts_c2, name:'C2', type:'bar', marker:{color:'rgb(221,255,238)'}}
+var c3 = {x:classes, y:counts_c3, name:'C3', type:'bar', marker:{color:'rgb(204,255,255)'}}
+var d1 = {x:classes, y:counts_d1, name:'D1', type:'bar', marker:{color:'rgb(204,238,255)'}}
+var d2 = {x:classes, y:counts_d2, name:'D2', type:'bar', marker:{color:'rgb(204,221,255)'}}
+var d3 = {x:classes, y:counts_d3, name:'D3', type:'bar', marker:{color:'rgb(204,204,255)'}}
+var e  = {x:classes, y:counts_e,  name:'E',  type:'bar', marker:{color:'rgb(204,204,204)'}}
 
 // 選手情報取得
 var playerRanks = getPlayerRanks()
@@ -60,9 +60,9 @@ for(var i = 0; i < playerRanks.length; i++) {
 }
 
 // 選手情報表示設定
-var JunNishikawa     = {x:classes, y:ranks_JunNishikawa    , name:'西川淳',  type:'scatter', connectgaps:true, marker:{color:'rgb(0,153,0)'}}
-var RyoeiHirano      = {x:classes, y:ranks_RyoeiHirano     , name:'平野良栄', type:'scatter', connectgaps:true, marker:{color:'rgb(204,0,0)'}}
-var TakehiroIshidate = {x:classes, y:ranks_TakehiroIshidate, name:'石立岳大', type:'scatter', connectgaps: true, marker:{color:'rgb(0,0,204)'}}
+var JunNishikawa     = {x:classes, y:ranks_JunNishikawa    , name:'西川淳<br>Jun Nishikawa',  type:'scatter', connectgaps:true, marker:{color:'rgb(0,153,0)'}}
+var RyoeiHirano      = {x:classes, y:ranks_RyoeiHirano     , name:'平野良栄<br>Ryoei Hirano', type:'scatter', connectgaps:true, marker:{color:'rgb(204,0,0)'}}
+var TakehiroIshidate = {x:classes, y:ranks_TakehiroIshidate, name:'石立岳大<br>Takehiro Ishidate', type:'scatter', connectgaps: true, marker:{color:'rgb(0,0,204)'}}
 
 var data = [
 	e,d3,d2,d1,c3,c2,c1,b2,b1,a2,a1,
@@ -70,7 +70,7 @@ var data = [
 ]
 	
 var layout = {
-	title: 'リーグ戦（22期後期～36期後期）',
+	title: 'リーグ戦（22期後期～36期後期）<br>League (2006/01~2020/01)',
 	barmode: 'stack',
 	height: 700
 }
