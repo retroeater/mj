@@ -66,23 +66,36 @@ jQuery(function($){
 					name += ' <a href="https://instagram.com/' + row.instagram_id + '" target="_blank"><img alt="Instagram" src="img/Instagram_AppIcon_Aug2017.png" height="29" width="29"><\/a>'
 				}
 
+				// YouTube
+				if(row.youtube_id) {
+					name += ' <a href="https://youtube.com/channel/' + row.youtube_id + '" target="_blank"><img alt="YouTube" src="img/youtube_social_icon_red.png" height="20" width="29"><\/a>'
+				}
+
+				// Wikipedia
+				if(row.wiki_id) {
+					name += ' <a href="https://ja.wikipedia.org/wiki/' + row.wiki_id + '" target="_blank"><img alt="Wikipedia" src="img/Wikipedia's_W.svg" height="29" width="29"><\/a>'
+				}
+
 				return name
 			}},
 			{ data: "class", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
-						return data + '期'
+						return data + '期' + ' / ' + row.year_joined
 					}
 					else {
 						return data
 					}
 				}
 			},
-			{ data: "birthplace_ja", className: "dt-body-center" },
+			{ data: "birthplace_ja", className: "dt-body-center", render: function(data,type,row,meta) {
+					return data + ' / ' + row.birthplace_en
+				}
+			},
 			{ data: "birthday", className: "dt-body-center"}
 		],
 		fixedHeader: true,
 		info: true,
-		lengthMenu: [ [20, 50, 100, -1], [20, 50, 100, "全"] ],
+		lengthMenu: [ [20, 50, 100, -1], [20, 50, 100, "All"] ],
 		order: true,
 		paging: true,
 		searching: true
