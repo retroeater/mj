@@ -42,7 +42,7 @@ jQuery(function($){
 			{ data: "title", className: "dt-body-left", visible: false },
 			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
 					if(row.twitter_url) {
-						return data + ' <a href="' + row.twitter_url + '" target="_blank"><img src="img/Twitter_Logo_Blue.png" class="twitter" height="24" width="24"><\/a>'
+						return data + ' <a href="' + row.twitter_url + '" target="_blank"><img src="img/Twitter_Logo_Blue.svg" class="twitter" height="32" width="32"><\/a>'
 					} else {
 						return data
 					}

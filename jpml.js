@@ -58,12 +58,12 @@ jQuery(function($){
 
 				// Twitter
 				if(row.twitter_id) {
-					name += ' <a href="https://twitter.com/' + row.twitter_id + '" target="_blank"><img alt="Twitter" src="img/Twitter_Logo_Blue.png" height="29" width="29"><\/a>'
+					name += ' <a href="https://twitter.com/' + row.twitter_id + '" target="_blank"><img alt="Twitter" src="img/Twitter_Logo_Blue.svg" height="32" width="32"><\/a>'
 				}
 
 				// Instagram
 				if(row.instagram_id) {
-					name += ' <a href="https://instagram.com/' + row.instagram_id + '" target="_blank"><img alt="Instagram" src="img/Instagram_AppIcon_Aug2017.png" height="29" width="29"><\/a>'
+					name += ' <a href="https://instagram.com/' + row.instagram_id + '" target="_blank"><img alt="Instagram" src="img/glyph-logo_May2016.png" height="29" width="29"><\/a>'
 				}
 
 				// YouTube
@@ -88,7 +88,12 @@ jQuery(function($){
 				}
 			},
 			{ data: "birthplace_ja", className: "dt-body-center", render: function(data,type,row,meta) {
-					return data + ' / ' + row.birthplace_en
+					if(data) {
+						return data + ' / ' + row.birthplace_en
+					}
+					else {
+						return data
+					}
 				}
 			},
 			{ data: "birthday", className: "dt-body-center"}
