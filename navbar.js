@@ -14,6 +14,7 @@ document.write(
 			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="jpml.html">連盟<br>JPML</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="calendar.html">日程<br>Calendar</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
 		'</ul>' +
 	'</div>' +
