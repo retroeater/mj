@@ -1,21 +1,26 @@
 document.write(
-'<nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">' +
+'<nav class="navbar navbar-expand-lg navbar-dark bg-dark">' +
 	'<a class="navbar-brand" href="index.html">M</a>' +
-	'<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">' +
-		'<span class="navbar-toggler-icon"></span>' +
-	'</button>' +
-	'<div class="collapse navbar-collapse" id="navbarNavAltMarkup">' +
-		'<ul class="navbar-nav">' +
+	'<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">' +
+		'<span class="navbar-toggler-icon"></span>'+
+	'</button>'+
+
+	'<div class="collapse navbar-collapse" id="navbarSupportedContent">'+
+		'<ul class="navbar-nav mr-auto">' +
 			'<li class="nav-item"><a class="nav-link" href="bio.html">略歴<br>Bio</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="results.html">成績<br>Results</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="league.html">リーグ<br>League</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="league-and-class.html">リーグ✕期<br>League/Class</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="media.html">メディア<br>Media</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="jpml.html">連盟<br>JPML</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="calendar.html">日程<br>Calendar</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
+			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">連盟<br>JPML</a>' +
+				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+					'<a class="dropdown-item" href="jpml.html">プロ / Pros</a>' +
+					'<a class="dropdown-item" href="calendar.html">日程 / Calendar</a>' +
+					'<a class="dropdown-item" href="books.html">書籍 / Books</a>' +
+					'<a class="dropdown-item" href="league.html">リーグ / League</a>' +
+					'<a class="dropdown-item" href="league-and-class.html">リーグ✕期 / League/Class</a>' +
+				'</div>' +
+			'</li>' +
 		'</ul>' +
 	'</div>' +
 '</nav>' +
