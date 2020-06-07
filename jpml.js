@@ -1,6 +1,6 @@
 jQuery(function($){
 	$('#jpml').DataTable( {
-		ajax: "https://retroeater.github.io/mj/en/jpml.json",
+		ajax: "https://retroeater.github.io/mj/jpml.json",
 		columns: [
 			{ data: "league_36_2", className: "dt-body-center", render: function(data,type,row,meta) {
 					if(data) {
@@ -73,7 +73,7 @@ jQuery(function($){
 
 				// Wikipedia
 				if(row.wiki_id) {
-					name += ' <a href="https://ja.wikipedia.org/wiki/' + row.wiki_id + '" target="_blank"><img alt="Wikipedia" src="img/Wikipedia.svg" height="29" width="29"><\/a>'
+					name += ' <a href="https://ja.wikipedia.org/wiki/' + row.wiki_id + '" target="_blank"><img alt="Wikipedia" src="img/Wikipedia%27s_W.svg" height="29" width="29"><\/a>'
 				}
 
 				return name
