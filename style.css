@@ -1,14 +1,7 @@
-.border-zero {
+.mj-border-zero {
 	border: 0;
 }
 
-img.twitter {
-	vertical-align: middle;
+th {
+	text-align: center;
 }
-
-table.left {
-	margin-left: 0;
-	margin-right: auto;
-}
-
-	
