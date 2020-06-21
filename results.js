@@ -1,67 +1,55 @@
-jQuery(function($){
-	$.extend( $.fn.dataTable.defaults, { 
-		language: { url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Japanese.json" } 
-    })
-	$('#result_summary').DataTable( {
-		ajax: "https://retroeater.github.io/mj/results_summary.json",
-		columns: [
-			{ data: "year", className: "dt-body-center" },
-			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) { 
-					if(row.score >= 0) {
-						return '+' + data.toFixed(1)
-					} else {
-						return '▲' + (Math.abs(data)).toFixed(1)
-					}
+google.charts.load('current', {'packages':['table']});
+google.charts.setOnLoadCallback(drawTable);
+
+function drawTable() {
+	var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1WxXJJ2vQPfjNsMYT9zBE2UU1Xo7T-PkhWYE6dtWtk50/edit#gid=0')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W')
+	query.send(handleQueryResponse)
+
+	function handleQueryResponse(response) {
+		if(response.isError()) {
+			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
+			return
+		}
+
+		var data = response.getDataTable()
+
+		var table = new google.visualization.Table(document.getElementById('myTable'));
+
+		// 団体名フォーマット
+		var orgFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+		orgFormatter.format(data,[2,3],2)
+
+		// タイトル名フォーマット
+		var titleFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+		titleFormatter.format(data,[4,5],4)
+
+		// 対局名フォーマット
+		for(let i = 0; i < data.getNumberOfRows(); i++) {
+				let twitter_url = data.getValue(i,21)
+
+				if(twitter_url) {
+					data.setValue(i,6, data.getValue(i,6) + ' ' + '<a href="' + twitter_url + '" target="_blank"><img src="img/Twitter_Logo_Blue.svg" height="24" width="24"><\/a>')
 				}
-			},
-			{ data: "average_rank", className: "dt-body-center", render: function(data,type,row,meta) {
-					return data.toFixed(2)
-				}
-			},
-			{ data: "1st_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
-					return data.toFixed(3)
-				}
-			},
-			{ data: "non_4th_ratio", className: "dt-body-center", render: function(data,type,row,meta) {
-					return data.toFixed(3)
-				}
-			},			
-			{ data: "number_of_games", className: "dt-body-right" }
-		],
-		info: false,
-		order: [ [ 0, "desc" ] ],
-		paging: false,
-		searching: false
-	})
-	$("#result_details").dataTable( {
-		ajax: "https://retroeater.github.io/mj/results_details.json",
-		columns: [
-			{ data: "date", className: "dt-body-center" },
-			{ data: "game_id", visible: false },
-			{ data: "organization", className: "dt-body-left" },
-			{ data: "title", className: "dt-body-left", visible: false },
-			{ data: "game", className: "dt-body-left", render: function(data,type,row,meta) {
-					if(row.twitter_url) {
-						return data + ' <a href="' + row.twitter_url + '" target="_blank"><img src="img/Twitter_Logo_Blue.svg" height="32" width="32"><\/a>'
-					} else {
-						return data
-					}
-				}
-			},
-			{ data: "players", className: "dt-body-left" },
-			{ data: "ranks", className: "dt-body-left" },
-			{ data: "score", className: "dt-body-right", render: function(data,type,row,meta) {
-					if(row.score >= 0) {
-						return '+' + data.toFixed(1)
-					} else {
-						return '▲' + (Math.abs(data)).toFixed(1)
-					}
-				}
-			},
-			{ data: "result", className: "dt-body-center" }
-		],
-		fixedHeader: true,
-		lengthMenu: [ [20, 50, -1], [20, 50, "全"] ],
-		order: [ [ 1, "desc" ] ]
-	})
-})
+		}
+
+		// 結果フォーマット
+		var resultFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+		resultFormatter.format(data,[19,20],19)
+
+		var options = {
+			allowHtml: true,
+			width: '100%',
+			height: '100%',
+			showRowNumber: true,
+			sortColumn: 0,
+			sortAscending: false
+		}
+
+		// 必要列のみ表示
+		var view = new google.visualization.DataView(data)
+		view.setColumns([0,2,4,6,8,17,18,19])
+
+		table.draw(view, options);
+	}
+}
