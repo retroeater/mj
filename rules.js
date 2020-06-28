@@ -1,27 +1,34 @@
-jQuery(function($){
-	$.extend( $.fn.dataTable.defaults, { 
-		language: { url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Japanese.json" } 
-    })
-	$('#rules').DataTable( {
-		ajax: "https://retroeater.github.io/mj/rules.json",
-		columns: [
-			{ data: "id", visible: false },
-			{ data: "game", className: "dt-body-center" },
-			{ data: "hand", className: "dt-body-center" },
-			{ data: "category", className: "dt-body-left" },
-			{ data: "subcategory", className: "dt-body-left" },
-			{ data: "nipponclub", className: "dt-body-center" },
-			{ data: "jpml", className: "dt-body-center" },
-			{ data: "jpmlwrc", className: "dt-body-center" },
-			{ data: "wrc", className: "dt-body-center" },
-			{ data: "saikyosen", className: "dt-body-center" },
-			{ data: "mleague", className: "dt-body-center" }
-		],
-		fixedHeader: true,
-		info: false,
-		order: [ [ 0, "asc" ] ],
-		paging: false,
-		searching: true,
-		sort: false
-	})
-})
+google.charts.load('current', {'packages':['table']});
+google.charts.setOnLoadCallback(drawTable);
+
+var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1IRMeWJNi_U8yJfz7OmSzG_PVV8R7tLPWS6xahZfmDXg/edit#gid=1629718271'
+
+function drawTable() {
+	var query = new google.visualization.Query(spreadsheet_url)
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K')
+	query.send(handleQueryResponse)
+
+	function handleQueryResponse(response) {
+		if(response.isError()) {
+			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
+			return
+		}
+
+		var data = response.getDataTable()
+
+		var table = new google.visualization.Table(document.getElementById('myTable'));
+
+		var options = {
+			allowHtml: true,
+			width: '100%',
+			height: '100%',
+			sortColumn: 0,
+			sortAscending: true
+		}
+
+		// 必要列のみ表示
+		var view = new google.visualization.DataView(data)
+
+		table.draw(view, options);
+	}
+}
