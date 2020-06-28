@@ -21,9 +21,7 @@ function drawTable() {
 		var options = {
 			allowHtml: true,
 			width: '100%',
-			height: '100%',
-			sortColumn: 0,
-			sortAscending: true
+			height: '100%'
 		}
 
 		// 必要列のみ表示
