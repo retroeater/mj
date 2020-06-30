@@ -1,8 +1,10 @@
+var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1CJkczeq8nMbxFaf9ZezVakxekPsQ-VFK9pU9ZrEsshg/edit#gid=0'
+
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
 function drawTable() {
-	var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1CJkczeq8nMbxFaf9ZezVakxekPsQ-VFK9pU9ZrEsshg/edit#gid=0')
+	var query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery('SELECT A,B,C,D,E,F,G,H')
 	query.send(handleQueryResponse)
 

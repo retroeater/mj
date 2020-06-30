@@ -12,6 +12,3 @@ document.write(
 '<!-- mj -->' +
 '<link rel="stylesheet" href="style.css" />'
 )
-
-
- 

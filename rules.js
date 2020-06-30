@@ -1,7 +1,7 @@
+var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1IRMeWJNi_U8yJfz7OmSzG_PVV8R7tLPWS6xahZfmDXg/edit#gid=1629718271'
+
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
-
-var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1IRMeWJNi_U8yJfz7OmSzG_PVV8R7tLPWS6xahZfmDXg/edit#gid=1629718271'
 
 function drawTable() {
 	var query = new google.visualization.Query(spreadsheet_url)
