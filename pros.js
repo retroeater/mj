@@ -130,7 +130,14 @@ function getFormattedName(data,row_index) {
 	let last_name_en = data.getValue(row_index,4)
 	let first_name_en = data.getValue(row_index,5)
 
-	let formattedName = last_name_jp_kanji + ' ' + first_name_jp_kanji
+	// nullを空文字列に変換
+	if(!first_name_jp_kanji) {first_name_jp_kanji = ""}
+	if(!last_name_jp_kana)   {last_name_jp_kana = ""}
+	if(!first_name_jp_kana)  {first_name_jp_kana = ""}
+	if(!last_name_en)        {last_name_en = ""}
+	if(!first_name_en)       {first_name_en = ""}
+
+	let formattedName = last_name_jp_kanji + first_name_jp_kanji
 
 	if(last_name_jp_kana) {
 		formattedName += ' （' + last_name_jp_kana + ' ' + first_name_jp_kana + '） ' + first_name_en + ' ' + last_name_en
