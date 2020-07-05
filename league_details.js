@@ -1,6 +1,6 @@
 function getLeagueDetails() {
 
-var leagueDetails = [
+const leagueDetails = [
 	// [0]  class_id
 	// [1]  class_en
 	// [2]  class_ja
@@ -51,7 +51,7 @@ var leagueDetails = [
 
 function getPlayerRanks() {
 
-var playerRanks = [
+const playerRanks = [
 	// [0] player
 	// [1] rank (22-2 ~ 36-2)
 	['JunNishikawa',[138,178,136,185,164,218,215,223,207,226,217,224,222,250,277,285,292,264,255,280,,,288,292,,,314,,358]],

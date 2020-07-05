@@ -1,10 +1,11 @@
-var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1z2VHx8tNBi_4T8i8tDCyqv8lkgYD8QdqwGf6WpX9ZdQ/edit#gid=0'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1z2VHx8tNBi_4T8i8tDCyqv8lkgYD8QdqwGf6WpX9ZdQ/edit#gid=0'
 
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
 function drawTable() {
-	var query = new google.visualization.Query(spreadsheet_url)
+
+	const query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S')
 	query.send(handleQueryResponse)
 
@@ -14,9 +15,9 @@ function drawTable() {
 			return
 		}
 
-		var data = response.getDataTable()
+		const data = response.getDataTable()
 
-		var table = new google.visualization.Table(document.getElementById('myTable'));
+		const table = new google.visualization.Table(document.getElementById('myTable'));
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -41,14 +42,14 @@ function drawTable() {
 				data.setValue(i, 17, formattedRank)
 		}
 
-		var options = {
+		const options = {
 			allowHtml: true,
 			width: '100%',
 			height: '100%'
 		}
 
 		// 必要列のみ表示
-		var view = new google.visualization.DataView(data)
+		const view = new google.visualization.DataView(data)
 		view.setColumns([17,0,6,8,10])
 
 		table.draw(view, options);
@@ -57,8 +58,8 @@ function drawTable() {
 
 function getFormattedBirthplace(data,row_index) {
 
-	let birthplace_ja = data.getValue(row_index,8)
-	let birthplace_en = data.getValue(row_index,9)
+	const birthplace_ja = data.getValue(row_index,8)
+	const birthplace_en = data.getValue(row_index,9)
 
 	let formattedBirthplace = ""
 
@@ -71,8 +72,8 @@ function getFormattedBirthplace(data,row_index) {
 
 function getFormattedClass(data,row_index) {
 
-	let class_ja = data.getValue(row_index,6)
-	let class_en = data.getValue(row_index,7)
+	const class_ja = data.getValue(row_index,6)
+	const class_en = data.getValue(row_index,7)
 
 	let formattedClass = ""
 
@@ -85,11 +86,11 @@ function getFormattedClass(data,row_index) {
 
 function getFormattedLinks(data,row_index) {
 	
-	let ron2_id = data.getValue(row_index,11)
-	let twitter_id = data.getValue(row_index,12)
-	let instagram_id = data.getValue(row_index,13)
-	let youtube_id = data.getValue(row_index,14)
-	let wiki_id = data.getValue(row_index,15)
+	const ron2_id = data.getValue(row_index,11)
+	const twitter_id = data.getValue(row_index,12)
+	const instagram_id = data.getValue(row_index,13)
+	const youtube_id = data.getValue(row_index,14)
+	const wiki_id = data.getValue(row_index,15)
 
 	let formattedLinks = ""
 	
@@ -148,8 +149,8 @@ function getFormattedName(data,row_index) {
 
 function getFormattedRank(data,row_index) {
 	
-	let league = data.getValue(row_index,17)
-	let rank = data.getValue(row_index,18)
+	const league = data.getValue(row_index,17)
+	const rank = data.getValue(row_index,18)
 
 	let formattedRank = ""
 	let ordinalIndicator = ""

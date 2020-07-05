@@ -1,10 +1,11 @@
-var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1IRMeWJNi_U8yJfz7OmSzG_PVV8R7tLPWS6xahZfmDXg/edit#gid=1629718271'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1IRMeWJNi_U8yJfz7OmSzG_PVV8R7tLPWS6xahZfmDXg/edit#gid=1629718271'
 
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
 function drawTable() {
-	var query = new google.visualization.Query(spreadsheet_url)
+
+	const query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K')
 	query.send(handleQueryResponse)
 
@@ -14,18 +15,18 @@ function drawTable() {
 			return
 		}
 
-		var data = response.getDataTable()
+		const data = response.getDataTable()
 
-		var table = new google.visualization.Table(document.getElementById('myTable'));
+		const table = new google.visualization.Table(document.getElementById('myTable'));
 
-		var options = {
+		const options = {
 			allowHtml: true,
 			width: '100%',
 			height: '100%'
 		}
 
 		// 必要列のみ表示
-		var view = new google.visualization.DataView(data)
+		const view = new google.visualization.DataView(data)
 
 		table.draw(view, options);
 	}

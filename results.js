@@ -1,10 +1,11 @@
-var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1WxXJJ2vQPfjNsMYT9zBE2UU1Xo7T-PkhWYE6dtWtk50/edit#gid=0'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1WxXJJ2vQPfjNsMYT9zBE2UU1Xo7T-PkhWYE6dtWtk50/edit#gid=0'
 
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
 function drawTable() {
-	var query = new google.visualization.Query(spreadsheet_url)
+
+	const query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W')
 	query.send(handleQueryResponse)
 
@@ -14,16 +15,16 @@ function drawTable() {
 			return
 		}
 
-		var data = response.getDataTable()
+		const data = response.getDataTable()
 
-		var table = new google.visualization.Table(document.getElementById('myTable'));
+		const table = new google.visualization.Table(document.getElementById('myTable'));
 
 		// 団体名フォーマット
-		var orgFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+		const orgFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
 		orgFormatter.format(data,[2,3],2)
 
 		// タイトル名フォーマット
-		var titleFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+		const titleFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
 		titleFormatter.format(data,[4,5],4)
 
 		// 対局名フォーマット
@@ -36,10 +37,10 @@ function drawTable() {
 		}
 
 		// 結果フォーマット
-		var resultFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+		const resultFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
 		resultFormatter.format(data,[19,20],19)
 
-		var options = {
+		const options = {
 			allowHtml: true,
 			width: '100%',
 			height: '100%',
@@ -49,7 +50,7 @@ function drawTable() {
 		}
 
 		// 必要列のみ表示
-		var view = new google.visualization.DataView(data)
+		const view = new google.visualization.DataView(data)
 		view.setColumns([0,2,4,6,8,17,18,19])
 
 		table.draw(view, options);
