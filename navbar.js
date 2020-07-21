@@ -12,6 +12,7 @@ document.write(
 			'<li class="nav-item"><a class="nav-link" href="media.html">メディア<br>Media</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="glossary.html">用語集<br>Glossary</a></li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">連盟<br>JPML</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="pros.html">プロ / Pros</a>' +
