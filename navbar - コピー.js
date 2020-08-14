@@ -7,6 +7,12 @@ document.write(
 
 	'<div class="collapse navbar-collapse" id="navbarSupportedContent">'+
 		'<ul class="navbar-nav mr-auto">' +
+			'<li class="nav-item"><a class="nav-link" href="bio.html">略歴<br>Bio</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="results.html">成績<br>Results</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="media.html">メディア<br>Media</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="glossary.html">用語集<br>Glossary</a></li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">連盟<br>JPML</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="pros.html">プロ / Pros</a>' +
@@ -17,16 +23,6 @@ document.write(
 					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
 				'</div>' +
 			'</li>' +
-			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +
-				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="bio.html">略歴 / Bio</a>' +
-					'<a class="dropdown-item" href="results.html">成績 / Results</a>' +
-					'<a class="dropdown-item" href="media.html">メディア / Media</a>' +
-				'</div>' +
-			'</li>' +
-			'<li class="nav-item"><a class="nav-link" href="glossary.html">用語集<br>Glossary</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
 		'</ul>' +
 	'</div>' +
 '</nav>' +
