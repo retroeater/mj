@@ -20,6 +20,7 @@ document.write(
 					'<a class="dropdown-item" href="books.html">書籍 / Books</a>' +
 					'<a class="dropdown-item" href="league.html">リーグ / League</a>' +
 					'<a class="dropdown-item" href="league-and-class.html">リーグ✕期 / League/Class</a>' +
+					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
 				'</div>' +
 			'</li>' +
 		'</ul>' +
