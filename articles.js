@@ -21,15 +21,19 @@ function drawTable() {
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
+				// 名前フォーマット
+				let formattedName = getFormattedName(data,i)
+
 				// タイトルフォーマット
 				let formattedTitle = getFormattedTitle(data,i)
 
-				data.setValue(i, 2, formattedTitle)
+				data.setValue(i, 0, formattedName)
+				data.setValue(i, 3, formattedTitle)
 		}
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,1,2,4])
+		view.setColumns([0,2,3,5])
 
 		const options = {
 			allowHtml: true,
@@ -44,10 +48,22 @@ function drawTable() {
 	}
 }
 
+function getFormattedName(data,row_index) {
+
+	let name_jp_kanji = data.getValue(row_index,0)
+	let name_jp_kana = data.getValue(row_index,1)
+
+	let formattedName = ""
+
+	formattedName = name_jp_kanji + ' （' + name_jp_kana + '）'
+
+	return formattedName
+}
+
 function getFormattedTitle(data,row_index) {
 
-	const title = data.getValue(row_index,2)
-	const url = data.getValue(row_index,3)
+	const title = data.getValue(row_index,3)
+	const url = data.getValue(row_index,4)
 
 	let formattedTitle = ""
 
