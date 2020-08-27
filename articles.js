@@ -1,9 +1,9 @@
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1p3JQrsjaywAB85aoiYcHoz5vrwzbBKMOQF7SWLM08Vw/edit#gid=0'
 
-google.charts.load('current', {'packages':['table']});
-google.charts.setOnLoadCallback(drawTable);
+google.charts.load('current', {'packages':['table','controls']});
+google.charts.setOnLoadCallback(drawDashboard);
 
-function drawTable() {
+function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery('SELECT A,B,C,D,E,F')
@@ -17,8 +17,6 @@ function drawTable() {
 
 		const data = response.getDataTable()
 
-		const table = new google.visualization.Table(document.getElementById('myTable'))
-
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
 				// 名前フォーマット
@@ -31,20 +29,43 @@ function drawTable() {
 				data.setValue(i, 3, formattedTitle)
 		}
 
+		
+		// Create a dashboard
+		var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
+
+
+    var stringFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'string_filter_div',
+        options: {
+            filterColumnIndex: 0
+        }
+    });
+	
+//		const table = new google.visualization.Table(document.getElementById('myTable'))
+		const table = new google.visualization.ChartWrapper({
+					'chartType': 'Table',
+					container_id: 'myTable',
+		})
+
 		// 必要列のみ表示
-		const view = new google.visualization.DataView(data)
-		view.setColumns([0,2,3,5])
+//		const view = new google.visualization.DataView(data)
+//		view.setColumns([0,2,3,5])
+//
+//		const options = {
+//			allowHtml: true,
+//			width: '100%',
+//			height: '100%',
+//			showRowNumber: true,
+//			sortColumn: 3,
+//			sortAscending: false
+//		}
 
-		const options = {
-			allowHtml: true,
-			width: '100%',
-			height: '100%',
-			showRowNumber: true,
-			sortColumn: 3,
-			sortAscending: false
-		}
 
-		table.draw(view, options)
+		dashboard.bind(stringFilter, table)
+//		table.draw(view, options)
+		dashboard.draw(data)
+
 	}
 }
 
