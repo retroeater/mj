@@ -19,19 +19,39 @@ function drawTable() {
 
 		const table = new google.visualization.Table(document.getElementById('myTable'))
 
+		for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+				// タイトルフォーマット
+				let formattedTitle = getFormattedTitle(data,i)
+
+				data.setValue(i, 2, formattedTitle)
+		}
+
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,1,2,3,4])
+		view.setColumns([0,1,2,4])
 
 		const options = {
 			allowHtml: true,
 			width: '100%',
 			height: '100%',
 			showRowNumber: true,
-			sortColumn: 3,
+			sortColumn: 4,
 			sortAscending: false
 		}
 
 		table.draw(view, options)
 	}
+}
+
+function getFormattedTitle(data,row_index) {
+
+	const title = data.getValue(row_index,2)
+	const url = data.getValue(row_index,3)
+
+	let formattedTitle = ""
+
+	formattedTitle += ' <a href="' + url + '" target="_blank"><img alt="記事" src="img/125_arr_hoso.png" height="29" width="29" /></a> ' + title
+
+	return formattedTitle
 }
