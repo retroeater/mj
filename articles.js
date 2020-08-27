@@ -17,17 +17,17 @@ function drawDashboard() {
 
 		const data = response.getDataTable()
 
-		for(let i = 0; i < data.getNumberOfRows(); i++) {
-
-				// 名前フォーマット
-				let formattedName = getFormattedName(data,i)
-
-				// タイトルフォーマット
-				let formattedTitle = getFormattedTitle(data,i)
-
-				data.setValue(i, 0, formattedName)
-				data.setValue(i, 3, formattedTitle)
-		}
+//		for(let i = 0; i < data.getNumberOfRows(); i++) {
+//
+//				// 名前フォーマット
+//				let formattedName = getFormattedName(data,i)
+//
+//				// タイトルフォーマット
+//				let formattedTitle = getFormattedTitle(data,i)
+//
+//				data.setValue(i, 0, formattedName)
+//				data.setValue(i, 3, formattedTitle)
+//		}
 
 		
 		// Create a dashboard
