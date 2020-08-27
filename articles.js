@@ -36,7 +36,7 @@ function drawTable() {
 			width: '100%',
 			height: '100%',
 			showRowNumber: true,
-			sortColumn: 4,
+			sortColumn: 3,
 			sortAscending: false
 		}
 
