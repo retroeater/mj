@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<url>
+		<loc>https://retroeater.github.io/mj/</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>weekly</changefreq>  
+		<priority>0.0</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/index.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>weekly</changefreq>  
+		<priority>0.0</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/bio.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/birthplaces.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/books.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.5</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/glossary.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>weekly</changefreq>  
+		<priority>0.5</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/league.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/league-and-class.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/links.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/maps.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>yearly</changefreq>  
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/media.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.5</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/pros.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>weekly</changefreq>  
+		<priority>1.0</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/results.html</loc>
+		<lastmod>2020-08-26</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>0.5</priority>
+	</url>
+
+</urlset>
