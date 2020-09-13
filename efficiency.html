@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176078855-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-176078855-1');
+</script>
+<script src="header.js"></script>
+<title>牌効率 | Efficiency</title>
+<script src="efficiency.js"></script>
+</head>
+<body>
+<!-- Bootstrap Navigation Bar -->
+<script src="navbar.js"></script>
+
+<div id="myChart" style="width: 100%; height: 600px;"></div>
+<p>
+計算方法：<br>
+「東」からメンツを作るには、「東」（残り3枚）⇒「東」（残り2枚）とツモる必要があるので、組合せ数は3*2=6通り。<br>
+「3456」からメンツを作るには、「1⇒2」「2⇒1」「2⇒4」「2⇒7」（略）「7⇒2」「7⇒5」「7⇒8」「8⇒7」で、174通り。<br>
+</p>
+<p>
+How to calculate the number of combinations to create a new group:<br>
+東: Draw "東" (3 left) and "東" (2 left) to create a new group "東東東" - 6 combinations.<br>
+3456: Draw "1->2", "2->1"..."7->8", "8->7" to create a new group - 174 combinations.<br>
+</p>
+</body>
+</html>
