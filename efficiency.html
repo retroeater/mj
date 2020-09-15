@@ -18,15 +18,17 @@
 <script src="navbar.js"></script>
 
 <div id="myChart" style="width: 100%; height: 700px;"></div>
-<p>
+<p class="mj-margin-text">
 計算方法：<br>
 「東」からメンツを作るには、「東」（残り3枚）⇒「東」（残り2枚）とツモる必要があるので、組合せ数は3*2=6通り。<br>
 「3456」からメンツを作るには、「1⇒2」「2⇒1」「2⇒4」「2⇒7」（略）「7⇒2」「7⇒5」「7⇒8」「8⇒7」で、174通り。<br>
+「1」と「9」、「2」と「8」、「3456」と「4567」等、同形・類形の牌姿については初出のみ代表として掲載しています。<br>
 </p>
-<p>
+<p class="mj-margin-text">
 How to calculate the number of combinations to create a new group:<br>
 東: Draw "東" (3 left) and "東" (2 left) to create a new group "東東東" - 6 combinations.<br>
 3456: Draw "1->2", "2->1"..."7->8", "8->7" to create a new group - 174 combinations.<br>
+*Only shows the first one for the same shape e.g. 1 for 9, 2 for 8, 3 for 4/5/6/7, 3456 for 4567.<br>
 </p>
 </body>
 </html>

@@ -2,6 +2,11 @@
 	border: 0;
 }
 
+.mj-margin-text {
+	margin-left: 32px;
+	margin-top: 24px;
+}
+
 th {
 	text-align: center;
 }
