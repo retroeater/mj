@@ -10,14 +10,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/index.html</loc>
-		<lastmod>2020-09-14</lastmod>
+		<lastmod>2020-10-02</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/articles.html</loc>
-		<lastmod>2020-08-27</lastmod>
+		<lastmod>2020-09-26</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>1.0</priority>
 	</url>
