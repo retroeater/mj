@@ -16,7 +16,8 @@ document.write(
 					'<a class="dropdown-item" href="league-and-class.html">リーグ✕期 / League/Class</a>' +
 					'<a class="dropdown-item" href="birthplaces.html">出身地 / Birthplaces</a>' +
 					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
-					'<a class="dropdown-item" href="results_37_a1.html">第37期A1リーグ / 2020 A1</a>' +
+					'<a class="dropdown-item" href="results_37_a1.html">第37期A1リーグ / A1 2020</a>' +
+					'<a class="dropdown-item" href="results_37_a2.html">第37期A2リーグ / A2 2020</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +
