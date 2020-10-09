@@ -122,7 +122,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/results_37_a1.html</loc>
-		<lastmod>2020-10-04</lastmod>
+		<lastmod>2020-10-09</lastmod>
+		<changefreq>weekly</changefreq>  
+		<priority>0.5</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/results_37_a1_detail.html</loc>
+		<lastmod>2020-10-09</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>0.5</priority>
 	</url>
