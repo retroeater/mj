@@ -1,4 +1,4 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1WxXJJ2vQPfjNsMYT9zBE2UU1Xo7T-PkhWYE6dtWtk50/edit#gid=0'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1WxXJJ2vQPfjNsMYT9zBE2UU1Xo7T-PkhWYE6dtWtk50/edit?sheet=summary'
 
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawTable);
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W')
+	query.setQuery('SELECT A,B,C,D,E,F')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -19,39 +19,14 @@ function drawTable() {
 
 		const table = new google.visualization.Table(document.getElementById('myTable'));
 
-		// 団体名フォーマット
-		const orgFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
-		orgFormatter.format(data,[2,3],2)
-
-		// タイトル名フォーマット
-		const titleFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
-		titleFormatter.format(data,[4,5],4)
-
-		// 対局名フォーマット
-		for(let i = 0; i < data.getNumberOfRows(); i++) {
-				let twitter_url = data.getValue(i,21)
-
-				if(twitter_url) {
-					data.setValue(i,6, data.getValue(i,6) + ' ' + '<a href="' + twitter_url + '" target="_blank"><img src="img/Twitter_Logo_Blue.svg" height="24" width="24"><\/a>')
-				}
-		}
-
-		// 結果フォーマット
-		const resultFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
-		resultFormatter.format(data,[19,20],19)
-
 		const options = {
 			allowHtml: true,
 			width: '100%',
-			height: '100%',
-			showRowNumber: true,
-			sortColumn: 0,
-			sortAscending: false
+			height: '100%'
 		}
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,2,4,6,8,17,18,19])
 
 		table.draw(view, options);
 	}
