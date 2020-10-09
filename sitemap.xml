@@ -17,21 +17,21 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/articles.html</loc>
-		<lastmod>2020-09-26</lastmod>
+		<lastmod>2020-10-08</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/articles_ryoei.html</loc>
-		<lastmod>2020-09-13</lastmod>
+		<lastmod>2020-10-08</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/bio.html</loc>
-		<lastmod>2020-08-26</lastmod>
+		<lastmod>2020-10-08</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>0.1</priority>
 	</url>
@@ -45,9 +45,9 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/books.html</loc>
-		<lastmod>2020-08-26</lastmod>
+		<lastmod>2020-10-08</lastmod>
 		<changefreq>monthly</changefreq>  
-		<priority>0.5</priority>
+		<priority>1.0</priority>
 	</url>
 
 	<url>
@@ -59,7 +59,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/glossary.html</loc>
-		<lastmod>2020-10-04</lastmod>
+		<lastmod>2020-10-08</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>0.1</priority>
 	</url>
@@ -101,7 +101,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/pros.html</loc>
-		<lastmod>2020-08-26</lastmod>
+		<lastmod>2020-10-08</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>1.0</priority>
 	</url>
