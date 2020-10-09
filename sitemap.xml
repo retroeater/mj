@@ -135,6 +135,13 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/results_37_a1_rank.html</loc>
+		<lastmod>2020-10-09</lastmod>
+		<changefreq>weekly</changefreq>  
+		<priority>0.5</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/results_37_a2.html</loc>
 		<lastmod>2020-10-09</lastmod>
 		<changefreq>weekly</changefreq>  
