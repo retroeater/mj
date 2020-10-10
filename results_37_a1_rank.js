@@ -18,13 +18,15 @@ function drawChart() {
 		const data = response.getDataTable()
 		
         const options = {
-			legend: {position: 'bottom'},
 			chartArea: {
 				left: 50,
 				top: 20,
 				width: '100%',
 				height: '80%'
-			}
+			},
+			legend: {position: 'bottom'},
+			title: '第37期A1リーグ',
+			titlePosition: 'in'
         }
 
         const chart = new google.visualization.LineChart(document.getElementById('myChart'))
