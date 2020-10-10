@@ -18,7 +18,13 @@ function drawChart() {
 		const data = response.getDataTable()
 		
         const options = {
-			legend: {position: 'bottom'}
+			legend: {position: 'bottom'},
+			chartArea: {
+				left: 50,
+				top: 20,
+				width: '100%',
+				height: '80%'
+			}
         }
 
         const chart = new google.visualization.LineChart(document.getElementById('myChart'))
@@ -26,3 +32,13 @@ function drawChart() {
         chart.draw(data, options)
 	}
 }
+
+(function(){
+    let requestId;
+    window.addEventListener('resize', function(){
+        cancelAnimationFrame(requestId);
+        requestId = requestAnimationFrame(function(){
+            drawChart();
+        })
+    })
+})()
