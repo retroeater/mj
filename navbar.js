@@ -12,12 +12,17 @@ document.write(
 					'<a class="dropdown-item" href="pros.html">プロ / Pros</a>' +
 					'<a class="dropdown-item" href="articles.html">記事 / Articles</a>' +
 					'<a class="dropdown-item" href="books.html">書籍 / Books</a>' +
-					'<a class="dropdown-item" href="league.html">リーグ / League</a>' +
-					'<a class="dropdown-item" href="league-and-class.html">リーグ✕期 / League/Class</a>' +
 					'<a class="dropdown-item" href="birthplaces.html">出身地 / Birthplaces</a>' +
 					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
+					'<a class="dropdown-item" href="ron2.html">ロン2 / Ron2</a>' +
+				'</div>' +
+			'</li>' +
+			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">鳳凰戦<br>Phoenix</a>' +
+				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="results_37_a1.html">第37期A1リーグ / A1 2020</a>' +
 					'<a class="dropdown-item" href="results_37_a2.html">第37期A2リーグ / A2 2020</a>' +
+					'<a class="dropdown-item" href="league.html">リーグ / League</a>' +
+					'<a class="dropdown-item" href="league-and-class.html">リーグ✕期 / League/Class</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +
