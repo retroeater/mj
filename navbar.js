@@ -21,7 +21,7 @@ document.write(
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="results_37_a1.html">第37期A1リーグ / A1 2020</a>' +
 					'<a class="dropdown-item" href="results_37_a2.html">第37期A2リーグ / A2 2020</a>' +
-					'<a class="dropdown-item" href="league.html">リーグ / League</a>' +
+					'<a class="dropdown-item" href="leagues.html">リーグ / Leagues</a>' +
 					'<a class="dropdown-item" href="league-by-class.html">リーグ✕期 / League by Class</a>' +
 				'</div>' +
 			'</li>' +
