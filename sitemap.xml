@@ -52,7 +52,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/efficiency.html</loc>
-		<lastmod>2020-09-14</lastmod>
+		<lastmod>2020-10-18</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>0.1</priority>
 	</url>
@@ -65,8 +65,8 @@
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/league.html</loc>
-		<lastmod>2020-08-26</lastmod>
+		<loc>https://retroeater.github.io/mj/leagues.html</loc>
+		<lastmod>2020-10-18</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>0.1</priority>
 	</url>
