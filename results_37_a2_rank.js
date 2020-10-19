@@ -34,13 +34,3 @@ function drawChart() {
         chart.draw(data, options)
 	}
 }
-
-(function(){
-    let requestId;
-    window.addEventListener('resize', function(){
-        cancelAnimationFrame(requestId);
-        requestId = requestAnimationFrame(function(){
-            drawChart();
-        })
-    })
-})()

@@ -47,3 +47,13 @@ function drawChart() {
         chart.draw(view, options)
 	}
 }
+
+(function(){
+    let requestId;
+    window.addEventListener('resize', function(){
+        cancelAnimationFrame(requestId);
+        requestId = requestAnimationFrame(function(){
+            drawChart();
+        })
+    })
+})()
