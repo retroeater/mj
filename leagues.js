@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawChart)
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,P,N,O')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -43,6 +43,7 @@ function drawChart() {
 				'#CCCCFF', // D3
 				'#CCCCCC', // E
 				'#CC0000', // 石立岳大
+				'#333333', // 齋藤豪
 				'#009900', // 西川淳
 				'#0000CC'  // 平野良栄
 			],
@@ -55,6 +56,7 @@ function drawChart() {
 				11: {type:'line'},
 				12: {type:'line'},
 				13: {type:'line'},
+				14: {type:'line'}
 			},
 			vAxis: {
 				direction: -1,
