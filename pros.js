@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawTable);
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S WHERE T = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {

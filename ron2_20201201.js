@@ -1,4 +1,4 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1oHOMaGoTeRqIAw-jHJt8vT7UUhGuPAtTl7ccLP0cHqY/edit?sheet=20210101'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1oHOMaGoTeRqIAw-jHJt8vT7UUhGuPAtTl7ccLP0cHqY/edit?sheet=20201201'
 
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
