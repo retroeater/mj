@@ -45,7 +45,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/books.html</loc>
-		<lastmod>2020-10-08</lastmod>
+		<lastmod>2021-01-05</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>1.0</priority>
 	</url>
@@ -101,8 +101,8 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/pros.html</loc>
-		<lastmod>2020-10-08</lastmod>
-		<changefreq>weekly</changefreq>  
+		<lastmod>2021-01-05</lastmod>
+		<changefreq>monthly</changefreq>  
 		<priority>1.0</priority>
 	</url>
 
