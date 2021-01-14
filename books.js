@@ -6,9 +6,20 @@ google.charts.setOnLoadCallback(drawTable);
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT B,C,D,F,G,I,J,M,O,P')
+	query.setQuery('SELECT B,C,D,F,G,H,I,J,L,M')
 	query.send(handleQueryResponse)
-
+	/*
+		0	B	著者名
+		1	C	著者名かな
+		2	D	Author
+		3	F	Amazon URL
+		4	G	商品画像URL
+		5	H	書籍名
+		6	I	Title
+		7	J	出版日
+		8	L	Kindle URL
+		9	M	Unlimited
+	*/
 	function handleQueryResponse(response) {
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
