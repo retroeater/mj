@@ -86,6 +86,7 @@ function drawDashboard() {
 		data.setColumnLabel(0, '名前<br>Name')
 		data.setColumnLabel(6, '期<br>Joined')
 		data.setColumnLabel(8, '出身地<br>Birthplace')
+		data.setColumnLabel(10, '誕生日<br>Birthday')
 		data.setColumnLabel(12, 'Twitter')
 		data.setColumnLabel(13, 'Instagram')
 		data.setColumnLabel(14, 'YouTube')
