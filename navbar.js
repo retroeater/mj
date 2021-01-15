@@ -9,7 +9,7 @@ document.write(
 		'<ul class="navbar-nav mr-auto">' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">連盟<br>JPML</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="pros.html">プロ / Pros</a>' +
+					'<a class="dropdown-item" href="jpml_pros.html">プロ / Pros</a>' +
 					'<a class="dropdown-item" href="articles.html">記事 / Articles</a>' +
 					'<a class="dropdown-item" href="books.html">書籍 / Books</a>' +
 					'<a class="dropdown-item" href="birthplaces.html">出身地 / Birthplaces</a>' +
