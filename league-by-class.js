@@ -35,14 +35,14 @@ function drawChart() {
 			},
 			hAxis: {
 				direction: -1,
-				maxValue: 35,
+				maxValue: 37,
 				textPosition: 'none'
 			},
 			vAxis: {
 				maxValue: 13,
 				textPosition: 'none'
 			},
-			title: 'リーグ✕期（36期後期時点）',
+			title: 'リーグ✕期（37期後期時点）',
 			titlePosition: 'in'
         }
 
