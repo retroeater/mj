@@ -45,7 +45,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/books.html</loc>
-		<lastmod>2021-01-10</lastmod>
+		<lastmod>2021-01-14</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>1.0</priority>
 	</url>
@@ -65,8 +65,15 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/jpml_pros.html</loc>
+		<lastmod>2021-01-14</lastmod>
+		<changefreq>monthly</changefreq>  
+		<priority>1.0</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/leagues.html</loc>
-		<lastmod>2020-10-18</lastmod>
+		<lastmod>2021-01-14</lastmod>
 		<changefreq>monthly</changefreq>  
 		<priority>0.1</priority>
 	</url>
@@ -143,21 +150,21 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/results_37_a2.html</loc>
-		<lastmod>2020-12-31</lastmod>
+		<lastmod>2021-01-14</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/results_37_a2_detail.html</loc>
-		<lastmod>2020-12-31</lastmod>
+		<lastmod>2021-01-14</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/results_37_a2_rank.html</loc>
-		<lastmod>2020-12-31</lastmod>
+		<lastmod>2021-01-14</lastmod>
 		<changefreq>weekly</changefreq>  
 		<priority>0.5</priority>
 	</url>
