@@ -161,7 +161,7 @@ function getFormattedRon2(data,row_index) {
 	let formattedRon2 = ""
 
 	if(ron2_id) {
-		formattedRon2 += '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2_id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="29" width="29" /></a> '
+		formattedRon2 += '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2_id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="32" width="32" /></a> '
 	}
 	else {
 		formattedRon2 += '<img alt="" src="img/empty.png" height="29" width="29" /> '
@@ -174,26 +174,15 @@ function getFormattedName(data,row_index) {
 
 	let last_name_jp_kanji = data.getValue(row_index,0)
 	let first_name_jp_kanji = data.getValue(row_index,1)
-	let last_name_jp_kana = data.getValue(row_index,2)
-	let first_name_jp_kana = data.getValue(row_index,3)
 	let last_name_en = data.getValue(row_index,4)
 	let first_name_en = data.getValue(row_index,5)
 
 	// nullを空文字列に変換
 	if(!first_name_jp_kanji) {first_name_jp_kanji = ""}
-	if(!last_name_jp_kana)   {last_name_jp_kana = ""}
-	if(!first_name_jp_kana)  {first_name_jp_kana = ""}
 	if(!last_name_en)        {last_name_en = ""}
 	if(!first_name_en)       {first_name_en = ""}
 
-	let formattedName = last_name_jp_kanji + first_name_jp_kanji
-
-	if(last_name_jp_kana) {
-		formattedName += ' （' + last_name_jp_kana + ' ' + first_name_jp_kana + '） <br><img alt="" src="img/empty.png" height="29" width="29" /> ' + first_name_en + ' ' + last_name_en
-	}
-	else {
-		formattedName += '<br><img alt="" src="img/empty.png" height="29" width="29" />'
-	}
+	let formattedName = last_name_jp_kanji + first_name_jp_kanji + '<br><img alt="" src="img/empty.png" height="32" width="32" /> ' + first_name_en + ' ' + last_name_en
 
 	return formattedName
 }
