@@ -24,8 +24,8 @@ function drawDashboard() {
 		12	O	Twitter
 		13	P	Instagram
 		14	Q	YouTube
-		15	R	Wiki
-		16	S	Ameblo
+		15	R	Wikipedia
+		16	S	Blog
 		17	T	37期後期リーグ
 		18	U	最高到達リーグ
 		-	V	表示
@@ -62,6 +62,9 @@ function drawDashboard() {
 				// Wikiperiaフォーマット
 				let formattedWikipedia = getFormattedWikipedia(data,i)
 
+				// Blogフォーマット
+				let formattedBlog = getFormattedBlog(data,i)
+
 				// 期フォーマット
 				let formattedClass = getFormattedClass(data,i)
 
@@ -84,6 +87,7 @@ function drawDashboard() {
 				data.setValue(i, 13, formattedInstagram)
 				data.setValue(i, 14, formattedYouTube)
 				data.setValue(i, 15, formattedWikipedia)
+				data.setValue(i, 16, formattedBlog)
 				data.setValue(i, 17, formattedLatestLeague)
 				data.setValue(i, 18, formattedHighestLeague)
 				data.setValue(i, 19, formattedArticles)
@@ -97,6 +101,7 @@ function drawDashboard() {
 		data.setColumnLabel(13, 'Instagram')
 		data.setColumnLabel(14, 'YouTube')
 		data.setColumnLabel(15, 'Wikipedia')
+		data.setColumnLabel(15, 'Blog')
 		data.setColumnLabel(17, '37期後期<br>2021/01')
 		data.setColumnLabel(18, '最高到達<br>Highest')
 		data.setColumnLabel(19, '関連記事<br>Articles')
@@ -127,7 +132,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,12,13,14,15,6,8,10,17,18,19])
+		view.setColumns([0,12,13,14,15,16,6,8,10,17,18,19])
 
 		dashboard.bind([nameFilter], table)
 		dashboard.draw(view)
@@ -160,6 +165,19 @@ function getFormattedBirthplace(data,row_index) {
 	}
 
 	return formattedBirthplace
+}
+
+function getFormattedBlog(data,row_index) {
+
+	const blog_url = data.getValue(row_index,16)
+
+	let formattedBlog = ""
+
+	if(blog_url) {
+		formattedBlog = '<a href="' + blog_url + '" target="_blank"><img alt="Blog" src="img/797_me_h.png" height="32" width="32" /></a>'
+	}
+
+	return formattedBlog
 }
 
 function getFormattedClass(data,row_index) {
