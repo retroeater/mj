@@ -1,9 +1,18 @@
+const params = (new URL(document.location)).searchParams
+const search_name = params.get('name')
+
+if(search_name == 'null') {
+	search_name = ''
+}
+
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_articles&headers=1'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
 
 function drawDashboard() {
+
+	console.log('name :', search_name)
 
 	const query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery('SELECT A,B,C,D,E,F')
@@ -37,6 +46,9 @@ function drawDashboard() {
 			options: {
 				filterColumnIndex: 0,
 				matchType: 'any'
+			},
+			state: {
+				value: search_name
 			}
 		})
 

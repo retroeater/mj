@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,W,A WHERE V = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 	/*
 		0	C	姓
@@ -29,6 +29,8 @@ function drawDashboard() {
 		17	T	37期後期リーグ
 		18	U	最高到達リーグ
 		-	V	表示
+		19	W	記事数
+		20	A	主キー
 	*/
 
 	function handleQueryResponse(response) {
@@ -71,6 +73,9 @@ function drawDashboard() {
 
 				// 最高到達リーグフォーマット
 				let formattedHighestLeague = getFormattedHighestLeague(data,i)
+				
+				// 関連記事フォーマット
+				let formattedArticles = getFormattedArticles(data,i)
 
 				data.setValue(i, 0, formattedRon2 + formattedName)
 				data.setValue(i, 6, formattedClass)
@@ -81,6 +86,7 @@ function drawDashboard() {
 				data.setValue(i, 15, formattedWikipedia)
 				data.setValue(i, 17, formattedLatestLeague)
 				data.setValue(i, 18, formattedHighestLeague)
+				data.setValue(i, 19, formattedArticles)
 		}
 
 		data.setColumnLabel(0, '名前<br>Name')
@@ -93,6 +99,7 @@ function drawDashboard() {
 		data.setColumnLabel(15, 'Wikipedia')
 		data.setColumnLabel(17, '37期後期<br>2021/01')
 		data.setColumnLabel(18, '最高到達<br>Highest')
+		data.setColumnLabel(19, '関連記事<br>Articles')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -120,11 +127,25 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,12,13,14,15,6,8,10,17,18])
+		view.setColumns([0,12,13,14,15,6,8,10,17,18,19])
 
 		dashboard.bind([nameFilter], table)
 		dashboard.draw(view)
 	}
+}
+
+function getFormattedArticles(data,row_index) {
+
+	const name = data.getValue(row_index,20)
+	const number_of_articles = data.getValue(row_index,19)
+
+	let formattedArticles = ""
+
+	if(number_of_articles != "0件") {
+		formattedArticles = '<a href="./jpml_articles.html?name=' + name + '" target="_blank"><img alt="記事・動画" src="img/note_hoso.png" height="32" width="32" /></a>'
+	}
+
+	return formattedArticles
 }
 
 function getFormattedBirthplace(data,row_index) {
