@@ -77,12 +77,14 @@ function drawDashboard() {
 
 function getFormattedName(data,row_index) {
 
-	let name_jp_kanji = data.getValue(row_index,0)
-	let name_jp_kana = data.getValue(row_index,1)
+	let author      = data.getValue(row_index,0)
+	let interviewer = data.getValue(row_index,1)
 
-	let formattedName = ""
+	let formattedName = author
 
-	formattedName = name_jp_kanji + ' （' + name_jp_kana + '）'
+	if(interviewer) {
+		formattedName += ' （聞き手：' + interviewer + '）'
+	}
 
 	return formattedName
 }

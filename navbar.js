@@ -10,8 +10,7 @@ document.write(
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">連盟<br>JPML</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="jpml_pros.html">プロ / Pros</a>' +
-					'<a class="dropdown-item" href="jpml_articles.html">記事 / Articles</a>' +
-					'<a class="dropdown-item" href="jpml_interviews.html">インタビュー / Interviews</a>' +
+					'<a class="dropdown-item" href="jpml_articles.html">記事・動画 / Articles</a>' +
 					'<a class="dropdown-item" href="jpml_books.html">書籍 / Books</a>' +
 					'<a class="dropdown-item" href="jpml_birthplaces.html">出身地 / Birthplaces</a>' +
 					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
