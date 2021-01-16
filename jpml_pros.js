@@ -101,7 +101,7 @@ function drawDashboard() {
 		data.setColumnLabel(13, 'Instagram')
 		data.setColumnLabel(14, 'YouTube')
 		data.setColumnLabel(15, 'Wikipedia')
-		data.setColumnLabel(15, 'Blog')
+		data.setColumnLabel(16, 'Blog')
 		data.setColumnLabel(17, '37期後期<br>2021/01')
 		data.setColumnLabel(18, '最高到達<br>Highest')
 		data.setColumnLabel(19, '関連記事<br>Articles')
