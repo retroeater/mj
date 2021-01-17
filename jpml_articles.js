@@ -15,7 +15,7 @@ function drawDashboard() {
 	console.log('name :', search_name)
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F')
+	query.setQuery('SELECT A,B,C,D,E,F WHERE H = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
