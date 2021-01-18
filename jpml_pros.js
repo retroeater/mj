@@ -240,11 +240,12 @@ function getFormattedLatestLeague(data,row_index) {
 
 function getFormattedHighestLeague(data,row_index) {
 
+	const name = data.getValue(row_index,20)
 	const highest_league  = data.getValue(row_index,18)
 
 	let formattedHighestLeague = ""
 
-	formattedHighestLeague = getFormattedLeague(highest_league)
+	formattedHighestLeague = getFormattedLeague(highest_league) + ' <a href="./jpml_leagues.html?name=' + name + '" target="_blank"><img alt="リーグ推移" src="img/chart_bar_line_hoso.png" height="32" width="32" /></a>'
 
 	return formattedHighestLeague
 }
