@@ -147,7 +147,7 @@ function getFormattedArticles(data,row_index) {
 	let formattedArticles = ""
 
 	if(number_of_articles != "0件") {
-		formattedArticles = '<a href="./jpml_articles.html?name=' + name + '" target="_blank"><img alt="記事・動画" src="img/note_hoso.png" height="32" width="32" /></a>'
+		formattedArticles = number_of_articles + ' <a href="./jpml_articles.html?name=' + name + '" target="_blank"><img alt="記事・動画" src="img/note_hoso.png" height="32" width="32" /></a>'
 	}
 
 	return formattedArticles
