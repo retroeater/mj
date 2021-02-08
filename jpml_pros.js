@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,W,A WHERE V = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,X,A WHERE V = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 	/*
 		0	C	姓
@@ -29,8 +29,8 @@ function drawDashboard() {
 		17	T	37期後期リーグ
 		18	U	最高到達リーグ
 		-	V	表示
-		19	W	記事数
-		20	A	主キー
+		19	X	記事数・新
+		21	A	主キー
 	*/
 
 	function handleQueryResponse(response) {
@@ -41,6 +41,8 @@ function drawDashboard() {
 
 		const data = response.getDataTable()
 
+		data.addColumn('string', '関連記事<br>Articles')
+
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
 				// ロン2フォーマット
@@ -48,7 +50,6 @@ function drawDashboard() {
 
 				// 名前フォーマット
 				let formattedName = getFormattedName(data,i)
-
 
 				// Twitterフォーマット
 				let formattedTwitter = getFormattedTwitter(data,i)
@@ -90,7 +91,7 @@ function drawDashboard() {
 				data.setValue(i, 16, formattedBlog)
 				data.setValue(i, 17, formattedLatestLeague)
 				data.setValue(i, 18, formattedHighestLeague)
-				data.setValue(i, 19, formattedArticles)
+				data.setValue(i, 21, formattedArticles)
 		}
 
 		data.setColumnLabel(0, '名前<br>Name')
@@ -104,7 +105,7 @@ function drawDashboard() {
 		data.setColumnLabel(16, 'Blog')
 		data.setColumnLabel(17, '37期後期<br>2021/01')
 		data.setColumnLabel(18, '最高到達<br>Highest')
-		data.setColumnLabel(19, '関連記事<br>Articles')
+		data.setColumnLabel(21, '関連記事<br>Articles')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -132,7 +133,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,12,13,14,15,16,6,8,10,17,18,19])
+		view.setColumns([0,12,13,14,15,16,6,8,10,17,18,21])
 
 		dashboard.bind([nameFilter], table)
 		dashboard.draw(view)
@@ -146,8 +147,8 @@ function getFormattedArticles(data,row_index) {
 
 	let formattedArticles = ""
 
-	if(number_of_articles != "0件") {
-		formattedArticles = number_of_articles + ' <a href="./jpml_articles.html?name=' + name + '" target="_blank"><img alt="記事・動画" src="img/note_hoso.png" height="32" width="32" /></a>'
+	if(number_of_articles != 0) {
+		formattedArticles = '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + number_of_articles + '件</a>'
 	}
 
 	return formattedArticles
