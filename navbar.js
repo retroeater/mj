@@ -12,6 +12,7 @@ document.write(
 					'<a class="dropdown-item" href="jpml_pros.html">プロ / Pros</a>' +
 					'<a class="dropdown-item" href="jpml_articles.html">記事・動画 / Articles</a>' +
 					'<a class="dropdown-item" href="jpml_books.html">書籍 / Books</a>' +
+					'<a class="dropdown-item" href="jpml_titles.html">タイトル / Titles</a>' +
 					'<a class="dropdown-item" href="jpml_birthplaces.html">出身地 / Birthplaces</a>' +
 					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
 					'<a class="dropdown-item" href="ron2.html">ロン2 / Ron2</a>' +
