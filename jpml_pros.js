@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,X,A WHERE V = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,X,A,Y WHERE V = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 	/*
 		0	C	姓
@@ -29,8 +29,11 @@ function drawDashboard() {
 		17	T	37期後期リーグ
 		18	U	最高到達リーグ
 		-	V	表示
-		19	X	記事数・新
-		21	A	主キー
+		19	X	記事数
+		20	A	主キー
+		21	Y	決勝戦進出数
+		22	-	記事リンク付
+		23	-	決勝戦リンク付
 	*/
 
 	function handleQueryResponse(response) {
@@ -42,6 +45,7 @@ function drawDashboard() {
 		const data = response.getDataTable()
 
 		data.addColumn('string', '関連記事<br>Articles')
+		data.addColumn('string', '決勝進出<br>Fonals')
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -81,6 +85,9 @@ function drawDashboard() {
 				// 関連記事フォーマット
 				let formattedArticles = getFormattedArticles(data,i)
 
+				// 決勝進出フォーマット
+				let formattedFinals = getFormattedFinals(data,i)
+
 				data.setValue(i, 0, formattedRon2 + formattedName)
 				data.setValue(i, 6, formattedClass)
 				data.setValue(i, 8, formattedBirthplace)
@@ -91,7 +98,8 @@ function drawDashboard() {
 				data.setValue(i, 16, formattedBlog)
 				data.setValue(i, 17, formattedLatestLeague)
 				data.setValue(i, 18, formattedHighestLeague)
-				data.setValue(i, 21, formattedArticles)
+				data.setValue(i, 22, formattedArticles)
+				data.setValue(i, 23, formattedFinals)
 		}
 
 		data.setColumnLabel(0, '名前<br>Name')
@@ -105,7 +113,8 @@ function drawDashboard() {
 		data.setColumnLabel(16, 'Blog')
 		data.setColumnLabel(17, '37期後期<br>2021/01')
 		data.setColumnLabel(18, '最高到達<br>Highest')
-		data.setColumnLabel(21, '関連記事<br>Articles')
+		data.setColumnLabel(22, '関連記事<br>Articles')
+		data.setColumnLabel(23, '決勝進出<br>Finals')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -133,7 +142,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,12,13,14,15,16,6,8,10,17,18,21])
+		view.setColumns([0,12,13,14,15,16,6,8,10,17,18,23,22])
 
 		dashboard.bind([nameFilter], table)
 		dashboard.draw(view)
@@ -193,6 +202,20 @@ function getFormattedClass(data,row_index) {
 	}
 
 	return formattedClass
+}
+
+function getFormattedFinals(data,row_index) {
+	
+	const name = data.getValue(row_index,20)
+	const number_of_finals = data.getValue(row_index,21)
+
+	let formattedFinals = ""
+
+	if(number_of_finals != 0) {
+		formattedFinals = '<a href="./jpml_titles.html?name=' + name + '" target="_blank">' + number_of_finals + '回</a>'
+	}
+
+	return formattedFinals	
 }
 
 function getFormattedRon2(data,row_index) {
