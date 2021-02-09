@@ -154,10 +154,12 @@ function getFormattedArticles(data,row_index) {
 	const name = data.getValue(row_index,20)
 	const number_of_articles = data.getValue(row_index,19)
 
+	let sortKey = ""
 	let formattedArticles = ""
 
 	if(number_of_articles != 0) {
-		formattedArticles = '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + number_of_articles + '件</a>'
+		sortKey = ('0000' + number_of_articles).slice(-4)
+		formattedArticles = '<a href="./jpml_articles.html?sort=' + sortKey + '&name=' + name + '" target="_blank">' + number_of_articles + '件</a>'
 	}
 
 	return formattedArticles
@@ -209,10 +211,12 @@ function getFormattedFinals(data,row_index) {
 	const name = data.getValue(row_index,20)
 	const number_of_finals = data.getValue(row_index,21)
 
+	let sortKey = ""
 	let formattedFinals = ""
 
 	if(number_of_finals != 0) {
-		formattedFinals = '<a href="./jpml_titles.html?name=' + name + '" target="_blank">' + number_of_finals + '回</a>'
+		sortKey = ('0000' + number_of_finals).slice(-4)
+		formattedFinals = '<a href="./jpml_titles.html?sort=' + sortKey + '&name=' + name + '" target="_blank">' + number_of_finals + '回</a>'
 	}
 
 	return formattedFinals	
@@ -240,7 +244,7 @@ function getFormattedName(data,row_index) {
 	let first_name_jp_kanji = data.getValue(row_index,1)
 	let last_name_en = data.getValue(row_index,4)
 	let first_name_en = data.getValue(row_index,5)
-
+	
 	// nullを空文字列に変換
 	if(!first_name_jp_kanji) {first_name_jp_kanji = ""}
 	if(!last_name_en)        {last_name_en = ""}
