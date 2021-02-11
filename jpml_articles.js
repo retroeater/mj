@@ -15,8 +15,20 @@ function drawDashboard() {
 	console.log('name :', search_name)
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F WHERE H = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,I,J,K WHERE H = "Y"')
 	query.send(handleQueryResponse)
+		/*
+		0	A	名前
+		1	B	聞き手
+		2	C	カテゴリ
+		3	D	タイトル
+		4	E	URL
+		5	F	日付
+		6	I	出典
+		7	J	出典URL
+		8	K	種別
+		-	H	表示
+	*/
 
 	function handleQueryResponse(response) {
 		if(response.isError()) {
@@ -34,8 +46,12 @@ function drawDashboard() {
 				// タイトルフォーマット
 				let formattedTitle = getFormattedTitle(data,i)
 
+				// 出典フォーマット
+				let formattedSource = getFormattedSource(data,i)
+
 				data.setValue(i, 0, formattedName)
 				data.setValue(i, 3, formattedTitle)
+				data.setValue(i, 6, formattedSource)
 		}
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
@@ -73,14 +89,14 @@ function drawDashboard() {
 				width: '100%',
 				height: '100%',
 				showRowNumber: true,
-				sortColumn: 3,
+				sortColumn: 4,
 				sortAscending: false
 			}
 		})
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,2,3,5])
+		view.setColumns([0,2,3,6,5])
 
 		dashboard.bind([nameFilter,categoryFilter], table)
 		dashboard.draw(view)
@@ -101,14 +117,38 @@ function getFormattedName(data,row_index) {
 	return formattedName
 }
 
-function getFormattedTitle(data,row_index) {
+function getFormattedSource(data,rowIndex) {
 
-	const title = data.getValue(row_index,3)
-	const url = data.getValue(row_index,4)
+	const source = data.getValue(rowIndex,6)
+	const url = data.getValue(rowIndex,7)
 
+	let sortKey = ""
+	let formattedSource = ""
+
+	sortKey = source
+	formattedSource = '<span class="' + source + '">' + '<a href="' + url + '" target="_blank">' + source + '</a></span>'
+
+	return formattedSource
+}
+
+function getFormattedTitle(data,rowIndex) {
+
+	const title = data.getValue(rowIndex,3)
+	const url = data.getValue(rowIndex,4)
+	const type = data.getValue(rowIndex,8)
+
+	let sortKey = ""
 	let formattedTitle = ""
+	let imageFile = ""
 
-	formattedTitle += ' <a href="' + url + '" target="_blank"><img alt="記事" src="img/125_arr_hoso.png" height="29" width="29" /></a> ' + title
+	if(type == "動画") {
+		imageFile = "youtube_social_square_white.png"
+	}
+	else {
+		imageFile = "125_arr_hoso.png"
+	}
+
+	formattedTitle = '<span class="' + title + '"><a href="' + url + '" target="_blank"><img alt="' + type + '" src="img/' + imageFile + '" height="45" width="45" /></a> ' + title + '</span>'
 
 	return formattedTitle
 }
