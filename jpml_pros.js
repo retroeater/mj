@@ -149,197 +149,211 @@ function drawDashboard() {
 	}
 }
 
-function getFormattedArticles(data,row_index) {
+function getFormattedArticles(data,rowIndex) {
 
-	const name = data.getValue(row_index,20)
-	const number_of_articles = data.getValue(row_index,19)
+	const name = data.getValue(rowIndex,20)
+	const numberOfArticles = data.getValue(rowIndex,19)
 
 	let sortKey = ""
 	let formattedArticles = ""
 
-	if(number_of_articles != 0) {
-		sortKey = ('0000' + number_of_articles).slice(-4)
-		formattedArticles = '<a href="./jpml_articles.html?sort=' + sortKey + '&name=' + name + '" target="_blank">' + number_of_articles + '件</a>'
+	if(numberOfArticles != 0) {
+		sortKey = ('0000' + numberOfArticles).slice(-4)
+		formattedArticles = '<span class="' + sortKey + '">' + '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + numberOfArticles + '件</a></span>'
 	}
 
 	return formattedArticles
 }
 
-function getFormattedBirthplace(data,row_index) {
+function getFormattedBirthplace(data,rowIndex) {
 
-	const birthplace_ja = data.getValue(row_index,8)
-	const birthplace_en = data.getValue(row_index,9)
+	const birthplaceJa = data.getValue(rowIndex,8)
+	const birthplaceEn = data.getValue(rowIndex,9)
 
 	let formattedBirthplace = ""
 
-	if(birthplace_ja) {
-		formattedBirthplace = birthplace_ja + '<br>' + birthplace_en
+	if(birthplaceJa) {
+		formattedBirthplace = '<span class="' + birthplaceEn + '">' + birthplaceJa + '<br>' + birthplaceEn + '</span>'
 	}
 
 	return formattedBirthplace
 }
 
-function getFormattedBlog(data,row_index) {
+function getFormattedBlog(data,rowIndex) {
 
-	const blog_url = data.getValue(row_index,16)
+	const blogUrl = data.getValue(rowIndex,16)
 
 	let formattedBlog = ""
 
-	if(blog_url) {
-		formattedBlog = '<a href="' + blog_url + '" target="_blank"><img alt="Blog" src="img/797_me_h.png" height="32" width="32" /></a>'
+	if(blogUrl) {
+		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" src="img/797_me_h.png" height="32" width="32" /></a>'
 	}
 
 	return formattedBlog
 }
 
-function getFormattedClass(data,row_index) {
+function getFormattedClass(data,rowIndex) {
 
-	const class_ja = data.getValue(row_index,6)
-	const class_en = data.getValue(row_index,7)
+	const classJa = data.getValue(rowIndex,6)
+	const classEn = data.getValue(rowIndex,7)
 
 	let formattedClass = ""
 
-	if(class_ja) {
-		formattedClass += class_ja + '期<br>' + class_en
+	if(classJa) {
+		formattedClass = '<span class="' + classEn + '">' + classJa + '期<br>' + classEn + '</span>'
 	}
 
 	return formattedClass
 }
 
-function getFormattedFinals(data,row_index) {
-	
-	const name = data.getValue(row_index,20)
-	const number_of_finals = data.getValue(row_index,21)
+function getFormattedFinals(data,rowIndex) {
+
+	const name = data.getValue(rowIndex,20)
+	const numberOfFinals = data.getValue(rowIndex,21)
 
 	let sortKey = ""
 	let formattedFinals = ""
 
-	if(number_of_finals != 0) {
-		sortKey = ('0000' + number_of_finals).slice(-4)
-		formattedFinals = '<a href="./jpml_titles.html?sort=' + sortKey + '&name=' + name + '" target="_blank">' + number_of_finals + '回</a>'
+	if(numberOfFinals != 0) {
+		sortKey = ('0000' + numberOfFinals).slice(-4)
+		formattedFinals = '<span class="' + sortKey + '">' + '<a href="./jpml_titles.html?name=' + name + '" target="_blank">' + numberOfFinals + '回</a></span>'
 	}
 
 	return formattedFinals	
 }
 
-function getFormattedRon2(data,row_index) {
+function getFormattedRon2(data,rowIndex) {
 
-	const ron2_id = data.getValue(row_index,11)
+	const lastNameEn = data.getValue(rowIndex,4)
+	const firstNameEn = data.getValue(rowIndex,5)
+	const ron2Id = data.getValue(rowIndex,11)
 
+	let sortKey = ""
 	let formattedRon2 = ""
 
-	if(ron2_id) {
-		formattedRon2 += '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2_id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="32" width="32" /></a> '
+	sortKey = firstNameEn + ' ' + lastNameEn
+
+	if(ron2Id) {
+		formattedRon2 = '<span class="' + sortKey + '">' + '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="32" width="32" /></a></span> '
 	}
 	else {
-		formattedRon2 += '<img alt="" src="img/empty.png" height="29" width="29" /> '
+		formattedRon2 = '<span class="' + sortKey + '">' + '<img alt="" src="img/empty.png" height="29" width="29" /></span> '
 	}
 
 	return formattedRon2
 }
 
-function getFormattedName(data,row_index) {
+function getFormattedName(data,rowIndex) {
 
-	let last_name_jp_kanji = data.getValue(row_index,0)
-	let first_name_jp_kanji = data.getValue(row_index,1)
-	let last_name_en = data.getValue(row_index,4)
-	let first_name_en = data.getValue(row_index,5)
-	
+	let lastNameJpKanji = data.getValue(rowIndex,0)
+	let firstNameJpKanji = data.getValue(rowIndex,1)
+	let lastNameEn = data.getValue(rowIndex,4)
+	let firstNameEn = data.getValue(rowIndex,5)
+
 	// nullを空文字列に変換
-	if(!first_name_jp_kanji) {first_name_jp_kanji = ""}
-	if(!last_name_en)        {last_name_en = ""}
-	if(!first_name_en)       {first_name_en = ""}
+	if(!firstNameJpKanji) {firstNameJpKanji = ""}
+	if(!lastNameEn)        {lastNameEn = ""}
+	if(!firstNameEn)       {firstNameEn = ""}
 
-	let formattedName = last_name_jp_kanji + first_name_jp_kanji + '<br><img alt="" src="img/empty.png" height="32" width="32" /> ' + first_name_en + ' ' + last_name_en
+	let formattedName = lastNameJpKanji + firstNameJpKanji + '<br><img alt="" src="img/empty.png" height="32" width="32" /> ' + firstNameEn + ' ' + lastNameEn
 
 	return formattedName
 }
 
-function getFormattedLatestLeague(data,row_index) {
+function getFormattedLatestLeague(data,rowIndex) {
 
-	const latest_league  = data.getValue(row_index,17)
+	const latestLeague = data.getValue(rowIndex,17)
 
+	let sortKey = ""
 	let formattedLatestLeague = ""
 
-	formattedLatestLeague = getFormattedLeague(latest_league)
+	if(latestLeague == "鳳凰位") {
+		sortKey = "0"
+		formattedLatestLeague = latestLeague
+	}
+	else if(latestLeague) {
+		sortKey = latestLeague
+		formattedLatestLeague = latestLeague
+	}
+	else {
+		sortKey = "ZZ"
+		formattedLatestLeague = ""
+	}
+
+	formattedLatestLeague = '<span class="' + sortKey + '">' + formattedLatestLeague + '</span>'
 
 	return formattedLatestLeague
 }
 
-function getFormattedHighestLeague(data,row_index) {
+function getFormattedHighestLeague(data,rowIndex) {
 
-	const name = data.getValue(row_index,20)
-	const highest_league  = data.getValue(row_index,18)
+	const name = data.getValue(rowIndex,20)
+	const highestLeague  = data.getValue(rowIndex,18)
 
+	let sortKey = ""
 	let formattedHighestLeague = ""
 
-	formattedHighestLeague = getFormattedLeague(highest_league) + ' <a href="./jpml_leagues.html?name=' + name + '" target="_blank"><img alt="リーグ推移" src="img/chart_bar_line_hoso.png" height="32" width="32" /></a>'
+	if(highestLeague == "鳳凰位") {
+		sortKey = "00"
+	}
+	else {
+		sortKey = highestLeague
+	}
+
+	if(highestLeague) {
+		formattedHighestLeague = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues.html?name=' + name + '" target="_blank">' + highestLeague + '</a></span>'
+	}
 
 	return formattedHighestLeague
 }
 
-function getFormattedLeague(league) {
-
-	let formattedLeague = ""
-
-	if(league) {
-		formattedLeague = league
-
-		if(league == '鳳凰位') {
-			formattedLeague += '<br>Champion'
-		}
-	}
+function getFormattedTwitter(data,rowIndex) {
 	
-	return formattedLeague
-}
-
-function getFormattedTwitter(data,row_index) {
-	
-	const twitter_id = data.getValue(row_index,12)
+	const twitterId = data.getValue(rowIndex,12)
 
 	let formattedTwitter = ""
 	
-	if(twitter_id) {
-		formattedTwitter += ' <a href="http://twitter.com/' + twitter_id + '" target="_blank"><img alt="Twitter" src="img/Twitter_Logo_Blue.svg" height="48" width="48" /></a> '
+	if(twitterId) {
+		formattedTwitter += ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" src="img/Twitter_Logo_Blue.svg" height="48" width="48" /></a> '
 	}
 	
 	return formattedTwitter	
 }
 
-function getFormattedInstagram(data,row_index) {
+function getFormattedInstagram(data,rowIndex) {
 	
-	const instagram_id = data.getValue(row_index,13)
+	const instagramId = data.getValue(rowIndex,13)
 
 	let formattedInstagram = ""
 	
-	if(instagram_id) {
-		formattedInstagram += ' <a href="http://instgram.com/' + instagram_id + '" target="_blank"><img alt="Instagram" src="img/glyph-logo_May2016.png" height="29" width="29" /></a> '
+	if(instagramId) {
+		formattedInstagram += ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" src="img/glyph-logo_May2016.png" height="29" width="29" /></a> '
 	}
 	
-	return formattedInstagram	
+	return formattedInstagram
 }
 
-function getFormattedYouTube(data,row_index) {
+function getFormattedYouTube(data,rowIndex) {
 	
-	const youtube_id = data.getValue(row_index,14)
+	const youtubeId = data.getValue(rowIndex,14)
 
 	let formattedYouTube = ""
 	
-	if(youtube_id) {
-		formattedYouTube += ' <a href="http://youtube.com/channel/' + youtube_id + '" target="_blank"><img alt="YouTube" src="img/youtube_social_icon_red.png" height="26" width="37" /></a> '
+	if(youtubeId) {
+		formattedYouTube += ' <a href="http://youtube.com/channel/' + youtubeId + '" target="_blank"><img alt="YouTube" src="img/youtube_social_icon_red.png" height="26" width="37" /></a> '
 	}
 	
 	return formattedYouTube	
 }
 
-function getFormattedWikipedia(data,row_index) {
+function getFormattedWikipedia(data,rowIndex) {
 	
-	const wiki_id = data.getValue(row_index,15)
+	const wikiId = data.getValue(rowIndex,15)
 
 	let formattedWikipedia = ""
 	
-	if(wiki_id) {
-		formattedWikipedia += ' <a href="https://ja.wikipedia.org/wiki/' + wiki_id + '" target="_blank"><img alt="Wiki" src="img/Wikipedia%27s_W.svg" height="36" width="36" /></a> '
+	if(wikiId) {
+		formattedWikipedia += ' <a href="https://ja.wikipedia.org/wiki/' + wikiId + '" target="_blank"><img alt="Wiki" src="img/Wikipedia%27s_W.svg" height="36" width="36" /></a> '
 	}
 	
 	return formattedWikipedia	
