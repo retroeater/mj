@@ -231,7 +231,7 @@ function getFormattedRon2(data,rowIndex) {
 	let sortKey = ""
 	let formattedRon2 = ""
 
-	sortKey = firstNameEn + ' ' + lastNameEn
+	sortKey = lastNameEn + ' ' + firstNameEn
 
 	if(ron2Id) {
 		formattedRon2 = '<span class="' + sortKey + '">' + '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="32" width="32" /></a></span> '
@@ -255,7 +255,7 @@ function getFormattedName(data,rowIndex) {
 	if(!lastNameEn)        {lastNameEn = ""}
 	if(!firstNameEn)       {firstNameEn = ""}
 
-	let formattedName = lastNameJpKanji + firstNameJpKanji + '<br><img alt="" src="img/empty.png" height="32" width="32" /> ' + firstNameEn + ' ' + lastNameEn
+	let formattedName = lastNameJpKanji + firstNameJpKanji + '<br><img alt="" src="img/empty.png" height="32" width="32" /> ' + lastNameEn + ' ' + firstNameEn
 
 	return formattedName
 }
