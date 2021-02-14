@@ -23,7 +23,7 @@ document.write(
 					'<a class="dropdown-item" href="results_37_a1.html">第37期A1リーグ / A1 2020</a>' +
 					'<a class="dropdown-item" href="results_37_a2.html">第37期A2リーグ / A2 2020</a>' +
 					'<a class="dropdown-item" href="leagues.html">リーグ / Leagues</a>' +
-					'<a class="dropdown-item" href="league-by-class.html">リーグ✕期 / League by Class</a>' +
+					'<a class="dropdown-item" href="jpml_league_by_class.html">リーグ✕期 / League by Class</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +

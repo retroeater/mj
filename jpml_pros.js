@@ -1,3 +1,20 @@
+const params = (new URL(document.location)).searchParams
+const search_name = params.get('name')
+const search_joined = params.get('joined')
+const search_league = params.get('league')
+
+if(search_name == 'null') {
+	search_name = ''
+}
+
+if(search_joined == 'null') {
+	search_joined = ''
+}
+
+if(search_league == 'null') {
+	search_league = ''
+}
+
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros'
 
 google.charts.load('current', {'packages':['table','controls']});
@@ -49,57 +66,57 @@ function drawDashboard() {
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-				// ロン2フォーマット
-				let formattedRon2 = getFormattedRon2(data,i)
+			// ロン2フォーマット
+			let formattedRon2 = getFormattedRon2(data,i)
 
-				// 名前フォーマット
-				let formattedName = getFormattedName(data,i)
+			// 名前フォーマット
+			let formattedName = getFormattedName(data,i)
 
-				// Twitterフォーマット
-				let formattedTwitter = getFormattedTwitter(data,i)
+			// Twitterフォーマット
+			let formattedTwitter = getFormattedTwitter(data,i)
 
-				// Instagramフォーマット
-				let formattedInstagram = getFormattedInstagram(data,i)
+			// Instagramフォーマット
+			let formattedInstagram = getFormattedInstagram(data,i)
 
-				// YouTubeフォーマット
-				let formattedYouTube = getFormattedYouTube(data,i)
+			// YouTubeフォーマット
+			let formattedYouTube = getFormattedYouTube(data,i)
 
-				// Wikiperiaフォーマット
-				let formattedWikipedia = getFormattedWikipedia(data,i)
+			// Wikiperiaフォーマット
+			let formattedWikipedia = getFormattedWikipedia(data,i)
 
-				// Blogフォーマット
-				let formattedBlog = getFormattedBlog(data,i)
+			// Blogフォーマット
+			let formattedBlog = getFormattedBlog(data,i)
 
-				// 期フォーマット
-				let formattedClass = getFormattedClass(data,i)
+			// 期フォーマット
+			let formattedClass = getFormattedClass(data,i)
 
-				// 出身地フォーマット
-				let formattedBirthplace = getFormattedBirthplace(data,i)
+			// 出身地フォーマット
+			let formattedBirthplace = getFormattedBirthplace(data,i)
 
-				// 直近リーグフォーマット
-				let formattedLatestLeague = getFormattedLatestLeague(data,i)
+			// 直近リーグフォーマット
+			let formattedLatestLeague = getFormattedLatestLeague(data,i)
 
-				// 最高到達リーグフォーマット
-				let formattedHighestLeague = getFormattedHighestLeague(data,i)
-				
-				// 関連記事フォーマット
-				let formattedArticles = getFormattedArticles(data,i)
+			// 最高到達リーグフォーマット
+			let formattedHighestLeague = getFormattedHighestLeague(data,i)
+			
+			// 関連記事フォーマット
+			let formattedArticles = getFormattedArticles(data,i)
 
-				// 決勝進出フォーマット
-				let formattedFinals = getFormattedFinals(data,i)
+			// 決勝進出フォーマット
+			let formattedFinals = getFormattedFinals(data,i)
 
-				data.setValue(i, 0, formattedRon2 + formattedName)
-				data.setValue(i, 6, formattedClass)
-				data.setValue(i, 8, formattedBirthplace)
-				data.setValue(i, 12, formattedTwitter)
-				data.setValue(i, 13, formattedInstagram)
-				data.setValue(i, 14, formattedYouTube)
-				data.setValue(i, 15, formattedWikipedia)
-				data.setValue(i, 16, formattedBlog)
-				data.setValue(i, 17, formattedLatestLeague)
-				data.setValue(i, 18, formattedHighestLeague)
-				data.setValue(i, 22, formattedArticles)
-				data.setValue(i, 23, formattedFinals)
+			data.setValue(i, 0, formattedRon2 + formattedName)
+			data.setValue(i, 6, formattedClass)
+			data.setValue(i, 8, formattedBirthplace)
+			data.setValue(i, 12, formattedTwitter)
+			data.setValue(i, 13, formattedInstagram)
+			data.setValue(i, 14, formattedYouTube)
+			data.setValue(i, 15, formattedWikipedia)
+			data.setValue(i, 16, formattedBlog)
+			data.setValue(i, 17, formattedLatestLeague)
+			data.setValue(i, 18, formattedHighestLeague)
+			data.setValue(i, 22, formattedArticles)
+			data.setValue(i, 23, formattedFinals)
 		}
 
 		data.setColumnLabel(0, '名前<br>Name')
@@ -126,7 +143,40 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: ' 名前/Name:'
+				},
+				state: {
+					value: search_name
 				}
+			}
+		})
+
+		const classFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'class_filter_div',
+			options: {
+				filterColumnIndex: 6,
+				matchType: 'any',
+				ui: {
+					label: ' 期/Joined:'
+				}
+			},
+			state: {
+				value: search_joined
+			}
+		})
+		
+		const leagueFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'league_filter_div',
+			options: {
+				filterColumnIndex: 9,
+				matchType: 'any',
+				ui: {
+					label: ' 37期後期:'
+				}
+			},
+			state: {
+				value: search_league
 			}
 		})
 
@@ -137,14 +187,17 @@ function drawDashboard() {
 				allowHtml: true,
 				width: '100%',
 				height: '100%'
-			}
+			},
+			state: {
+				value: search_joined
+			}			
 		})
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
 		view.setColumns([0,12,13,14,15,16,6,8,10,17,18,23,22])
 
-		dashboard.bind([nameFilter], table)
+		dashboard.bind([nameFilter,classFilter,leagueFilter], table)
 		dashboard.draw(view)
 	}
 }
