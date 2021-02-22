@@ -15,7 +15,7 @@ if(search_league == 'null') {
 	search_league = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=pros'
 
 google.charts.load('current', {'packages':['table','controls']});
 google.charts.setOnLoadCallback(drawDashboard)
@@ -23,13 +23,13 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,X,A,Y WHERE V = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 	/*
-		0	C	姓
-		1	D	名
-		2	E	せい
-		3	F	めい
+		0	A	主キー
+		1	B	ソートキー
+		2	C	姓
+		3	D	名
 		4	G	Last Name
 		5	H	First Name
 		6	I	期
@@ -45,12 +45,12 @@ function drawDashboard() {
 		16	S	Blog
 		17	T	37期後期リーグ
 		18	U	最高到達リーグ
-		-	V	表示
-		19	X	記事数
-		20	A	主キー
-		21	Y	決勝戦進出数
-		22	-	記事リンク付
-		23	-	決勝戦リンク付
+		19	V	決勝戦進出数
+		20	W	記事数
+		21	X	最終更新日
+		-	Y	表示
+		22	-	決勝戦リンク付
+		23	-	記事リンク付
 	*/
 
 	function handleQueryResponse(response) {
@@ -61,8 +61,8 @@ function drawDashboard() {
 
 		const data = response.getDataTable()
 
-		data.addColumn('string', '関連記事<br>Articles')
 		data.addColumn('string', '決勝進出<br>Fonals')
+		data.addColumn('string', '関連記事<br>Articles')
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -98,14 +98,14 @@ function drawDashboard() {
 
 			// 最高到達リーグフォーマット
 			let formattedHighestLeague = getFormattedHighestLeague(data,i)
+
+			// 決勝進出フォーマット
+			let formattedFinals = getFormattedFinals(data,i)
 			
 			// 関連記事フォーマット
 			let formattedArticles = getFormattedArticles(data,i)
 
-			// 決勝進出フォーマット
-			let formattedFinals = getFormattedFinals(data,i)
-
-			data.setValue(i, 0, formattedRon2 + formattedName)
+			data.setValue(i, 2, formattedRon2 + formattedName)
 			data.setValue(i, 6, formattedClass)
 			data.setValue(i, 8, formattedBirthplace)
 			data.setValue(i, 12, formattedTwitter)
@@ -115,11 +115,11 @@ function drawDashboard() {
 			data.setValue(i, 16, formattedBlog)
 			data.setValue(i, 17, formattedLatestLeague)
 			data.setValue(i, 18, formattedHighestLeague)
-			data.setValue(i, 22, formattedArticles)
-			data.setValue(i, 23, formattedFinals)
+			data.setValue(i, 22, formattedFinals)
+			data.setValue(i, 23, formattedArticles)
 		}
 
-		data.setColumnLabel(0, '名前<br>Name')
+		data.setColumnLabel(2, '名前<br>Name')
 		data.setColumnLabel(6, '期<br>Joined')
 		data.setColumnLabel(8, '出身地<br>Birthplace')
 		data.setColumnLabel(10, '誕生日<br>Birthday')
@@ -130,8 +130,9 @@ function drawDashboard() {
 		data.setColumnLabel(16, 'Blog')
 		data.setColumnLabel(17, '37期後期<br>2021/01')
 		data.setColumnLabel(18, '最高到達<br>Highest')
-		data.setColumnLabel(22, '関連記事<br>Articles')
-		data.setColumnLabel(23, '決勝進出<br>Finals')
+		data.setColumnLabel(21, '最終更新日<br>Updated')
+		data.setColumnLabel(22, '決勝進出<br>Finals')
+		data.setColumnLabel(23, '関連記事<br>Articles')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -195,7 +196,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,12,13,14,15,16,6,8,10,17,18,23,22])
+		view.setColumns([2,12,13,14,15,16,6,8,10,17,18,22,23,21])
 
 		dashboard.bind([nameFilter,classFilter,leagueFilter], table)
 		dashboard.draw(view)
@@ -204,8 +205,8 @@ function drawDashboard() {
 
 function getFormattedArticles(data,rowIndex) {
 
-	const name = data.getValue(rowIndex,20)
-	const numberOfArticles = data.getValue(rowIndex,19)
+	const name = data.getValue(rowIndex,0)
+	const numberOfArticles = data.getValue(rowIndex,20)
 
 	let sortKey = ""
 	let formattedArticles = ""
@@ -261,8 +262,8 @@ function getFormattedClass(data,rowIndex) {
 
 function getFormattedFinals(data,rowIndex) {
 
-	const name = data.getValue(rowIndex,20)
-	const numberOfFinals = data.getValue(rowIndex,21)
+	const name = data.getValue(rowIndex,0)
+	const numberOfFinals = data.getValue(rowIndex,19)
 
 	let sortKey = ""
 	let formattedFinals = ""
@@ -298,8 +299,8 @@ function getFormattedRon2(data,rowIndex) {
 
 function getFormattedName(data,rowIndex) {
 
-	let lastNameJpKanji = data.getValue(rowIndex,0)
-	let firstNameJpKanji = data.getValue(rowIndex,1)
+	let lastNameJpKanji = data.getValue(rowIndex,2)
+	let firstNameJpKanji = data.getValue(rowIndex,3)
 	let lastNameEn = data.getValue(rowIndex,4)
 	let firstNameEn = data.getValue(rowIndex,5)
 
@@ -340,7 +341,7 @@ function getFormattedLatestLeague(data,rowIndex) {
 
 function getFormattedHighestLeague(data,rowIndex) {
 
-	const name = data.getValue(rowIndex,20)
+	const name = data.getValue(rowIndex,0)
 	const highestLeague  = data.getValue(rowIndex,18)
 
 	let sortKey = ""
