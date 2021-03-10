@@ -5,7 +5,7 @@ if(search_name == 'null') {
 	search_name = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_articles&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=articles&headers=1'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -15,7 +15,7 @@ function drawDashboard() {
 	console.log('name :', search_name)
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,I,J,K WHERE H = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,H,I,J,K WHERE L = "Y"')
 	query.send(handleQueryResponse)
 		/*
 		0	A	名前
@@ -24,9 +24,11 @@ function drawDashboard() {
 		3	D	タイトル
 		4	E	URL
 		5	F	日付
-		6	I	出典
-		7	J	出典URL
-		8	K	種別
+		-	G	原題
+		6	H	出典
+		7	I	出典URL
+		8	J	種別
+		9	K	登録日
 		-	H	表示
 	*/
 
@@ -88,15 +90,17 @@ function drawDashboard() {
 				allowHtml: true,
 				width: '100%',
 				height: '100%',
+				page: 'enable',
+				pageSize: 200,
 				showRowNumber: true,
-				sortColumn: 4,
+				sortColumn: 3,
 				sortAscending: false
 			}
 		})
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,2,3,6,5])
+		view.setColumns([0,2,3,5,6,9])
 
 		dashboard.bind([nameFilter,categoryFilter], table)
 		dashboard.draw(view)
