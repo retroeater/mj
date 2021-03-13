@@ -15,7 +15,7 @@ if(search_league == 'null') {
 	search_league = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=pros'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros&headers=1'
 
 google.charts.load('current', {'packages':['table','controls']});
 google.charts.setOnLoadCallback(drawDashboard)
@@ -23,7 +23,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 	/*
 		0	A	主キー
@@ -49,8 +49,10 @@ function drawDashboard() {
 		20	W	記事数
 		21	X	最終更新日
 		-	Y	表示
-		22	-	決勝戦リンク付
-		23	-	記事リンク付
+		22	AA	放送対局
+		23	-	決勝戦リンク付
+		24	-	記事リンク付
+		25	-	放送対局リンク付
 	*/
 
 	function handleQueryResponse(response) {
@@ -63,6 +65,7 @@ function drawDashboard() {
 
 		data.addColumn('string', '決勝進出<br>Fonals')
 		data.addColumn('string', '関連記事<br>Articles')
+		data.addColumn('string', '放送対局<br>Live')
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -101,9 +104,12 @@ function drawDashboard() {
 
 			// 決勝進出フォーマット
 			let formattedFinals = getFormattedFinals(data,i)
-			
+
 			// 関連記事フォーマット
 			let formattedArticles = getFormattedArticles(data,i)
+
+			// 放送対局フォーマット
+			let formattedLives = getFormattedLives(data,i)
 
 			data.setValue(i, 2, formattedRon2 + formattedName)
 			data.setValue(i, 6, formattedClass)
@@ -115,8 +121,9 @@ function drawDashboard() {
 			data.setValue(i, 16, formattedBlog)
 			data.setValue(i, 17, formattedLatestLeague)
 			data.setValue(i, 18, formattedHighestLeague)
-			data.setValue(i, 22, formattedFinals)
-			data.setValue(i, 23, formattedArticles)
+			data.setValue(i, 23, formattedFinals)
+			data.setValue(i, 24, formattedArticles)
+			data.setValue(i, 25, formattedLives)
 		}
 
 		data.setColumnLabel(2, '名前<br>Name')
@@ -131,8 +138,9 @@ function drawDashboard() {
 		data.setColumnLabel(17, '37期後期<br>2021/01')
 		data.setColumnLabel(18, '最高到達<br>Highest')
 		data.setColumnLabel(21, '最終更新日<br>Updated')
-		data.setColumnLabel(22, '決勝進出<br>Finals')
-		data.setColumnLabel(23, '関連記事<br>Articles')
+		data.setColumnLabel(23, '決勝進出<br>Finals')
+		data.setColumnLabel(24, '関連記事<br>Articles')
+		data.setColumnLabel(25, '放送対局<br>Live')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -196,7 +204,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([2,12,13,14,15,16,6,8,10,17,18,22,23,21])
+		view.setColumns([2,12,13,14,15,16,6,8,10,17,18,23,24,25,21])
 
 		dashboard.bind([nameFilter,classFilter,leagueFilter], table)
 		dashboard.draw(view)
@@ -276,25 +284,20 @@ function getFormattedFinals(data,rowIndex) {
 	return formattedFinals	
 }
 
-function getFormattedRon2(data,rowIndex) {
+function getFormattedLives(data,rowIndex) {
 
-	const lastNameEn = data.getValue(rowIndex,4)
-	const firstNameEn = data.getValue(rowIndex,5)
-	const ron2Id = data.getValue(rowIndex,11)
+	const name = data.getValue(rowIndex,0)
+	const numberOfLives = data.getValue(rowIndex,22)
 
 	let sortKey = ""
-	let formattedRon2 = ""
+	let formattedLives = ""
 
-	sortKey = lastNameEn + ' ' + firstNameEn
-
-	if(ron2Id) {
-		formattedRon2 = '<span class="' + sortKey + '">' + '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="32" width="32" /></a></span> '
-	}
-	else {
-		formattedRon2 = '<span class="' + sortKey + '">' + '<img alt="" src="img/empty.png" height="29" width="29" /></span> '
+	if(numberOfLives != 0) {
+		sortKey = ('0000' + numberOfLives).slice(-4)
+		formattedLives = '<span class="' + sortKey + '">' + '<a href="./jpml_live.html?name=' + name + '&status=ALL" target="_blank">' + numberOfLives + '件</a></span>'
 	}
 
-	return formattedRon2
+	return formattedLives
 }
 
 function getFormattedName(data,rowIndex) {
@@ -359,6 +362,27 @@ function getFormattedHighestLeague(data,rowIndex) {
 	}
 
 	return formattedHighestLeague
+}
+
+function getFormattedRon2(data,rowIndex) {
+
+	const lastNameEn = data.getValue(rowIndex,4)
+	const firstNameEn = data.getValue(rowIndex,5)
+	const ron2Id = data.getValue(rowIndex,11)
+
+	let sortKey = ""
+	let formattedRon2 = ""
+
+	sortKey = lastNameEn + ' ' + firstNameEn
+
+	if(ron2Id) {
+		formattedRon2 = '<span class="' + sortKey + '">' + '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="32" width="32" /></a></span> '
+	}
+	else {
+		formattedRon2 = '<span class="' + sortKey + '">' + '<img alt="" src="img/empty.png" height="29" width="29" /></span> '
+	}
+
+	return formattedRon2
 }
 
 function getFormattedTwitter(data,rowIndex) {

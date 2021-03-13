@@ -1,8 +1,16 @@
 const params = (new URL(document.location)).searchParams
-const search_name = params.get('name')
+let search_name = params.get('name')
+let search_status = params.get('status')
 
 if(search_name == 'null') {
 	search_name = ''
+}
+
+if(search_status == 'ALL') {
+	search_status = ''
+}
+else {
+	search_status = '未放送'
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=live&headers=1'
@@ -92,7 +100,7 @@ function drawDashboard() {
 				matchType: 'any'
 			},
 			state: {
-				value: '未放送'
+				value: search_status
 			}
 		})
 
