@@ -23,7 +23,7 @@ function drawDashboard() {
 		2	C	カテゴリ
 		3	D	タイトル
 		4	E	URL
-		5	F	日付
+		5	F	公開日
 		-	G	原題
 		6	H	出典
 		7	I	出典URL
@@ -48,12 +48,20 @@ function drawDashboard() {
 				// タイトルフォーマット
 				let formattedTitle = getFormattedTitle(data,i)
 
+				// 公開日フォーマット
+				let formattedPublishedDate = getFormattedPublishedDate(data,i)
+
 				// 出典フォーマット
 				let formattedSource = getFormattedSource(data,i)
 
+				// 公開日フォーマット
+				let formattedRegistrationDate = getFormattedRegistrationDate(data,i)
+
 				data.setValue(i, 0, formattedName)
 				data.setValue(i, 3, formattedTitle)
+				data.setValue(i, 5, formattedPublishedDate)
 				data.setValue(i, 6, formattedSource)
+				data.setValue(i, 9, formattedRegistrationDate)
 		}
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
@@ -73,7 +81,6 @@ function drawDashboard() {
 		const categoryFilter = new google.visualization.ControlWrapper({
 			controlType: 'CategoryFilter',
 			containerId: 'category_filter_div',
-			values: ['コラム','初級講座','中級講座','上級講座'],
 			options: {
 				filterColumnIndex: 1,
 				ui: {
@@ -82,7 +89,7 @@ function drawDashboard() {
 				}
 			},
 		})
-	
+
 		const table = new google.visualization.ChartWrapper({
 					'chartType': 'Table',
 					containerId: 'table_div',
@@ -107,6 +114,15 @@ function drawDashboard() {
 	}
 }
 
+function getFormattedDate(date) {
+	
+	let formattedDate = ""
+
+	formattedDate = '<span style="white-space: nowrap">' + date + '</span>' 
+
+	return formattedDate
+}
+
 function getFormattedName(data,row_index) {
 
 	let author      = data.getValue(row_index,0)
@@ -119,6 +135,30 @@ function getFormattedName(data,row_index) {
 	}
 
 	return formattedName
+}
+
+function getFormattedPublishedDate(data,rowIndex) {
+	
+	let publishedDate = data.getValue(rowIndex,5)
+
+	let formattedPublishedDate = ""
+
+	formattedPublishedDate = getFormattedDate(publishedDate)
+
+	return formattedPublishedDate
+}
+
+function getFormattedRegistrationDate(data,rowIndex) {
+	
+	let registrationDate = data.getValue(rowIndex,9)
+
+	let formattedRegistrationDate = ""
+
+	if(registrationDate) {
+		formattedRegistrationDate = getFormattedDate(registrationDate)
+	}		
+
+	return formattedRegistrationDate
 }
 
 function getFormattedSource(data,rowIndex) {
