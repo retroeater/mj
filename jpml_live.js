@@ -5,7 +5,7 @@ if(search_name == 'null') {
 	search_name = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=articles&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=live&headers=1'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -13,21 +13,21 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,H,I,J,K WHERE L = "Y"')
+	query.setQuery('SELECT A,B,C,D,F,G,H,I,J,K WHERE L = "Y"')
 	query.send(handleQueryResponse)
 		/*
-		0	A	名前
-		1	B	聞き手
-		2	C	カテゴリ
-		3	D	タイトル
-		4	E	URL
-		5	F	公開日
-		-	G	原題
-		6	H	出典
-		7	I	出典URL
-		8	J	種別
+		0	A	対局者
+		1	B	実況
+		2	C	解説
+		3	D	カテゴリ
+		-	E	原題
+		4	F	タイトル
+		5	G	放送URL
+		6	H	放送日
+		7	I	開始時刻
+		8	J	状況
 		9	K	登録日
-		-	H	表示
+		-	L	表示
 	*/
 
 	function handleQueryResponse(response) {
@@ -46,19 +46,15 @@ function drawDashboard() {
 				// タイトルフォーマット
 				let formattedTitle = getFormattedTitle(data,i)
 
-				// 公開日フォーマット
-				let formattedPublishedDate = getFormattedPublishedDate(data,i)
+				// 放送日フォーマット
+				let formattedAirDate = getFormattedAirDate(data,i)
 
-				// 出典フォーマット
-				let formattedSource = getFormattedSource(data,i)
-
-				// 公開日フォーマット
+				// 登録日フォーマット
 				let formattedRegistrationDate = getFormattedRegistrationDate(data,i)
 
 				data.setValue(i, 0, formattedName)
-				data.setValue(i, 3, formattedTitle)
-				data.setValue(i, 5, formattedPublishedDate)
-				data.setValue(i, 6, formattedSource)
+				data.setValue(i, 4, formattedTitle)
+				data.setValue(i, 6, formattedAirDate)
 				data.setValue(i, 9, formattedRegistrationDate)
 		}
 
@@ -83,10 +79,39 @@ function drawDashboard() {
 				filterColumnIndex: 1,
 				ui: {
 					caption: 'カテゴリを絞り込む',
+					sortValues: true
+				}
+			}
+		})
+
+		const statusFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'status_filter_div',
+			options: {
+				filterColumnIndex: 5,
+				matchType: 'any'
+			},
+			state: {
+				value: '未放送'
+			}
+		})
+
+/*
+		const statusFilter = new google.visualization.ControlWrapper({
+			controlType: 'CategoryFilter',
+			containerId: 'status_filter_div',
+			options: {
+				filterColumnIndex: 5,
+				ui: {
+					caption: '',
 					sortValues: false
 				}
 			},
+			state: {
+				value: ['未放送']
+			}
 		})
+*/
 
 		const table = new google.visualization.ChartWrapper({
 					'chartType': 'Table',
@@ -99,15 +124,15 @@ function drawDashboard() {
 				pageSize: 200,
 				showRowNumber: true,
 				sortColumn: 3,
-				sortAscending: false
+				sortAscending: true
 			}
 		})
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,2,3,5,6,9])
+		view.setColumns([0,3,4,6,7,8,9])
 
-		dashboard.bind([nameFilter,categoryFilter], table)
+		dashboard.bind([nameFilter,categoryFilter,statusFilter], table)
 		dashboard.draw(view)
 	}
 }
@@ -123,27 +148,26 @@ function getFormattedDate(date) {
 
 function getFormattedName(data,row_index) {
 
-	let author      = data.getValue(row_index,0)
-	let interviewer = data.getValue(row_index,1)
+	let player      = data.getValue(row_index,0)
+	let commentator = data.getValue(row_index,1)
+	let analyst     = data.getValue(row_index,2)
 
-	let formattedName = author
+	let formattedName = ""
 
-	if(interviewer) {
-		formattedName += ' （聞き手：' + interviewer + '）'
-	}
+	formattedName = player + '<br>（実況：' + commentator + '、解説：' + analyst + '）' 
 
 	return formattedName
 }
 
-function getFormattedPublishedDate(data,rowIndex) {
+function getFormattedAirDate(data,rowIndex) {
 	
-	let publishedDate = data.getValue(rowIndex,5)
+	let airDate = data.getValue(rowIndex,6)
 
-	let formattedPublishedDate = ""
+	let formattedAirDate = ""
 
-	formattedPublishedDate = getFormattedDate(publishedDate)
+	formattedAirDate = getFormattedDate(airDate)
 
-	return formattedPublishedDate
+	return formattedAirDate
 }
 
 function getFormattedRegistrationDate(data,rowIndex) {
@@ -159,38 +183,16 @@ function getFormattedRegistrationDate(data,rowIndex) {
 	return formattedRegistrationDate
 }
 
-function getFormattedSource(data,rowIndex) {
-
-	const source = data.getValue(rowIndex,6)
-	const url = data.getValue(rowIndex,7)
-
-	let sortKey = ""
-	let formattedSource = ""
-
-	sortKey = source
-	formattedSource = '<span class="' + source + '">' + '<a href="' + url + '" target="_blank">' + source + '</a></span>'
-
-	return formattedSource
-}
-
 function getFormattedTitle(data,rowIndex) {
 
-	const title = data.getValue(rowIndex,3)
-	const url = data.getValue(rowIndex,4)
-	const type = data.getValue(rowIndex,8)
+	const title = data.getValue(rowIndex,4)
+	const url = data.getValue(rowIndex,5)
 
-	let sortKey = ""
 	let formattedTitle = ""
-	let imageFile = ""
 
-	if(type == "動画") {
-		imageFile = "youtube_social_square_white.png"
-	}
-	else {
-		imageFile = "125_arr_hoso.png"
-	}
+		imageFile = ""
 
-	formattedTitle = '<span class="' + title + '"><a href="' + url + '" target="_blank"><img alt="' + type + '" src="img/' + imageFile + '" height="45" width="45" /></a> ' + title + '</span>'
+	formattedTitle = '<span class="' + title + '"><a href="' + url + '" target="_blank"><img alt="' + title + '" src="img/125_arr_hoso.png" height="45" width="45" /></a> ' + title + '</span>'
 
 	return formattedTitle
 }
