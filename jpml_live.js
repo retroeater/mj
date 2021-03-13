@@ -96,23 +96,6 @@ function drawDashboard() {
 			}
 		})
 
-/*
-		const statusFilter = new google.visualization.ControlWrapper({
-			controlType: 'CategoryFilter',
-			containerId: 'status_filter_div',
-			options: {
-				filterColumnIndex: 5,
-				ui: {
-					caption: '',
-					sortValues: false
-				}
-			},
-			state: {
-				value: ['未放送']
-			}
-		})
-*/
-
 		const table = new google.visualization.ChartWrapper({
 					'chartType': 'Table',
 					containerId: 'table_div',
@@ -122,9 +105,7 @@ function drawDashboard() {
 				height: '100%',
 				page: 'enable',
 				pageSize: 200,
-				showRowNumber: true,
-				sortColumn: 3,
-				sortAscending: true
+				showRowNumber: true
 			}
 		})
 
