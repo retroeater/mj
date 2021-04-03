@@ -43,7 +43,7 @@ function drawDashboard() {
 		14	Q	YouTube
 		15	R	Wikipedia
 		16	S	Blog
-		17	T	37期後期リーグ
+		17	T	38期前期リーグ
 		18	U	最高到達リーグ
 		19	V	決勝戦進出数
 		20	W	記事数
@@ -135,7 +135,7 @@ function drawDashboard() {
 		data.setColumnLabel(14, 'YouTube')
 		data.setColumnLabel(15, 'Wikipedia')
 		data.setColumnLabel(16, 'Blog')
-		data.setColumnLabel(17, '37期後期<br>2021/01')
+		data.setColumnLabel(17, '38期前期<br>2021/04')
 		data.setColumnLabel(18, '最高到達<br>Highest')
 		data.setColumnLabel(21, '最終更新日<br>Updated')
 		data.setColumnLabel(23, '決勝進出<br>Finals')
@@ -181,7 +181,7 @@ function drawDashboard() {
 				filterColumnIndex: 9,
 				matchType: 'any',
 				ui: {
-					label: ' 37期後期:'
+					label: ' 38期前期:'
 				}
 			},
 			state: {
