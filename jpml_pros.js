@@ -197,8 +197,7 @@ function drawDashboard() {
 			options : {
 				allowHtml: true,
 				width: '100%',
-				height: '100%',
-				sortColumn: 0
+				height: '100%'
 			},
 			state: {
 				value: search_joined
