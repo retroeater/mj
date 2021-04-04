@@ -23,7 +23,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA,AB WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 	/*
 		0	A	主キー
@@ -50,9 +50,10 @@ function drawDashboard() {
 		21	X	最終更新日
 		-	Y	表示
 		22	AA	放送対局
-		23	-	決勝戦リンク付
-		24	-	記事リンク付
-		25	-	放送対局リンク付
+		23	AB	段位
+		24	-	決勝戦リンク付
+		25	-	記事リンク付
+		26	-	放送対局リンク付
 	*/
 
 	function handleQueryResponse(response) {
@@ -121,9 +122,9 @@ function drawDashboard() {
 			data.setValue(i, 16, formattedBlog)
 			data.setValue(i, 17, formattedLatestLeague)
 			data.setValue(i, 18, formattedHighestLeague)
-			data.setValue(i, 23, formattedFinals)
-			data.setValue(i, 24, formattedArticles)
-			data.setValue(i, 25, formattedLives)
+			data.setValue(i, 24, formattedFinals)
+			data.setValue(i, 25, formattedArticles)
+			data.setValue(i, 26, formattedLives)
 		}
 
 		data.setColumnLabel(2, '名前<br>Name')
@@ -138,9 +139,10 @@ function drawDashboard() {
 		data.setColumnLabel(17, '38期前期<br>2021/04')
 		data.setColumnLabel(18, '最高到達<br>Highest')
 		data.setColumnLabel(21, '最終更新日<br>Updated')
-		data.setColumnLabel(23, '決勝進出<br>Finals')
-		data.setColumnLabel(24, '関連記事<br>Articles')
-		data.setColumnLabel(25, '放送対局<br>Live')
+		data.setColumnLabel(23, '段位<br>Dan')
+		data.setColumnLabel(24, '決勝進出<br>Finals')
+		data.setColumnLabel(25, '関連記事<br>Articles')
+		data.setColumnLabel(26, '放送対局<br>Live')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -204,7 +206,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([2,12,13,14,15,16,6,8,10,17,18,23,24,25,21])
+		view.setColumns([2,12,13,14,15,16,6,23,8,10,17,18,24,25,26,21])
 
 		dashboard.bind([nameFilter,classFilter,leagueFilter], table)
 		dashboard.draw(view)
