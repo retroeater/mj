@@ -1,7 +1,7 @@
 const params = (new URL(document.location)).searchParams
-const search_name = params.get('name')
-const search_joined = params.get('joined')
-const search_league = params.get('league')
+let search_name = params.get('name')
+let search_joined = params.get('joined')
+let search_league = params.get('league')
 
 if(search_name == 'null') {
 	search_name = ''
@@ -154,10 +154,10 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: ' 名前/Name:'
-				},
-				state: {
-					value: search_name
 				}
+			},
+			state: {
+					value: search_name
 			}
 		})
 

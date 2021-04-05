@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawTable);
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT B,C,D,F,G,H,I,J,L,M')
+	query.setQuery('SELECT B,C,D,F,G,H,I,J,L,M,N WHERE O = "Y"')
 	query.send(handleQueryResponse)
 	/*
 		0	B	著者名
@@ -19,6 +19,8 @@ function drawTable() {
 		7	J	出版日
 		8	L	Kindle URL
 		9	M	Unlimited
+		10	N	登録日
+		-	O	表示
 	*/
 	function handleQueryResponse(response) {
 		if(response.isError()) {
@@ -52,7 +54,7 @@ function drawTable() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,3,5,7])
+		view.setColumns([0,3,5,7,10])
 
 		const options = {
 			allowHtml: true,
