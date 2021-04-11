@@ -180,7 +180,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 9,
+				filterColumnIndex: 10,
 				matchType: 'any',
 				ui: {
 					label: ' 38期前期:'
