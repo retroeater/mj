@@ -12,7 +12,6 @@ document.write(
 					'<a class="dropdown-item" href="jpml_pros.html">プロ / Pros</a>' +
 					'<a class="dropdown-item" href="jpml_articles.html">記事・動画 / Articles</a>' +
 					'<a class="dropdown-item" href="jpml_live.html">放送対局 / Live</a>' +
-					'<a class="dropdown-item" href="jpml_books.html">書籍 / Books</a>' +
 					'<a class="dropdown-item" href="jpml_titles.html">タイトル / Titles</a>' +
 					'<a class="dropdown-item" href="jpml_birthplaces.html">出身地 / Birthplaces</a>' +
 					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
@@ -37,6 +36,7 @@ document.write(
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item"><a class="nav-link" href="efficiency.html">牌効率<br>Efficiency</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="glossary.html">用語集<br>Glossary</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
 			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
