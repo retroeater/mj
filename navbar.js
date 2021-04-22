@@ -28,11 +28,11 @@ document.write(
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="bio.html">略歴 / Bio</a>' +
-					'<a class="dropdown-item" href="results.html">成績 / Results</a>' +
-					'<a class="dropdown-item" href="results_detail.html">成績詳細 / Results Detail</a>' +
-					'<a class="dropdown-item" href="media.html">メディア / Media</a>' +
-					'<a class="dropdown-item" href="articles_ryoei.html">記事 / Articles</a>' +
+					'<a class="dropdown-item" href="rh_bio.html">略歴 / Bio</a>' +
+					'<a class="dropdown-item" href="rh_results.html">成績 / Results</a>' +
+					'<a class="dropdown-item" href="rh_results_detail.html">成績詳細 / Results Detail</a>' +
+					'<a class="dropdown-item" href="rh_media.html">メディア / Media</a>' +
+					'<a class="dropdown-item" href="rh_articles.html">記事 / Articles</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item"><a class="nav-link" href="efficiency.html">牌効率<br>Efficiency</a></li>' +
