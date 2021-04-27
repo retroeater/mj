@@ -18,12 +18,13 @@ document.write(
 					'<a class="dropdown-item" href="ron2.html">ロン2 / Ron2</a>' +
 				'</div>' +
 			'</li>' +
-			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">鳳凰戦<br>Phoenix</a>' +
+			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">リーグ戦<br>League</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="results_37_a1.html">第37期A1リーグ / A1 2020</a>' +
-					'<a class="dropdown-item" href="results_37_a2.html">第37期A2リーグ / A2 2020</a>' +
-					'<a class="dropdown-item" href="jpml_leagues.html">リーグ / Leagues</a>' +
-					'<a class="dropdown-item" href="jpml_league_by_class.html">リーグ✕期 / League by Class</a>' +
+					'<a class="dropdown-item" href="results_37_a1.html">鳳凰戦第37期A1リーグ</a>' +
+					'<a class="dropdown-item" href="results_37_a2.html">鳳凰戦第37期A2リーグ</a>' +
+					'<a class="dropdown-item" href="jpml_league_by_class.html">鳳凰戦リーグ✕期分布</a>' +
+					'<a class="dropdown-item" href="jpml_leagues.html">鳳凰戦リーグ推移</a>' +
+					'<a class="dropdown-item" href="jpml_leagues_ouka.html">女流桜花リーグ推移</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +

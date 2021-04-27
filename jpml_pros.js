@@ -23,7 +23,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA,AB WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA,AB,AC WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 	/*
 		0	A	主キー
@@ -51,9 +51,10 @@ function drawDashboard() {
 		-	Y	表示
 		22	AA	放送対局
 		23	AB	段位
-		24	-	決勝戦リンク付
-		25	-	記事リンク付
-		26	-	放送対局リンク付
+		24	AC	15期女流桜花リーグ
+		25	-	決勝戦リンク付
+		26	-	記事リンク付
+		27	-	放送対局リンク付
 	*/
 
 	function handleQueryResponse(response) {
@@ -103,6 +104,9 @@ function drawDashboard() {
 			// 最高到達リーグフォーマット
 			let formattedHighestLeague = getFormattedHighestLeague(data,i)
 
+			// 直近桜花リーグフォーマット
+			let formattedLatestOukaLeague = getFormattedLatestOukaLeague(data,i)
+
 			// 決勝進出フォーマット
 			let formattedFinals = getFormattedFinals(data,i)
 
@@ -122,9 +126,10 @@ function drawDashboard() {
 			data.setValue(i, 16, formattedBlog)
 			data.setValue(i, 17, formattedLatestLeague)
 			data.setValue(i, 18, formattedHighestLeague)
-			data.setValue(i, 24, formattedFinals)
-			data.setValue(i, 25, formattedArticles)
-			data.setValue(i, 26, formattedLives)
+			data.setValue(i, 24, formattedLatestOukaLeague)
+			data.setValue(i, 25, formattedFinals)
+			data.setValue(i, 26, formattedArticles)
+			data.setValue(i, 27, formattedLives)
 		}
 
 		data.setColumnLabel(2, '名前<br>Name')
@@ -140,9 +145,10 @@ function drawDashboard() {
 		data.setColumnLabel(18, '最高到達<br>Highest')
 		data.setColumnLabel(21, '最終更新日<br>Updated')
 		data.setColumnLabel(23, '段位<br>Dan')
-		data.setColumnLabel(24, '決勝進出<br>Finals')
-		data.setColumnLabel(25, '関連記事<br>Articles')
-		data.setColumnLabel(26, '放送対局<br>Live')
+		data.setColumnLabel(24, '15期桜花<br>2020/04')
+		data.setColumnLabel(25, '決勝進出<br>Finals')
+		data.setColumnLabel(26, '関連記事<br>Articles')
+		data.setColumnLabel(27, '放送対局<br>Live')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -206,7 +212,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([2,12,13,14,15,16,6,23,8,10,17,18,24,25,26,21])
+		view.setColumns([2,12,13,14,15,16,6,23,8,10,17,18,24,25,26,27,21])
 
 		dashboard.bind([nameFilter,classFilter,leagueFilter], table)
 		dashboard.draw(view)
@@ -364,6 +370,32 @@ function getFormattedHighestLeague(data,rowIndex) {
 	}
 
 	return formattedHighestLeague
+}
+
+function getFormattedLatestOukaLeague(data,rowIndex) {
+
+	const name = data.getValue(rowIndex,0)
+	const latestOukaLeague = data.getValue(rowIndex,24)
+
+	let sortKey = ""
+	let formattedLatestOukaLeague = ""
+
+	if(latestOukaLeague == "桜花") {
+		sortKey = "0"
+		formattedLatestOukaLeague = latestOukaLeague
+	}
+	else if(latestOukaLeague) {
+		sortKey = latestOukaLeague
+		formattedLatestOukaLeague = latestOukaLeague
+	}
+	else {
+		sortKey = "ZZ"
+		formattedLatestOukaLeague = ""
+	}
+
+	formattedLatestOukaLeague = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues_ouka.html?name=' + name + '" target="_blank">' + formattedLatestOukaLeague + '</a></span>'
+
+	return formattedLatestOukaLeague
 }
 
 function getFormattedRon2(data,rowIndex) {

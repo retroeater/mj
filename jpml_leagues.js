@@ -2,7 +2,7 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
 if((!search_name) || (search_name == 'null')) {
-	search_name = '平野良栄'
+	search_name = '佐々木寿人'
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=鳳凰戦&headers=1'
