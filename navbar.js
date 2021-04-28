@@ -21,6 +21,7 @@ document.write(
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">リーグ戦<br>League</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="jpml_results_38_a1.html">鳳凰戦第38期A1リーグ</a>' +
+					'<a class="dropdown-item" href="jpml_results_38_a2.html">鳳凰戦第38期A2リーグ</a>' +
 					'<a class="dropdown-item" href="jpml_results_37_a1.html">鳳凰戦第37期A1リーグ</a>' +
 					'<a class="dropdown-item" href="jpml_results_37_a2.html">鳳凰戦第37期A2リーグ</a>' +
 					'<a class="dropdown-item" href="jpml_league_by_class.html">鳳凰戦リーグ✕期分布</a>' +
