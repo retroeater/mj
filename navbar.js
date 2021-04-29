@@ -30,7 +30,7 @@ document.write(
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">女流桜花<br>Ouka</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="jpml_leagues_ouka.html">桜花リーグ推移</a>' +
+					'<a class="dropdown-item" href="jpml_leagues_ouka.html">リーグ推移</a>' +
 					'<a class="dropdown-item" href="jpml_ouka_16_a.html">第16期Aリーグ</a>' +
 				'</div>' +
 			'</li>' +
