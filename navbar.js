@@ -15,7 +15,6 @@ document.write(
 					'<a class="dropdown-item" href="jpml_titles.html">タイトル / Titles</a>' +
 					'<a class="dropdown-item" href="jpml_birthplaces.html">出身地 / Birthplaces</a>' +
 					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
-					'<a class="dropdown-item" href="ron2.html">ロン2 / Ron2</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">鳳凰戦<br>Houou</a>' +
@@ -32,6 +31,18 @@ document.write(
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="jpml_leagues_ouka.html">リーグ推移</a>' +
 					'<a class="dropdown-item" href="jpml_ouka_16_a.html">第16期Aリーグ</a>' +
+				'</div>' +
+			'</li>' +
+			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ロン2<br>Ron2</a>' +
+				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+					'<a class="dropdown-item" href="ron2.html">2021-05-01</a>' +
+					'<a class="dropdown-item" href="ron2_20210401.html">2021-04-01</a>' +
+					'<a class="dropdown-item" href="ron2_20210301.html">2021-03-01</a>' +
+					'<a class="dropdown-item" href="ron2_20210201.html">2021-02-01</a>' +
+					'<a class="dropdown-item" href="ron2_20210101.html">2021-01-01</a>' +
+					'<a class="dropdown-item" href="ron2_20201201.html">2020-12-01</a>' +
+					'<a class="dropdown-item" href="ron2_20201101.html">2020-11-01</a>' +
+					'<a class="dropdown-item" href="ron2_20201011.html">2020-10-11</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +
