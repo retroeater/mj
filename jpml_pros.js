@@ -2,6 +2,7 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 let search_joined = params.get('joined')
 let search_league = params.get('league')
+let search_ouka = params.get('ouka')
 
 if(search_name == 'null') {
 	search_name = ''
@@ -15,6 +16,10 @@ if(search_league == 'null') {
 	search_league = ''
 }
 
+if(search_ouka == 'null') {
+	search_ouka = ''
+}
+
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros&headers=1'
 
 google.charts.load('current', {'packages':['table','controls']});
@@ -23,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA,AB,AC WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA,AB,AC,AD WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 	/*
 		0	A	主キー
@@ -52,9 +57,10 @@ function drawDashboard() {
 		22	AA	放送対局
 		23	AB	段位
 		24	AC	15期女流桜花リーグ
-		25	-	決勝戦リンク付
-		26	-	記事リンク付
-		27	-	放送対局リンク付
+		25	AD	女流桜花最高到達
+		26	-	決勝戦リンク付
+		27	-	記事リンク付
+		28	-	放送対局リンク付
 	*/
 
 	function handleQueryResponse(response) {
@@ -107,6 +113,9 @@ function drawDashboard() {
 			// 直近桜花リーグフォーマット
 			let formattedLatestOukaLeague = getFormattedLatestOukaLeague(data,i)
 
+			// 直近桜花リーグフォーマット
+			let formattedHighestOuka = getFormattedHighestOuka(data,i)
+
 			// 決勝進出フォーマット
 			let formattedFinals = getFormattedFinals(data,i)
 
@@ -127,9 +136,10 @@ function drawDashboard() {
 			data.setValue(i, 17, formattedLatestLeague)
 			data.setValue(i, 18, formattedHighestLeague)
 			data.setValue(i, 24, formattedLatestOukaLeague)
-			data.setValue(i, 25, formattedFinals)
-			data.setValue(i, 26, formattedArticles)
-			data.setValue(i, 27, formattedLives)
+			data.setValue(i, 25, formattedHighestOuka)
+			data.setValue(i, 26, formattedFinals)
+			data.setValue(i, 27, formattedArticles)
+			data.setValue(i, 28, formattedLives)
 		}
 
 		data.setColumnLabel(2, '名前<br>Name')
@@ -146,9 +156,10 @@ function drawDashboard() {
 		data.setColumnLabel(21, '最終更新日<br>Updated')
 		data.setColumnLabel(23, '段位<br>Dan')
 		data.setColumnLabel(24, '15期桜花<br>2020/04')
-		data.setColumnLabel(25, '決勝進出<br>Finals')
-		data.setColumnLabel(26, '関連記事<br>Articles')
-		data.setColumnLabel(27, '放送対局<br>Live')
+		data.setColumnLabel(25, '桜花最高<br>Highest')
+		data.setColumnLabel(26, '決勝進出<br>Finals')
+		data.setColumnLabel(27, '関連記事<br>Articles')
+		data.setColumnLabel(28, '放送対局<br>Live')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -197,6 +208,21 @@ function drawDashboard() {
 			}
 		})
 
+		const oukaFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'ouka_filter_div',
+			options: {
+				filterColumnIndex: 12,
+				matchType: 'any',
+				ui: {
+					label: '桜花15期:'
+				}
+			},
+			state: {
+				value: search_ouka
+			}
+		})
+
 		const table = new google.visualization.ChartWrapper({
 			'chartType': 'Table',
 			containerId: 'myTable',
@@ -212,9 +238,9 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([2,12,13,14,15,16,6,23,8,10,17,18,24,25,26,27,21])
+		view.setColumns([2,12,13,14,15,16,6,23,8,10,17,18,24,25,26,27,28,21])
 
-		dashboard.bind([nameFilter,classFilter,leagueFilter], table)
+		dashboard.bind([nameFilter,classFilter,leagueFilter,oukaFilter], table)
 		dashboard.draw(view)
 	}
 }
@@ -345,7 +371,8 @@ function getFormattedLatestLeague(data,rowIndex) {
 		formattedLatestLeague = ""
 	}
 
-	formattedLatestLeague = '<span class="' + sortKey + '">' + formattedLatestLeague + '</span>'
+//  <span> が検索にヒットしてしまうのでコメント
+//	formattedLatestLeague = '<span class="' + sortKey + '">' + formattedLatestLeague + '</span>'
 
 	return formattedLatestLeague
 }
@@ -372,6 +399,28 @@ function getFormattedHighestLeague(data,rowIndex) {
 	return formattedHighestLeague
 }
 
+function getFormattedHighestOuka(data,rowIndex) {
+
+	const name = data.getValue(rowIndex,0)
+	const highestOuka  = data.getValue(rowIndex,25)
+
+	let sortKey = ""
+	let formattedHighestOuka = ""
+
+	if(highestOuka == "桜花") {
+		sortKey = "00"
+	}
+	else {
+		sortKey = highestOuka
+	}
+
+	if(highestOuka) {
+		formattedHighestOuka = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues_ouka.html?name=' + name + '" target="_blank">' + highestOuka + '</a></span>'
+	}
+
+	return formattedHighestOuka
+}
+
 function getFormattedLatestOukaLeague(data,rowIndex) {
 
 	const name = data.getValue(rowIndex,0)
@@ -393,7 +442,8 @@ function getFormattedLatestOukaLeague(data,rowIndex) {
 		formattedLatestOukaLeague = ""
 	}
 
-	formattedLatestOukaLeague = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues_ouka.html?name=' + name + '" target="_blank">' + formattedLatestOukaLeague + '</a></span>'
+//  <span> が検索にヒットしてしまうのでコメント
+//	formattedLatestOukaLeague = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues_ouka.html?name=' + name + '" target="_blank">' + formattedLatestOukaLeague + '</a></span>'
 
 	return formattedLatestOukaLeague
 }

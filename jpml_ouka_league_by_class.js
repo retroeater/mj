@@ -1,12 +1,12 @@
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_league_by_class'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros&headers=1'
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
 
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E WHERE E <> 0')
+	query.setQuery('SELECT "A",I,AC,COUNT(I) WHERE Y = "Y" AND I <> "" AND AC <> "" GROUP BY I,AC')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -16,6 +16,34 @@ function drawChart() {
 		}
 		
 		const data = response.getDataTable()
+		data.addColumn('number','リーグID')
+
+		let chartData = new google.visualization.DataTable()
+		chartData.addColumn('string','ID')
+		chartData.addColumn('number','期')
+		chartData.addColumn('number','リーグID')
+		chartData.addColumn('string','リーグ')
+		chartData.addColumn('number','人数')
+
+		let id
+		let proClass
+		let leagueId
+		let league
+		let numberOfPeople
+
+		for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+			idString = String(data.getValue(i,3))
+			proClass = Number(data.getValue(i,1))
+			league = data.getValue(i,2)
+			leagueId = getLeagueId(league)
+			numberOfPeople = data.getValue(i,3)
+			
+			chartData.addRows([
+				[idString,proClass,leagueId,league,numberOfPeople]			
+			])
+
+		}
 
 		const options = {
 			bubble: {
@@ -40,15 +68,15 @@ function drawChart() {
 			},
 			vAxis: {
 				minValue: 0,
-				maxValue: 13,
+				maxValue: 6,
 				textPosition: 'left',
-				ticks: [{v:1,f:'E'},{v:2,f:'D3'},{v:3,f:'D2'},{v:4,f:'D1'},{v:5,f:'C3'},{v:6,f:'C2'},{v:7,f:'C1'},{v:8,f:'B2'},{v:9,f:'B1'},{v:10,f:'A2'},{v:11,f:'A1'},{v:12,f:'鳳凰位'}]
+				ticks: [{v:1,f:'C2'},{v:2,f:'C1'},{v:3,f:'B'},{v:4,f:'A'},{v:5,f:'桜花'}]
 			},
 			sizeAxis:  {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: 'リーグ✕期（38期前期時点）',
+			title: 'リーグ✕期（15期時点）',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
@@ -63,18 +91,43 @@ function drawChart() {
 
 			if(selection.length > 0) {
 
-				let proClass = data.getValue(selection[0].row,1)
-				let league = data.getValue(selection[0].row,3)
+				let proClass = Number(data.getValue(selection[0].row,1))
+				let league = data.getValue(selection[0].row,2)
 				let joined = proClass + 1984
 
-				let url = './jpml_pros.html?joined=' + joined + '&league=' + league
+				let url = './jpml_pros.html?joined=' + joined + '&ouka=' + league
 
 				window.open(url, '_blank')
 			}
 		})
 
-        chart.draw(data, options)
+        chart.draw(chartData, options)
 	}
+}
+
+function getLeagueId(league) {
+
+	let leagueId = ""
+	
+	switch(league) {
+	case "桜花":
+		leagueId = 5
+		break
+	case "A":
+		leagueId = 4
+		break
+	case "B":
+		leagueId = 3
+		break
+	case "C1":
+		leagueId = 2
+		break
+	case "C2":
+		leagueId = 1
+		break
+	}
+
+	return leagueId
 }
 
 (function(){
