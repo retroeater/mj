@@ -1,12 +1,11 @@
-
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_league_by_class'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros&headers=1'
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
 
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E WHERE E <> 0')
+	query.setQuery('SELECT "A",I,T,COUNT(I) WHERE Y = "Y" AND I <> "" AND T <> "" GROUP BY I,T')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -16,6 +15,33 @@ function drawChart() {
 		}
 		
 		const data = response.getDataTable()
+		data.addColumn('number','リーグID')
+
+		let chartData = new google.visualization.DataTable()
+		chartData.addColumn('string','ID')
+		chartData.addColumn('number','期')
+		chartData.addColumn('number','リーグID')
+		chartData.addColumn('string','リーグ')
+		chartData.addColumn('number','人数')
+
+		let id
+		let proClass
+		let leagueId
+		let league
+		let numberOfPeople
+
+		for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+			idString = String(data.getValue(i,3))
+			proClass = Number(data.getValue(i,1))
+			league = data.getValue(i,2)
+			leagueId = getLeagueId(league)
+			numberOfPeople = data.getValue(i,3)
+			
+			chartData.addRows([
+				[idString,proClass,leagueId,league,numberOfPeople]			
+			])
+		}
 
 		const options = {
 			bubble: {
@@ -63,8 +89,8 @@ function drawChart() {
 
 			if(selection.length > 0) {
 
-				let proClass = data.getValue(selection[0].row,1)
-				let league = data.getValue(selection[0].row,3)
+				let proClass = Number(data.getValue(selection[0].row,1))
+				let league = data.getValue(selection[0].row,2)
 				let joined = proClass + 1984
 
 				let url = './jpml_pros.html?joined=' + joined + '&league=' + league
@@ -73,8 +99,54 @@ function drawChart() {
 			}
 		})
 
-        chart.draw(data, options)
+        chart.draw(chartData, options)
 	}
+}
+
+function getLeagueId(league) {
+
+	let leagueId = ""
+	
+	switch(league) {
+	case "鳳凰位":
+		leagueId = 12
+		break
+	case "A1":
+		leagueId = 11
+		break
+	case "A2":
+		leagueId = 10
+		break
+	case "B1":
+		leagueId = 9
+		break
+	case "B2":
+		leagueId = 8
+		break
+	case "C1":
+		leagueId = 7
+		break
+	case "C2":
+		leagueId = 6
+		break
+	case "C3":
+		leagueId = 5
+		break
+	case "D1":
+		leagueId = 4
+		break
+	case "D2":
+		leagueId = 3
+		break
+	case "D3":
+		leagueId = 2
+		break
+	case "E":
+		leagueId = 1
+		break
+	}
+
+	return leagueId
 }
 
 (function(){
