@@ -19,12 +19,12 @@ document.write(
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">鳳凰戦<br>Houou</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="jpml_leagues.html">リーグ推移</a>' +
-					'<a class="dropdown-item" href="jpml_league_by_class.html">リーグ✕期</a>' +
-					'<a class="dropdown-item" href="jpml_results_38_a1.html">第38期A1リーグ</a>' +
-					'<a class="dropdown-item" href="jpml_results_38_a2.html">第38期A2リーグ</a>' +
-					'<a class="dropdown-item" href="jpml_results_37_a1.html">第37期A1リーグ</a>' +
-					'<a class="dropdown-item" href="jpml_results_37_a2.html">第37期A2リーグ</a>' +
+					'<a class="dropdown-item" href="houou_leagues.html">リーグ推移</a>' +
+					'<a class="dropdown-item" href="houou_league_by_class.html">リーグ✕期</a>' +
+					'<a class="dropdown-item" href="houou_38_a1.html">第38期A1リーグ</a>' +
+					'<a class="dropdown-item" href="houou_38_a2.html">第38期A2リーグ</a>' +
+					'<a class="dropdown-item" href="houou_37_a1.html">第37期A1リーグ</a>' +
+					'<a class="dropdown-item" href="houou_37_a2.html">第37期A2リーグ</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">女流桜花<br>Ouka</a>' +

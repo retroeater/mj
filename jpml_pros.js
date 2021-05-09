@@ -104,14 +104,8 @@ function drawDashboard() {
 			// 出身地フォーマット
 			let formattedBirthplace = getFormattedBirthplace(data,i)
 
-			// 直近リーグフォーマット
-//			let formattedLatestLeague = getFormattedLatestLeague(data,i)
-
 			// 最高到達リーグフォーマット
 			let formattedHighestLeague = getFormattedHighestLeague(data,i)
-
-			// 直近桜花リーグフォーマット
-//			let formattedLatestOukaLeague = getFormattedLatestOukaLeague(data,i)
 
 			// 直近桜花リーグフォーマット
 			let formattedHighestOuka = getFormattedHighestOuka(data,i)
@@ -351,32 +345,6 @@ function getFormattedName(data,rowIndex) {
 	return formattedName
 }
 
-function getFormattedLatestLeague(data,rowIndex) {
-
-	const latestLeague = data.getValue(rowIndex,17)
-
-	let sortKey = ""
-	let formattedLatestLeague = ""
-
-	if(latestLeague == "鳳凰位") {
-		sortKey = "0"
-		formattedLatestLeague = latestLeague
-	}
-	else if(latestLeague) {
-		sortKey = latestLeague
-		formattedLatestLeague = latestLeague
-	}
-	else {
-		sortKey = "ZZ"
-		formattedLatestLeague = ""
-	}
-
-//  <span> が検索にヒットしてしまうのでコメント
-//	formattedLatestLeague = '<span class="' + sortKey + '">' + formattedLatestLeague + '</span>'
-
-	return formattedLatestLeague
-}
-
 function getFormattedHighestLeague(data,rowIndex) {
 
 	const name = data.getValue(rowIndex,0)
@@ -393,7 +361,7 @@ function getFormattedHighestLeague(data,rowIndex) {
 	}
 
 	if(highestLeague) {
-		formattedHighestLeague = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues.html?name=' + name + '" target="_blank">' + highestLeague + '</a></span>'
+		formattedHighestLeague = '<span class="' + sortKey + '">' + '<a href="./houou_leagues.html?name=' + name + '" target="_blank">' + highestLeague + '</a></span>'
 	}
 
 	return formattedHighestLeague
@@ -419,30 +387,6 @@ function getFormattedHighestOuka(data,rowIndex) {
 	}
 
 	return formattedHighestOuka
-}
-
-function getFormattedLatestOukaLeague(data,rowIndex) {
-
-	const name = data.getValue(rowIndex,0)
-	const latestOukaLeague = data.getValue(rowIndex,24)
-
-	let sortKey = ""
-	let formattedLatestOukaLeague = ""
-
-	if(latestOukaLeague == "桜花") {
-		sortKey = "0"
-		formattedLatestOukaLeague = latestOukaLeague
-	}
-	else if(latestOukaLeague) {
-		sortKey = latestOukaLeague
-		formattedLatestOukaLeague = latestOukaLeague
-	}
-	else {
-		sortKey = "ZZ"
-		formattedLatestOukaLeague = ""
-	}
-
-	return formattedLatestOukaLeague
 }
 
 function getFormattedRon2(data,rowIndex) {

@@ -4,36 +4,78 @@
 	<url>
 		<loc>https://retroeater.github.io/mj/</loc>
 		<lastmod>2021-05-05</lastmod>
-		<changefreq>weekly</changefreq>  
+		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/index.html</loc>
 		<lastmod>2021-05-05</lastmod>
-		<changefreq>weekly</changefreq>  
+		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/books.html</loc>
 		<lastmod>2021-04-19</lastmod>
-		<changefreq>monthly</changefreq>  
+		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/efficiency.html</loc>
 		<lastmod>2020-04-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/glossary.html</loc>
 		<lastmod>2021-01-24</lastmod>
-		<changefreq>monthly</changefreq>  
+		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/houou_leagues.html</loc>
+		<lastmod>2021-05-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>1.0</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/houou_league_by_class.html</loc>
+		<lastmod>2021-05-09</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/houou_37_a1.html</loc>
+		<lastmod>2021-05-09</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/houou_37_a2.html</loc>
+		<lastmod>2021-05-09</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/houou_38_a1.html</loc>
+		<lastmod>2021-05-09</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>0.5</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/houou_38_a2.html</loc>
+		<lastmod>2021-05-09</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>0.5</priority>
 	</url>
 
 	<url>
@@ -46,203 +88,161 @@
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_birthplaces.html</loc>
 		<lastmod>2021-01-15</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/jpml_league_by_class.html</loc>
-		<lastmod>2021-04-12</lastmod>
-		<changefreq>yearly</changefreq>  
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/jpml_leagues.html</loc>
-		<lastmod>2021-04-27</lastmod>
-		<changefreq>monthly</changefreq>  
-		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_live.html</loc>
 		<lastmod>2021-04-12</lastmod>
-		<changefreq>monthly</changefreq>  
+		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_pros.html</loc>
 		<lastmod>2021-05-05</lastmod>
-		<changefreq>weekly</changefreq>  
+		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/jpml_results_37_a1.html</loc>
-		<lastmod>2021-04-27</lastmod>
-		<changefreq>yearly</changefreq>  
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/jpml_results_37_a2.html</loc>
-		<lastmod>2021-04-27</lastmod>
-		<changefreq>yearly</changefreq>  
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/jpml_results_38_a1.html</loc>
-		<lastmod>2021-04-27</lastmod>
-		<changefreq>weekly</changefreq>  
-		<priority>0.5</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/jpml_results_38_a2.html</loc>
-		<lastmod>2021-04-28</lastmod>
-		<changefreq>weekly</changefreq>  
-		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_titles.html</loc>
 		<lastmod>2021-04-05</lastmod>
-		<changefreq>monthly</changefreq>  
+		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/links.html</loc>
 		<lastmod>2020-12-13</lastmod>
-		<changefreq>monthly</changefreq>  
+		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/maps.html</loc>
 		<lastmod>2020-08-26</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ouka_leagues.html</loc>
 		<lastmod>2021-05-09</lastmod>
-		<changefreq>monthly</changefreq>  
+		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ouka_league_by_class.html</loc>
 		<lastmod>2021-05-09</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ouka_houou_league.html</loc>
 		<lastmod>2021-05-09</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ouka_16_a.html</loc>
 		<lastmod>2021-05-09</lastmod>
-		<changefreq>weekly</changefreq>  
+		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/rh_articles.html</loc>
 		<lastmod>2021-04-21</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/rh_bio.html</loc>
 		<lastmod>2021-04-21</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/rh_media.html</loc>
 		<lastmod>2021-04-21</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/rh_results.html</loc>
 		<lastmod>2021-04-21</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/rh_results_detail.html</loc>
 		<lastmod>2021-04-21</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2.html</loc>
 		<lastmod>2021-05-01</lastmod>
-		<changefreq>monthly</changefreq>  
+		<changefreq>monthly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20201011.html</loc>
 		<lastmod>2020-11-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20201101.html</loc>
 		<lastmod>2020-12-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20201201.html</loc>
 		<lastmod>2021-01-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20210101.html</loc>
 		<lastmod>2021-02-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20210201.html</loc>
 		<lastmod>2021-03-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20210301.html</loc>
 		<lastmod>2021-04-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20210401.html</loc>
 		<lastmod>2021-05-01</lastmod>
-		<changefreq>yearly</changefreq>  
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
