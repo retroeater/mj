@@ -105,13 +105,13 @@ function drawDashboard() {
 			let formattedBirthplace = getFormattedBirthplace(data,i)
 
 			// 直近リーグフォーマット
-			let formattedLatestLeague = getFormattedLatestLeague(data,i)
+//			let formattedLatestLeague = getFormattedLatestLeague(data,i)
 
 			// 最高到達リーグフォーマット
 			let formattedHighestLeague = getFormattedHighestLeague(data,i)
 
 			// 直近桜花リーグフォーマット
-			let formattedLatestOukaLeague = getFormattedLatestOukaLeague(data,i)
+//			let formattedLatestOukaLeague = getFormattedLatestOukaLeague(data,i)
 
 			// 直近桜花リーグフォーマット
 			let formattedHighestOuka = getFormattedHighestOuka(data,i)
@@ -133,9 +133,9 @@ function drawDashboard() {
 			data.setValue(i, 14, formattedYouTube)
 			data.setValue(i, 15, formattedWikipedia)
 			data.setValue(i, 16, formattedBlog)
-			data.setValue(i, 17, formattedLatestLeague)
+//			data.setValue(i, 17, formattedLatestLeague)
 			data.setValue(i, 18, formattedHighestLeague)
-			data.setValue(i, 24, formattedLatestOukaLeague)
+//			data.setValue(i, 24, formattedLatestOukaLeague)
 			data.setValue(i, 25, formattedHighestOuka)
 			data.setValue(i, 26, formattedFinals)
 			data.setValue(i, 27, formattedArticles)
@@ -415,7 +415,7 @@ function getFormattedHighestOuka(data,rowIndex) {
 	}
 
 	if(highestOuka) {
-		formattedHighestOuka = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues_ouka.html?name=' + name + '" target="_blank">' + highestOuka + '</a></span>'
+		formattedHighestOuka = '<span class="' + sortKey + '">' + '<a href="./ouka_leagues.html?name=' + name + '" target="_blank">' + highestOuka + '</a></span>'
 	}
 
 	return formattedHighestOuka
@@ -441,9 +441,6 @@ function getFormattedLatestOukaLeague(data,rowIndex) {
 		sortKey = "ZZ"
 		formattedLatestOukaLeague = ""
 	}
-
-//  <span> が検索にヒットしてしまうのでコメント
-//	formattedLatestOukaLeague = '<span class="' + sortKey + '">' + '<a href="./jpml_leagues_ouka.html?name=' + name + '" target="_blank">' + formattedLatestOukaLeague + '</a></span>'
 
 	return formattedLatestOukaLeague
 }
