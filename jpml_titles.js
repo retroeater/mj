@@ -45,7 +45,7 @@ function drawDashboard() {
 				filterColumnIndex: 2,
 				ui: {
 					caption: 'タイトル名',
-					sortValues: false
+					sortValues: true
 				}
 			},
 		})
