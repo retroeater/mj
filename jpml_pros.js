@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -91,7 +91,9 @@ function drawDashboard() {
 		let oukaLatestLeague	// AC 15期桜花
 		let oukaHighestLeague	// AD 桜花最高
 		let danEn				// AE Dan
-		let twitterImageUrl		// AE Twitter画像
+		let twitterImageUrl		// AF Twitter画像
+		let instagramImageUrl	// AG Instagram画像
+		let youTubeImageUrl		// AH YouTube画像
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -127,12 +129,14 @@ function drawDashboard() {
 			oukaHighestLeague = data.getValue(i,29)
 			danEn = data.getValue(i,30)
 			twitterImageUrl = data.getValue(i,31)
+//			instagramImageUrl = data.getValue(i,32)
+			youTubeImageUrl = data.getValue(i,33)
 
 			let formattedName = getFormattedName(name,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id)
 			let formattedTwitter = getFormattedTwitter(twitterId,twitterImageUrl)
 			let formattedInstagram = getFormattedInstagram(instagramId)
-			let formattedYouTube = getFormattedYouTube(youTubeId)
+			let formattedYouTube = getFormattedYouTube(youTubeId,youTubeImageUrl)
 			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
 			let formattedBlog = getFormattedBlog(blogUrl)
 			let formattedProClass = getFormattedProClass(proClass,joined)
@@ -424,12 +428,8 @@ function getFormattedTwitter(twitterId,twitterImageUrl) {
 
 	let formattedTwitter
 
-	if(!twitterImageUrl) {
-		twitterImageUrl = 'img/Twitter_Logo_Blue.svg'
-	}
-
 	if(twitterId) {
-		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" src="' + twitterImageUrl + '" height="48" width="48" /></a> '
+		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" src="' + twitterImageUrl + '" height="48" width="48" onError="this.onerror=null;this.src=\'img/Twitter_Logo_Blue.svg\'" /></a>'
 	}
 
 	return formattedTwitter	
@@ -446,12 +446,12 @@ function getFormattedWikipedia(wikipediaId) {
 	return formattedWikipedia	
 }
 
-function getFormattedYouTube(youTubeId) {
+function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
 	let formattedYouTube
-	
+
 	if(youTubeId) {
-		formattedYouTube = ' <a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" src="img/youtube_social_icon_red.png" height="26" width="37" /></a> '
+		formattedYouTube = '<a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" src="' + youTubeImageUrl + '" height="48" width="48" onError="this.onerror=null;this.src=\'img/youtube_social_square_white.png\'" /></a>'
 	}
 	
 	return formattedYouTube	
