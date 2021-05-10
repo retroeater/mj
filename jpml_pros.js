@@ -28,40 +28,8 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA,AB,AC,AD WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF WHERE Y = "Y"')
 	query.send(handleQueryResponse)
-	/*
-		0	A	主キー
-		1	B	ソートキー
-		2	C	姓
-		3	D	名
-		4	G	Last Name
-		5	H	First Name
-		6	I	期
-		7	J	入会年
-		8	K	出身地
-		9	L	Birthplace
-		10	M	誕生日
-		11	N	ロン2
-		12	O	Twitter
-		13	P	Instagram
-		14	Q	YouTube
-		15	R	Wikipedia
-		16	S	Blog
-		17	T	38期前期リーグ
-		18	U	最高到達リーグ
-		19	V	決勝戦進出数
-		20	W	記事数
-		21	X	最終更新日
-		-	Y	表示
-		22	AA	放送対局
-		23	AB	段位
-		24	AC	15期女流桜花リーグ
-		25	AD	女流桜花最高到達
-		26	-	決勝戦リンク付
-		27	-	記事リンク付
-		28	-	放送対局リンク付
-	*/
 
 	function handleQueryResponse(response) {
 		if(response.isError()) {
@@ -69,91 +37,138 @@ function drawDashboard() {
 			return
 		}
 
+		const chartData = new google.visualization.DataTable()
+		chartData.addColumn('string','名前')
+		chartData.addColumn('string','ロン2')
+		chartData.addColumn('string','Twitter')
+		chartData.addColumn('string','Instagram')
+		chartData.addColumn('string','YouTube')
+		chartData.addColumn('string','Wikipedia')
+		chartData.addColumn('string','Blog')
+		chartData.addColumn('string','期<br>Joined')
+		chartData.addColumn('string','段位<br>Dan')
+		chartData.addColumn('string','出身地<br>Birthplace')
+		chartData.addColumn('string','誕生日<br>Birthday')
+		chartData.addColumn('string','38期前期<br>2021/04')
+		chartData.addColumn('string','最高到達<br>Highest')
+		chartData.addColumn('string','15期桜花<br>2020/04')
+		chartData.addColumn('string','桜花最高<br>Highest')
+		chartData.addColumn('string','決勝進出<br>Finals')
+		chartData.addColumn('string','関連記事<br>Articles')
+		chartData.addColumn('string','放送対局<br>Live')
+		chartData.addColumn('string','最終更新日<br>Updated')
+
 		const data = response.getDataTable()
 
-		data.addColumn('string', '決勝進出<br>Fonals')
-		data.addColumn('string', '関連記事<br>Articles')
-		data.addColumn('string', '放送対局<br>Live')
+		let	name				// A 名前
+		let sortKey				// B ソートキー
+		let lastNameJaKanji		// C 姓
+		let firstNameJaKanji	// D 名
+		let lastNameJaKana		// E 姓
+		let firstNameJaKana		// F 名
+		let lastNameEn			// G Last Name
+		let firstNameEn			// H First Name
+		let proClass			// I 期
+		let joined				// J Joined
+		let birthplaceJa		// K 出身地
+		let birthplaceEn		// L Birthplace
+		let birthday			// M 誕生日
+		let ron2Id				// N ロン2
+		let twitterId			// O Twitter
+		let intagramId			// P Instagram
+		let youtubeId			// Q YouTube
+		let wikipediaId			// R Wikipedia
+		let blogUrl				// S Blog
+		let hououLatestLeague	// T 38期前期リーグ
+		let hououHighestLeague	// U 最高到達リーグ
+		let numberOfFinals		// V 決勝進出
+		let numberOfArticles	// W 関連記事
+		let lastUpdated			// X 最終更新
+		let isVisible			// Y 表示
+		let remarks				// Z 備考
+		let numberOfLives		// AA 放送対局
+		let danJa				// AB 段位
+		let oukaLatestLeague	// AC 15期桜花
+		let oukaHighestLeague	// AD 桜花最高
+		let danEn				// AE Dan
+		let twitterImageUrl		// AE Twitter画像
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-			// ロン2フォーマット
-			let formattedRon2 = getFormattedRon2(data,i)
+			name = data.getValue(i,0)
+			sortKey = data.getValue(i,1)
+//			lastNameJaKanji = data.getValue(i,2)
+//			firstNameJaKanji = data.getValue(i,3)
+//			lastNameJaKana = data.getValue(i,4)
+//			firstNameJaKana = data.getValue(i,5)
+			lastNameEn = data.getValue(i,6)
+			firstNameEn = data.getValue(i,7)
+			proClass = data.getValue(i,8)
+			joined = data.getValue(i,9)
+			birthplaceJa = data.getValue(i,10)
+			birthplaceEn = data.getValue(i,11)
+			birthday = data.getValue(i,12)
+			ron2Id = data.getValue(i,13)
+			twitterId = data.getValue(i,14)
+			instagramId = data.getValue(i,15)
+			youTubeId = data.getValue(i,16)
+			wikipediaId = data.getValue(i,17)
+			blogUrl = data.getValue(i,18)
+			hououLatestLeague = data.getValue(i,19)
+			hououHighestLeague = data.getValue(i,20)
+			numberOfFinals = data.getValue(i,21)
+			numberOfArticles = data.getValue(i,22)
+			lastUpdated = data.getValue(i,23)
+//			isVisible = data.getValue(i,24)
+//			remarks = data.getValue(i,25)
+			numberOfLives = data.getValue(i,26)
+			danJa = data.getValue(i,27)
+			oukaLatestLeague = data.getValue(i,28)
+			oukaHighestLeague = data.getValue(i,29)
+			danEn = data.getValue(i,30)
+			twitterImageUrl = data.getValue(i,31)
 
-			// 名前フォーマット
-			let formattedName = getFormattedName(data,i)
+			let formattedName = getFormattedName(name,lastNameEn,firstNameEn)
+			let formattedRon2 = getFormattedRon2(ron2Id)
+			let formattedTwitter = getFormattedTwitter(twitterId,twitterImageUrl)
+			let formattedInstagram = getFormattedInstagram(instagramId)
+			let formattedYouTube = getFormattedYouTube(youTubeId)
+			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
+			let formattedBlog = getFormattedBlog(blogUrl)
+			let formattedProClass = getFormattedProClass(proClass,joined)
+			let formattedDan = getFormattedDan(danJa,danEn)			
+			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
+			let formattedHououHighestLeague = getFormattedHououHighestLeague(name,hououHighestLeague)
+			let formattedOukaHighestLeague = getFormattedOukaHighestLeague(name,oukaHighestLeague)
+			let formattedFinals = getFormattedFinals(name,numberOfFinals)
+			let formattedArticles = getFormattedArticles(name,numberOfArticles)
+			let formattedLives = getFormattedLives(name,numberOfLives)
+			let formattedLastUpdated = getFormattedLastUpdated(lastUpdated)
 
-			// Twitterフォーマット
-			let formattedTwitter = getFormattedTwitter(data,i)
-
-			// Instagramフォーマット
-			let formattedInstagram = getFormattedInstagram(data,i)
-
-			// YouTubeフォーマット
-			let formattedYouTube = getFormattedYouTube(data,i)
-
-			// Wikiperiaフォーマット
-			let formattedWikipedia = getFormattedWikipedia(data,i)
-
-			// Blogフォーマット
-			let formattedBlog = getFormattedBlog(data,i)
-
-			// 期フォーマット
-			let formattedClass = getFormattedClass(data,i)
-
-			// 出身地フォーマット
-			let formattedBirthplace = getFormattedBirthplace(data,i)
-
-			// 最高到達リーグフォーマット
-			let formattedHighestLeague = getFormattedHighestLeague(data,i)
-
-			// 直近桜花リーグフォーマット
-			let formattedHighestOuka = getFormattedHighestOuka(data,i)
-
-			// 決勝進出フォーマット
-			let formattedFinals = getFormattedFinals(data,i)
-
-			// 関連記事フォーマット
-			let formattedArticles = getFormattedArticles(data,i)
-
-			// 放送対局フォーマット
-			let formattedLives = getFormattedLives(data,i)
-
-			data.setValue(i, 2, formattedRon2 + formattedName)
-			data.setValue(i, 6, formattedClass)
-			data.setValue(i, 8, formattedBirthplace)
-			data.setValue(i, 12, formattedTwitter)
-			data.setValue(i, 13, formattedInstagram)
-			data.setValue(i, 14, formattedYouTube)
-			data.setValue(i, 15, formattedWikipedia)
-			data.setValue(i, 16, formattedBlog)
-//			data.setValue(i, 17, formattedLatestLeague)
-			data.setValue(i, 18, formattedHighestLeague)
-//			data.setValue(i, 24, formattedLatestOukaLeague)
-			data.setValue(i, 25, formattedHighestOuka)
-			data.setValue(i, 26, formattedFinals)
-			data.setValue(i, 27, formattedArticles)
-			data.setValue(i, 28, formattedLives)
+			chartData.addRows([
+				[
+					formattedName,
+					formattedRon2,
+					formattedTwitter,
+					formattedInstagram,
+					formattedYouTube,
+					formattedWikipedia,
+					formattedBlog,
+					formattedProClass,
+					formattedDan,
+					formattedBirthplace,
+					birthday,
+					hououLatestLeague,
+					formattedHououHighestLeague,
+					oukaLatestLeague,
+					formattedOukaHighestLeague,
+					formattedFinals,
+					formattedArticles,
+					formattedLives,
+					formattedLastUpdated
+				]			
+			])
 		}
-
-		data.setColumnLabel(2, '名前<br>Name')
-		data.setColumnLabel(6, '期<br>Joined')
-		data.setColumnLabel(8, '出身地<br>Birthplace')
-		data.setColumnLabel(10, '誕生日<br>Birthday')
-		data.setColumnLabel(12, 'Twitter')
-		data.setColumnLabel(13, 'Instagram')
-		data.setColumnLabel(14, 'YouTube')
-		data.setColumnLabel(15, 'Wikipedia')
-		data.setColumnLabel(16, 'Blog')
-		data.setColumnLabel(17, '38期前期<br>2021/04')
-		data.setColumnLabel(18, '最高到達<br>Highest')
-		data.setColumnLabel(21, '最終更新日<br>Updated')
-		data.setColumnLabel(23, '段位<br>Dan')
-		data.setColumnLabel(24, '15期桜花<br>2020/04')
-		data.setColumnLabel(25, '桜花最高<br>Highest')
-		data.setColumnLabel(26, '決勝進出<br>Finals')
-		data.setColumnLabel(27, '関連記事<br>Articles')
-		data.setColumnLabel(28, '放送対局<br>Live')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
@@ -176,7 +191,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'class_filter_div',
 			options: {
-				filterColumnIndex: 6,
+				filterColumnIndex: 7,
 				matchType: 'any',
 				ui: {
 					label: ' 期/Joined:'
@@ -191,7 +206,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 10,
+				filterColumnIndex: 11,
 				matchType: 'any',
 				ui: {
 					label: ' 38期前期:'
@@ -206,7 +221,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 12,
+				filterColumnIndex: 13,
 				matchType: 'any',
 				ui: {
 					label: '桜花15期:'
@@ -230,22 +245,17 @@ function drawDashboard() {
 			}			
 		})
 
-		// 必要列のみ表示
-		const view = new google.visualization.DataView(data)
-		view.setColumns([2,12,13,14,15,16,6,23,8,10,17,18,24,25,26,27,28,21])
+		const view = new google.visualization.DataView(chartData)
 
 		dashboard.bind([nameFilter,classFilter,leagueFilter,oukaFilter], table)
 		dashboard.draw(view)
 	}
 }
 
-function getFormattedArticles(data,rowIndex) {
+function getFormattedArticles(name,numberOfArticles) {
 
-	const name = data.getValue(rowIndex,0)
-	const numberOfArticles = data.getValue(rowIndex,20)
-
-	let sortKey = ""
-	let formattedArticles = ""
+	let sortKey
+	let formattedArticles
 
 	if(numberOfArticles != 0) {
 		sortKey = ('0000' + numberOfArticles).slice(-4)
@@ -255,12 +265,9 @@ function getFormattedArticles(data,rowIndex) {
 	return formattedArticles
 }
 
-function getFormattedBirthplace(data,rowIndex) {
+function getFormattedBirthplace(birthplaceJa,birthplaceEn) {
 
-	const birthplaceJa = data.getValue(rowIndex,8)
-	const birthplaceEn = data.getValue(rowIndex,9)
-
-	let formattedBirthplace = ""
+	let formattedBirthplace
 
 	if(birthplaceJa) {
 		formattedBirthplace = '<span class="' + birthplaceEn + '">' + birthplaceJa + '<br>' + birthplaceEn + '</span>'
@@ -269,11 +276,9 @@ function getFormattedBirthplace(data,rowIndex) {
 	return formattedBirthplace
 }
 
-function getFormattedBlog(data,rowIndex) {
+function getFormattedBlog(blogUrl) {
 
-	const blogUrl = data.getValue(rowIndex,16)
-
-	let formattedBlog = ""
+	let formattedBlog
 
 	if(blogUrl) {
 		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" src="img/797_me_h.png" height="32" width="32" /></a>'
@@ -282,43 +287,75 @@ function getFormattedBlog(data,rowIndex) {
 	return formattedBlog
 }
 
-function getFormattedClass(data,rowIndex) {
+function getFormattedDan(danJa,danEn) {
 
-	const classJa = data.getValue(rowIndex,6)
-	const classEn = data.getValue(rowIndex,7)
+	let formattedDan
 
-	let formattedClass = ""
-
-	if(classJa) {
-		formattedClass = '<span class="' + classEn + '">' + classJa + '期<br>' + classEn + '</span>'
+	if(danJa) {
+		formattedDan = '<span class="' + danEn + '">' + danJa + '<br>' + danEn
 	}
 
-	return formattedClass
+	return formattedDan
 }
 
-function getFormattedFinals(data,rowIndex) {
+function getFormattedFinals(name,numberOfFinals) {
 
-	const name = data.getValue(rowIndex,0)
-	const numberOfFinals = data.getValue(rowIndex,19)
-
-	let sortKey = ""
-	let formattedFinals = ""
+	let sortKey
+	let formattedFinals
 
 	if(numberOfFinals != 0) {
 		sortKey = ('0000' + numberOfFinals).slice(-4)
 		formattedFinals = '<span class="' + sortKey + '">' + '<a href="./jpml_titles.html?name=' + name + '" target="_blank">' + numberOfFinals + '回</a></span>'
 	}
 
-	return formattedFinals	
+	return formattedFinals
 }
 
-function getFormattedLives(data,rowIndex) {
+function getFormattedHououHighestLeague(name,hououHighestLeague) {
 
-	const name = data.getValue(rowIndex,0)
-	const numberOfLives = data.getValue(rowIndex,22)
+	let sortKey
+	let formattedHououHighestLeague
 
-	let sortKey = ""
-	let formattedLives = ""
+	if(hououHighestLeague == "鳳凰位") {
+		sortKey = "00"
+	}
+	else {
+		sortKey = hououHighestLeague
+	}
+
+	if(hououHighestLeague) {
+		formattedHououHighestLeague = '<span class="' + sortKey + '">' + '<a href="./houou_leagues.html?name=' + name + '" target="_blank">' + hououHighestLeague + '</a></span>'
+	}
+
+	return formattedHououHighestLeague
+}
+
+function getFormattedInstagram(instagramId) {
+
+	let formattedInstagram
+
+	if(instagramId) {
+		formattedInstagram = ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" src="img/glyph-logo_May2016.png" height="29" width="29" /></a> '
+	}
+
+	return formattedInstagram
+}
+
+function getFormattedLastUpdated(lastUpdated) {
+
+	let formattedLastUpdated
+
+	if(lastUpdated) {
+		formattedLastUpdated = lastUpdated.getFullYear() + '-' + ('00' + (lastUpdated.getMonth()+1)).slice(-2) + '-' + ('00' + lastUpdated.getDate()).slice(-2)
+	}
+
+	return formattedLastUpdated
+}
+
+function getFormattedLives(name,numberOfLives) {
+
+	let sortKey
+	let formattedLives
 
 	if(numberOfLives != 0) {
 		sortKey = ('0000' + numberOfLives).slice(-4)
@@ -328,136 +365,94 @@ function getFormattedLives(data,rowIndex) {
 	return formattedLives
 }
 
-function getFormattedName(data,rowIndex) {
+function getFormattedName(name,lastNameEn,firstNameEn) {
 
-	let lastNameJpKanji = data.getValue(rowIndex,2)
-	let firstNameJpKanji = data.getValue(rowIndex,3)
-	let lastNameEn = data.getValue(rowIndex,4)
-	let firstNameEn = data.getValue(rowIndex,5)
+	let sortKey
+	let formattedName = name
 
 	// nullを空文字列に変換
-	if(!firstNameJpKanji) {firstNameJpKanji = ""}
-	if(!lastNameEn)        {lastNameEn = ""}
-	if(!firstNameEn)       {firstNameEn = ""}
+	if(!lastNameEn)  {lastNameEn = ""}
+	if(!firstNameEn) {firstNameEn = ""}
 
-	let formattedName = lastNameJpKanji + firstNameJpKanji + '<br><img alt="" src="img/empty.png" height="32" width="32" /> ' + lastNameEn + ' ' + firstNameEn
+	formattedName = '<span class="' + sortKey + '">' + name + '<br>' + lastNameEn + ' ' + firstNameEn + '</span>'
 
 	return formattedName
 }
 
-function getFormattedHighestLeague(data,rowIndex) {
+function getFormattedOukaHighestLeague(name,oukaHighestLeague) {
 
-	const name = data.getValue(rowIndex,0)
-	const highestLeague  = data.getValue(rowIndex,18)
+	let sortKey
+	let formattedOukaHighestLeague
 
-	let sortKey = ""
-	let formattedHighestLeague = ""
-
-	if(highestLeague == "鳳凰位") {
+	if(oukaHighestLeague == "桜花") {
 		sortKey = "00"
 	}
 	else {
-		sortKey = highestLeague
+		sortKey = oukaHighestLeague
 	}
 
-	if(highestLeague) {
-		formattedHighestLeague = '<span class="' + sortKey + '">' + '<a href="./houou_leagues.html?name=' + name + '" target="_blank">' + highestLeague + '</a></span>'
+	if(oukaHighestLeague) {
+		formattedOukaHighestLeague = '<span class="' + sortKey + '">' + '<a href="./ouka_leagues.html?name=' + name + '" target="_blank">' + oukaHighestLeague + '</a></span>'
 	}
 
-	return formattedHighestLeague
+	return formattedOukaHighestLeague
 }
 
-function getFormattedHighestOuka(data,rowIndex) {
+function getFormattedProClass(proClass,joined) {
 
-	const name = data.getValue(rowIndex,0)
-	const highestOuka  = data.getValue(rowIndex,25)
+	let formattedProClass
 
-	let sortKey = ""
-	let formattedHighestOuka = ""
-
-	if(highestOuka == "桜花") {
-		sortKey = "00"
-	}
-	else {
-		sortKey = highestOuka
+	if(proClass) {
+		formattedProClass = '<span class="' + joined + '">' + proClass + '期<br>' + joined + '</span>'
 	}
 
-	if(highestOuka) {
-		formattedHighestOuka = '<span class="' + sortKey + '">' + '<a href="./ouka_leagues.html?name=' + name + '" target="_blank">' + highestOuka + '</a></span>'
-	}
-
-	return formattedHighestOuka
+	return formattedProClass
 }
 
-function getFormattedRon2(data,rowIndex) {
+function getFormattedRon2(ron2Id) {
 
-	const lastNameEn = data.getValue(rowIndex,4)
-	const firstNameEn = data.getValue(rowIndex,5)
-	const ron2Id = data.getValue(rowIndex,11)
-
-	let sortKey = ""
-	let formattedRon2 = ""
-
-	sortKey = lastNameEn + ' ' + firstNameEn
+	let formattedRon2
 
 	if(ron2Id) {
-		formattedRon2 = '<span class="' + sortKey + '">' + '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="32" width="32" /></a></span> '
-	}
-	else {
-		formattedRon2 = '<span class="' + sortKey + '">' + '<img alt="" src="img/empty.png" height="29" width="29" /></span> '
+		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="48" width="48" /></a>'
 	}
 
 	return formattedRon2
 }
 
-function getFormattedTwitter(data,rowIndex) {
-	
-	const twitterId = data.getValue(rowIndex,12)
+function getFormattedTwitter(twitterId,twitterImageUrl) {
 
-	let formattedTwitter = ""
-	
-	if(twitterId) {
-		formattedTwitter += ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" src="img/Twitter_Logo_Blue.svg" height="48" width="48" /></a> '
+	let formattedTwitter
+
+	if(!twitterImageUrl) {
+		twitterImageUrl = 'img/Twitter_Logo_Blue.svg'
 	}
-	
+
+	if(twitterId) {
+		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" src="' + twitterImageUrl + '" height="48" width="48" /></a> '
+	}
+
 	return formattedTwitter	
 }
 
-function getFormattedInstagram(data,rowIndex) {
-	
-	const instagramId = data.getValue(rowIndex,13)
+function getFormattedWikipedia(wikipediaId) {
 
-	let formattedInstagram = ""
-	
-	if(instagramId) {
-		formattedInstagram += ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" src="img/glyph-logo_May2016.png" height="29" width="29" /></a> '
+	let formattedWikipedia
+
+	if(wikipediaId) {
+		formattedWikipedia = ' <a href="https://ja.wikipedia.org/wiki/' + wikipediaId + '" target="_blank"><img alt="Wiki" src="img/Wikipedia%27s_W.svg" height="36" width="36" /></a> '
 	}
-	
-	return formattedInstagram
+
+	return formattedWikipedia	
 }
 
-function getFormattedYouTube(data,rowIndex) {
-	
-	const youtubeId = data.getValue(rowIndex,14)
+function getFormattedYouTube(youTubeId) {
 
-	let formattedYouTube = ""
+	let formattedYouTube
 	
-	if(youtubeId) {
-		formattedYouTube += ' <a href="http://youtube.com/channel/' + youtubeId + '" target="_blank"><img alt="YouTube" src="img/youtube_social_icon_red.png" height="26" width="37" /></a> '
+	if(youTubeId) {
+		formattedYouTube = ' <a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" src="img/youtube_social_icon_red.png" height="26" width="37" /></a> '
 	}
 	
 	return formattedYouTube	
-}
-
-function getFormattedWikipedia(data,rowIndex) {
-	
-	const wikiId = data.getValue(rowIndex,15)
-
-	let formattedWikipedia = ""
-	
-	if(wikiId) {
-		formattedWikipedia += ' <a href="https://ja.wikipedia.org/wiki/' + wikiId + '" target="_blank"><img alt="Wiki" src="img/Wikipedia%27s_W.svg" height="36" width="36" /></a> '
-	}
-	
-	return formattedWikipedia	
 }
