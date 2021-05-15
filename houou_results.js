@@ -7,7 +7,7 @@ if(search_name == 'null') {
 }
 
 if(!search_class) {
-	search_class = '37期後期'
+	search_class = ''
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=houou&headers=1'

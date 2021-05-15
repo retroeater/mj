@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -49,10 +49,11 @@ function drawDashboard() {
 		chartData.addColumn('string','段位<br>Dan')
 		chartData.addColumn('string','出身地<br>Birthplace')
 		chartData.addColumn('string','誕生日<br>Birthday')
-		chartData.addColumn('string','38期前期<br>2021/04')
-		chartData.addColumn('string','最高到達<br>Highest')
-		chartData.addColumn('string','15期桜花<br>2020/04')
-		chartData.addColumn('string','桜花最高<br>Highest')
+		chartData.addColumn('string','鳳凰戦<br>出場回数')
+		chartData.addColumn('string','鳳凰戦<br>38期前期')
+		chartData.addColumn('string','鳳凰戦<br>最高到達')
+		chartData.addColumn('string','女流桜花<br>15期')
+		chartData.addColumn('string','女流桜花<br>最高到達')
 		chartData.addColumn('string','決勝進出<br>Finals')
 		chartData.addColumn('string','関連記事<br>Articles')
 		chartData.addColumn('string','放送対局<br>Live')
@@ -79,8 +80,8 @@ function drawDashboard() {
 		let youtubeId			// Q YouTube
 		let wikipediaId			// R Wikipedia
 		let blogUrl				// S Blog
-		let hououLatestLeague	// T 38期前期リーグ
-		let hououHighestLeague	// U 最高到達リーグ
+		let hououLatestLeague	// T 鳳凰戦38期前期リーグ
+		let hououHighestLeague	// U 鳳凰戦最高到達リーグ
 		let numberOfFinals		// V 決勝進出
 		let numberOfArticles	// W 関連記事
 		let lastUpdated			// X 最終更新
@@ -94,6 +95,7 @@ function drawDashboard() {
 		let twitterImageUrl		// AF Twitter画像
 		let instagramImageUrl	// AG Instagram画像
 		let youTubeImageUrl		// AH YouTube画像
+		let hououSeasons		// AI 鳳凰戦出場回数
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -131,6 +133,7 @@ function drawDashboard() {
 			twitterImageUrl = data.getValue(i,31)
 //			instagramImageUrl = data.getValue(i,32)
 			youTubeImageUrl = data.getValue(i,33)
+			hououSeasons = data.getValue(i,34)
 
 			let formattedName = getFormattedName(name,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id)
@@ -142,6 +145,7 @@ function drawDashboard() {
 			let formattedProClass = getFormattedProClass(proClass,joined)
 			let formattedDan = getFormattedDan(danJa,danEn)			
 			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
+			let formattedHououSeasons = getFormattedHououSeasons(name,hououSeasons)
 			let formattedHououHighestLeague = getFormattedHououHighestLeague(name,hououHighestLeague)
 			let formattedOukaHighestLeague = getFormattedOukaHighestLeague(name,oukaHighestLeague)
 			let formattedFinals = getFormattedFinals(name,numberOfFinals)
@@ -162,6 +166,7 @@ function drawDashboard() {
 					formattedDan,
 					formattedBirthplace,
 					birthday,
+					formattedHououSeasons,
 					hououLatestLeague,
 					formattedHououHighestLeague,
 					oukaLatestLeague,
@@ -210,7 +215,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 11,
+				filterColumnIndex: 12,
 				matchType: 'any',
 				ui: {
 					label: ' 38期前期:'
@@ -225,7 +230,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 13,
+				filterColumnIndex: 14,
 				matchType: 'any',
 				ui: {
 					label: '桜花15期:'
@@ -332,6 +337,19 @@ function getFormattedHououHighestLeague(name,hououHighestLeague) {
 	}
 
 	return formattedHououHighestLeague
+}
+
+function getFormattedHououSeasons(name,hououSeasons) {
+
+	let sortKey
+	let formattedHououSeasons
+
+	if(hououSeasons != 0) {
+		sortKey = ('0000' + hououSeasons).slice(-4)
+		formattedHououSeasons = '<span class="' + sortKey + '">' + '<a href="./houou_results.html?name=' + name + '" target="_blank">' + hououSeasons + '回</a></span>'
+	}
+
+	return formattedHououSeasons
 }
 
 function getFormattedInstagram(instagramId) {
