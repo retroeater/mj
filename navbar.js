@@ -25,6 +25,7 @@ document.write(
 					'<a class="dropdown-item" href="houou_38_a2.html">第38期A2リーグ</a>' +
 					'<a class="dropdown-item" href="houou_37_a1.html">第37期A1リーグ</a>' +
 					'<a class="dropdown-item" href="houou_37_a2.html">第37期A2リーグ</a>' +
+					'<a class="dropdown-item" href="houou_results.html?class=37期後期">成績詳細</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">女流桜花<br>Ouka</a>' +
