@@ -18,7 +18,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V WHERE V = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W WHERE V = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -32,6 +32,7 @@ function drawDashboard() {
 		chartData.addColumn('string','期')
 		chartData.addColumn('string','リーグ')
 		chartData.addColumn('number','順位')
+		chartData.addColumn('string','結果')
 		chartData.addColumn('number','合計')
 		chartData.addColumn('number','第1節')
 		chartData.addColumn('number','第2節')
@@ -70,6 +71,8 @@ function drawDashboard() {
 		let point11		// S 第11節
 		let point12		// T 第12節
 		let point13		// U 第13節
+		let isVisible	// V 表示
+		let result		// W 結果
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -94,6 +97,8 @@ function drawDashboard() {
 			point11 = data.getValue(i,18)
 			point12 = data.getValue(i,19)
 			point13 = data.getValue(i,20)
+//			isVisible = data.getValue(i,21)
+			result = data.getValue(i,22)
 
 			let formattedClass =getFormattedClass(season,half)
 
@@ -103,6 +108,7 @@ function drawDashboard() {
 					formattedClass,
 					league,
 					rank,
+					result,
 					pointTotal,
 					point01,
 					point02,
