@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -52,6 +52,7 @@ function drawDashboard() {
 		chartData.addColumn('string','鳳凰戦<br>出場回数')
 		chartData.addColumn('string','鳳凰戦<br>38期前期')
 		chartData.addColumn('string','鳳凰戦<br>最高到達')
+		chartData.addColumn('string','女流桜花<br>出場回数')
 		chartData.addColumn('string','女流桜花<br>15期')
 		chartData.addColumn('string','女流桜花<br>最高到達')
 		chartData.addColumn('string','決勝進出<br>Finals')
@@ -96,6 +97,7 @@ function drawDashboard() {
 		let instagramImageUrl	// AG Instagram画像
 		let youTubeImageUrl		// AH YouTube画像
 		let hououSeasons		// AI 鳳凰戦出場回数
+		let oukaSeasons			// AJ 女流桜花出場回数
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -134,6 +136,7 @@ function drawDashboard() {
 //			instagramImageUrl = data.getValue(i,32)
 			youTubeImageUrl = data.getValue(i,33)
 			hououSeasons = data.getValue(i,34)
+			oukaSeasons = data.getValue(i,35)
 
 			let formattedName = getFormattedName(name,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id)
@@ -147,6 +150,7 @@ function drawDashboard() {
 			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
 			let formattedHououSeasons = getFormattedHououSeasons(name,hououSeasons)
 			let formattedHououHighestLeague = getFormattedHououHighestLeague(name,hououHighestLeague)
+			let formattedOukaSeasons = getFormattedOukaSeasons(name,oukaSeasons)
 			let formattedOukaHighestLeague = getFormattedOukaHighestLeague(name,oukaHighestLeague)
 			let formattedFinals = getFormattedFinals(name,numberOfFinals)
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
@@ -169,6 +173,7 @@ function drawDashboard() {
 					formattedHououSeasons,
 					hououLatestLeague,
 					formattedHououHighestLeague,
+					formattedOukaSeasons,
 					oukaLatestLeague,
 					formattedOukaHighestLeague,
 					formattedFinals,
@@ -230,7 +235,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 14,
+				filterColumnIndex: 15,
 				matchType: 'any',
 				ui: {
 					label: '桜花15期:'
@@ -344,7 +349,7 @@ function getFormattedHououSeasons(name,hououSeasons) {
 	let sortKey
 	let formattedHououSeasons
 
-	if(hououSeasons != 0) {
+	if(hououSeasons) {
 		sortKey = ('0000' + hououSeasons).slice(-4)
 		formattedHououSeasons = '<span class="' + sortKey + '">' + '<a href="./houou_results.html?name=' + name + '" target="_blank">' + hououSeasons + '回</a></span>'
 	}
@@ -418,6 +423,19 @@ function getFormattedOukaHighestLeague(name,oukaHighestLeague) {
 	}
 
 	return formattedOukaHighestLeague
+}
+
+function getFormattedOukaSeasons(name,oukaSeasons) {
+
+	let sortKey
+	let formattedOukaSeasons
+
+	if(oukaSeasons) {
+		sortKey = ('0000' + oukaSeasons).slice(-4)
+		formattedOukaSeasons = '<span class="' + sortKey + '">' + '<a href="./ouka_results.html?name=' + name + '" target="_blank">' + oukaSeasons + '回</a></span>'
+	}
+
+	return formattedOukaSeasons
 }
 
 function getFormattedProClass(proClass,joined) {
