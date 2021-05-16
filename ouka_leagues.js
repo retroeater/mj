@@ -5,7 +5,7 @@ if((!search_name) || (search_name == 'null')) {
 	search_name = '川原舞子'
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=桜花&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ouka&headers=1'
 
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
