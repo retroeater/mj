@@ -34,6 +34,7 @@ document.write(
 					'<a class="dropdown-item" href="ouka_league_by_class.html">リーグ✕期</a>' +
 					'<a class="dropdown-item" href="ouka_houou_league.html">桜花✕鳳凰リーグ</a>' +
 					'<a class="dropdown-item" href="ouka_16_a.html">第16期Aリーグ</a>' +
+					'<a class="dropdown-item" href="ouka_results.html">成績詳細</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ロン2<br>Ron2</a>' +

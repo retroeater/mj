@@ -163,6 +163,13 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/ouka_results.html</loc>
+		<lastmod>2021-05-16</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/rh_articles.html</loc>
 		<lastmod>2021-04-21</lastmod>
 		<changefreq>yearly</changefreq>
