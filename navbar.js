@@ -9,12 +9,12 @@ document.write(
 		'<ul class="navbar-nav mr-auto">' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">連盟<br>JPML</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="jpml_pros.html">プロ / Pros</a>' +
-					'<a class="dropdown-item" href="jpml_articles.html">記事・動画 / Articles</a>' +
-					'<a class="dropdown-item" href="jpml_live.html">放送対局 / Live</a>' +
-					'<a class="dropdown-item" href="jpml_titles.html">タイトル / Titles</a>' +
-					'<a class="dropdown-item" href="jpml_birthplaces.html">出身地 / Birthplaces</a>' +
-					'<a class="dropdown-item" href="maps.html">地図 / Maps</a>' +
+					'<a class="dropdown-item" href="jpml_pros.html">プロ一覧</a>' +
+					'<a class="dropdown-item" href="jpml_articles.html">記事・動画</a>' +
+					'<a class="dropdown-item" href="jpml_live.html">放送対局</a>' +
+					'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
+					'<a class="dropdown-item" href="jpml_birthplaces.html">出身地</a>' +
+					'<a class="dropdown-item" href="maps.html">地図</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">鳳凰戦<br>Houou</a>' +
@@ -51,11 +51,11 @@ document.write(
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="rh_bio.html">略歴 / Bio</a>' +
-					'<a class="dropdown-item" href="rh_results.html">成績 / Results</a>' +
-					'<a class="dropdown-item" href="rh_results_detail.html">成績詳細 / Results Detail</a>' +
-					'<a class="dropdown-item" href="rh_media.html">メディア / Media</a>' +
-					'<a class="dropdown-item" href="rh_articles.html">記事 / Articles</a>' +
+					'<a class="dropdown-item" href="rh_bio.html">略歴</a>' +
+					'<a class="dropdown-item" href="rh_results.html">成績</a>' +
+					'<a class="dropdown-item" href="rh_results_detail.html">成績詳細</a>' +
+					'<a class="dropdown-item" href="rh_media.html">メディア</a>' +
+					'<a class="dropdown-item" href="rh_articles.html">記事</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item"><a class="nav-link" href="efficiency.html">牌効率<br>Efficiency</a></li>' +
