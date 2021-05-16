@@ -43,8 +43,8 @@ function drawDashboard() {
 		chartData.addColumn('string','Twitter')
 		chartData.addColumn('string','Instagram')
 		chartData.addColumn('string','YouTube')
-		chartData.addColumn('string','Wikipedia')
 		chartData.addColumn('string','Blog')
+		chartData.addColumn('string','Wikipedia')
 		chartData.addColumn('string','期<br>Joined')
 		chartData.addColumn('string','段位<br>Dan')
 		chartData.addColumn('string','出身地<br>Birthplace')
@@ -94,7 +94,7 @@ function drawDashboard() {
 		let oukaHighestLeague	// AD 桜花最高
 		let danEn				// AE Dan
 		let twitterImageUrl		// AF Twitter画像
-		let instagramImageUrl	// AG Instagram画像
+		let blogImageUrl		// AG Blog画像
 		let youTubeImageUrl		// AH YouTube画像
 		let hououSeasons		// AI 鳳凰戦出場回数
 		let oukaSeasons			// AJ 女流桜花出場回数
@@ -133,7 +133,7 @@ function drawDashboard() {
 			oukaHighestLeague = data.getValue(i,29)
 			danEn = data.getValue(i,30)
 			twitterImageUrl = data.getValue(i,31)
-//			instagramImageUrl = data.getValue(i,32)
+			blogImageUrl = data.getValue(i,32)
 			youTubeImageUrl = data.getValue(i,33)
 			hououSeasons = data.getValue(i,34)
 			oukaSeasons = data.getValue(i,35)
@@ -144,7 +144,7 @@ function drawDashboard() {
 			let formattedInstagram = getFormattedInstagram(instagramId)
 			let formattedYouTube = getFormattedYouTube(youTubeId,youTubeImageUrl)
 			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
-			let formattedBlog = getFormattedBlog(blogUrl)
+			let formattedBlog = getFormattedBlog(blogUrl,blogImageUrl)
 			let formattedProClass = getFormattedProClass(proClass,joined)
 			let formattedDan = getFormattedDan(danJa,danEn)			
 			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
@@ -164,8 +164,8 @@ function drawDashboard() {
 					formattedTwitter,
 					formattedInstagram,
 					formattedYouTube,
-					formattedWikipedia,
 					formattedBlog,
+					formattedWikipedia,
 					formattedProClass,
 					formattedDan,
 					formattedBirthplace,
@@ -290,12 +290,16 @@ function getFormattedBirthplace(birthplaceJa,birthplaceEn) {
 	return formattedBirthplace
 }
 
-function getFormattedBlog(blogUrl) {
+function getFormattedBlog(blogUrl,blogImageUrl) {
 
 	let formattedBlog
 
+	if(!blogImageUrl) {
+		blogImageUrl = 'img/797_me_h.png'
+	}
+
 	if(blogUrl) {
-		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" src="img/797_me_h.png" height="32" width="32" /></a>'
+		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" src="' + blogImageUrl + '" height="48" width="48" onError="this.onerror=null;this.src=\'img/797_me_h.png\'" /></a>'
 	}
 
 	return formattedBlog
