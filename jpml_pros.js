@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -98,6 +98,7 @@ function drawDashboard() {
 		let youTubeImageUrl		// AH YouTube画像
 		let hououSeasons		// AI 鳳凰戦出場回数
 		let oukaSeasons			// AJ 女流桜花出場回数
+		let ron2ImageUrl		// AK ロン2画像
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -137,9 +138,10 @@ function drawDashboard() {
 			youTubeImageUrl = data.getValue(i,33)
 			hououSeasons = data.getValue(i,34)
 			oukaSeasons = data.getValue(i,35)
+			ron2ImageUrl = data.getValue(i,36)
 
 			let formattedName = getFormattedName(name,lastNameEn,firstNameEn)
-			let formattedRon2 = getFormattedRon2(ron2Id)
+			let formattedRon2 = getFormattedRon2(ron2Id,ron2ImageUrl)
 			let formattedTwitter = getFormattedTwitter(twitterId,twitterImageUrl)
 			let formattedInstagram = getFormattedInstagram(instagramId)
 			let formattedYouTube = getFormattedYouTube(youTubeId,youTubeImageUrl)
@@ -453,12 +455,19 @@ function getFormattedProClass(proClass,joined) {
 	return formattedProClass
 }
 
-function getFormattedRon2(ron2Id) {
+function getFormattedRon2(ron2Id,ron2ImageUrl) {
 
 	let formattedRon2
 
+console.log(ron2Id)
+console.log(ron2ImageUrl)
+
+	if(!ron2ImageUrl) {
+		ron2ImageUrl = 'img/125_arr_hoso.png'
+	}
+
 	if(ron2Id) {
-		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="img/125_arr_hoso.png" height="48" width="48" /></a>'
+		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="' + ron2ImageUrl + '" height="48" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
 	}
 
 	return formattedRon2
