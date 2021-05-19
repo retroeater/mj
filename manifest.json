@@ -1,15 +1,15 @@
 {
-  "name": "PWA Test",
-  "short_name": "PWA",
+  "name": "Mahjong",
+  "short_name": "M",
   "theme_color": "#2196f3",
   "background_color": "#2196f3",
   "display": "standalone",
   "start_url": "./index.html",
   "icons": [
     {
-      "src": "./img/797_me_h.png",
-      "sizes": "256x256",
-      "type": "image/png"
+      "src": "./favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
     }
   ]
 }
