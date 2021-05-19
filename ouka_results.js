@@ -1,8 +1,10 @@
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ouka&headers=1'
+
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 let search_class = params.get('class')
 
-if(search_name == 'null') {
+if(!search_name) {
 	search_name = ''
 }
 
@@ -10,7 +12,99 @@ if(!search_class) {
 	search_class = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ouka&headers=1'
+let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R WHERE R = "Y"'
+
+if(search_name) {
+	queryStatement += ' AND B = "' + search_name + '" ORDER BY C,D'
+}
+
+if(search_name) {
+
+	google.charts.load('current', {'packages':['corechart']})
+	google.charts.setOnLoadCallback(drawChart)
+
+	function drawChart() {
+
+		const query = new google.visualization.Query(spreadsheet_url)
+		query.setQuery(queryStatement)
+		query.send(handleQueryResponse)
+
+		function handleQueryResponse(response) {
+			if(response.isError()) {
+				alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
+				return
+			}
+
+			const chartData = new google.visualization.DataTable()
+			chartData.addColumn('string','期')
+			chartData.addColumn('number','期初1')
+			chartData.addColumn('number','期初2')
+			chartData.addColumn('number','期末1')
+			chartData.addColumn('number','期末2')
+
+			const data = response.getDataTable()
+
+			let currentTotalScore = 0
+			let newTotalScore = 0
+
+			for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+				let season = data.getValue(i,2)
+				let score = data.getValue(i,8)
+
+				let formattedClass = getFormattedClass(season)
+
+				newTotalScore = currentTotalScore + score
+
+				chartData.addRows([
+					[
+						formattedClass,
+						currentTotalScore,
+						currentTotalScore,
+						newTotalScore,
+						newTotalScore					
+					]			
+				])			
+
+				currentTotalScore = newTotalScore
+			}
+			
+			const options = {
+				chartArea: {
+					left: 20,
+					top: 20,
+					width: '100%',
+					height: '80%'
+				},
+				legend: {
+					position: 'none'
+				},
+				title: '通算得点：' + newTotalScore.toFixed(1),
+				titlePosition: 'in',
+				bar: {
+					groupWidth: '90%'
+				},
+				candlestick: {
+					fallingColor: {
+						strokeWidth: 0,
+						fill: '#FF6666'
+					},
+					risingColor: {
+						strokeWidth: 0,
+						fill: '#6666FF'
+					}
+				},
+				vAxis: {
+					textPosition: 'in'
+				}
+			}
+
+			const chart = new google.visualization.CandlestickChart(document.getElementById('myChart'))
+
+			chart.draw(chartData, options)
+		}
+	}
+}
 
 google.charts.load('current', {'packages':['table','controls']});
 google.charts.setOnLoadCallback(drawDashboard)
@@ -18,7 +112,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R WHERE R = "Y"')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
