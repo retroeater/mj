@@ -87,8 +87,8 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_articles.html</loc>
-		<lastmod>2021-05-18</lastmod>
-		<changefreq>daily</changefreq>
+		<lastmod>2021-05-19</lastmod>
+		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
@@ -108,7 +108,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_pros.html</loc>
-		<lastmod>2021-05-16</lastmod>
+		<lastmod>2021-05-19</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -117,6 +117,13 @@
 		<loc>https://retroeater.github.io/mj/jpml_titles.html</loc>
 		<lastmod>2021-05-10</lastmod>
 		<changefreq>monthly</changefreq>
+		<priority>1.0</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/jpml_videos.html</loc>
+		<lastmod>2021-05-19</lastmod>
+		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
 

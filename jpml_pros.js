@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -56,7 +56,8 @@ function drawDashboard() {
 		chartData.addColumn('string','女流桜花<br>15期')
 		chartData.addColumn('string','女流桜花<br>最高到達')
 		chartData.addColumn('string','決勝進出<br>Finals')
-		chartData.addColumn('string','関連記事<br>Articles')
+		chartData.addColumn('string','関連<br>記事')
+		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送対局<br>Live')
 		chartData.addColumn('string','最終更新日<br>Updated')
 
@@ -99,6 +100,7 @@ function drawDashboard() {
 		let hououSeasons		// AI 鳳凰戦出場回数
 		let oukaSeasons			// AJ 女流桜花出場回数
 		let ron2ImageUrl		// AK ロン2画像
+		let numberOfVideos		// AL 関連動画
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -139,6 +141,7 @@ function drawDashboard() {
 			hououSeasons = data.getValue(i,34)
 			oukaSeasons = data.getValue(i,35)
 			ron2ImageUrl = data.getValue(i,36)
+			numberOfVideos = data.getValue(i,37)
 
 			let formattedName = getFormattedName(name,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id,ron2ImageUrl)
@@ -156,6 +159,7 @@ function drawDashboard() {
 			let formattedOukaHighestLeague = getFormattedOukaHighestLeague(name,oukaHighestLeague)
 			let formattedFinals = getFormattedFinals(name,numberOfFinals)
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
+			let formattedVideos = getFormattedVideos(name,numberOfVideos)
 			let formattedLives = getFormattedLives(name,numberOfLives)
 			let formattedLastUpdated = getFormattedLastUpdated(lastUpdated)
 
@@ -180,6 +184,7 @@ function drawDashboard() {
 					formattedOukaHighestLeague,
 					formattedFinals,
 					formattedArticles,
+					formattedVideos,
 					formattedLives,
 					formattedLastUpdated
 				]			
@@ -482,6 +487,19 @@ function getFormattedTwitter(twitterId,twitterImageUrl) {
 	}
 
 	return formattedTwitter	
+}
+
+function getFormattedVideos(name,numberOfVideos) {
+
+	let sortKey
+	let formattedVideos
+
+	if(numberOfVideos != 0) {
+		sortKey = ('0000' + numberOfVideos).slice(-4)
+		formattedVideos = '<span class="' + sortKey + '">' + '<a href="./jpml_videos.html?name=' + name + '" target="_blank">' + numberOfVideos + '件</a></span>'
+	}
+
+	return formattedVideos
 }
 
 function getFormattedWikipedia(wikipediaId) {
