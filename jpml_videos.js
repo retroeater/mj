@@ -36,7 +36,7 @@ function drawDashboard() {
 
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','動画')
-		chartData.addColumn('string','タイトル・出典・公開日・出演')
+		chartData.addColumn('string','公開日・タイトル・出典・出演')
 		
 		const data = response.getDataTable()
 
@@ -67,24 +67,15 @@ function drawDashboard() {
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
-		const nameFilter = new google.visualization.ControlWrapper({
+		const infoFilter = new google.visualization.ControlWrapper({
 			controlType: 'StringFilter',
-			containerId: 'name_filter_div',
+			containerId: 'info_filter_div',
 			options: {
 				filterColumnIndex: 1,
-				matchType: 'any'
+				matchType: 'any',
 			},
 			state: {
 				value: search_name
-			}
-		})
-
-		const channelFilter = new google.visualization.ControlWrapper({
-			controlType: 'StringFilter',
-			containerId: 'channel_filter_div',
-			options: {
-				filterColumnIndex: 1,
-				matchType: 'any'
 			}
 		})
 
@@ -103,7 +94,7 @@ function drawDashboard() {
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(chartData)
 
-		dashboard.bind([nameFilter,channelFilter], table)
+		dashboard.bind([infoFilter], table)
 		dashboard.draw(view)
 	}
 }
@@ -123,7 +114,7 @@ function getFormattedTitle(name,channelName,title,publishedDate) {
 
 //	formattedChannelImage = '<a href="' + channelUrl + '" target="_blank" "><img src="' + channelImageUrl + '" height="90" width="90" /></a>'
 
-	formattedTitle = title + '<br>' + channelName + '<br>' + publishedDate + '<br>' + name
+	formattedTitle = publishedDate + '<br>' + title + '<br>' + channelName + '<br>' + name
 
 	return formattedTitle
 }
