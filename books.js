@@ -1,6 +1,14 @@
-let search_name = ''
-
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=books&headers=1'
+
+const params = (new URL(document.location)).searchParams
+let search_name = params.get('name')
+
+if(!search_name) {
+	search_name = ''
+}
+
+let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N WHERE N = "Y"'
+
 
 google.charts.load('current', {'packages':['table','controls']});
 google.charts.setOnLoadCallback(drawDashboard)
@@ -8,69 +16,79 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M WHERE N = "Y"')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
-	/*
-		0	A	著者名
-		1	B	著者名かな
-		2	C	所属団体
-		3	D	所属団体かな
-		4	E	ASIN
-		5	F	商品URL
-		6	G	商品画像URL
-		7	H	書籍名
-		8	I	出版日
-		9	J	Kindle ASIN
-		10	K	Kindle URL
-		11	L	Unlimited
-		12	M	登録日
-		-	N	表示
-	*/
+
+	let name			// A 著者名
+	let nameKana		// B 著者名かな
+	let org				// C 所属団体
+	let orgKana			// D 所属団体かな
+	let asin			// E ASIN
+	let url				// F 商品URL
+	let imageUrl		// G 商品画像URL
+	let title			// H 書籍名
+	let publishedDate	// I 出版日
+	let asinKindle		// J Kindle ASIN
+	let kindleUrl		// K Kindle URL
+	let isUnlimited		// L Unlimited
+	let registeredDate	// M 登録日
+	let isVisible		// N 表示
+
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
 
-		const data = response.getDataTable()
+		const chartData = new google.visualization.DataTable()
+		chartData.addColumn('string','書籍')
+		chartData.addColumn('string','出版日・タイトル・著者')
 
-//		const table = new google.visualization.Table(document.getElementById('myTable'));
+		const data = response.getDataTable()
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-				// 著者フォーマット
-				let formattedAuthor = getFormattedAuthor(data,i)
+			name = data.getValue(i,0)
+//			nameKana = data.getValue(i,1)
+//			org = data.getValue(i,2)
+//			orgKana = data.getValue(i,3)
+//			asin = data.getValue(i,4)
+			url = data.getValue(i,5)
+			imageUrl = data.getValue(i,6)
+			title = data.getValue(i,7)
+			publishedDate = data.getValue(i,8)
+//			asinKindle = data.getValue(i,9)
+			kindleUrl = data.getValue(i,10)
+			isUnlimited = data.getValue(i,11)
+//			registeredDate = data.getValue(i,12)
+//			isVisible = data.getValue(i,13)
 
-				// 商品画像フォーマット
-				let formattedProductImage = getFormattedProductImage(data,i)
+			let formattedInfo =getFormattedInfo(name,title,publishedDate,kindleUrl,isUnlimited)
+			let formattedImage = getFormattedImage(url,imageUrl,title)
 
-				// 書籍名フォーマット
-				let formattedTitle = getFormattedTitle(data,i)
-
-				data.setValue(i, 0, formattedAuthor)
-				data.setValue(i, 5, formattedProductImage)
-				data.setValue(i, 7, formattedTitle)
+			chartData.addRows([
+				[
+					formattedImage,
+					formattedInfo
+				]
+			])
 		}
-
-		data.setColumnLabel(0, '著者')
-		data.setColumnLabel(5, 'Amazon')
-		data.setColumnLabel(7, 'タイトル')
-		data.setColumnLabel(8, '出版日')
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
-		const nameFilter = new google.visualization.ControlWrapper({
+		const infoFilter = new google.visualization.ControlWrapper({
 			controlType: 'StringFilter',
-			containerId: 'name_filter_div',
+			containerId: 'info_filter_div',
 			options: {
-				filterColumnIndex: 0,
+				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
-					label: ' 著者:'
+					label: '検索:'
 				}
 			},
 			state: {
-					value: search_name
+				value: search_name
 			}
 		})
 
@@ -81,58 +99,49 @@ function drawDashboard() {
 				allowHtml: true,
 				width: '100%',
 				height: '100%',
-				sortColumn: 3,
+				sortColumn: 1,
 				sortAscending: false				
 			}
 		})
 
-		// 必要列のみ表示
-		const view = new google.visualization.DataView(data)
-		view.setColumns([0,5,7,8])
+		const view = new google.visualization.DataView(chartData)
 
-		dashboard.bind([nameFilter], table)
+		dashboard.bind([infoFilter], table)
 		dashboard.draw(view)
 	}
 }
 
-function getFormattedAuthor(data,rowIndex) {
+function getFormattedImage(url,imageUrl,title) {
 
-	const author           = data.getValue(rowIndex,0)
-	const authorKana       = data.getValue(rowIndex,1)
+	let formattedImage
 
-	let formattedAuthor = ""
+	formattedImage = '<a href="' + url + '" target="_blank"><img alt="' + title + '" src="' + imageUrl + '" /></a>'
 
-	formattedAuthor = '<span class="' + authorKana + '">' + author + '</span>'
-
-	return formattedAuthor
+	return formattedImage
 }
 
-function getFormattedProductImage(data,rowIndex) {
+function getFormattedInfo(name,title,publishedDate,kindleUrl,isUnlimited) {
 
-	const productUrl   = data.getValue(rowIndex,5)
-	const productImage = data.getValue(rowIndex,6)
-	const title        = data.getValue(rowIndex,7)
+	let formattedInfo
+	let formattedPublishedDate
 
-	let formattedProductImage = ""
-
-	formattedProductImage = '<a href="' + productUrl + '" target="_blank"><img alt="' + title + '" src="' + productImage + '" /></a>'
-
-	return formattedProductImage
-}
-
-function getFormattedTitle(data,rowIndex) {
-
-	const title       = data.getValue(rowIndex,7)
-	const kindleUrl   = data.getValue(rowIndex,10)
-	const isUnlimited = data.getValue(rowIndex,11)
-
-	let formattedTitle = ""
-
-	formattedTitle = title
+	formattedPublsihedDate = getFormattedPublishedDate(publishedDate)
+	formattedInfo = formattedPublsihedDate + '<br>' + title + '<br>' + name
 
 	if(isUnlimited) {
-		formattedTitle += '<br><a href="' + kindleUrl + '/" target="_blank"><img alt="kindle unlimited" height="18" src="img/ku-logo-orange-black._CB485944605_.png"></a>'
+		formattedInfo += '<br><a href="' + kindleUrl + '/" target="_blank"><img alt="kindle unlimited" height="18" src="img/ku-logo-orange-black._CB485944605_.png"></a>'
 	}
 
-	return formattedTitle
+	return formattedInfo
+}
+
+function getFormattedPublishedDate(publishedDate) {
+
+	let formattedPublishedDate
+
+	if(publishedDate) {
+		formattedPublishedDate = publishedDate.getFullYear() + '-' + ('00' + (publishedDate.getMonth()+1)).slice(-2) + '-' + ('00' + publishedDate.getDate()).slice(-2)
+	}
+
+	return formattedPublishedDate
 }
