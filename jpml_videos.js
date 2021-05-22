@@ -1,11 +1,13 @@
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=videos&headers=1'
 
 const params = (new URL(document.location)).searchParams
-const search_name = params.get('name')
+let search_name = params.get('name')
 
-if(search_name == 'null') {
+if(!search_name) {
 	search_name = ''
 }
+
+let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE J = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -13,7 +15,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J WHERE J = "Y"')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	let name			// A 名前
@@ -59,8 +61,7 @@ function drawDashboard() {
 			chartData.addRows([
 				[
 					formattedImage,
-					formattedTitle,
-//					name
+					formattedTitle
 				]			
 			])
 		}
@@ -73,6 +74,9 @@ function drawDashboard() {
 			options: {
 				filterColumnIndex: 1,
 				matchType: 'any',
+				ui: {
+					label: '検索:'
+				}
 			},
 			state: {
 				value: search_name
@@ -91,7 +95,6 @@ function drawDashboard() {
 			}
 		})
 
-		// 必要列のみ表示
 		const view = new google.visualization.DataView(chartData)
 
 		dashboard.bind([infoFilter], table)
@@ -111,8 +114,6 @@ function getFormattedImage(title,url,imageUrl) {
 function getFormattedTitle(name,channelName,title,publishedDate) {
 
 	let formattedTitle
-
-//	formattedChannelImage = '<a href="' + channelUrl + '" target="_blank" "><img src="' + channelImageUrl + '" height="90" width="90" /></a>'
 
 	formattedTitle = publishedDate + '<br>' + title + '<br>' + channelName + '<br>' + name
 

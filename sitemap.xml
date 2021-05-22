@@ -3,14 +3,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/</loc>
-		<lastmod>2021-05-05</lastmod>
+		<lastmod>2021-05-21</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/index.html</loc>
-		<lastmod>2021-05-05</lastmod>
+		<lastmod>2021-05-21</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -122,7 +122,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_videos.html</loc>
-		<lastmod>2021-05-19</lastmod>
+		<lastmod>2021-05-229</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
