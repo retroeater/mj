@@ -3,14 +3,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/</loc>
-		<lastmod>2021-05-21</lastmod>
+		<lastmod>2021-05-22</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/index.html</loc>
-		<lastmod>2021-05-21</lastmod>
+		<lastmod>2021-05-22</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -101,14 +101,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_live.html</loc>
-		<lastmod>2021-05-16</lastmod>
+		<lastmod>2021-05-22</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_pros.html</loc>
-		<lastmod>2021-05-19</lastmod>
+		<lastmod>2021-05-22</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -150,7 +150,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ouka_league_by_class.html</loc>
-		<lastmod>2021-05-09</lastmod>
+		<lastmod>2021-05-22</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>

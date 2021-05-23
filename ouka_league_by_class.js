@@ -1,22 +1,22 @@
-
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros&headers=1'
+
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
+
+const queryStatement = 'SELECT I,AC,COUNT(I) WHERE Y = "Y" AND I > 0 AND AC <> "" GROUP BY I,AC'
 
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT "A",I,AC,COUNT(I) WHERE Y = "Y" AND I <> "" AND AC <> "" GROUP BY I,AC')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
-		
-		const data = response.getDataTable()
-		data.addColumn('number','リーグID')
 
 		let chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','ID')
@@ -24,6 +24,8 @@ function drawChart() {
 		chartData.addColumn('number','リーグID')
 		chartData.addColumn('string','リーグ')
 		chartData.addColumn('number','人数')
+
+		const data = response.getDataTable()
 
 		let id
 		let proClass
@@ -33,16 +35,21 @@ function drawChart() {
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-			idString = String(data.getValue(i,3))
-			proClass = Number(data.getValue(i,1))
-			league = data.getValue(i,2)
+			idString = String(data.getValue(i,2))
+			proClass = data.getValue(i,0)
+			league = data.getValue(i,1)
 			leagueId = getLeagueId(league)
-			numberOfPeople = data.getValue(i,3)
-			
-			chartData.addRows([
-				[idString,proClass,leagueId,league,numberOfPeople]			
-			])
+			numberOfPeople = data.getValue(i,2)
 
+			chartData.addRows([
+				[
+					idString,
+					proClass,
+					leagueId,
+					league,
+					numberOfPeople
+				]
+			])
 		}
 
 		const options = {
@@ -76,7 +83,7 @@ function drawChart() {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: 'リーグ✕期（15期時点）',
+			title: 'リーグ✕期（16期時点）',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
