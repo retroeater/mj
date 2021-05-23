@@ -98,8 +98,8 @@ function drawChart() {
 
 			if(selection.length > 0) {
 
-				let proClass = Number(data.getValue(selection[0].row,1))
-				let league = data.getValue(selection[0].row,2)
+				let proClass = data.getValue(selection[0].row,0)
+				let league = data.getValue(selection[0].row,1)
 				let joined = proClass + 1984
 
 				let url = './jpml_pros.html?joined=' + joined + '&ouka=' + league
