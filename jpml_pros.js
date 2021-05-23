@@ -245,7 +245,7 @@ function drawDashboard() {
 				filterColumnIndex: 15,
 				matchType: 'any',
 				ui: {
-					label: '桜花15期:'
+					label: '桜花16期:'
 				}
 			},
 			state: {
