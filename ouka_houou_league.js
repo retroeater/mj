@@ -1,22 +1,24 @@
-
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros&headers=1'
+
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
+
+const queryStatement = 'SELECT T,AC,COUNT(T) WHERE Y = "Y" AND T <> "" AND AC <> "" GROUP BY T,AC'
 
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT "A",T,AC,COUNT(T) WHERE Y = "Y" AND T <> "" AND AC <> "" GROUP BY T,AC')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
-		
+
 		const data = response.getDataTable()
-		data.addColumn('number','リーグID')
 
 		let chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','ID')
@@ -34,15 +36,21 @@ function drawChart() {
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-			idString = String(data.getValue(i,3))
-			hououLeague = data.getValue(i,1)
+			idString = String(data.getValue(i,2))
+			hououLeague = data.getValue(i,0)
 			hououLeagueId = getHououLeagueId(hououLeague)
-			oukaLeague = data.getValue(i,2)
+			oukaLeague = data.getValue(i,1)
 			oukaLeagueId = getOukaLeagueId(oukaLeague)
-			numberOfPeople = data.getValue(i,3)
+			numberOfPeople = data.getValue(i,2)
 
 			chartData.addRows([
-				[idString,hououLeagueId,oukaLeagueId,oukaLeague,numberOfPeople]			
+				[
+					idString,
+					hououLeagueId,
+					oukaLeagueId,
+					oukaLeague,
+					numberOfPeople
+				]
 			])
 		}
 
@@ -77,7 +85,7 @@ function drawChart() {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: '第15期女流桜花✕第38期前期鳳凰リーグ',
+			title: '第16期女流桜花✕第38期前期鳳凰リーグ',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
@@ -92,8 +100,8 @@ function drawChart() {
 
 			if(selection.length > 0) {
 
-				let hououLeague = data.getValue(selection[0].row,1)
-				let oukaLeague = data.getValue(selection[0].row,2)
+				let hououLeague = data.getValue(selection[0].row,0)
+				let oukaLeague = data.getValue(selection[0].row,1)
 
 				let url = './jpml_pros.html?league=' + hououLeague + '&ouka=' + oukaLeague
 
