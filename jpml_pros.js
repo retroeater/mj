@@ -53,7 +53,7 @@ function drawDashboard() {
 		chartData.addColumn('string','鳳凰戦<br>38期前期')
 		chartData.addColumn('string','鳳凰戦<br>最高到達')
 		chartData.addColumn('string','女流桜花<br>出場回数')
-		chartData.addColumn('string','女流桜花<br>15期')
+		chartData.addColumn('string','女流桜花<br>16期')
 		chartData.addColumn('string','女流桜花<br>最高到達')
 		chartData.addColumn('string','決勝進出<br>Finals')
 		chartData.addColumn('string','関連<br>記事')
