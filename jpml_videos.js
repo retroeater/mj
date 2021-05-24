@@ -106,7 +106,7 @@ function getFormattedImage(title,url,imageUrl) {
 
 	let formattedImage
 
-	formattedImage = '<a href="' + url + '" target="_blank" "><img src="' + imageUrl + '" height="90" width="120" alt="' + title + '" /></a>'
+	formattedImage = '<a href="' + url + '" target="_blank" "><img src="' + imageUrl + '" height="90" width="160" alt="' + title + '" /></a>'
 
 	return formattedImage
 }
