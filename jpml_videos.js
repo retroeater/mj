@@ -38,7 +38,7 @@ function drawDashboard() {
 
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','動画')
-		chartData.addColumn('string','公開日・タイトル・出典・出演')
+		chartData.addColumn('string','概要')
 		
 		const data = response.getDataTable()
 
