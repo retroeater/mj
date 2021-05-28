@@ -7,6 +7,12 @@
 	margin-top: 24px;
 }
 
+img.articles {
+	width: 120px;
+	height: 90px;
+	object-fit: cover;
+}
+
 th {
 	text-align: center;
 }

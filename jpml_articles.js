@@ -1,11 +1,13 @@
-const params = (new URL(document.location)).searchParams
-const search_name = params.get('name')
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=articles&headers=1'
 
-if(search_name == 'null') {
+const params = (new URL(document.location)).searchParams
+let search_name = params.get('name')
+
+if(!search_name) {
 	search_name = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=articles&headers=1'
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE J = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -13,79 +15,72 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,H,I,J,K WHERE L = "Y"')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
-		/*
-		0	A	名前
-		1	B	聞き手
-		2	C	カテゴリ
-		3	D	タイトル
-		4	E	URL
-		5	F	公開日
-		-	G	原題
-		6	H	出典
-		7	I	出典URL
-		8	J	種別
-		9	K	登録日
-		-	H	表示
-	*/
+
+	let name			// A 名前
+	let sourceName		// B 出典
+	let sourcelUrl		// C 出典URL
+	let sourceImageUrl	// D 出典画像URL
+	let originalTitle	// E 原題
+	let title			// F タイトル
+	let url				// G URL
+	let imageUrl		// H 画像URL
+	let publishedDate	// I 公開日
+	let isVisible		// J 表示
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
 
+		const chartData = new google.visualization.DataTable()
+		chartData.addColumn('string','記事')
+		chartData.addColumn('string','概要')
+
 		const data = response.getDataTable()
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-				// 名前フォーマット
-				let formattedName = getFormattedName(data,i)
+			name = data.getValue(i,0)
+			sourceName = data.getValue(i,1)
+//			sourcelUrl = data.getValue(i,2)
+//			sourceImageUrl = data.getValue(i,3)
+//			originalTitle = data.getValue(i,4)
+			title = data.getValue(i,5)
+			url = data.getValue(i,6)
+			imageUrl = data.getValue(i,7)
+			publishedDate = data.getValue(i,8)
+//			isVisible = data.getValue(i,9)
 
-				// タイトルフォーマット
-				let formattedTitle = getFormattedTitle(data,i)
+			let formattedTitle = getFormattedTitle(name,sourceName,title,publishedDate)
+			let formattedImage = getFormattedImage(title,url,imageUrl)
 
-				// 公開日フォーマット
-				let formattedPublishedDate = getFormattedPublishedDate(data,i)
-
-				// 出典フォーマット
-				let formattedSource = getFormattedSource(data,i)
-
-				// 公開日フォーマット
-				let formattedRegistrationDate = getFormattedRegistrationDate(data,i)
-
-				data.setValue(i, 0, formattedName)
-				data.setValue(i, 3, formattedTitle)
-				data.setValue(i, 5, formattedPublishedDate)
-				data.setValue(i, 6, formattedSource)
-				data.setValue(i, 9, formattedRegistrationDate)
+			chartData.addRows([
+				[
+					formattedImage,
+					formattedTitle
+				]			
+			])
 		}
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
-		const nameFilter = new google.visualization.ControlWrapper({
+		const infoFilter = new google.visualization.ControlWrapper({
 			controlType: 'StringFilter',
-			containerId: 'name_filter_div',
+			containerId: 'info_filter_div',
 			options: {
-				filterColumnIndex: 0,
-				matchType: 'any'
+				filterColumnIndex: 1,
+				matchType: 'any',
+				ui: {
+					label: '検索：'
+				}
 			},
 			state: {
 				value: search_name
 			}
-		})
-
-		const categoryFilter = new google.visualization.ControlWrapper({
-			controlType: 'CategoryFilter',
-			containerId: 'category_filter_div',
-			options: {
-				filterColumnIndex: 1,
-				ui: {
-					caption: 'カテゴリを絞り込む',
-					sortValues: false
-				}
-			},
 		})
 
 		const table = new google.visualization.ChartWrapper({
@@ -96,101 +91,35 @@ function drawDashboard() {
 				width: '100%',
 				height: '100%',
 				page: 'enable',
-				pageSize: 200,
-				showRowNumber: true,
-				sortColumn: 3,
-				sortAscending: false
+				pageSize: 100
 			}
 		})
 
-		// 必要列のみ表示
-		const view = new google.visualization.DataView(data)
-		view.setColumns([0,2,3,5,6,9])
+		const view = new google.visualization.DataView(chartData)
 
-		dashboard.bind([nameFilter,categoryFilter], table)
+		dashboard.bind([infoFilter], table)
 		dashboard.draw(view)
 	}
 }
 
-function getFormattedDate(date) {
-	
-	let formattedDate = ""
+function getFormattedImage(title,url,imageUrl) {
 
-	formattedDate = '<span style="white-space: nowrap">' + date + '</span>' 
+	let formattedImage
 
-	return formattedDate
-}
-
-function getFormattedName(data,row_index) {
-
-	let author      = data.getValue(row_index,0)
-	let interviewer = data.getValue(row_index,1)
-
-	let formattedName = author
-
-	if(interviewer) {
-		formattedName += ' （聞き手：' + interviewer + '）'
+	if(!imageUrl) {
+		imageUrl = './img/125_arr_hoso.png'
 	}
 
-	return formattedName
+	formattedImage = '<a href="' + url + '" target="_blank" "><img class="articles" loading="lazy" src="' + imageUrl + '" alt="' + title + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+
+	return formattedImage
 }
 
-function getFormattedPublishedDate(data,rowIndex) {
-	
-	let publishedDate = data.getValue(rowIndex,5)
+function getFormattedTitle(name,channelName,title,publishedDate) {
 
-	let formattedPublishedDate = ""
+	let formattedTitle
 
-	formattedPublishedDate = getFormattedDate(publishedDate)
-
-	return formattedPublishedDate
-}
-
-function getFormattedRegistrationDate(data,rowIndex) {
-	
-	let registrationDate = data.getValue(rowIndex,9)
-
-	let formattedRegistrationDate = ""
-
-	if(registrationDate) {
-		formattedRegistrationDate = getFormattedDate(registrationDate)
-	}		
-
-	return formattedRegistrationDate
-}
-
-function getFormattedSource(data,rowIndex) {
-
-	const source = data.getValue(rowIndex,6)
-	const url = data.getValue(rowIndex,7)
-
-	let sortKey = ""
-	let formattedSource = ""
-
-	sortKey = source
-	formattedSource = '<span class="' + source + '">' + '<a href="' + url + '" target="_blank">' + source + '</a></span>'
-
-	return formattedSource
-}
-
-function getFormattedTitle(data,rowIndex) {
-
-	const title = data.getValue(rowIndex,3)
-	const url = data.getValue(rowIndex,4)
-	const type = data.getValue(rowIndex,8)
-
-	let sortKey = ""
-	let formattedTitle = ""
-	let imageFile = ""
-
-	if(type == "動画") {
-		imageFile = "youtube_social_square_white.png"
-	}
-	else {
-		imageFile = "125_arr_hoso.png"
-	}
-
-	formattedTitle = '<span class="' + title + '"><a href="' + url + '" target="_blank"><img alt="' + type + '" src="img/' + imageFile + '" height="45" width="45" /></a> ' + title + '</span>'
+	formattedTitle = publishedDate + '<br>' + title + '<br>' + channelName + '<br>' + name
 
 	return formattedTitle
 }
