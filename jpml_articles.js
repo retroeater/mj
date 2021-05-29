@@ -91,7 +91,7 @@ function drawDashboard() {
 				width: '100%',
 				height: '100%',
 				page: 'enable',
-				pageSize: 100
+				pageSize: 50
 			}
 		})
 
