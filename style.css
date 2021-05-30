@@ -40,6 +40,10 @@ img.videos {
 	object-fit: cover;
 }
 
+input {
+	width: 100px
+}
+
 th {
 	text-align: center;
 }
