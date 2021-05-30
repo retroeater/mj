@@ -246,7 +246,7 @@ function drawDashboard() {
 		})
 
 		const table = new google.visualization.ChartWrapper({
-			'chartType': 'Table',
+			chartType: 'Table',
 			containerId: 'myTable',
 			options : {
 				allowHtml: true,

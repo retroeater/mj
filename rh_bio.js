@@ -1,15 +1,18 @@
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=bio'
 
+const queryStatement = 'SELECT A,B'
+
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -25,7 +28,6 @@ function drawTable() {
 			height: '100%'
 		}
 
-		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
 
 		table.draw(view, options);

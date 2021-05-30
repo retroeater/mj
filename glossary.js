@@ -1,15 +1,18 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=glossary'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=glossary&headers=1'
 
-google.charts.load('current', {'packages':['table']});
-google.charts.setOnLoadCallback(drawTable);
+const queryStatement = 'SELECT A,B,C,D'
+
+google.charts.load('current', {'packages':['table']})
+google.charts.setOnLoadCallback(drawTable)
 
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -17,7 +20,7 @@ function drawTable() {
 
 		var data = response.getDataTable()
 
-		const table = new google.visualization.Table(document.getElementById('myTable'));
+		const table = new google.visualization.Table(document.getElementById('myTable'))
 
 		const options = {
 			allowHtml: true,
@@ -25,9 +28,8 @@ function drawTable() {
 			height: '100%'
 		}
 
-		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
 
-		table.draw(view, options);
+		table.draw(view, options)
 	}
 }

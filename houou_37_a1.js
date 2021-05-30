@@ -3,10 +3,12 @@ const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1xw_MUb2yNdPv-kR
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
+let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K'
+
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -39,10 +41,12 @@ const spreadsheet_url_rank = 'https://docs.google.com/spreadsheets/d/1xw_MUb2yNd
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
 
+const rankQueryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K'
+
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url_rank)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K')
+	query.setQuery(rankQueryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {

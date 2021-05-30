@@ -1,4 +1,6 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=articles_ryoei'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=articles_ryoei&headers=1'
+
+const queryStatement = 'SELECT A,B,C,D,E,F WHERE G = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -6,10 +8,11 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F WHERE G = "Y"')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -19,14 +22,14 @@ function drawDashboard() {
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-				// 名前フォーマット
-				let formattedName = getFormattedName(data,i)
+			// 名前フォーマット
+			let formattedName = getFormattedName(data,i)
 
-				// タイトルフォーマット
-				let formattedTitle = getFormattedTitle(data,i)
+			// タイトルフォーマット
+			let formattedTitle = getFormattedTitle(data,i)
 
-				data.setValue(i, 0, formattedName)
-				data.setValue(i, 3, formattedTitle)
+			data.setValue(i, 0, formattedName)
+			data.setValue(i, 3, formattedTitle)
 		}
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
@@ -34,19 +37,17 @@ function drawDashboard() {
 		const categoryFilter = new google.visualization.ControlWrapper({
 			controlType: 'CategoryFilter',
 			containerId: 'category_filter_div',
-			values: ['コラム','初級講座','中級講座','上級講座'],
 			options: {
 				filterColumnIndex: 1,
 				ui: {
-					caption: 'カテゴリを絞り込む',
-					sortValues: false
+					sortValues: true
 				}
 			},
 		})
 	
 		const table = new google.visualization.ChartWrapper({
-					'chartType': 'Table',
-					containerId: 'table_div',
+			chartType: 'Table',
+			containerId: 'table_div',
 			options : {
 				allowHtml: true,
 				width: '100%',

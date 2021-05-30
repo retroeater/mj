@@ -30,6 +30,7 @@ if(search_name) {
 		query.send(handleQueryResponse)
 
 		function handleQueryResponse(response) {
+
 			if(response.isError()) {
 				alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 				return

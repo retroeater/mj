@@ -1,15 +1,18 @@
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1O8IzJYEB_tfgvh1RI41mkR2JZjeHTFCZ4gtMY_l8fkQ/edit#gid=1188043937'
 
+const queryStatement = 'SELECT A,B WHERE E = "Y" ORDER BY B DESC'
+
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
 
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B WHERE E = "Y" ORDER BY B DESC')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -25,7 +28,9 @@ function drawChart() {
 			},
 			legend: 'none',
 			title: 'どの牌を残すとメンツができやすいか | Efficiency to create a new group from an existing group and/or an isolated tile',
-			titleTextStyle: {bold: false}
+			titleTextStyle: {
+				bold: false
+			}
         }
 
 		const view = new google.visualization.DataView(data)

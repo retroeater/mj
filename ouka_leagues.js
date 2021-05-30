@@ -1,11 +1,13 @@
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ouka&headers=1'
+
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
-if((!search_name) || (search_name == 'null')) {
+if(!search_name) {
 	search_name = '川原舞子'
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ouka&headers=1'
+const queryStatement = 'SELECT A,B,C,D,E,F,G WHERE G > 0'
 
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
@@ -13,33 +15,34 @@ google.charts.setOnLoadCallback(drawChart)
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G WHERE G > 0')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
 
-	const data = response.getDataTable()
+		const data = response.getDataTable()
 
-	let leagues_01 = ['1',0,0,0,0,null]
-	let leagues_02 = ['2',0,0,0,0,null]
-	let leagues_03 = ['3',0,0,0,0,null]
-	let leagues_04 = ['4',0,0,0,0,null]
-	let leagues_05 = ['5',0,0,0,0,null]
-	let leagues_06 = ['6',0,0,0,0,null]
-	let leagues_07 = ['7',0,0,0,0,null]
-	let leagues_08 = ['8',0,0,0,0,null]
-	let leagues_09 = ['9',0,0,0,0,null]
-	let leagues_10 = ['10',0,0,0,0,null]
-	let leagues_11 = ['11',0,0,0,0,null]
-	let leagues_12 = ['12',0,0,0,0,null]
-	let leagues_13 = ['13',0,0,0,0,null]
-	let leagues_14 = ['14',0,0,0,0,null]
-	let leagues_15 = ['15',0,0,0,0,null]
-	let leagues_16 = ['16',0,0,0,0,null]
+		let leagues_01 = ['1',0,0,0,0,null]
+		let leagues_02 = ['2',0,0,0,0,null]
+		let leagues_03 = ['3',0,0,0,0,null]
+		let leagues_04 = ['4',0,0,0,0,null]
+		let leagues_05 = ['5',0,0,0,0,null]
+		let leagues_06 = ['6',0,0,0,0,null]
+		let leagues_07 = ['7',0,0,0,0,null]
+		let leagues_08 = ['8',0,0,0,0,null]
+		let leagues_09 = ['9',0,0,0,0,null]
+		let leagues_10 = ['10',0,0,0,0,null]
+		let leagues_11 = ['11',0,0,0,0,null]
+		let leagues_12 = ['12',0,0,0,0,null]
+		let leagues_13 = ['13',0,0,0,0,null]
+		let leagues_14 = ['14',0,0,0,0,null]
+		let leagues_15 = ['15',0,0,0,0,null]
+		let leagues_16 = ['16',0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -137,8 +140,6 @@ function drawChart() {
 			let my_class_year = leagueRanks[i][0]
 			let my_rank = leagueRanks[i][1]
 
-			console.log(my_class_year + ',' + my_rank)
-			
 			for(let j = 0; j < chartData.getNumberOfRows(); j++) {
 
 				let class_year = chartData.getValue(j,0)
@@ -169,13 +170,17 @@ function drawChart() {
 				'#CCEEFF', // C2
 				'#0000CC'  // 名前
 			],
-			curveType:  'function',
+			curveType: 'function',
 			interpolateNulls: true,
 			isStacked: true,
-			legend: {position: 'bottom'},
+			legend: {
+				position: 'bottom'
+			},
 			seriesType: 'bars',
 			series: {
-				4: {type:'line'}
+				4: {
+					type:'line'
+				}
 			},
 			vAxis: {
 				direction: -1,

@@ -37,7 +37,7 @@ function drawDashboard() {
 
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','動画')
-		chartData.addColumn('string','公開日・タイトル・対局者')
+		chartData.addColumn('string','概要')
 
 		const data = response.getDataTable()
 
@@ -82,8 +82,8 @@ function drawDashboard() {
 		})
 
 		const table = new google.visualization.ChartWrapper({
-					'chartType': 'Table',
-					containerId: 'table_div',
+			chartType: 'Table',
+			containerId: 'table_div',
 			options : {
 				allowHtml: true,
 				width: '100%',
@@ -108,7 +108,7 @@ function getFormattedImage(title,url,imageUrl) {
 		imageUrl = './img/125_arr_hoso.png'
 	}
 
-	formattedImage = '<a href="' + url + '" target="_blank"><img src="' + imageUrl + '" alt="' + title + '" height="90" width="160" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+	formattedImage = '<a href="' + url + '" target="_blank"><img alt="' + title + '" class="live" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
 
 	return formattedImage
 }

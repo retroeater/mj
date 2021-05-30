@@ -7,8 +7,7 @@ if(!search_name) {
 	search_name = ''
 }
 
-let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N WHERE N = "Y"'
-
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N WHERE N = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']});
 google.charts.setOnLoadCallback(drawDashboard)
@@ -43,7 +42,7 @@ function drawDashboard() {
 
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','書籍')
-		chartData.addColumn('string','出版日・タイトル・著者')
+		chartData.addColumn('string','概要')
 
 		const data = response.getDataTable()
 
@@ -93,7 +92,7 @@ function drawDashboard() {
 		})
 
 		const table = new google.visualization.ChartWrapper({
-			'chartType': 'Table',
+			chartType: 'Table',
 			containerId: 'myTable',
 			options : {
 				allowHtml: true,

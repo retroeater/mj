@@ -84,7 +84,7 @@ function drawDashboard() {
 		})
 
 		const table = new google.visualization.ChartWrapper({
-			'chartType': 'Table',
+			chartType: 'Table',
 			containerId: 'table_div',
 			options : {
 				allowHtml: true,
@@ -110,7 +110,7 @@ function getFormattedImage(title,url,imageUrl) {
 		imageUrl = './img/125_arr_hoso.png'
 	}
 
-	formattedImage = '<a href="' + url + '" target="_blank" "><img class="articles" loading="lazy" src="' + imageUrl + '" alt="' + title + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+	formattedImage = '<a href="' + url + '" target="_blank" "><img alt="' + title + '" class="articles" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
 
 	return formattedImage
 }

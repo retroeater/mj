@@ -17,7 +17,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/books.html</loc>
-		<lastmod>2021-05-20</lastmod>
+		<lastmod>2021-05-29</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -80,14 +80,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/houou_results.html</loc>
-		<lastmod>2021-05-18</lastmod>
+		<lastmod>2021-05-29</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_articles.html</loc>
-		<lastmod>2021-05-28</lastmod>
+		<lastmod>2021-05-29</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -101,7 +101,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_live.html</loc>
-		<lastmod>2021-05-23</lastmod>
+		<lastmod>2021-05-29</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -115,14 +115,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_titles.html</loc>
-		<lastmod>2021-05-10</lastmod>
+		<lastmod>2021-05-29</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_videos.html</loc>
-		<lastmod>2021-05-24</lastmod>
+		<lastmod>2021-05-29</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -171,7 +171,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ouka_results.html</loc>
-		<lastmod>2021-05-18</lastmod>
+		<lastmod>2021-05-29</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>

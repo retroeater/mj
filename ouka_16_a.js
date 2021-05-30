@@ -1,15 +1,18 @@
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1Jd-WelbdQNrpLmLBFZdU_Mw3BaC-xhDEgdmDKD4LanY/edit?sheet=総合成績&headers=1'
 
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,O,P,Q,R'
+
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,O,P,Q,R')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -36,16 +39,19 @@ function drawTable() {
 
 const spreadsheet_url_rank = 'https://docs.google.com/spreadsheets/d/1Jd-WelbdQNrpLmLBFZdU_Mw3BaC-xhDEgdmDKD4LanY/edit?sheet=順位推移&headers=1'
 
+const rankQueryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,O,P,Q,R'
+
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
 
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url_rank)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,O,P,Q,R')
+	query.setQuery(rankQueryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -60,7 +66,9 @@ function drawChart() {
 				width: '100%',
 				height: '80%'
 			},
-			legend: {position: 'bottom'},
+			legend: {
+				position: 'bottom'
+			},
 			title: '第16期女流桜花Aリーグ',
 			titlePosition: 'in'
         }

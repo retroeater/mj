@@ -1,11 +1,13 @@
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=houou&headers=1'
+
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
-if((!search_name) || (search_name == 'null')) {
+if(!search_name) {
 	search_name = '佐々木寿人'
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=houou&headers=1'
+const queryStatement = 'SELECT A,B,C,D,E,F,G WHERE G > 0'
 
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
@@ -13,10 +15,11 @@ google.charts.setOnLoadCallback(drawChart)
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G WHERE G > 0')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -300,13 +303,17 @@ function drawChart() {
 				'#CCCCCC', // E
 				'#0000CC'  // 名前
 			],
-			curveType:  'function',
+			curveType: 'function',
 			interpolateNulls: true,
 			isStacked: true,
-			legend: {position: 'bottom'},
+			legend: {
+				position: 'bottom'
+			},
 			seriesType: 'bars',
 			series: {
-				11: {type:'line'}
+				11: {
+					type:'line'
+				}
 			},
 			vAxis: {
 				direction: -1,

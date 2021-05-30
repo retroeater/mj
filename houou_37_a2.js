@@ -3,10 +3,12 @@ const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1Dx3XGjp0xmiQMvp
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P'
+
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -35,13 +37,15 @@ function drawTable() {
 
 const spreadsheet_url_rank = 'https://docs.google.com/spreadsheets/d/1Dx3XGjp0xmiQMvp4PzIBu6SerXsRlMWAI9UsVumFfjM/edit?sheet=順位推移&headers=1'
 
+const rankQueryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P'
+
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
 
 function drawChart() {
 
 	const query = new google.visualization.Query(spreadsheet_url_rank)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P')
+	query.setQuery(rankQueryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {

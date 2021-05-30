@@ -7,7 +7,7 @@ if(!search_name) {
 	search_name = ''
 }
 
-let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE J = "Y"'
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE J = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -84,8 +84,8 @@ function drawDashboard() {
 		})
 
 		const table = new google.visualization.ChartWrapper({
-					'chartType': 'Table',
-					containerId: 'table_div',
+			chartType: 'Table',
+			containerId: 'table_div',
 			options : {
 				allowHtml: true,
 				width: '100%',
@@ -106,7 +106,7 @@ function getFormattedImage(title,url,imageUrl) {
 
 	let formattedImage
 
-	formattedImage = '<a href="' + url + '" target="_blank" "><img src="' + imageUrl + '" height="90" width="160" alt="' + title + '" /></a>'
+	formattedImage = '<a href="' + url + '" target="_blank" "><img alt="' + title + '" class="videos" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
 
 	return formattedImage
 }
