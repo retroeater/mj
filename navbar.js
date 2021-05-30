@@ -50,6 +50,12 @@ document.write(
 					'<a class="dropdown-item" href="ron2_20201011.html">2020-10-11</a>' +
 				'</div>' +
 			'</li>' +
+			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="mtsuku.html">Mつく<br>Mtsuku</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="efficiency.html">牌効率<br>Efficiency</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="glossary.html">用語集<br>Glossary</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
+			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">個人<br>Ryoei</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="rh_bio.html">略歴</a>' +
@@ -59,11 +65,6 @@ document.write(
 					'<a class="dropdown-item" href="rh_articles.html">記事</a>' +
 				'</div>' +
 			'</li>' +
-			'<li class="nav-item"><a class="nav-link" href="efficiency.html">牌効率<br>Efficiency</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="glossary.html">用語集<br>Glossary</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
-			'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
 		'</ul>' +
 	'</div>' +
 '</nav>' +
