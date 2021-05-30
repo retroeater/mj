@@ -117,7 +117,17 @@ function getFormattedInfo(player,commentator,analyst,title,publishedDate) {
 
 	let formattedInfo
 
-	formattedInfo = publishedDate + '<br>' + title + '<br>' + player + '<br>実況：' + commentator + '、解説：' + analyst
+	formattedInfo = publishedDate + '<br>' + title + '<br>' + player + '<br>'
+
+	if(commentator) {
+		formattedInfo += '実況：' + commentator
+		if(analyst) {
+			formattedInfo += '、解説：' + analyst
+		}
+	}
+	else if(analyst) {
+		formattedInfo += '解説：' + analyst
+	}
 
 	return formattedInfo
 }
