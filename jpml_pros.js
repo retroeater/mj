@@ -45,21 +45,21 @@ function drawDashboard() {
 		chartData.addColumn('string','YouTube')
 		chartData.addColumn('string','Blog')
 		chartData.addColumn('string','Wikipedia')
-		chartData.addColumn('string','期<br>Joined')
-		chartData.addColumn('string','段位<br>Dan')
-		chartData.addColumn('string','出身地<br>Birthplace')
-		chartData.addColumn('string','誕生日<br>Birthday')
+		chartData.addColumn('string','期<br>入会年')
+		chartData.addColumn('string','段位')
+		chartData.addColumn('string','出身地')
+		chartData.addColumn('string','誕生日')
 		chartData.addColumn('string','鳳凰戦<br>出場回数')
 		chartData.addColumn('string','鳳凰戦<br>38期前期')
 		chartData.addColumn('string','鳳凰戦<br>最高到達')
 		chartData.addColumn('string','女流桜花<br>出場回数')
 		chartData.addColumn('string','女流桜花<br>16期')
 		chartData.addColumn('string','女流桜花<br>最高到達')
-		chartData.addColumn('string','決勝進出<br>Finals')
+		chartData.addColumn('string','決勝<br>進出')
 		chartData.addColumn('string','関連<br>記事')
 		chartData.addColumn('string','関連<br>動画')
-		chartData.addColumn('string','放送対局<br>Live')
-		chartData.addColumn('string','最終更新日<br>Updated')
+		chartData.addColumn('string','放送<br>対局')
+//		chartData.addColumn('string','最終更新')
 
 		const data = response.getDataTable()
 
@@ -127,7 +127,7 @@ function drawDashboard() {
 			hououHighestLeague = data.getValue(i,20)
 			numberOfFinals = data.getValue(i,21)
 			numberOfArticles = data.getValue(i,22)
-			lastUpdated = data.getValue(i,23)
+//			lastUpdated = data.getValue(i,23)
 //			isVisible = data.getValue(i,24)
 //			remarks = data.getValue(i,25)
 			numberOfLives = data.getValue(i,26)
@@ -161,7 +161,7 @@ function drawDashboard() {
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
 			let formattedVideos = getFormattedVideos(name,numberOfVideos)
 			let formattedLives = getFormattedLives(name,numberOfLives)
-			let formattedLastUpdated = getFormattedLastUpdated(lastUpdated)
+//			let formattedLastUpdated = getFormattedLastUpdated(lastUpdated)
 
 			chartData.addRows([
 				[
@@ -185,8 +185,8 @@ function drawDashboard() {
 					formattedFinals,
 					formattedArticles,
 					formattedVideos,
-					formattedLives,
-					formattedLastUpdated
+					formattedLives
+//					formattedLastUpdated
 				]			
 			])
 		}
@@ -215,7 +215,7 @@ function drawDashboard() {
 				filterColumnIndex: 7,
 				matchType: 'any',
 				ui: {
-					label: ' 期/Joined:'
+					label: ' 期/入会年:'
 				}
 			},
 			state: {
@@ -258,8 +258,12 @@ function drawDashboard() {
 			containerId: 'myTable',
 			options : {
 				allowHtml: true,
+				cssClassNames: {
+					tableCell: 'mj-pros'
+				},
+				frozenColumns: 1,
 				width: '100%',
-				height: '100%'
+				height: '640px'
 			},
 			state: {
 				value: search_joined
@@ -306,7 +310,7 @@ function getFormattedBlog(blogUrl,blogImageUrl) {
 	}
 
 	if(blogUrl) {
-		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" src="' + blogImageUrl + '" height="48" width="48" onError="this.onerror=null;this.src=\'img/797_me_h.png\'" /></a>'
+		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" class="pros" loading="lazy" src="' + blogImageUrl + '" onError="this.onerror=null;this.src=\'img/797_me_h.png\'" /></a>'
 	}
 
 	return formattedBlog
@@ -373,7 +377,7 @@ function getFormattedInstagram(instagramId) {
 	let formattedInstagram
 
 	if(instagramId) {
-		formattedInstagram = ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" src="img/glyph-logo_May2016.png" height="29" width="29" /></a> '
+		formattedInstagram = ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" class="pros" src="img/glyph-logo_May2016.png" /></a> '
 	}
 
 	return formattedInstagram
@@ -464,15 +468,12 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 
 	let formattedRon2
 
-console.log(ron2Id)
-console.log(ron2ImageUrl)
-
 	if(!ron2ImageUrl) {
 		ron2ImageUrl = 'img/125_arr_hoso.png'
 	}
 
 	if(ron2Id) {
-		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" src="' + ron2ImageUrl + '" height="48" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
 	}
 
 	return formattedRon2
@@ -483,7 +484,7 @@ function getFormattedTwitter(twitterId,twitterImageUrl) {
 	let formattedTwitter
 
 	if(twitterId) {
-		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" src="' + twitterImageUrl + '" height="48" width="48" onError="this.onerror=null;this.src=\'img/Twitter_Logo_Blue.svg\'" /></a>'
+		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" class="pros" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'img/Twitter_Logo_Blue.svg\'" /></a>'
 	}
 
 	return formattedTwitter	
@@ -507,7 +508,7 @@ function getFormattedWikipedia(wikipediaId) {
 	let formattedWikipedia
 
 	if(wikipediaId) {
-		formattedWikipedia = ' <a href="https://ja.wikipedia.org/wiki/' + wikipediaId + '" target="_blank"><img alt="Wiki" src="img/Wikipedia%27s_W.svg" height="36" width="36" /></a> '
+		formattedWikipedia = ' <a href="https://ja.wikipedia.org/wiki/' + wikipediaId + '" target="_blank"><img alt="Wikipedia" class="pros" src="img/Wikipedia%27s_W.svg" /></a> '
 	}
 
 	return formattedWikipedia	
@@ -518,8 +519,8 @@ function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 	let formattedYouTube
 
 	if(youTubeId) {
-		formattedYouTube = '<a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" src="' + youTubeImageUrl + '" height="48" width="48" onError="this.onerror=null;this.src=\'img/youtube_social_square_white.png\'" /></a>'
+		formattedYouTube = '<a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" class="pros" loading="lazy" src="' + youTubeImageUrl + '" onError="this.onerror=null;this.src=\'img/youtube_social_square_white.png\'" /></a>'
 	}
-	
+
 	return formattedYouTube	
 }
