@@ -254,7 +254,7 @@ function drawDashboard() {
 		})
 
 		const table = new google.visualization.ChartWrapper({
-			'chartType': 'Table',
+			chartType: 'Table',
 			containerId: 'myTable',
 			options : {
 				allowHtml: true,
@@ -262,7 +262,7 @@ function drawDashboard() {
 					tableCell: 'mj-pros'
 				},
 				width: '100%',
-				height: '640px'
+				height: '100%'
 			},
 			state: {
 				value: search_joined

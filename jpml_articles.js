@@ -84,8 +84,8 @@ function drawDashboard() {
 		})
 
 		const table = new google.visualization.ChartWrapper({
-					'chartType': 'Table',
-					containerId: 'table_div',
+			'chartType': 'Table',
+			containerId: 'table_div',
 			options : {
 				allowHtml: true,
 				width: '100%',
