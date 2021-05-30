@@ -261,7 +261,6 @@ function drawDashboard() {
 				cssClassNames: {
 					tableCell: 'mj-pros'
 				},
-				frozenColumns: 1,
 				width: '100%',
 				height: '640px'
 			},
