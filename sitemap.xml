@@ -23,16 +23,16 @@
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/efficiency.html</loc>
-		<lastmod>2020-04-01</lastmod>
-		<changefreq>yearly</changefreq>
+		<loc>https://retroeater.github.io/mj/dictionary.html</loc>
+		<lastmod>2021-06-01</lastmod>
+		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/glossary.html</loc>
-		<lastmod>2021-01-24</lastmod>
-		<changefreq>monthly</changefreq>
+		<loc>https://retroeater.github.io/mj/efficiency.html</loc>
+		<lastmod>2020-04-01</lastmod>
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
