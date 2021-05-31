@@ -73,6 +73,11 @@ height: 100% !important;
 	min-height: 700px;
 }
 
+.judan-chart {
+	width: 100%; 
+	min-height: 1200px;
+}
+
 @media only screen and (min-width: 768px) {
 .googlecal { padding-bottom: 75%; }
 }
