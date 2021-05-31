@@ -1,4 +1,6 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1oHOMaGoTeRqIAw-jHJt8vT7UUhGuPAtTl7ccLP0cHqY/edit?sheet=20210201&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1oHOMaGoTeRqIAw-jHJt8vT7UUhGuPAtTl7ccLP0cHqY/edit?sheet=20210501&headers=1'
+
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE L = "Y"'
 
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
@@ -6,10 +8,11 @@ google.charts.setOnLoadCallback(drawTable);
 function drawTable() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J WHERE L = "Y"')
+	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
@@ -19,7 +22,6 @@ function drawTable() {
 
 		const table = new google.visualization.Table(document.getElementById('myTable'));
 
-		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
 
 		const options = {

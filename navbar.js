@@ -45,7 +45,8 @@ document.write(
 			'</li>' +
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ロン2<br>Ron2</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="ron2.html">2021-05-01</a>' +
+					'<a class="dropdown-item" href="ron2.html">2021-06-01</a>' +
+					'<a class="dropdown-item" href="ron2_20210501.html">2021-05-01</a>' +
 					'<a class="dropdown-item" href="ron2_20210401.html">2021-04-01</a>' +
 					'<a class="dropdown-item" href="ron2_20210301.html">2021-03-01</a>' +
 					'<a class="dropdown-item" href="ron2_20210201.html">2021-02-01</a>' +

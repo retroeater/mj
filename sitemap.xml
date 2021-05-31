@@ -227,7 +227,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2.html</loc>
-		<lastmod>2021-05-01</lastmod>
+		<lastmod>2021-06-01</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -277,6 +277,13 @@
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_20210401.html</loc>
 		<lastmod>2021-05-01</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/ron2_20210501.html</loc>
+		<lastmod>2021-06-01</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
