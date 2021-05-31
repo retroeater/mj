@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -101,6 +101,8 @@ function drawDashboard() {
 		let oukaSeasons			// AJ 女流桜花出場回数
 		let ron2ImageUrl		// AK ロン2画像
 		let numberOfVideos		// AL 関連動画
+		let tenhouId			// AM 天鳳ID
+		let instgramImageUrl	// AN Instagram画像
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -142,8 +144,10 @@ function drawDashboard() {
 			oukaSeasons = data.getValue(i,35)
 			ron2ImageUrl = data.getValue(i,36)
 			numberOfVideos = data.getValue(i,37)
+//			tenhouId = data.getValue(i,38)
+//			instagramImageUrl = data.getValue(i,39)
 
-			let formattedName = getFormattedName(name,lastNameEn,firstNameEn)
+			let formattedName = getFormattedName(name,sortKey,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id,ron2ImageUrl)
 			let formattedTwitter = getFormattedTwitter(twitterId,twitterImageUrl)
 			let formattedInstagram = getFormattedInstagram(instagramId)
@@ -406,9 +410,8 @@ function getFormattedLives(name,numberOfLives) {
 	return formattedLives
 }
 
-function getFormattedName(name,lastNameEn,firstNameEn) {
+function getFormattedName(name,sortKey,lastNameEn,firstNameEn) {
 
-	let sortKey
 	let formattedName = name
 
 	// nullを空文字列に変換
