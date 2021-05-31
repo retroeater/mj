@@ -76,7 +76,7 @@ function drawChart() {
 				left: 80,
 				top: 20,
 				width: '90%',
-				height: '80%'
+				height: '100%'
 			},
 			legend: {
 				position: 'none'
