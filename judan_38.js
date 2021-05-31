@@ -7,7 +7,7 @@ if(!search_name) {
 	search_name = ''
 }
 
-const queryStatement = 'SELECT A,B,C,D'
+const queryStatement = 'SELECT A,B,C,D,E WHERE E = "Y"'
 
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
@@ -22,6 +22,7 @@ function drawChart() {
 	let startRound	// B 参戦
 	let endRound	// C 到達
 	let eliminated	// D 敗退
+	let isVisible	// E 表示
 
 	function handleQueryResponse(response) {
 
@@ -46,6 +47,7 @@ function drawChart() {
 			startRound = data.getValue(i,1)
 			endRound = data.getValue(i,2)
 			eliminated = data.getValue(i,3)
+//			isVisible = data.getValue(i,4)
 
 			let style = getStyle(eliminated)
 
