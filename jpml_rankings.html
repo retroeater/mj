@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176078855-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-176078855-1');
+</script>
+<script src="header.js"></script>
+<title>ランキング</title>
+<script type="text/javascript" src="jpml_rankings.js"></script>
+</head>
+<body>
+<!-- Bootstrap Navigation Bar -->
+<script src="navbar.js"></script>
+
+<div id="dashboard_div">
+	<div id="info_filter_div" class="mj-filter"></div>
+<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
+    <option value="">ランキングを選択</option>
+    <option value="jpml_rankings.html?division=【鳳凰戦】通算">【鳳凰戦】通算得点</option>
+    <option value="jpml_rankings.html?division=【鳳凰戦】期最高">【鳳凰戦】期最高得点</option>
+    <option value="jpml_rankings.html?division=【鳳凰戦】節最高">【鳳凰戦】節最高得点</option>
+    <option value="jpml_rankings.html?division=【女流桜花】通算">【女流桜花】通算得点</option>
+    <option value="jpml_rankings.html?division=【女流桜花】期最高">【女流桜花】期最高得点</option>
+    <option value="jpml_rankings.html?division=【女流桜花】節最高">【女流桜花】節最高得点</option>
+</select>
+	<div id="table_div"></div>
+</div>
+
+</body>
+</html>
