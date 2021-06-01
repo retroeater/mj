@@ -14,6 +14,7 @@ document.write(
 					'<a class="dropdown-item" href="jpml_videos.html">動画</a>' +
 					'<a class="dropdown-item" href="jpml_live.html">放送対局</a>' +
 					'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
+					'<a class="dropdown-item" href="jpml_rankings.html">ランキング</a>' +
 					'<a class="dropdown-item" href="jpml_birthplaces.html">出身地</a>' +
 					'<a class="dropdown-item" href="maps.html">地図</a>' +
 				'</div>' +

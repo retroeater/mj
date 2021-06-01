@@ -14,8 +14,6 @@ if(!search_name) {
 
 const queryStatement = 'SELECT A,B,C,D,E WHERE E = "Y" AND A ="' + search_division + '"'
 
-console.log(queryStatement)
-
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
 
