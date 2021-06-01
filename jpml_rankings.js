@@ -5,7 +5,7 @@ let search_division = params.get('division')
 let search_name = params.get('name')
 
 if(!search_division) {
-	search_division = ''
+	search_division = '【鳳凰戦】通算'
 }
 
 if(!search_name) {
@@ -18,10 +18,6 @@ google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
 
 function drawDashboard() {
-
-	if(!search_division) {
-		return
-	}
 
 	const query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery(queryStatement)
