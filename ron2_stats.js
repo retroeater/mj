@@ -38,14 +38,14 @@ if(search_name) {
 
 			const data = response.getDataTable()
 
-			let	riichiRate = data.getValue(0,12)
-			let callingRate = data.getValue(0,13)
-			let winningRate = data.getValue(0,14)
-			let averageWinningPoint = data.getValue(0,15)
-			let dealinRate = data.getValue(0,16)
-			let averageDealinPoint = data.getValue(0,17)
-			let averagePlacement = data.getValue(0,18)
-			let firstOrSecondRate = data.getValue(0,19)
+			let	riichiRate = data.getValue(0,12).toFixed(2)
+			let callingRate = data.getValue(0,13).toFixed(2)
+			let winningRate = data.getValue(0,14).toFixed(2)
+			let averageWinningPoint = data.getValue(0,15).toFixed(2)
+			let dealinRate = data.getValue(0,16).toFixed(2)
+			let averageDealinPoint = data.getValue(0,17).toFixed(2)
+			let averagePlacement = data.getValue(0,18).toFixed(2)
+			let firstOrSecondRate = data.getValue(0,19).toFixed(2)
 
 			let ctx = document.getElementById('myRadarChart').getContext('2d')
 			let myChart = new Chart(ctx, {
@@ -62,7 +62,7 @@ if(search_name) {
 						'副露率'			
 					],
 					datasets: [{
-						label: '偏差値',
+						label: search_name,
 						data: [
 							averagePlacement,
 							firstOrSecondRate,
@@ -81,9 +81,6 @@ if(search_name) {
 						r: {
 							suggestedMin: 30,
 							suggestedMax: 70
-						},
-						y: {
-							beginAtZero: true
 						}
 					}
 				}

@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -59,50 +59,52 @@ function drawDashboard() {
 		chartData.addColumn('string','関連<br>記事')
 		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送<br>対局')
+		chartData.addColumn('string','ロン2<br>6/1')
 //		chartData.addColumn('string','最終更新')
 
 		const data = response.getDataTable()
 
-		let	name				// A 名前
-		let sortKey				// B ソートキー
-		let lastNameJaKanji		// C 姓
-		let firstNameJaKanji	// D 名
-		let lastNameJaKana		// E 姓
-		let firstNameJaKana		// F 名
-		let lastNameEn			// G Last Name
-		let firstNameEn			// H First Name
-		let proClass			// I 期
-		let joined				// J Joined
-		let birthplaceJa		// K 出身地
-		let birthplaceEn		// L Birthplace
-		let birthday			// M 誕生日
-		let ron2Id				// N ロン2
-		let twitterId			// O Twitter
-		let intagramId			// P Instagram
-		let youtubeId			// Q YouTube
-		let wikipediaId			// R Wikipedia
-		let blogUrl				// S Blog
-		let hououLatestLeague	// T 鳳凰戦38期前期リーグ
-		let hououHighestLeague	// U 鳳凰戦最高到達リーグ
-		let numberOfFinals		// V 決勝進出
-		let numberOfArticles	// W 関連記事
-		let lastUpdated			// X 最終更新
-		let isVisible			// Y 表示
-		let remarks				// Z 備考
-		let numberOfLives		// AA 放送対局
-		let danJa				// AB 段位
-		let oukaLatestLeague	// AC 15期桜花
-		let oukaHighestLeague	// AD 桜花最高
-		let danEn				// AE Dan
-		let twitterImageUrl		// AF Twitter画像
-		let blogImageUrl		// AG Blog画像
-		let youTubeImageUrl		// AH YouTube画像
-		let hououSeasons		// AI 鳳凰戦出場回数
-		let oukaSeasons			// AJ 女流桜花出場回数
-		let ron2ImageUrl		// AK ロン2画像
-		let numberOfVideos		// AL 関連動画
-		let tenhouId			// AM 天鳳ID
-		let instgramImageUrl	// AN Instagram画像
+		let	name					// A 名前
+		let sortKey					// B ソートキー
+		let lastNameJaKanji			// C 姓
+		let firstNameJaKanji		// D 名
+		let lastNameJaKana			// E 姓
+		let firstNameJaKana			// F 名
+		let lastNameEn				// G Last Name
+		let firstNameEn				// H First Name
+		let proClass				// I 期
+		let joined					// J Joined
+		let birthplaceJa			// K 出身地
+		let birthplaceEn			// L Birthplace
+		let birthday				// M 誕生日
+		let ron2Id					// N ロン2
+		let twitterId				// O Twitter
+		let intagramId				// P Instagram
+		let youtubeId				// Q YouTube
+		let wikipediaId				// R Wikipedia
+		let blogUrl					// S Blog
+		let hououLatestLeague		// T 鳳凰戦38期前期リーグ
+		let hououHighestLeague		// U 鳳凰戦最高到達リーグ
+		let numberOfFinals			// V 決勝進出
+		let numberOfArticles		// W 関連記事
+		let lastUpdated				// X 最終更新
+		let isVisible				// Y 表示
+		let remarks					// Z 備考
+		let numberOfLives			// AA 放送対局
+		let danJa					// AB 段位
+		let oukaLatestLeague		// AC 15期桜花
+		let oukaHighestLeague		// AD 桜花最高
+		let danEn					// AE Dan
+		let twitterImageUrl			// AF Twitter画像
+		let blogImageUrl			// AG Blog画像
+		let youTubeImageUrl			// AH YouTube画像
+		let hououSeasons			// AI 鳳凰戦出場回数
+		let oukaSeasons				// AJ 女流桜花出場回数
+		let ron2ImageUrl			// AK ロン2画像
+		let numberOfVideos			// AL 関連動画
+		let tenhouId				// AM 天鳳ID
+		let instgramImageUrl		// AN Instagram画像
+		let ron2AveragePlacement	// AO ロン2平均順位
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -146,6 +148,7 @@ function drawDashboard() {
 			numberOfVideos = data.getValue(i,37)
 //			tenhouId = data.getValue(i,38)
 //			instagramImageUrl = data.getValue(i,39)
+			ron2AveragePlacement = data.getValue(i,40)
 
 			let formattedName = getFormattedName(name,sortKey,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id,ron2ImageUrl)
@@ -165,6 +168,7 @@ function drawDashboard() {
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
 			let formattedVideos = getFormattedVideos(name,numberOfVideos)
 			let formattedLives = getFormattedLives(name,numberOfLives)
+			let formattedRon2AveragePlacement = getFormattedRon2AveragePlacement(name,ron2AveragePlacement)
 //			let formattedLastUpdated = getFormattedLastUpdated(lastUpdated)
 
 			chartData.addRows([
@@ -189,7 +193,8 @@ function drawDashboard() {
 					formattedFinals,
 					formattedArticles,
 					formattedVideos,
-					formattedLives
+					formattedLives,
+					formattedRon2AveragePlacement
 //					formattedLastUpdated
 				]			
 			])
@@ -479,6 +484,18 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 	}
 
 	return formattedRon2
+}
+
+function getFormattedRon2AveragePlacement(name,ron2AveragePlacement) {
+
+	let formattedRon2AveragePlacement
+
+	if(ron2AveragePlacement) {
+		ron2AveragePlacement = ron2AveragePlacement.toFixed(2)
+		formattedRon2AveragePlacement = '<span class="' + ron2AveragePlacement + '"><a href="ron2_stats.html?name=' + name + '" target="_blank">' + ron2AveragePlacement + '</a></span>'
+	}
+
+	return formattedRon2AveragePlacement
 }
 
 function getFormattedTwitter(twitterId,twitterImageUrl) {
