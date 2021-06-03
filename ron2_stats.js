@@ -106,7 +106,7 @@ function drawTable() {
 
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','日付')
-		chartData.addColumn('number','ID')
+//		chartData.addColumn('number','ID')
 		chartData.addColumn('string','名前')
 		chartData.addColumn('string','最終対戦日')
 		chartData.addColumn('number','立直率')
@@ -136,7 +136,7 @@ function drawTable() {
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
 			asOfDate = data.getValue(i,0)
-			id = data.getValue(i,1)
+//			id = data.getValue(i,1)
 			name = data.getValue(i,2)
 			lastPlayedDate = data.getValue(i,3)
 			riichiRate = data.getValue(i,4)
@@ -151,7 +151,7 @@ function drawTable() {
 			chartData.addRows([
 				[
 					asOfDate,
-					id,
+//					id,
 					name,
 					lastPlayedDate,
 					riichiRate,
