@@ -24,7 +24,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/dictionary.html</loc>
-		<lastmod>2021-06-01</lastmod>
+		<lastmod>2021-06-03</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
@@ -93,13 +93,6 @@
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/jpml_birthplaces.html</loc>
-		<lastmod>2021-01-15</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
 		<loc>https://retroeater.github.io/mj/jpml_live.html</loc>
 		<lastmod>2021-05-30</lastmod>
 		<changefreq>monthly</changefreq>
@@ -115,7 +108,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_rankings.html</loc>
-		<lastmod>2021-06-01</lastmod>
+		<lastmod>2021-06-03</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
