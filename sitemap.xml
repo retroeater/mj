@@ -114,6 +114,13 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/jpml_ron2.html</loc>
+		<lastmod>2021-06-04</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.5</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/jpml_titles.html</loc>
 		<lastmod>2021-05-29</lastmod>
 		<changefreq>monthly</changefreq>
@@ -221,69 +228,6 @@
 	<url>
 		<loc>https://retroeater.github.io/mj/rh_results_detail.html</loc>
 		<lastmod>2021-04-21</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2.html</loc>
-		<lastmod>2021-06-01</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20201011.html</loc>
-		<lastmod>2020-11-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20201101.html</loc>
-		<lastmod>2020-12-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20201201.html</loc>
-		<lastmod>2021-01-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20210101.html</loc>
-		<lastmod>2021-02-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20210201.html</loc>
-		<lastmod>2021-03-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20210301.html</loc>
-		<lastmod>2021-04-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20210401.html</loc>
-		<lastmod>2021-05-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ron2_20210501.html</loc>
-		<lastmod>2021-06-01</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>

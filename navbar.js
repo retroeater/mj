@@ -14,6 +14,7 @@ document.write(
 					'<a class="dropdown-item" href="jpml_videos.html">動画</a>' +
 					'<a class="dropdown-item" href="jpml_live.html">放送対局</a>' +
 					'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
+					'<a class="dropdown-item" href="jpml_ron2.html">ロン2</a>' +
 					'<a class="dropdown-item" href="jpml_rankings.html">ランキング</a>' +
 					'<a class="dropdown-item" href="https://twitter.com/i/lists/1378864966321721344" target="_blank">ツイッター</a>' +
 					'<a class="dropdown-item" href="maps.html">地図</a>' +
@@ -42,19 +43,6 @@ document.write(
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">十段戦<br>Judan</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="judan_38.html">第38期</a>' +
-				'</div>' +
-			'</li>' +
-			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ロン2<br>Ron2</a>' +
-				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="ron2.html">2021-06-01</a>' +
-					'<a class="dropdown-item" href="ron2_20210501.html">2021-05-01</a>' +
-					'<a class="dropdown-item" href="ron2_20210401.html">2021-04-01</a>' +
-					'<a class="dropdown-item" href="ron2_20210301.html">2021-03-01</a>' +
-					'<a class="dropdown-item" href="ron2_20210201.html">2021-02-01</a>' +
-					'<a class="dropdown-item" href="ron2_20210101.html">2021-01-01</a>' +
-					'<a class="dropdown-item" href="ron2_20201201.html">2020-12-01</a>' +
-					'<a class="dropdown-item" href="ron2_20201101.html">2020-11-01</a>' +
-					'<a class="dropdown-item" href="ron2_20201011.html">2020-10-11</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
