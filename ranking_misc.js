@@ -1,13 +1,13 @@
 const params = (new URL(document.location)).searchParams
-let search_division = params.get('division')
+let division = params.get('division')
 
-if(!search_division) {
-	search_division = '出身地'
+if(!division) {
+	division = '出身地'
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=rankings&headers=1'
 
-const queryStatement = 'SELECT A,B,C,D,E WHERE E = "Y" AND A ="【その他】' + search_division + '"'
+const queryStatement = 'SELECT A,B,C,D,E WHERE E = "Y" AND A ="【その他】' + division + '"'
 
 google.charts.load('current', {'packages':['table']})
 google.charts.setOnLoadCallback(drawTable)
@@ -18,11 +18,9 @@ function drawTable() {
 	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
-	let division	// A 部門
 	let rank		// B 順位
-	let name		// C 名前
+	let name		// C 部門
 	let score		// D スコア
-	let isVisible	// E 表示
 
 	function handleQueryResponse(response) {
 
@@ -33,18 +31,16 @@ function drawTable() {
 
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('number','順位')
-		chartData.addColumn('string','名前')
-		chartData.addColumn('number',search_division)
+		chartData.addColumn('string',division)
+		chartData.addColumn('number','人数')
 		
 		const data = response.getDataTable()
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-			division = data.getValue(i,0)
 			rank = data.getValue(i,1)
 			name = data.getValue(i,2)
 			score = data.getValue(i,3)
-//			isVisible = data.getValue(i,4)
 
 			chartData.addRows([
 				[
