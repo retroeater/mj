@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176078855-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-176078855-1');
+</script>
+<script src="header.js"></script>
+<title>YouTubeランキング</title>
+<script type="text/javascript" src="ranking_youtube.js"></script>
+</head>
+<body>
+<!-- Bootstrap Navigation Bar -->
+<script src="navbar.js"></script>
+
+<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
+	<option value="">部門を選択</option>
+	<option value="ranking_youtube.html?division=動画本数">動画本数</option>
+	<option value="ranking_youtube.html?division=登録者数">登録者数</option>
+	<option value="ranking_youtube.html?division=再生回数">再生回数</option>
+</select>
+<div id="table_div"></div>
+</body>
+</html>

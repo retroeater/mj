@@ -44,6 +44,12 @@ img.pros {
 	object-fit: cover;
 }
 
+img.thumbnails {
+	width: 120px;
+	height: 120px;
+	object-fit: cover;	
+}
+
 img.videos {
 	width: 160px;
 	height: 90px;

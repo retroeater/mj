@@ -15,7 +15,6 @@ document.write(
 					'<a class="dropdown-item" href="jpml_live.html">放送対局</a>' +
 					'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
 					'<a class="dropdown-item" href="jpml_ron2.html">ロン2</a>' +
-					'<a class="dropdown-item" href="jpml_rankings.html">ランキング</a>' +
 					'<a class="dropdown-item" href="https://twitter.com/i/lists/1378864966321721344" target="_blank">ツイッター</a>' +
 					'<a class="dropdown-item" href="maps.html">地図</a>' +
 				'</div>' +
@@ -43,6 +42,14 @@ document.write(
 			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">十段戦<br>Judan</a>' +
 				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 					'<a class="dropdown-item" href="judan_38.html">第38期</a>' +
+				'</div>' +
+			'</li>' +
+			'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ランキング<br>Rankings</a>' +
+				'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+					'<a class="dropdown-item" href="ranking_houou.html">鳳凰戦</a>' +
+					'<a class="dropdown-item" href="ranking_ouka.html">女流桜花</a>' +
+					'<a class="dropdown-item" href="ranking_youtube.html">YouTube</a>' +
+					'<a class="dropdown-item" href="ranking_misc.html">その他</a>' +
 				'</div>' +
 			'</li>' +
 			'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
