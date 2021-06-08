@@ -17,6 +17,7 @@ document.write(
 						'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
 						'<a class="dropdown-item" href="jpml_ron2.html">ロン2</a>' +
 						'<a class="dropdown-item" href="jpml_twitter.html">Twitter</a>' +
+						'<a class="dropdown-item" href="jpml_links.html">リンク</a>' +
 						'<a class="dropdown-item" href="maps.html">地図</a>' +
 					'</div>' +
 				'</li>' +
@@ -58,13 +59,13 @@ document.write(
 				'<li class="nav-item"><a class="nav-link" href="efficiency.html">牌効率<br>Efficiency</a></li>' +
 				'<li class="nav-item"><a class="nav-link" href="dictionary.html">辞書<br>Dictionary</a></li>' +
 				'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
-				'<li class="nav-item"><a class="nav-link" href="links.html">リンク<br>Links</a></li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">個人<br>Ryoei</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="rh_bio.html">略歴</a>' +
 						'<a class="dropdown-item" href="rh_results.html">成績</a>' +
 						'<a class="dropdown-item" href="rh_results_detail.html">成績詳細</a>' +
 						'<a class="dropdown-item" href="rh_articles.html">記事</a>' +
+						'<a class="dropdown-item" href="rh_links.html">リンク</a>' +
 					'</div>' +
 				'</li>' +
 			'</ul>' +
