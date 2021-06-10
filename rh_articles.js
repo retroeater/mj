@@ -88,7 +88,7 @@ function getFormattedTitle(data,row_index) {
 
 	let formattedTitle = ""
 
-	formattedTitle += ' <a href="' + url + '" target="_blank"><img alt="記事" src="img/125_arr_hoso.png" height="29" width="29" /></a> ' + title
+	formattedTitle += ' <a href="' + url + '" target="_blank"><img alt="記事" src="img/box-arrow-up-right.svg" height="16" width="16" /></a> ' + title
 
 	return formattedTitle
 }

@@ -89,8 +89,9 @@ function drawTable() {
 function getFormattedChannel(channelName,channelUrl,channelImageUrl) {
 
 	let formattedChannel
+	const youtubeIcon = 'img/youtube.svg'
 
-	formattedChannel = '<a href="' + channelUrl + '" target="_blank" "><img alt="' + channelName + '" class="thumbnails" loading="lazy" src="' + channelImageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+	formattedChannel = '<a href="' + channelUrl + '" target="_blank" "><img alt="' + channelName + '" class="thumbnails" loading="lazy" src="' + channelImageUrl + '" onError="this.onerror=null;this.src=\'' + youtubeIcon + '\'" /></a>'
 
 	return formattedChannel
 }

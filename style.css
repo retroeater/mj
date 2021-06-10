@@ -28,13 +28,14 @@ img.articles {
 }
 
 img.dictionary {
-	width: 24px;
-	height: 24px;
+	width: 16px;
+	height: 16px;
 }
 
 img.links {
-	width: 24px;
-	height: 24px;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
 }
 
 img.live {
@@ -53,6 +54,10 @@ img.thumbnails {
 	width: 120px;
 	height: 120px;
 	object-fit: cover;	
+}
+
+img.twitter {
+	fill: #00acee;
 }
 
 img.videos {

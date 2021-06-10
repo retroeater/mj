@@ -312,13 +312,10 @@ function getFormattedBirthplace(birthplaceJa,birthplaceEn) {
 function getFormattedBlog(blogUrl,blogImageUrl) {
 
 	let formattedBlog
-
-	if(!blogImageUrl) {
-		blogImageUrl = 'img/797_me_h.png'
-	}
+	const blogIcon = 'img/journal-text.svg'
 
 	if(blogUrl) {
-		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" class="pros" loading="lazy" src="' + blogImageUrl + '" onError="this.onerror=null;this.src=\'img/797_me_h.png\'" /></a>'
+		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" class="pros" loading="lazy" src="' + blogImageUrl + '" onError="this.onerror=null;this.src=\'' + blogIcon + '\'" /></a>'
 	}
 
 	return formattedBlog
@@ -383,9 +380,10 @@ function getFormattedHououSeasons(name,hououSeasons) {
 function getFormattedInstagram(instagramId) {
 
 	let formattedInstagram
+	const instagramIcon = 'img/instagram.svg'
 
 	if(instagramId) {
-		formattedInstagram = ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" class="pros" src="img/glyph-logo_May2016.png" /></a> '
+		formattedInstagram = ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" class="pros" src="' + instagramIcon + '" /></a> '
 	}
 
 	return formattedInstagram
@@ -501,9 +499,10 @@ function getFormattedRon2AveragePlacement(name,ron2AveragePlacement) {
 function getFormattedTwitter(twitterId,twitterImageUrl) {
 
 	let formattedTwitter
+	const twitterIcon = 'img/twitter.svg'
 
 	if(twitterId) {
-		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" class="pros" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'img/Twitter_Logo_Blue.svg\'" /></a>'
+		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" class="pros" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + twitterIcon + '\'" /></a>'
 	}
 
 	return formattedTwitter	
@@ -536,9 +535,10 @@ function getFormattedWikipedia(wikipediaId) {
 function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
 	let formattedYouTube
+	const youtubeIcon = 'img/youtube.svg'
 
 	if(youTubeId) {
-		formattedYouTube = '<a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" class="pros" loading="lazy" src="' + youTubeImageUrl + '" onError="this.onerror=null;this.src=\'img/youtube_social_square_white.png\'" /></a>'
+		formattedYouTube = '<a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" class="pros" loading="lazy" src="' + youTubeImageUrl + '" onError="this.onerror=null;this.src=\'' + youtubeIcon + '\'" /></a>'
 	}
 
 	return formattedYouTube	

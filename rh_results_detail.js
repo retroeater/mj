@@ -35,7 +35,7 @@ function drawTable() {
 				let twitter_url = data.getValue(i,21)
 
 				if(twitter_url) {
-					data.setValue(i,6, data.getValue(i,6) + ' ' + '<a href="' + twitter_url + '" target="_blank"><img src="img/Twitter_Logo_Blue.svg" height="24" width="24"><\/a>')
+					data.setValue(i,6, data.getValue(i,6) + ' ' + '<a href="' + twitter_url + '" target="_blank"><img alt="Twitter" src="img/twitter.svg" height="16" width="16"><\/a>')
 				}
 		}
 
