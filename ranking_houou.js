@@ -10,9 +10,21 @@ if(!search_name) {
 	search_name = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=rankings&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=houou&headers=1'
+let queryStatement
 
-const queryStatement = 'SELECT A,B,C,D,E WHERE E = "Y" AND A ="【鳳凰戦】' + search_division + '"'
+
+switch(search_division) {
+	case '期最高得点':
+		queryStatement = 'SELECT B,H WHERE V = "Y" ORDER BY H DESC LIMIT 100'
+		break
+	case '節最高得点':
+		queryStatement = 'SELECT B,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
+		break
+	default: // 通算得点
+		queryStatement = 'SELECT B,SUM(H) WHERE V = "Y" GROUP BY B ORDER BY SUM(H) DESC LIMIT 100'
+		break
+}
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -36,20 +48,23 @@ function drawDashboard() {
 			return
 		}
 
+
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('number','順位')
 		chartData.addColumn('string','名前')
 		chartData.addColumn('string',search_division)
 		
-		const data = response.getDataTable()
+		let data = response.getDataTable()
+
+		if(search_division == '節最高得点') {
+			data = getSectionHighScoreData(data)			
+		}
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-			division = data.getValue(i,0)
-			rank = data.getValue(i,1)
-			name = data.getValue(i,2)
-			score = data.getValue(i,3).toFixed(1)
-//			isVisible = data.getValue(i,4)
+			rank = i+1
+			name = data.getValue(i,0)
+			score = data.getValue(i,1).toFixed(1)
 
 			chartData.addRows([
 				[
@@ -91,4 +106,34 @@ function drawDashboard() {
 		dashboard.bind([infoFilter], table)
 		dashboard.draw(view)
 	}
+}
+
+function getSectionHighScoreData(data) {
+
+	let sectionHighScoreData = new google.visualization.DataTable()
+	sectionHighScoreData.addColumn('string','名前')
+	sectionHighScoreData.addColumn('number','節最高得点')
+	sectionHighScoreData.addColumn('number','ソートキー')
+
+	for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+		let name = data.getValue(i,0)
+
+		for(let section = 1; section < 14; section++) {
+
+			let sectionScore = data.getValue(i,section)
+			
+			if(sectionScore > 0) {
+				let sortKey = 1000 - sectionScore // sort key for descening order
+				sectionHighScoreData.addRows([
+					[name,sectionScore,sortKey]
+				])
+			}
+		}
+	}
+
+	sectionHighScoreData.sort([{column:2},{column:0}])
+	sectionHighScoreData.removeRows(100,sectionHighScoreData.getNumberOfRows()-100)
+
+	return sectionHighScoreData
 }
