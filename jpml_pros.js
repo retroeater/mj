@@ -135,7 +135,7 @@ function drawDashboard() {
 //			isVisible = data.getValue(i,24)
 //			remarks = data.getValue(i,25)
 			numberOfLives = data.getValue(i,26)
-			danJa = data.getValue(i,27)
+//			danJa = data.getValue(i,27)
 			oukaLatestLeague = data.getValue(i,28)
 			oukaHighestLeague = data.getValue(i,29)
 			danEn = data.getValue(i,30)
@@ -158,7 +158,7 @@ function drawDashboard() {
 			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
 			let formattedBlog = getFormattedBlog(blogUrl,blogImageUrl)
 			let formattedProClass = getFormattedProClass(proClass,joined)
-			let formattedDan = getFormattedDan(danJa,danEn)			
+			let formattedDan = getFormattedDan(danEn)			
 			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
 			let formattedHououSeasons = getFormattedHououSeasons(name,hououSeasons)
 			let formattedHououHighestLeague = getFormattedHououHighestLeague(name,hououHighestLeague)
@@ -321,12 +321,45 @@ function getFormattedBlog(blogUrl,blogImageUrl) {
 	return formattedBlog
 }
 
-function getFormattedDan(danJa,danEn) {
+function getFormattedDan(danEn) {
 
+	let danJa
 	let formattedDan
 
-	if(danJa) {
-		formattedDan = '<span class="' + danEn + '">' + danJa + '<br>' + danEn
+	switch(danEn) {
+		case 1:
+			danJa = '初段'
+			break
+		case 2:
+			danJa = 'ニ段'
+			break
+		case 3:
+			danJa = '三段'
+			break
+		case 4:
+			danJa = '四段'
+			break
+		case 5:
+			danJa = '五段'
+			break
+		case 6:
+			danJa = '六段'
+			break
+		case 7:
+			danJa = '七段'
+			break
+		case 8:
+			danJa = '八段'
+			break
+		case 9:
+			danJa = '九段'
+			break
+		default:
+			break
+	}
+
+	if(danEn) {
+		formattedDan = '<span class="' + danEn + '">' + danJa + '</span>'
 	}
 
 	return formattedDan
