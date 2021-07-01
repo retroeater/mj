@@ -2,7 +2,7 @@ const params = (new URL(document.location)).searchParams
 let search_date = params.get('date')
 
 if(!search_date) {
-	search_date = '20210601'
+	search_date = '20210701'
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1oHOMaGoTeRqIAw-jHJt8vT7UUhGuPAtTl7ccLP0cHqY/edit?sheet=' + search_date + '&headers=1'

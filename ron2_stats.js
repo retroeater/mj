@@ -5,7 +5,7 @@ let search_date = params.get('date')
 let search_name = params.get('name')
 
 if(!search_date) {
-	search_date = '2021-06-01'
+	search_date = '2021-07-01'
 }
 
 if(!search_name) {
