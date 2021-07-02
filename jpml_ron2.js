@@ -2,12 +2,12 @@ const params = (new URL(document.location)).searchParams
 let search_date = params.get('date')
 
 if(!search_date) {
-	search_date = '20210701'
+	search_date = '2021-07-01'
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1oHOMaGoTeRqIAw-jHJt8vT7UUhGuPAtTl7ccLP0cHqY/edit?sheet=' + search_date + '&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ron2&headers=1'
 
-const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE L = "Y"'
+const queryStatement = 'SELECT P,Q,R,S,T,U,V,W,X,Y,Z WHERE AI = "Y" AND O = "' + search_date + '"' 
 
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
@@ -20,6 +20,7 @@ function drawTable() {
 
 	let id
 	let name
+	let lastUpdatedDate
 	let riichiRate
 	let callingRate
 	let winningRate
@@ -39,14 +40,15 @@ function drawTable() {
 		const chartData = new google.visualization.DataTable()
 //		chartData.addColumn('number','ID')
 		chartData.addColumn('string',search_date+'時点')
-		chartData.addColumn('string','リーチ率')
-		chartData.addColumn('string','副露率')
+		chartData.addColumn('string','平均順位')
+		chartData.addColumn('string','連対率')
 		chartData.addColumn('string','和了率')
 		chartData.addColumn('string','平均和了点')
 		chartData.addColumn('string','放銃率')
 		chartData.addColumn('string','平均放銃点')
-		chartData.addColumn('string','平均順位')
-		chartData.addColumn('string','連対率')
+		chartData.addColumn('string','リーチ率')
+		chartData.addColumn('string','副露率')
+		chartData.addColumn('string','最終対戦日')
 		
 		const data = response.getDataTable()
 
@@ -54,27 +56,28 @@ function drawTable() {
 
 //			id = data.getValue(i,0)
 			name = data.getValue(i,1)
-			riichiRate = data.getValue(i,2).toFixed(2)
-			callingRate = data.getValue(i,3).toFixed(2)
-			winningRate = data.getValue(i,4).toFixed(2)
-			averageWinningPoint = data.getValue(i,5).toLocaleString()
-			dealinRate = data.getValue(i,6).toFixed(2)
-			averageDealinPoint = data.getValue(i,7).toLocaleString()
-			averagePlacement = data.getValue(i,8).toFixed(2)
-			firstOrSecondRate = data.getValue(i,9).toFixed(2)
+			lastUpdatedDate = data.getValue(i,2)
+			riichiRate = data.getValue(i,3).toFixed(2)
+			callingRate = data.getValue(i,4).toFixed(2)
+			winningRate = data.getValue(i,5).toFixed(2)
+			averageWinningPoint = data.getValue(i,6).toLocaleString()
+			dealinRate = data.getValue(i,7).toFixed(2)
+			averageDealinPoint = data.getValue(i,8).toLocaleString()
+			averagePlacement = data.getValue(i,9).toFixed(2)
+			firstOrSecondRate = data.getValue(i,10).toFixed(2)
 
 			chartData.addRows([
 				[
-//					id,
 					name,
-					riichiRate,
-					callingRate,
+					averagePlacement,
+					firstOrSecondRate,
 					winningRate,
 					averageWinningPoint,
 					dealinRate,
 					averageDealinPoint,
-					averagePlacement,
-					firstOrSecondRate
+					riichiRate,
+					callingRate,
+					lastUpdatedDate
 				]			
 			])
 		}
@@ -87,7 +90,9 @@ function drawTable() {
 			allowHtml: true,
 			width: '100%',
 			height: '100%',
-			showRowNumber: false
+			showRowNumber: false,
+			sortColumn: 1,
+			sortAscending: true
 		}
 
 		table.draw(view, options);

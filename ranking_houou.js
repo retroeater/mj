@@ -48,7 +48,6 @@ function drawDashboard() {
 			return
 		}
 
-
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('number','順位')
 		chartData.addColumn('string','名前')

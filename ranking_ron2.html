@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176078855-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-176078855-1');
+</script>
+<script src="header.js"></script>
+<title>ロン2ランキング</title>
+<script type="text/javascript" src="ranking_ron2.js"></script>
+</head>
+<body>
+<!-- Bootstrap Navigation Bar -->
+<script src="navbar.js"></script>
+
+<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
+	<option value="">部門を選択</option>
+	<option value="ranking_ron2.html?division=平均順位">平均順位</option>
+	<option value="ranking_ron2.html?division=連対率">連対率</option>
+	<option value="ranking_ron2.html?division=和了率">和了率</option>
+	<option value="ranking_ron2.html?division=平均和了点">平均和了点</option>
+	<option value="ranking_ron2.html?division=放銃率">放銃率</option>
+	<option value="ranking_ron2.html?division=平均放銃点">平均放銃点</option>
+	<option value="ranking_ron2.html?division=立直率">立直率</option>
+	<option value="ranking_ron2.html?division=副露率">副露率</option>
+</select>
+<div id="table_div"></div>
+<p>（※2020年10月以降、最近の100対戦、最終対戦日3か月以内、規定打席100半荘、プロ雀士紹介ページに掲載のプロのみ）</p>
+</body>
+</html>
