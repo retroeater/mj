@@ -49,7 +49,7 @@ function drawChart() {
 			eliminated = data.getValue(i,3)
 //			isVisible = data.getValue(i,4)
 
-			let style = getStyle(eliminated)
+			let style = getStyle(endRound,eliminated)
 
 			chartData.addRows([
 				[
@@ -110,14 +110,36 @@ function drawChart() {
 	}
 }
 
-function getStyle(eliminated) {
+function getStyle(endRound,eliminated) {
 
 	let style
 
 	style = 'color: #6666ff'
 
 	if(eliminated) {
-		style = 'color: #999999'
+		switch(endRound) {
+			case 8:
+				style = 'color: #222222'
+				break
+			case 9:
+				style = 'color: #444444'
+				break
+			case 10:
+				style = 'color: #666666'
+				break
+			case 11:
+				style = 'color: #888888'
+				break
+			case 12:
+				style = 'color: #aaaaaa'
+				break
+			case 13:
+				style = 'color: #cccccc'
+				break
+			default:
+				style = 'color: #999999'
+				break
+		}
 	}
 
 	return style
