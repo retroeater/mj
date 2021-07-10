@@ -66,14 +66,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/houou_38_a1.html</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-10</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/houou_38_a2.html</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-10</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -87,7 +87,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_articles.html</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-10</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -101,14 +101,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_live.html</loc>
-		<lastmod>2021-06-30</lastmod>
-		<changefreq>monthly</changefreq>
+		<lastmod>2021-07-10</lastmod>
+		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_pros.html</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-10</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -136,14 +136,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_videos.html</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-10</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/judan_38.html</loc>
-		<lastmod>2021-07-02</lastmod>
+		<lastmod>2021-07-10</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.1</priority>
 	</url>
@@ -227,7 +227,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ranking_youtube.html</loc>
-		<lastmod>2021-07-01</lastmod>
+		<lastmod>2021-07-10</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.1</priority>
 	</url>

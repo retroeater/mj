@@ -3,20 +3,24 @@ let division = params.get('division')
 
 let sortColumn
 
-if(division == '再生回数') {
-	sortColumn = 'H'
-}
-else if(division == '登録者数') {
-	sortColumn = 'G'
-}
-else {
-	division = '動画本数'
-	sortColumn = 'F'
+switch(division) {
+	case '再生回数':
+		sortColumn = 'H'
+		break
+	case '登録者数':
+		sortColumn = 'G'
+		break
+	case '再生回数/動画':
+		sortColumn = 'J'
+		break
+	default: // 動画本数
+		sortColumn = 'F'
+		break
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=youtube&headers=1'
 
-const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I WHERE I = "Y" ORDER BY ' + sortColumn + ' DESC LIMIT 10'
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE I = "Y" ORDER BY ' + sortColumn + ' DESC LIMIT 10'
 
 google.charts.load('current', {'packages':['table']})
 google.charts.setOnLoadCallback(drawTable)
@@ -27,14 +31,15 @@ function drawTable() {
 	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
-	let name			// A 名前
-	let channelId		// B チャンネルID
-	let channelName		// C チャンネル名
-	let channelUrl		// D チャンネルURL
-	let channelImage	// E チャンネル画像URL
-	let videoCount		// F 動画本数
-	let subscriberCount	// G 登録者数
-	let viewCount		// H 再生回数
+	let name				// A 名前
+	let channelId			// B チャンネルID
+	let channelName			// C チャンネル名
+	let channelUrl			// D チャンネルURL
+	let channelImage		// E チャンネル画像URL
+	let videoCount			// F 動画本数
+	let subscriberCount		// G 登録者数
+	let viewCount			// H 再生回数
+	let viewCountPerVideo	// J 再生回数/動画
 
 	function handleQueryResponse(response) {
 
@@ -59,9 +64,10 @@ function drawTable() {
 			videoCount = data.getValue(i,5).toLocaleString()
 			subscriberCount = data.getValue(i,6).toLocaleString()
 			viewCount = data.getValue(i,7).toLocaleString()
+			viewCountPerVideo = data.getValue(i,9).toLocaleString()
 
 			let formattedChannel = getFormattedChannel(channelName,channelUrl,channelImageUrl)
-			let formattedInfo = getFormattedInfo(name,viewCount,subscriberCount,videoCount)
+			let formattedInfo = getFormattedInfo(name,viewCount,subscriberCount,videoCount,viewCountPerVideo)
 
 			chartData.addRows([
 				[
@@ -96,11 +102,11 @@ function getFormattedChannel(channelName,channelUrl,channelImageUrl) {
 	return formattedChannel
 }
 
-function getFormattedInfo(name,viewCount,subscriberCount,videoCount) {
+function getFormattedInfo(name,viewCount,subscriberCount,videoCount,viewCountPerVideo) {
 
 	let formattedInfo
 
-	formattedInfo = name + '<br>動画本数：' + videoCount + '<br>登録者数：' + subscriberCount + '<br>再生回数：' + viewCount
+	formattedInfo = name + '<br>動画本数：' + videoCount + '<br>登録者数：' + subscriberCount + '<br>再生回数：' + viewCount + '<br>再生回数/動画：' + viewCountPerVideo
 
 	return formattedInfo
 }
