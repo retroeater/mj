@@ -21,7 +21,7 @@ switch(search_division) {
 	case '節最高得点':
 		queryStatement = 'SELECT B,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
 		break
-	case '期浮き率':
+	case '期単位浮き率':
 		queryStatement = 'SELECT B,H WHERE V = "Y" ORDER BY B,H'
 		break
 	default: // 通算得点
@@ -63,7 +63,7 @@ function drawDashboard() {
 		if(search_division == '節最高得点') {
 			data = getSectionHighScoreData(data)			
 		}
-		else if(search_division == '期浮き率') {
+		else if(search_division == '期単位浮き率') {
 			data = getSeasonPositiveRate(data)
 			numberOfDecimalDigits = 3
 		}
