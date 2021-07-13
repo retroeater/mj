@@ -65,6 +65,7 @@ document.write(
 						'<a class="dropdown-item" href="rh_bio.html">略歴</a>' +
 						'<a class="dropdown-item" href="rh_results.html">成績</a>' +
 						'<a class="dropdown-item" href="rh_results_detail.html">成績詳細</a>' +
+						'<a class="dropdown-item" href="rh_paifu.html">牌譜</a>' +
 						'<a class="dropdown-item" href="rh_articles.html">記事</a>' +
 						'<a class="dropdown-item" href="rh_links.html">リンク</a>' +
 					'</div>' +

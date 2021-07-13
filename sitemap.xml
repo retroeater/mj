@@ -3,14 +3,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/index.html</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -66,14 +66,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/houou_38_a1.html</loc>
-		<lastmod>2021-07-10</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/houou_38_a2.html</loc>
-		<lastmod>2021-07-10</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -87,7 +87,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_articles.html</loc>
-		<lastmod>2021-07-10</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -101,7 +101,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_live.html</loc>
-		<lastmod>2021-07-10</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -136,7 +136,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_videos.html</loc>
-		<lastmod>2021-07-10</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -185,7 +185,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ouka_16_a.html</loc>
-		<lastmod>2021-06-30</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -227,7 +227,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ranking_youtube.html</loc>
-		<lastmod>2021-07-10</lastmod>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.1</priority>
 	</url>
@@ -249,6 +249,13 @@
 	<url>
 		<loc>https://retroeater.github.io/mj/rh_links.html</loc>
 		<lastmod>2021-06-07</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/rh_paifu.html</loc>
+		<lastmod>2021-07-12</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
