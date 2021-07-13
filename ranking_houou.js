@@ -65,7 +65,7 @@ function drawDashboard() {
 		}
 		else if(search_division == '期浮き率') {
 			data = getSeasonPositiveRate(data)
-			numberOfDecimalDigits = 4
+			numberOfDecimalDigits = 3
 		}
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
