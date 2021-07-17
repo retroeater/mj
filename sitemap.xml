@@ -274,4 +274,11 @@
 		<priority>0.1</priority>
 	</url>
 
+	<url>
+		<loc>https://retroeater.github.io/mj/saikyo.html</loc>
+		<lastmod>2021-07-17</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
 </urlset>
