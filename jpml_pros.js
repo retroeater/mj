@@ -55,6 +55,7 @@ function drawDashboard() {
 		chartData.addColumn('string','桜花<br>出場')
 		chartData.addColumn('string','桜花<br>16期')
 		chartData.addColumn('string','桜花<br>最高')
+		chartData.addColumn('string','最強<br>出場')
 		chartData.addColumn('string','決勝<br>進出')
 		chartData.addColumn('string','関連<br>記事')
 		chartData.addColumn('string','関連<br>動画')
@@ -91,7 +92,7 @@ function drawDashboard() {
 		let isVisible				// Y 表示
 		let remarks					// Z 備考
 		let numberOfLives			// AA 放送対局
-		let danJa					// AB 段位
+		let saikyoGames				// AB 最強出場
 		let oukaLatestLeague		// AC 15期桜花
 		let oukaHighestLeague		// AD 桜花最高
 		let danEn					// AE Dan
@@ -135,7 +136,7 @@ function drawDashboard() {
 //			isVisible = data.getValue(i,24)
 //			remarks = data.getValue(i,25)
 			numberOfLives = data.getValue(i,26)
-//			danJa = data.getValue(i,27)
+			saikyoGames = data.getValue(i,27)
 			oukaLatestLeague = data.getValue(i,28)
 			oukaHighestLeague = data.getValue(i,29)
 			danEn = data.getValue(i,30)
@@ -164,6 +165,7 @@ function drawDashboard() {
 			let formattedHououHighestLeague = getFormattedHououHighestLeague(name,hououHighestLeague)
 			let formattedOukaSeasons = getFormattedOukaSeasons(name,oukaSeasons)
 			let formattedOukaHighestLeague = getFormattedOukaHighestLeague(name,oukaHighestLeague)
+			let formattedSaikyoGames = getFormattedSaikyoGames(name,saikyoGames)
 			let formattedFinals = getFormattedFinals(name,numberOfFinals)
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
 			let formattedVideos = getFormattedVideos(name,numberOfVideos)
@@ -190,6 +192,7 @@ function drawDashboard() {
 					formattedOukaSeasons,
 					oukaLatestLeague,
 					formattedOukaHighestLeague,
+					formattedSaikyoGames,
 					formattedFinals,
 					formattedArticles,
 					formattedVideos,
@@ -529,6 +532,18 @@ function getFormattedRon2AveragePlacement(name,ron2AveragePlacement) {
 	return formattedRon2AveragePlacement
 }
 
+function getFormattedSaikyoGames(name,saikyoGames) {
+
+	let sortKey
+	let formattedSaikyoGames
+
+	if(saikyoGames) {
+		sortKey = ('0000' + saikyoGames).slice(-4)
+		formattedSaikyoGames = '<span class="' + sortKey + '">' + '<a href="./saikyo.html?name=' + name + '" target="_blank">' + saikyoGames + '回</a></span>'
+	}
+
+	return formattedSaikyoGames
+}
 function getFormattedTwitter(twitterId,twitterImageUrl) {
 
 	let formattedTwitter
