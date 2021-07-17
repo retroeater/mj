@@ -22,7 +22,7 @@ switch(search_division) {
 		queryStatement = 'SELECT B,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
 		break
 	case '期単位浮き率':
-		queryStatement = 'SELECT B,H WHERE V = "Y" ORDER BY B,H'
+		queryStatement = 'SELECT B,H WHERE V = "Y" AND H IS NOT NULL ORDER BY B,H'
 		break
 	default: // 通算得点
 		queryStatement = 'SELECT B,SUM(H) WHERE V = "Y" GROUP BY B ORDER BY SUM(H) DESC LIMIT 100'

@@ -20,6 +20,9 @@ switch(search_division) {
 	case '節最高得点':
 		queryStatement = 'SELECT B,J,K,L,M,N,O,P,Q WHERE R = "Y"'
 		break
+	case '期単位浮き率':
+		queryStatement = 'SELECT B,I WHERE R = "Y" AND I IS NOT NULL ORDER BY B,I'
+		break
 	default: // 通算得点
 		queryStatement = 'SELECT B,SUM(I) WHERE R = "Y" GROUP BY B ORDER BY SUM(I) DESC LIMIT 50'
 		break
@@ -40,6 +43,8 @@ function drawDashboard() {
 	let score		// D スコア
 	let isVisible	// E 表示
 
+	let numberOfDecimalDigits = 1
+
 	function handleQueryResponse(response) {
 
 		if(response.isError()) {
@@ -58,12 +63,16 @@ function drawDashboard() {
 		if(search_division == '節最高得点') {
 			data = getSectionHighScoreData(data)			
 		}
+		else if(search_division == '期単位浮き率') {
+			data = getSeasonPositiveRate(data)
+			numberOfDecimalDigits = 3
+		}
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
 			rank = i+1
 			name = data.getValue(i,0)
-			score = data.getValue(i,1).toFixed(1)
+			score = data.getValue(i,1).toFixed(numberOfDecimalDigits)
 
 			chartData.addRows([
 				[
@@ -135,4 +144,67 @@ function getSectionHighScoreData(data) {
 	sectionHighScoreData.removeRows(100,sectionHighScoreData.getNumberOfRows()-100)
 
 	return sectionHighScoreData
+}
+
+function getSeasonPositiveRate(data) {
+
+	let seasonPositiveRateData = new google.visualization.DataTable()
+	seasonPositiveRateData.addColumn('string','名前')
+	seasonPositiveRateData.addColumn('number','節最高得点')
+	seasonPositiveRateData.addColumn('number','ソートキー1')
+	seasonPositiveRateData.addColumn('number','ソートキー2')
+
+	let previousName
+	let numberOfPositiveScores = 0
+	let numberOfNegativeScores = 0
+	let seasonPositiveRate = 0
+	let sortKey1 = 0
+	let sortKey2 = 0
+	
+	for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+		let name = data.getValue(i,0)
+		let seasonScore = data.getValue(i,1)
+
+		if(name == previousName) {
+			if(seasonScore >= 0) {
+				numberOfPositiveScores++
+			}
+			else {
+				numberOfNegativeScores++
+			}
+		}
+		else {
+			seasonPositiveRate = numberOfPositiveScores/(numberOfPositiveScores+numberOfNegativeScores)
+			sortKey1 = 1 - seasonPositiveRate
+			sortKey2 = 100 - (numberOfPositiveScores + numberOfNegativeScores)
+
+			if(numberOfPositiveScores+numberOfNegativeScores >= 10) {
+				seasonPositiveRateData.addRows([
+					[previousName,seasonPositiveRate,sortKey1,sortKey2]
+				])			
+			}
+
+			previousName = name
+			numberOfPositiveScores = 0
+			numberOfNegativeScores = 0
+
+			if(seasonScore >= 0) {
+				numberOfPositiveScores++
+			}
+			else {
+				numberOfNegativeScores++
+			}
+		}
+	}
+	if(numberOfPositiveScores+numberOfNegativeScores >= 10) {
+		seasonPositiveRateData.addRows([
+			[previousName,seasonPositiveRate,sortKey1,sortKey2]
+		])			
+	}
+
+	seasonPositiveRateData.sort([{column:2},{column:3},{column:0}])
+	seasonPositiveRateData.removeRows(10,seasonPositiveRateData.getNumberOfRows()-10)
+
+	return seasonPositiveRateData
 }
