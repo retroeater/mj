@@ -179,7 +179,7 @@ function getSeasonPositiveRate(data) {
 			sortKey1 = 1 - seasonPositiveRate
 			sortKey2 = 100 - (numberOfPositiveScores + numberOfNegativeScores)
 
-			if(numberOfPositiveScores+numberOfNegativeScores >= 10) {
+			if(numberOfPositiveScores+numberOfNegativeScores >= 5) {
 				seasonPositiveRateData.addRows([
 					[previousName,seasonPositiveRate,sortKey1,sortKey2]
 				])			
@@ -197,14 +197,14 @@ function getSeasonPositiveRate(data) {
 			}
 		}
 	}
-	if(numberOfPositiveScores+numberOfNegativeScores >= 10) {
+	if(numberOfPositiveScores+numberOfNegativeScores >= 5) {
 		seasonPositiveRateData.addRows([
 			[previousName,seasonPositiveRate,sortKey1,sortKey2]
 		])			
 	}
 
 	seasonPositiveRateData.sort([{column:2},{column:3},{column:0}])
-	seasonPositiveRateData.removeRows(10,seasonPositiveRateData.getNumberOfRows()-10)
+	seasonPositiveRateData.removeRows(20,seasonPositiveRateData.getNumberOfRows()-20)
 
 	return seasonPositiveRateData
 }
