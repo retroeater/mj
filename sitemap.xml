@@ -219,6 +219,13 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/ranking_wrc.html</loc>
+		<lastmod>2021-07-19</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/ranking_ron2.html</loc>
 		<lastmod>2021-07-01</lastmod>
 		<changefreq>monthly</changefreq>

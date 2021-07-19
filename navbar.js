@@ -56,6 +56,7 @@ document.write(
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="ranking_houou.html">鳳凰戦</a>' +
 						'<a class="dropdown-item" href="ranking_ouka.html">女流桜花</a>' +
+						'<a class="dropdown-item" href="ranking_wrc.html">JPML WRC</a>' +
 						'<a class="dropdown-item" href="ranking_ron2.html">ロン2</a>' +
 						'<a class="dropdown-item" href="ranking_youtube.html">YouTube</a>' +
 						'<a class="dropdown-item" href="ranking_misc.html">その他</a>' +
