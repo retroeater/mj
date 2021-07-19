@@ -46,6 +46,11 @@ document.write(
 						'<a class="dropdown-item" href="judan_38.html">第38期</a>' +
 					'</div>' +
 				'</li>' +
+				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">JPML<br>WRC</a>' +
+					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+						'<a class="dropdown-item" href="wrc_results.html">成績詳細</a>' +
+					'</div>' +
+				'</li>' +
 				'<li class="nav-item"><a class="nav-link" href="saikyo.html">最強戦<br>Saikyo</a></li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ランキング<br>Rankings</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +

@@ -113,8 +113,9 @@ function drawDashboard() {
 function getFormattedImage(url,imageUrl,title) {
 
 	let formattedImage
+	const linkIcon = 'img/125_arr_hoso.png'
 
-	formattedImage = '<a href="' + url + '" target="_blank"><img alt="' + title + '" src="' + imageUrl + '" /></a>'
+	formattedImage = '<a href="' + url + '" target="_blank"><img alt="' + title + '" height="75" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
 
 	return formattedImage
 }
