@@ -53,7 +53,7 @@ function drawDashboard() {
 
 		// 必要列のみ表示
 		const view = new google.visualization.DataView(data)
-		view.setColumns([0,1,2,3,4])
+		view.setColumns([0,1,2,3,4,6])
 
 		dashboard.bind([nameFilter], table)
 		dashboard.draw(view)
