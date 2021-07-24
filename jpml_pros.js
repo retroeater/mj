@@ -461,7 +461,7 @@ function getFormattedLives(name,numberOfLives) {
 
 	if(numberOfLives != 0) {
 		sortKey = ('0000' + numberOfLives).slice(-4)
-		formattedLives = '<span class="' + sortKey + '">' + '<a href="./jpml_live.html?name=' + name + '&status=ALL" target="_blank">' + numberOfLives + '件</a></span>'
+		formattedLives = '<span class="' + sortKey + '">' + '<a href="./video_live.html?name=' + name + '&status=ALL" target="_blank">' + numberOfLives + '件</a></span>'
 	}
 
 	return formattedLives
@@ -582,7 +582,7 @@ function getFormattedVideos(name,numberOfVideos) {
 
 	if(numberOfVideos != 0) {
 		sortKey = ('0000' + numberOfVideos).slice(-4)
-		formattedVideos = '<span class="' + sortKey + '">' + '<a href="./jpml_videos.html?name=' + name + '" target="_blank">' + numberOfVideos + '件</a></span>'
+		formattedVideos = '<span class="' + sortKey + '">' + '<a href="./video_jpml.html?name=' + name + '" target="_blank">' + numberOfVideos + '件</a></span>'
 	}
 
 	return formattedVideos

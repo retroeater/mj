@@ -23,20 +23,6 @@
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/dictionary.html</loc>
-		<lastmod>2021-06-03</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/efficiency.html</loc>
-		<lastmod>2020-04-01</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
 		<loc>https://retroeater.github.io/mj/houou_leagues.html</loc>
 		<lastmod>2021-05-09</lastmod>
 		<changefreq>monthly</changefreq>
@@ -79,6 +65,13 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/houou_ranking.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/houou_results.html</loc>
 		<lastmod>2021-05-29</lastmod>
 		<changefreq>yearly</changefreq>
@@ -100,24 +93,10 @@
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/jpml_live.html</loc>
-		<lastmod>2021-07-17</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>1.0</priority>
-	</url>
-
-	<url>
 		<loc>https://retroeater.github.io/mj/jpml_pros.html</loc>
 		<lastmod>2021-07-19</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/jpml_ron2.html</loc>
-		<lastmod>2021-07-01</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
 	</url>
 
 	<url>
@@ -135,13 +114,6 @@
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/jpml_videos.html</loc>
-		<lastmod>2021-07-17</lastmod>
-		<changefreq>daily</changefreq>
-		<priority>1.0</priority>
-	</url>
-
-	<url>
 		<loc>https://retroeater.github.io/mj/judan_38.html</loc>
 		<lastmod>2021-07-17</lastmod>
 		<changefreq>weekly</changefreq>
@@ -152,13 +124,6 @@
 		<loc>https://retroeater.github.io/mj/maps.html</loc>
 		<lastmod>2020-08-26</lastmod>
 		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/mtsuku.html</loc>
-		<lastmod>2021-05-30</lastmod>
-		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
@@ -191,6 +156,13 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/ouka_ranking.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/ouka_results.html</loc>
 		<lastmod>2021-05-29</lastmod>
 		<changefreq>yearly</changefreq>
@@ -198,44 +170,23 @@
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/ranking_houou.html</loc>
-		<lastmod>2021-07-17</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ranking_misc.html</loc>
-		<lastmod>2021-06-06</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ranking_ouka.html</loc>
-		<lastmod>2021-07-17</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ranking_wrc.html</loc>
-		<lastmod>2021-07-19</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://retroeater.github.io/mj/ranking_ron2.html</loc>
-		<lastmod>2021-07-01</lastmod>
+		<loc>https://retroeater.github.io/mj/resource_dictionary.html</loc>
+		<lastmod>2021-07-23</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
-		<loc>https://retroeater.github.io/mj/ranking_youtube.html</loc>
-		<lastmod>2021-07-12</lastmod>
-		<changefreq>daily</changefreq>
+		<loc>https://retroeater.github.io/mj/resource_efficiency.html</loc>
+		<lastmod>2020-07-23</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/resource_rules.html</loc>
+		<lastmod>2020-07-23</lastmod>
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
@@ -282,9 +233,72 @@
 	</url>
 
 	<url>
+		<loc>https://retroeater.github.io/mj/ron2_ranking.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/ron2_results.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.5</priority>
+	</url>
+
+	<url>
 		<loc>https://retroeater.github.io/mj/saikyo.html</loc>
 		<lastmod>2021-07-20</lastmod>
 		<changefreq>monthly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/tokusho_ranking.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/tokusho_results.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/video_jpml.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>1.0</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/video_live.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>1.0</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/video_mtsuku.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/video_ranking.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.1</priority>
+	</url>
+
+	<url>
+		<loc>https://retroeater.github.io/mj/wrc_ranking.html</loc>
+		<lastmod>2021-07-23</lastmod>
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 

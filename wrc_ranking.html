@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-176078855-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-176078855-1');
+</script>
+<script src="header.js"></script>
+<title>JPML WRCランキング</title>
+<script type="text/javascript" src="wrc_ranking.js"></script>
+</head>
+<body>
+<!-- Bootstrap Navigation Bar -->
+<script src="navbar.js"></script>
+
+<div id="dashboard_div">
+	<div id="info_filter_div" class="mj-filter"></div>
+	<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
+		<option value="">部門を選択</option>
+		<option value="wrc_ranking.html?division=通算得点">通算得点</option>
+		<option value="wrc_ranking.html?division=期最高得点">期最高得点</option>
+		<option value="wrc_ranking.html?division=節最高得点">節最高得点</option>
+		<option value="wrc_ranking.html?division=期単位浮き率">期単位浮き率</option>
+	</select>
+	<div id="table_div"></div>
+</div>
+<p>（※第1期から第8期まで、期単位浮き率は5期以上のみ）</p>
+</body>
+</html>

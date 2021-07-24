@@ -12,10 +12,7 @@ document.write(
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="jpml_pros.html">プロ</a>' +
 						'<a class="dropdown-item" href="jpml_articles.html">記事</a>' +
-						'<a class="dropdown-item" href="jpml_videos.html">動画</a>' +
-						'<a class="dropdown-item" href="jpml_live.html">放送対局</a>' +
 						'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
-						'<a class="dropdown-item" href="jpml_ron2.html">ロン2</a>' +
 						'<a class="dropdown-item" href="jpml_twitter.html">Twitter</a>' +
 						'<a class="dropdown-item" href="jpml_links.html">リンク</a>' +
 						'<a class="dropdown-item" href="maps.html">地図</a>' +
@@ -23,6 +20,7 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">鳳凰戦<br>Houou</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+						'<a class="dropdown-item" href="houou_ranking.html">ランキング</a>' +
 						'<a class="dropdown-item" href="houou_leagues.html">リーグ推移</a>' +
 						'<a class="dropdown-item" href="houou_league_by_class.html">リーグ✕期</a>' +
 						'<a class="dropdown-item" href="houou_38_a1.html">第38期A1リーグ</a>' +
@@ -34,7 +32,8 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">女流桜花<br>Ouka</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-						'<a class="dropdown-item" href="ouka_leagues.html">リーグ推移</a>' +
+					'<a class="dropdown-item" href="ouka_ranking.html">ランキング</a>' +
+					'<a class="dropdown-item" href="ouka_leagues.html">リーグ推移</a>' +
 						'<a class="dropdown-item" href="ouka_league_by_class.html">リーグ✕期</a>' +
 						'<a class="dropdown-item" href="ouka_houou_league.html">桜花✕鳳凰リーグ</a>' +
 						'<a class="dropdown-item" href="ouka_16_a.html">第16期Aリーグ</a>' +
@@ -48,25 +47,39 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">JPML<br>WRC</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-						'<a class="dropdown-item" href="wrc_results.html">成績詳細</a>' +
+					'<a class="dropdown-item" href="wrc_ranking.html">ランキング</a>' +
+					'<a class="dropdown-item" href="wrc_results.html">成績詳細</a>' +
+					'</div>' +
+				'</li>' +
+				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">特別昇級<br>Tokusho</a>' +
+					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+					'<a class="dropdown-item" href="tokusho_ranking.html">ランキング</a>' +
+					'<a class="dropdown-item" href="tokusho_results.html">成績詳細</a>' +
+					'</div>' +
+				'</li>' +
+				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ロン2<br>Ron2</a>' +
+					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+					'<a class="dropdown-item" href="ron2_ranking.html">ランキング</a>' +
+					'<a class="dropdown-item" href="ron2_results.html">成績詳細</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item"><a class="nav-link" href="saikyo.html">最強戦<br>Saikyo</a></li>' +
-				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ランキング<br>Rankings</a>' +
+				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">動画<br>Videos</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-						'<a class="dropdown-item" href="ranking_houou.html">鳳凰戦</a>' +
-						'<a class="dropdown-item" href="ranking_ouka.html">女流桜花</a>' +
-						'<a class="dropdown-item" href="ranking_wrc.html">JPML WRC</a>' +
-						'<a class="dropdown-item" href="ranking_ron2.html">ロン2</a>' +
-						'<a class="dropdown-item" href="ranking_youtube.html">YouTube</a>' +
-						'<a class="dropdown-item" href="ranking_misc.html">その他</a>' +
+						'<a class="dropdown-item" href="video_ranking.html">ランキング</a>' +
+						'<a class="dropdown-item" href="video_jpml.html">連盟プロ</a>' +
+						'<a class="dropdown-item" href="video_live.html">放送対局</a>' +
+						'<a class="dropdown-item" href="video_mtsuku.html">Mつく</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item"><a class="nav-link" href="books.html">書籍<br>Books</a></li>' +
-				'<li class="nav-item"><a class="nav-link" href="mtsuku.html">Mつく<br>Mtsuku</a></li>' +
-				'<li class="nav-item"><a class="nav-link" href="efficiency.html">牌効率<br>Efficiency</a></li>' +
-				'<li class="nav-item"><a class="nav-link" href="dictionary.html">辞書<br>Dictionary</a></li>' +
-				'<li class="nav-item"><a class="nav-link" href="rules.html">ルール<br>Rules</a></li>' +
+				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">リソース<br>Resources</a>' +
+					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+						'<a class="dropdown-item" href="resource_dictionary.html">辞書</a>' +
+						'<a class="dropdown-item" href="resource_efficiency.html">牌効率</a>' +
+						'<a class="dropdown-item" href="resource_rules.html">ルール</a>' +
+					'</div>' +
+				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">個人<br>Ryoei</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="rh_bio.html">略歴</a>' +
