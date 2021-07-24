@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -56,6 +56,7 @@ function drawDashboard() {
 		chartData.addColumn('string','桜花<br>16期')
 		chartData.addColumn('string','桜花<br>最高')
 		chartData.addColumn('string','JWRC<br>出場')
+		chartData.addColumn('string','特昇<br>出場')
 		chartData.addColumn('string','最強<br>出場')
 		chartData.addColumn('string','決勝<br>進出')
 		chartData.addColumn('string','関連<br>記事')
@@ -108,6 +109,7 @@ function drawDashboard() {
 		let instgramImageUrl		// AN Instagram画像
 		let ron2AveragePlacement	// AO ロン2平均順位
 		let jpmlWrcSeasons			// AP JPML WRC出場回数
+		let tokushoSeasons			// AQ 特昇出場回数
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -153,6 +155,7 @@ function drawDashboard() {
 //			instagramImageUrl = data.getValue(i,39)
 			ron2AveragePlacement = data.getValue(i,40)
 			jpmlWrcSeasons = data.getValue(i,41)
+			tokushoSeasons = data.getValue(i,42)
 
 			let formattedName = getFormattedName(name,sortKey,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id,ron2ImageUrl)
@@ -169,6 +172,7 @@ function drawDashboard() {
 			let formattedOukaSeasons = getFormattedOukaSeasons(name,oukaSeasons)
 			let formattedOukaHighestLeague = getFormattedOukaHighestLeague(name,oukaHighestLeague)
 			let formattedJpmlWrcSeasons = getFormattedJpmlWrcSeasons(name,jpmlWrcSeasons)
+			let formattedTokushoSeasons = getFormattedTokushoSeasons(name,tokushoSeasons)
 			let formattedSaikyoGames = getFormattedSaikyoGames(name,saikyoGames)
 			let formattedFinals = getFormattedFinals(name,numberOfFinals)
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
@@ -197,6 +201,7 @@ function drawDashboard() {
 					oukaLatestLeague,
 					formattedOukaHighestLeague,
 					formattedJpmlWrcSeasons,
+					formattedTokushoSeasons,
 					formattedSaikyoGames,
 					formattedFinals,
 					formattedArticles,
@@ -561,6 +566,19 @@ function getFormattedSaikyoGames(name,saikyoGames) {
 	}
 
 	return formattedSaikyoGames
+}
+
+function getFormattedTokushoSeasons(name,tokushoSeasons) {
+
+	let sortKey
+	let formattedTokushoSeasons
+
+	if(tokushoSeasons) {
+		sortKey = ('0000' + tokushoSeasons).slice(-4)
+		formattedTokushoSeasons = '<span class="' + sortKey + '">' + '<a href="./tokusho_results.html?name=' + name + '" target="_blank">' + tokushoSeasons + '回</a></span>'
+	}
+
+	return formattedTokushoSeasons
 }
 
 function getFormattedTwitter(twitterId,twitterImageUrl) {
