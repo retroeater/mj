@@ -188,6 +188,7 @@ function drawChart() {
 			leagues_35_1[1] = leagues_35_2[1]
 			leagues_36_1[1] = leagues_36_2[1]
 			leagues_37_1[1] = leagues_37_2[1]
+			leagues_38_1[1] = 13
 
 			// 前期A2リーグ人数補完
 			leagues_23_1[2] = leagues_23_2[2]
@@ -205,6 +206,7 @@ function drawChart() {
 			leagues_35_1[2] = leagues_35_2[2]
 			leagues_36_1[2] = leagues_36_2[2]
 			leagues_37_1[2] = leagues_37_2[2]
+			leagues_38_1[2] = 16
 		}
 
 		let chartData = new google.visualization.DataTable()
