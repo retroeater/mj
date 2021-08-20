@@ -27,6 +27,16 @@ function drawChart() {
 
 	const data = response.getDataTable()
 
+	let leagues_17_2 = ['17後',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_18_1 = ['18前',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_18_2 = ['18後',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_19_1 = ['19前',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_19_2 = ['19後',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_20_1 = ['20前',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_20_2 = ['20後',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_21_1 = ['21前',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_21_2 = ['21後',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_22_1 = ['22前',0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_22_2 = ['22後',0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_23_1 = ['23前',0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_23_2 = ['23後',0,0,0,0,0,0,0,0,0,0,0,null]
@@ -73,6 +83,36 @@ function drawChart() {
 			if(league != "鳳凰位") {
 
 				switch(class_year_period) {
+					case "17後":
+						leagues_17_2[league_index]++
+						break
+					case "18前":
+						leagues_18_1[league_index]++
+						break
+					case "18後":
+						leagues_18_2[league_index]++
+						break
+					case "19前":
+						leagues_19_1[league_index]++
+						break
+					case "19後":
+						leagues_19_2[league_index]++
+						break
+					case "20前":
+						leagues_20_1[league_index]++
+						break
+					case "20後":
+						leagues_20_2[league_index]++
+						break
+					case "21前":
+						leagues_21_1[league_index]++
+						break
+					case "21後":
+						leagues_21_2[league_index]++
+						break
+					case "22前":
+						leagues_22_1[league_index]++
+						break
 					case "22後":
 						leagues_22_2[league_index]++
 						break
@@ -173,6 +213,11 @@ function drawChart() {
 			}
 
 			// 前期A1リーグ人数補完
+			leagues_18_1[1] = leagues_18_2[1]
+			leagues_19_1[1] = leagues_19_2[1]
+			leagues_20_1[1] = leagues_20_2[1]
+			leagues_21_1[1] = leagues_21_2[1]
+			leagues_22_1[1] = leagues_22_2[1]
 			leagues_23_1[1] = leagues_23_2[1]
 			leagues_24_1[1] = leagues_24_2[1]
 			leagues_25_1[1] = leagues_25_2[1]
@@ -191,6 +236,11 @@ function drawChart() {
 			leagues_38_1[1] = 13
 
 			// 前期A2リーグ人数補完
+			leagues_18_1[2] = leagues_18_2[2]
+			leagues_19_1[2] = leagues_19_2[2]
+			leagues_20_1[2] = leagues_20_2[2]
+			leagues_21_1[2] = leagues_21_2[2]
+			leagues_22_1[2] = leagues_22_2[2]
 			leagues_23_1[2] = leagues_23_2[2]
 			leagues_24_1[2] = leagues_24_2[2]
 			leagues_25_1[2] = leagues_25_2[2]
@@ -225,6 +275,16 @@ function drawChart() {
 		chartData.addColumn('number',search_name)
 
 		chartData.addRows([
+			leagues_17_2,
+			leagues_18_1,
+			leagues_18_2,
+			leagues_19_1,
+			leagues_19_2,
+			leagues_20_1,
+			leagues_20_2,
+			leagues_21_1,
+			leagues_21_2,
+			leagues_22_1,
 			leagues_22_2,
 			leagues_23_1,
 			leagues_23_2,
