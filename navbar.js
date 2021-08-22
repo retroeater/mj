@@ -63,7 +63,7 @@ document.write(
 					'<a class="dropdown-item" href="ron2_results.html">成績詳細</a>' +
 					'</div>' +
 				'</li>' +
-				'<li class="nav-item"><a class="nav-link" href="saikyo.html">最強戦<br>Saikyo</a></li>' +
+				'<li class="nav-item"><a class="nav-link" href="saikyo_results.html">最強戦<br>Saikyo</a></li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">動画<br>Videos</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="video_ranking.html">ランキング</a>' +

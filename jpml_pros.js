@@ -562,7 +562,7 @@ function getFormattedSaikyoGames(name,saikyoGames) {
 
 	if(saikyoGames) {
 		sortKey = ('0000' + saikyoGames).slice(-4)
-		formattedSaikyoGames = '<span class="' + sortKey + '">' + '<a href="./saikyo.html?name=' + name + '" target="_blank">' + saikyoGames + '回</a></span>'
+		formattedSaikyoGames = '<span class="' + sortKey + '">' + '<a href="./saikyo_results.html?name=' + name + '" target="_blank">' + saikyoGames + '回</a></span>'
 	}
 
 	return formattedSaikyoGames
