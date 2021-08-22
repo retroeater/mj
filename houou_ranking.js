@@ -24,9 +24,12 @@ switch(search_division) {
 	case '期単位浮き率':
 		queryStatement = 'SELECT B,H WHERE V = "Y" AND H IS NOT NULL ORDER BY B,H'
 		break
-	default: // 通算得点
-		queryStatement = 'SELECT B,SUM(H) WHERE V = "Y" GROUP BY B ORDER BY SUM(H) DESC LIMIT 100'
+	case '連続昇級回数':
+		queryStatement = 'SELECT B,C,D,W WHERE V = "Y" ORDER BY B,C,D'
 		break
+	default: // 通算得点
+	queryStatement = 'SELECT B,SUM(H) WHERE V = "Y" GROUP BY B ORDER BY SUM(H) DESC LIMIT 100'
+	break
 }
 
 google.charts.load('current', {'packages':['table','controls']})
@@ -66,6 +69,10 @@ function drawDashboard() {
 		else if(search_division == '期単位浮き率') {
 			data = getSeasonPositiveRate(data)
 			numberOfDecimalDigits = 3
+		}
+		else if(search_division == '連続昇級回数') {
+			data = getConsecutivePromotionData(data)
+			numberOfDecimalDigits = 0
 		}
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
@@ -114,6 +121,66 @@ function drawDashboard() {
 		dashboard.bind([infoFilter], table)
 		dashboard.draw(view)
 	}
+}
+
+function getConsecutivePromotionData(data) {
+
+	let consecutivePromotionData = new google.visualization.DataTable()
+	consecutivePromotionData.addColumn('string','名前')
+	consecutivePromotionData.addColumn('number','連続昇級回数')
+	consecutivePromotionData.addColumn('number','ソートキー')
+
+	let previousName
+	let numberOfConsecutivePromotions = 0
+	let sortKey = 0
+	
+	for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+		let name = data.getValue(i,0)
+		let season = data.getValue(i,1)
+		let half = data.getValue(i,2)
+		let result = data.getValue(i,3)
+
+		if(name == previousName) {
+			if(result == '昇級') {
+				numberOfConsecutivePromotions++
+			}
+			else {
+				if(numberOfConsecutivePromotions >= 3) {
+					sortKey = 100 - numberOfConsecutivePromotions
+					consecutivePromotionData.addRows([
+						[previousName,numberOfConsecutivePromotions,sortKey]
+					])
+				}
+				numberOfConsecutivePromotions = 0
+			}
+		}
+		else {
+			if(numberOfConsecutivePromotions >= 3) {
+				sortKey = 100 - numberOfConsecutivePromotions
+				consecutivePromotionData.addRows([
+					[previousName,numberOfConsecutivePromotions,sortKey]
+				])
+			}
+
+			previousName = name
+			numberOfConsecutivePromotions = 0
+
+			if(result == '昇級') {
+				numberOfConsecutivePromotions++
+			}
+		}
+	}
+	if(numberOfConsecutivePromotions >= 3) {
+		sortKey = 100 - numberOfConsecutivePromotions
+		consecutivePromotionData.addRows([
+			[previousName,numberOfConsecutivePromotions,sortKey]
+		])
+	}
+
+	consecutivePromotionData.sort([{column:2},{column:0}])
+
+	return consecutivePromotionData
 }
 
 function getSectionHighScoreData(data) {
