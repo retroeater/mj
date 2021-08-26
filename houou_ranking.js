@@ -18,11 +18,14 @@ switch(search_division) {
 	case '期最高得点':
 		queryStatement = 'SELECT B,H WHERE V = "Y" ORDER BY H DESC LIMIT 100'
 		break
+	case '期単位浮き率':
+		queryStatement = 'SELECT B,H WHERE V = "Y" AND H IS NOT NULL ORDER BY B,H'
+		break
 	case '節最高得点':
 		queryStatement = 'SELECT B,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
 		break
-	case '期単位浮き率':
-		queryStatement = 'SELECT B,H WHERE V = "Y" AND H IS NOT NULL ORDER BY B,H'
+	case '節単位浮き率':
+		queryStatement = 'SELECT B,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y" ORDER BY B'
 		break
 	case '連続昇級回数':
 		queryStatement = 'SELECT B,C,D,W WHERE V = "Y" ORDER BY B,C,D'
@@ -66,8 +69,12 @@ function drawDashboard() {
 		if(search_division == '節最高得点') {
 			data = getSectionHighScoreData(data)			
 		}
+		else if(search_division == '節単位浮き率') {
+			data = getSectionPositiveRateData(data)			
+			numberOfDecimalDigits = 3
+		}
 		else if(search_division == '期単位浮き率') {
-			data = getSeasonPositiveRate(data)
+			data = getSeasonPositiveRateData(data)
 			numberOfDecimalDigits = 3
 		}
 		else if(search_division == '連続昇級回数') {
@@ -183,6 +190,96 @@ function getConsecutivePromotionData(data) {
 	return consecutivePromotionData
 }
 
+function getSectionPositiveRateData(data) {
+
+	let sectionPositiveNegativeData = new google.visualization.DataTable()
+	sectionPositiveNegativeData.addColumn('string','名前')
+	sectionPositiveNegativeData.addColumn('number','節単位浮き数')
+	sectionPositiveNegativeData.addColumn('number','節単位沈み数')
+
+	let sectionPositiveRateData = new google.visualization.DataTable()
+	sectionPositiveRateData.addColumn('string','名前')
+	sectionPositiveRateData.addColumn('number','節単位浮き率')
+	sectionPositiveRateData.addColumn('number','ソートキー1')
+	sectionPositiveRateData.addColumn('number','ソートキー2')
+
+	let numberOfPositiveScores = 0
+	let numberOfNegativeScores = 0
+
+	for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+		let name = data.getValue(i,0)
+
+		for(let section = 1; section < 14; section++) {
+
+			let sectionScore = data.getValue(i,section)
+
+			if(sectionScore > 0) {
+				numberOfPositiveScores++
+			}
+			else if(sectionScore < 0){
+				numberOfNegativeScores++
+			}
+		}
+		sectionPositiveNegativeData.addRows([
+			[name,numberOfPositiveScores,numberOfNegativeScores]
+		])
+
+		numberOfPositiveScores = 0
+		numberOfNegativeScores = 0
+	}
+
+	let previousName
+	let sectionPositiveRate = 0
+	let sortKey1 = 0
+	let sortKey2 = 0
+
+	numberOfPositiveScores = 0
+	numberOfNegativeScores = 0
+
+	for(let i = 0; i < sectionPositiveNegativeData.getNumberOfRows(); i++) {
+
+		let name = sectionPositiveNegativeData.getValue(i,0)
+
+		if(name == previousName) {
+			numberOfPositiveScores = numberOfPositiveScores + sectionPositiveNegativeData.getValue(i,1)
+			numberOfNegativeScores = numberOfNegativeScores + sectionPositiveNegativeData.getValue(i,2)
+		}
+		else {
+			sectionPositiveRate = numberOfPositiveScores / (numberOfPositiveScores + numberOfNegativeScores)
+			sortKey1 = 1 - sectionPositiveRate
+			sortKey2 = 1000 - (numberOfPositiveScores + numberOfNegativeScores)
+
+			if(numberOfPositiveScores + numberOfNegativeScores >= 50) {
+				sectionPositiveRateData.addRows([
+					[previousName,sectionPositiveRate,sortKey1,sortKey2]
+				])
+			}
+
+			previousName = name
+			numberOfPositiveScores = 0
+			numberOfNegativeScores = 0
+
+			numberOfPositiveScores = sectionPositiveNegativeData.getValue(i,1)
+			numberOfNegativeScores = sectionPositiveNegativeData.getValue(i,2)
+		}
+	}
+	sectionPositiveRate = numberOfPositiveScores / (numberOfPositiveScores + numberOfNegativeScores)
+	sortKey1 = 1 - sectionPositiveRate
+	sortKey2 = 1000 - (numberOfPositiveScores + numberOfNegativeScores)
+
+	if(numberOfPositiveScores+numberOfNegativeScores >= 50) {
+		sectionPositiveRateData.addRows([
+			[previousName,sectionPositiveRate,sortKey1,sortKey2]
+		])			
+	}
+
+	sectionPositiveRateData.sort([{column:2},{column:3},{column:0}])
+	sectionPositiveRateData.removeRows(50,sectionPositiveRateData.getNumberOfRows()-50)
+
+	return sectionPositiveRateData
+}
+
 function getSectionHighScoreData(data) {
 
 	let sectionHighScoreData = new google.visualization.DataTable()
@@ -213,11 +310,11 @@ function getSectionHighScoreData(data) {
 	return sectionHighScoreData
 }
 
-function getSeasonPositiveRate(data) {
+function getSeasonPositiveRateData(data) {
 
 	let seasonPositiveRateData = new google.visualization.DataTable()
 	seasonPositiveRateData.addColumn('string','名前')
-	seasonPositiveRateData.addColumn('number','節最高得点')
+	seasonPositiveRateData.addColumn('number','期単位浮き率')
 	seasonPositiveRateData.addColumn('number','ソートキー1')
 	seasonPositiveRateData.addColumn('number','ソートキー2')
 
