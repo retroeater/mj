@@ -18,7 +18,7 @@ switch(division) {
 		break
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=youtube&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=YT&headers=1'
 
 const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J WHERE I = "Y" ORDER BY ' + sortColumn + ' DESC LIMIT 10'
 
