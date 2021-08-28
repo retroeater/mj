@@ -20,7 +20,7 @@ if(search_ouka == 'null') {
 	search_ouka = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=jpml_pros&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=pro&headers=1'
 
 google.charts.load('current', {'packages':['table','controls']});
 google.charts.setOnLoadCallback(drawDashboard)
