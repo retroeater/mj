@@ -10,21 +10,21 @@ if(!search_name) {
 	search_name = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=tokusho&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=特昇&headers=1'
 let queryStatement
 
 switch(search_division) {
 	case '期最高得点':
-		queryStatement = 'SELECT B,F WHERE O = "Y" ORDER BY F DESC LIMIT 100'
+		queryStatement = 'SELECT A,H WHERE V = "Y" ORDER BY H DESC LIMIT 100'
 		break
 	case '節最高得点':
-		queryStatement = 'SELECT B,G,H,I,J,K,L,M,N WHERE O = "Y"'
+		queryStatement = 'SELECT A,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
 		break
 	case '期単位浮き率':
-		queryStatement = 'SELECT B,F WHERE O = "Y" AND F IS NOT NULL ORDER BY B,F'
+		queryStatement = 'SELECT A,H WHERE V = "Y" AND H IS NOT NULL ORDER BY A,H'
 		break
 	default: // 通算得点
-		queryStatement = 'SELECT B,SUM(F) WHERE O = "Y" GROUP BY B ORDER BY SUM(F) DESC LIMIT 50'
+		queryStatement = 'SELECT A,SUM(H) WHERE V = "Y" GROUP BY A ORDER BY SUM(H) DESC LIMIT 50'
 		break
 }
 
@@ -37,11 +37,9 @@ function drawDashboard() {
 	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
-	let division	// A 部門
-	let rank		// B 順位
-	let name		// C 名前
-	let score		// D スコア
-	let isVisible	// E 表示
+	let rank
+	let name
+	let score
 
 	let numberOfDecimalDigits = 1
 

@@ -1,4 +1,4 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ouka&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=桜花&headers=1'
 
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
@@ -7,7 +7,7 @@ if(!search_name) {
 	search_name = '川原舞子'
 }
 
-const queryStatement = 'SELECT A,B,C,D,E,F,G WHERE G > 0'
+const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
 
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
@@ -46,10 +46,10 @@ function drawChart() {
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-			let name = data.getValue(i,1)
-			let class_year = data.getValue(i,2)
-			let league = data.getValue(i,4)
-			let league_index = data.getValue(i,5)
+			let name = data.getValue(i,0)
+			let class_year = data.getValue(i,1)
+			let league = data.getValue(i,3)
+			let league_index = data.getValue(i,4)
 
 			if(league != "桜花") {
 
@@ -194,26 +194,16 @@ function drawChart() {
 	}
 }
 
-(function(){
-    let requestId;
-    window.addEventListener('resize', function(){
-        cancelAnimationFrame(requestId);
-        requestId = requestAnimationFrame(function(){
-            drawChart();
-        })
-    })
-})()
-
 function getLeagueRanks(data,chartData,search_name) {
 
 	let leagueRanks = []
 	
 	for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-		let name = data.getValue(i,1)
-		let class_year = data.getValue(i,2)
-		let league = data.getValue(i,4)
-		let rank = data.getValue(i,6)
+		let name = data.getValue(i,0)
+		let class_year = data.getValue(i,1)
+		let league = data.getValue(i,3)
+		let rank = data.getValue(i,5)
 
 		if(search_name == name) {
 
@@ -259,3 +249,13 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year,my_league) {
 
 	return numberOfPeopleInUpperLeagues
 }
+
+(function() {
+    let requestId
+    window.addEventListener('resize', function() {
+        cancelAnimationFrame(requestId)
+        requestId = requestAnimationFrame(function() {
+            drawChart()
+        })
+    })
+})()

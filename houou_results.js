@@ -1,4 +1,4 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=houou&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=鳳凰&headers=1'
 
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
@@ -12,10 +12,10 @@ if(!search_class) {
 	search_class = ''
 }
 
-let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W WHERE V = "Y"'
+let queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
 
 if(search_name) {
-	queryStatement += ' AND B = "' + search_name + '" ORDER BY C,D'
+	queryStatement += ' AND A = "' + search_name + '" ORDER BY B,C'
 }
 
 if(search_name) {
@@ -50,8 +50,8 @@ if(search_name) {
 
 			for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-				let season = data.getValue(i,2)
-				let half = data.getValue(i,3)
+				let season = data.getValue(i,1)
+				let half = data.getValue(i,2)
 				let score = data.getValue(i,7)
 
 				let formattedClass = season + half 
@@ -146,13 +146,13 @@ function drawDashboard() {
 
 		const data = response.getDataTable()
 
-		let	key			// A キー
-		let name		// B 名前
-		let season		// C 期
-		let half		// D 前後期
-		let league		// E リーグ
-		let leagueId	// F リーグキー
-		let rank		// G 順位
+		let name		// A 名前
+		let season		// B 期
+		let half		// C 前後
+		let league		// D リーグ
+		let leagueId	// E リーグキー
+		let rank		// F 順位
+		let result		// G 結果
 		let pointTotal	// H 合計
 		let point01		// I 第1節
 		let point02		// J 第2節
@@ -167,18 +167,16 @@ function drawDashboard() {
 		let point11		// S 第11節
 		let point12		// T 第12節
 		let point13		// U 第13節
-		let isVisible	// V 表示
-		let result		// W 結果
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
-			key = data.getValue(i,0)
-			name = data.getValue(i,1)
-			season = data.getValue(i,2)
-			half = data.getValue(i,3)
-			league = data.getValue(i,4)
-			leagueId = data.getValue(i,5)
-			rank = data.getValue(i,6)
+			name = data.getValue(i,0)
+			season = data.getValue(i,1)
+			half = data.getValue(i,2)
+			league = data.getValue(i,3)
+			leagueId = data.getValue(i,4)
+			rank = data.getValue(i,5)
+			result = data.getValue(i,6)
 			pointTotal = data.getValue(i,7)
 			point01 = data.getValue(i,8)
 			point02 = data.getValue(i,9)
@@ -193,10 +191,8 @@ function drawDashboard() {
 			point11 = data.getValue(i,18)
 			point12 = data.getValue(i,19)
 			point13 = data.getValue(i,20)
-//			isVisible = data.getValue(i,21)
-			result = data.getValue(i,22)
 
-			let formattedClass =getFormattedClass(season,half)
+			let formattedClass = getFormattedClass(season,half)
 
 			chartData.addRows([
 				[
@@ -290,17 +286,17 @@ function getFormattedClass(season,half) {
 
 	let formattedClass
 
-	formattedClass = season + '期' + half + '期'
+	formattedClass = season + half
 
 	return formattedClass
 }
 
-(function(){
-    let requestId;
-    window.addEventListener('resize', function(){
-        cancelAnimationFrame(requestId);
-        requestId = requestAnimationFrame(function(){
-            drawChart();
+(function() {
+    let requestId
+    window.addEventListener('resize', function() {
+        cancelAnimationFrame(requestId)
+        requestId = requestAnimationFrame(function() {
+            drawChart()
         })
     })
 })()

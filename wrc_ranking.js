@@ -10,21 +10,21 @@ if(!search_name) {
 	search_name = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=wrc&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=JWRC&headers=1'
 let queryStatement
 
 switch(search_division) {
 	case '期最高得点':
-		queryStatement = 'SELECT B,F WHERE L = "Y" ORDER BY F DESC LIMIT 100'
+		queryStatement = 'SELECT A,H WHERE V = "Y" ORDER BY H DESC LIMIT 100'
 		break
 	case '節最高得点':
-		queryStatement = 'SELECT B,G,H,I,J,K WHERE L = "Y"'
+		queryStatement = 'SELECT A,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
 		break
 	case '期単位浮き率':
-		queryStatement = 'SELECT B,F WHERE L = "Y" AND F IS NOT NULL ORDER BY B,F'
+		queryStatement = 'SELECT A,H WHERE V = "Y" AND H IS NOT NULL ORDER BY A,H'
 		break
 	default: // 通算得点
-		queryStatement = 'SELECT B,SUM(F) WHERE L = "Y" GROUP BY B ORDER BY SUM(F) DESC LIMIT 50'
+		queryStatement = 'SELECT A,SUM(H) WHERE V = "Y" GROUP BY A ORDER BY SUM(H) DESC LIMIT 50'
 		break
 }
 
@@ -37,11 +37,9 @@ function drawDashboard() {
 	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
-	let division	// A 部門
-	let rank		// B 順位
-	let name		// C 名前
-	let score		// D スコア
-	let isVisible	// E 表示
+	let rank
+	let name
+	let score
 
 	let numberOfDecimalDigits = 1
 
@@ -52,12 +50,11 @@ function drawDashboard() {
 			return
 		}
 
-
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('number','順位')
 		chartData.addColumn('string','名前')
 		chartData.addColumn('string',search_division)
-		
+
 		let data = response.getDataTable()
 
 		if(search_division == '節最高得点') {
@@ -175,7 +172,7 @@ function getSeasonPositiveRate(data) {
 			}
 		}
 		else {
-			seasonPositiveRate = numberOfPositiveScores/(numberOfPositiveScores+numberOfNegativeScores)
+			seasonPositiveRate = numberOfPositiveScores / (numberOfPositiveScores + numberOfNegativeScores)
 			sortKey1 = 1 - seasonPositiveRate
 			sortKey2 = 100 - (numberOfPositiveScores + numberOfNegativeScores)
 
@@ -197,7 +194,7 @@ function getSeasonPositiveRate(data) {
 			}
 		}
 	}
-	if(numberOfPositiveScores+numberOfNegativeScores >= 5) {
+	if(numberOfPositiveScores + numberOfNegativeScores >= 5) {
 		seasonPositiveRateData.addRows([
 			[previousName,seasonPositiveRate,sortKey1,sortKey2]
 		])			
