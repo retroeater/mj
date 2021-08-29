@@ -20,7 +20,7 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">鳳凰戦<br>Houou</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-						'<a class="dropdown-item" href="houou_ranking.html">ランキング</a>' +
+						'<a class="dropdown-item" href="houou_ranking.html?sheet=鳳凰">ランキング</a>' +
 						'<a class="dropdown-item" href="houou_leagues.html">リーグ推移</a>' +
 						'<a class="dropdown-item" href="houou_league_by_class.html">リーグ✕期</a>' +
 						'<a class="dropdown-item" href="houou_38_a1.html">第38期A1リーグ</a>' +
@@ -32,7 +32,7 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">女流桜花<br>Ouka</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="ouka_ranking.html">ランキング</a>' +
+					'<a class="dropdown-item" href="ouka_ranking.html?sheet=桜花">ランキング</a>' +
 					'<a class="dropdown-item" href="ouka_leagues.html">リーグ推移</a>' +
 						'<a class="dropdown-item" href="ouka_league_by_class.html">リーグ✕期</a>' +
 						'<a class="dropdown-item" href="ouka_houou_league.html">桜花✕鳳凰リーグ</a>' +
@@ -47,13 +47,13 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">JPML<br>WRC</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="wrc_ranking.html">ランキング</a>' +
+					'<a class="dropdown-item" href="wrc_ranking.html?sheet=JWRC">ランキング</a>' +
 					'<a class="dropdown-item" href="wrc_results.html">成績詳細</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">特別昇級<br>Tokusho</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-					'<a class="dropdown-item" href="tokusho_ranking.html">ランキング</a>' +
+					'<a class="dropdown-item" href="tokusho_ranking.html?sheet=特昇">ランキング</a>' +
 					'<a class="dropdown-item" href="tokusho_results.html">成績詳細</a>' +
 					'</div>' +
 				'</li>' +
