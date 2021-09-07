@@ -280,6 +280,37 @@ function getSeasonPositiveRateData(data,minimumSeasons) {
 	return seasonPositiveRateData
 }
 
+function getTotalScorePerSeasonData(data,minimumSeasons) {
+
+	let totalScorePerSeasonData = new google.visualization.DataTable()
+	totalScorePerSeasonData.addColumn('string','名前')
+	totalScorePerSeasonData.addColumn('number','通算得点/期')
+	totalScorePerSeasonData.addColumn('number','ソートキー')
+
+	let	totalScorePerSeason = 0
+	let sortKey = 0
+
+	for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+		let name = data.getValue(i,0)
+		let totalScore = data.getValue(i,1)
+		let seasons = data.getValue(i,2)
+
+		if((totalScore > 0) && (seasons >= minimumSeasons)) {
+			totalScorePerSeason = totalScore / seasons
+			sortKey = SORT_KEY_OFFSET - totalScorePerSeason // sort key for descening order
+
+			totalScorePerSeasonData.addRows([
+				[name,totalScorePerSeason,sortKey]
+			])
+		}
+	}
+
+	totalScorePerSeasonData.sort([{column:2},{column:0}])
+
+	return totalScorePerSeasonData
+}
+
 function getChartData(sheet,division,data) {
 
 	data = getAggregatedData(sheet,division,data)
@@ -341,6 +372,9 @@ function getQueryString(division) {
 	if(division == '通算得点') {
 		queryString = 'SELECT A,SUM(H) WHERE V = "Y" AND H IS NOT NULL GROUP BY A ORDER BY SUM(H) DESC'
 	}
+	else if(division == '通算得点/期') {
+		queryString = 'SELECT A,SUM(H),COUNT(H) WHERE V = "Y" AND H IS NOT NULL GROUP BY A'
+	}
 	else if(division == '期最高得点') {
 		queryString = 'SELECT A,H WHERE V = "Y" AND H IS NOT NULL ORDER BY H DESC'
 	}
@@ -392,6 +426,9 @@ function getAggregatedData(sheet,division,data) {
 	let minimumSeasons = getMinimumSeasons(sheet)
 	let minimumSections = getMinimumSections(sheet)
 
+	if(division == '通算得点/期') {
+		data = getTotalScorePerSeasonData(data,minimumSeasons)
+	}
 	if(division == '期単位浮き率') {
 		data = getSeasonPositiveRateData(data,minimumSeasons)
 	}
@@ -433,6 +470,9 @@ function reduceChartData(sheet,division,chartData) {
 		if(division == '通算得点') {
 			limit = 50
 		}		
+		else if(division == '通算得点/期') {
+			limit = 30
+		}
 		else if(division == '期単位浮き率') {
 			limit = 20
 		}
@@ -443,6 +483,9 @@ function reduceChartData(sheet,division,chartData) {
 	else if(sheet == 'JWRC') {
 		if(division == '通算得点') {
 			limit = 50
+		}
+		else if(division == '通算得点/期') {
+			limit = 30
 		}
 		else if(division == '期単位浮き率') {
 			limit = 22
@@ -518,11 +561,11 @@ function getMinimumSeasons(sheet) {
 
 function getMinimumSections(sheet) {
 
-	let minimumSeasons = 25
+	let minimumSections = 25
 
 	if(sheet == '鳳凰') {
-		minimumSeasons = 50
+		minimumSections = 50
 	}
 
-	return minimumSeasons
+	return minimumSections
 }
