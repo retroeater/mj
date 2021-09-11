@@ -27,48 +27,49 @@ function drawChart() {
 
 	const data = response.getDataTable()
 
-	let leagues_17_2 = ['17後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_18_1 = ['18前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_18_2 = ['18後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_19_1 = ['19前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_19_2 = ['19後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_20_1 = ['20前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_20_2 = ['20後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_21_1 = ['21前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_21_2 = ['21後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_22_1 = ['22前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_22_2 = ['22後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_23_1 = ['23前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_23_2 = ['23後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_24_1 = ['24前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_24_2 = ['24後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_25_1 = ['25前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_25_2 = ['25後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_26_1 = ['26前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_26_2 = ['26後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_27_1 = ['27前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_27_2 = ['27後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_28_1 = ['28前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_28_2 = ['28後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_29_1 = ['29前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_29_2 = ['29後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_30_1 = ['30前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_30_2 = ['30後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_31_1 = ['31前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_31_2 = ['31後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_32_1 = ['32前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_32_2 = ['32後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_33_1 = ['33前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_33_2 = ['33後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_34_1 = ['34前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_34_2 = ['34後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_35_1 = ['35前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_35_2 = ['35後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_36_1 = ['36前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_36_2 = ['36後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_37_1 = ['37前',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_37_2 = ['37後',0,0,0,0,0,0,0,0,0,0,0,null]
-	let leagues_38_1 = ['38前',0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_17_2 = ['17後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_18_1 = ['18前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_18_2 = ['18後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_19_1 = ['19前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_19_2 = ['19後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_20_1 = ['20前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_20_2 = ['20後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_21_1 = ['21前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_21_2 = ['21後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_22_1 = ['22前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_22_2 = ['22後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_23_1 = ['23前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_23_2 = ['23後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_24_1 = ['24前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_24_2 = ['24後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_25_1 = ['25前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_25_2 = ['25後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_26_1 = ['26前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_26_2 = ['26後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_27_1 = ['27前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_27_2 = ['27後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_28_1 = ['28前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_28_2 = ['28後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_29_1 = ['29前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_29_2 = ['29後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_30_1 = ['30前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_30_2 = ['30後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_31_1 = ['31前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_31_2 = ['31後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_32_1 = ['32前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_32_2 = ['32後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_33_1 = ['33前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_33_2 = ['33後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_34_1 = ['34前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_34_2 = ['34後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_35_1 = ['35前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_35_2 = ['35後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_36_1 = ['36前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_36_2 = ['36後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_37_1 = ['37前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_37_2 = ['37後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_38_1 = ['38前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_38_2 = ['38後',0,0,0,0,0,0,0,0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -209,7 +210,10 @@ function drawChart() {
 					case "38前":
 						leagues_38_1[league_index]++
 						break
-				}
+					case "38後":
+						leagues_38_2[league_index]++
+						break
+					}
 			}
 
 			// 前期A1リーグ人数補完
@@ -233,7 +237,7 @@ function drawChart() {
 			leagues_35_1[1] = leagues_35_2[1]
 			leagues_36_1[1] = leagues_36_2[1]
 			leagues_37_1[1] = leagues_37_2[1]
-			leagues_38_1[1] = 13
+			leagues_38_1[1] = leagues_38_2[1]
 
 			// 前期A2リーグ人数補完
 			leagues_18_1[2] = leagues_18_2[2]
@@ -256,7 +260,7 @@ function drawChart() {
 			leagues_35_1[2] = leagues_35_2[2]
 			leagues_36_1[2] = leagues_36_2[2]
 			leagues_37_1[2] = leagues_37_2[2]
-			leagues_38_1[2] = 16
+			leagues_38_1[2] = leagues_38_2[2]
 		}
 
 		let chartData = new google.visualization.DataTable()
@@ -271,7 +275,8 @@ function drawChart() {
 		chartData.addColumn('number','D1')
 		chartData.addColumn('number','D2')
 		chartData.addColumn('number','D3')
-		chartData.addColumn('number','E')
+		chartData.addColumn('number','E1')
+		chartData.addColumn('number','E2')
 		chartData.addColumn('number',search_name)
 
 		chartData.addRows([
@@ -316,7 +321,8 @@ function drawChart() {
 			leagues_36_2,
 			leagues_37_1,
 			leagues_37_2,
-			leagues_38_1
+			leagues_38_1,
+			leagues_38_2
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
@@ -333,7 +339,7 @@ function drawChart() {
 				let class_year_period = chartData.getValue(j,0)
 
 				if(my_class_year_period == class_year_period) {
-					chartData.setValue(j,12,my_rank)
+					chartData.setValue(j,13,my_rank)
 				}
 			}	
 		}
@@ -362,7 +368,8 @@ function drawChart() {
 				'#CCEEFF', // D1
 				'#CCDDFF', // D2
 				'#CCCCFF', // D3
-				'#CCCCCC', // E
+				'#CCCCCC', // E1
+				'#999999', // E2
 				'#0000CC'  // 名前
 			],
 			curveType: 'function',
@@ -373,7 +380,7 @@ function drawChart() {
 			},
 			seriesType: 'bars',
 			series: {
-				11: {
+				12: {
 					type:'line'
 				}
 			},
@@ -413,7 +420,7 @@ function getLeagueRanks(data,chartData,search_name) {
 
 		let class_year_period = class_year + class_period
 
-		if(search_name == name) {
+		if((search_name == name) && (class_year_period != '38後')) { // 38期後期順位未反映
 
 			let numberOfPeopleInUpperLeagues = getNumberOfPeopleInUpperLeagues(chartData,class_year_period,league)
 			let leagueRank = numberOfPeopleInUpperLeagues + rank
@@ -442,7 +449,8 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year_period,my_leagu
 		let d1 = chartData.getValue(i,8)
 		let d2 = chartData.getValue(i,9)
 		let d3 = chartData.getValue(i,10)
-		let e = chartData.getValue(i,11)
+		let e1 = chartData.getValue(i,11)
+		let e2 = chartData.getValue(i,12)
 
 		if(my_class_year_period == class_year_period) {
 		
@@ -476,10 +484,13 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year_period,my_leagu
 				case "D3":
 					numberOfPeopleInUpperLeagues = a1+a2+b1+b2+c1+c2+c3+d1+d2
 					break
-				case "E":
+				case "E1":
 					numberOfPeopleInUpperLeagues = a1+a2+b1+b2+c1+c2+c3+d1+d2+d3
 					break
-			}
+				case "E2":
+					numberOfPeopleInUpperLeagues = a1+a2+b1+b2+c1+c2+c3+d1+d2+d3+e1
+					break
+				}
 		}
 	}
 

@@ -77,13 +77,13 @@ function drawChart() {
 				minValue: 0,
 				maxValue: 13,
 				textPosition: 'left',
-				ticks: [{v:1,f:'E'},{v:2,f:'D3'},{v:3,f:'D2'},{v:4,f:'D1'},{v:5,f:'C3'},{v:6,f:'C2'},{v:7,f:'C1'},{v:8,f:'B2'},{v:9,f:'B1'},{v:10,f:'A2'},{v:11,f:'A1'},{v:12,f:'鳳凰位'}]
+				ticks: [{v:1,f:'E2'},{v:2,f:'E1'},{v:3,f:'D3'},{v:4,f:'D2'},{v:5,f:'D1'},{v:6,f:'C3'},{v:7,f:'C2'},{v:8,f:'C1'},{v:9,f:'B2'},{v:10,f:'B1'},{v:11,f:'A2'},{v:12,f:'A1'},{v:13,f:'鳳凰位'}]
 			},
 			sizeAxis:  {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: 'リーグ✕期（38期前期時点）',
+			title: 'リーグ✕期（38期後期時点）',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
@@ -118,42 +118,45 @@ function getLeagueId(league) {
 	
 	switch(league) {
 	case "鳳凰位":
-		leagueId = 12
+		leagueId = 13
 		break
 	case "A1":
-		leagueId = 11
+		leagueId = 12
 		break
 	case "A2":
-		leagueId = 10
+		leagueId = 11
 		break
 	case "B1":
-		leagueId = 9
+		leagueId = 10
 		break
 	case "B2":
-		leagueId = 8
+		leagueId = 9
 		break
 	case "C1":
-		leagueId = 7
+		leagueId = 8
 		break
 	case "C2":
-		leagueId = 6
+		leagueId = 7
 		break
 	case "C3":
-		leagueId = 5
+		leagueId = 6
 		break
 	case "D1":
-		leagueId = 4
+		leagueId = 5
 		break
 	case "D2":
-		leagueId = 3
+		leagueId = 4
 		break
 	case "D3":
+		leagueId = 3
+		break
+	case "E1":
 		leagueId = 2
 		break
-	case "E":
+	case "E2":
 		leagueId = 1
 		break
-	}
+		}
 
 	return leagueId
 }
