@@ -40,6 +40,81 @@ function drawDashboard() {
 	}
 }
 
+function getConsecutivePositiveSeasonData(data,sheet) {
+
+	let consecutivePositiveSeasonData = new google.visualization.DataTable()
+	consecutivePositiveSeasonData.addColumn('string','名前')
+	consecutivePositiveSeasonData.addColumn('number','期連続浮き回数')
+	consecutivePositiveSeasonData.addColumn('number','ソートキー')
+
+	let numberOfMinimumConsecutivePositiveSeasons
+
+	if(sheet == '鳳凰') {
+		numberOfMinimumConsecutivePositiveSeasons = 6
+	}
+	else if(sheet == '桜花') {
+		numberOfMinimumConsecutivePositiveSeasons = 3
+	}
+	else if(sheet == 'JWRC') {
+		numberOfMinimumConsecutivePositiveSeasons = 3
+	}
+	else if(sheet == '特昇') {
+		numberOfMinimumConsecutivePositiveSeasons = 3
+	}
+
+	let previousName
+	let numberOfConsecutivePositive = 0
+	let sortKey = 0
+	
+	for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+		let name = data.getValue(i,0)
+		let season = data.getValue(i,1)
+		let half = data.getValue(i,2)
+		let totalPoint = data.getValue(i,3)
+
+		if(name == previousName) {
+			if(totalPoint > 0) {
+				numberOfConsecutivePositive++
+			}
+			else {
+				if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSeasons) {
+					sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+					consecutivePositiveSeasonData.addRows([
+						[previousName,numberOfConsecutivePositive,sortKey]
+					])
+				}
+				numberOfConsecutivePositive = 0
+			}
+		}
+		else {
+			if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSeasons) {
+				sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+				consecutivePositiveSeasonData.addRows([
+					[previousName,numberOfConsecutivePositive,sortKey]
+				])
+			}
+
+			previousName = name
+			numberOfConsecutivePositive = 0
+
+			if(totalPoint > 0) {
+				numberOfConsecutivePositive++
+			}
+		}
+	}
+	if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSeasons) {
+		sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+		consecutivePositiveSeasonData.addRows([
+			[previousName,numberOfConsecutivePositive,sortKey]
+		])
+	}
+
+	consecutivePositiveSeasonData.sort([{column:2},{column:0}])
+
+	return consecutivePositiveSeasonData
+}
+
 function getConsecutivePromotionData(data) {
 
 	let consecutivePromotionData = new google.visualization.DataTable()
@@ -358,7 +433,7 @@ function getNumberOfDecimalDigits(division) {
 	if((division == '期単位浮き率') || (division == '節単位浮き率')) {
 		numberOfDecimalDigits = 3
 	}
-	else if(division == '連続昇級回数') {
+	else if((division == '連続昇級回数') || (division == '期連続浮き回数')) {
 		numberOfDecimalDigits = 0
 	}
 
@@ -380,6 +455,9 @@ function getQueryString(division) {
 	}
 	else if(division == '期単位浮き率') {
 		queryString = 'SELECT A,H WHERE V = "Y" AND H IS NOT NULL ORDER BY A,H'
+	}
+	else if(division == '期連続浮き回数') {
+		queryString = 'SELECT A,B,C,H WHERE V = "Y" AND H IS NOT NULL ORDER BY A,B,C'
 	}
 	else if(division == '節最高得点') {
 		queryString = 'SELECT A,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y"'
@@ -429,8 +507,11 @@ function getAggregatedData(sheet,division,data) {
 	if(division == '通算得点/期') {
 		data = getTotalScorePerSeasonData(data,minimumSeasons)
 	}
-	if(division == '期単位浮き率') {
+	else if(division == '期単位浮き率') {
 		data = getSeasonPositiveRateData(data,minimumSeasons)
+	}
+	else if(division == '期連続浮き回数') {
+		data = getConsecutivePositiveSeasonData(data,sheet)
 	}
 	else if(division == '節最高得点') {
 		data = getSectionHighScoreData(data)			
