@@ -115,6 +115,108 @@ function getConsecutivePositiveSeasonData(data,sheet) {
 	return consecutivePositiveSeasonData
 }
 
+function getConsecutivePositiveSectionData(data,sheet) {
+
+	let consecutivePositiveSectionData = new google.visualization.DataTable()
+	consecutivePositiveSectionData.addColumn('string','名前')
+	consecutivePositiveSectionData.addColumn('number','節連続浮き回数')
+	consecutivePositiveSectionData.addColumn('number','ソートキー')
+
+	let numberOfMinimumConsecutivePositiveSections
+
+	if(sheet == '鳳凰') {
+		numberOfMinimumConsecutivePositiveSections = 8
+	}
+	else if(sheet == '桜花') {
+		numberOfMinimumConsecutivePositiveSections = 5
+	}
+	else if(sheet == 'JWRC') {
+		numberOfMinimumConsecutivePositiveSections = 5
+	}
+	else if(sheet == '特昇') {
+		numberOfMinimumConsecutivePositiveSections = 5
+	}
+
+	let previousName
+	let numberOfConsecutivePositive = 0
+	let sortKey = 0
+	
+	for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+		let name = data.getValue(i,0)
+
+		if(name == previousName) {
+
+			for(let j = 3; j < 16; j++) {
+				let sectionPoint = data.getValue(i,j)
+
+//console.log(sectionPoint)
+
+				if(sectionPoint > 0) {
+//console.log('Positive')
+					numberOfConsecutivePositive++
+				}
+				else if(sectionPoint < 0) {
+//console.log('Negative')
+					if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
+						sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+						consecutivePositiveSectionData.addRows([
+							[previousName,numberOfConsecutivePositive,sortKey]
+						])						
+					}
+					numberOfConsecutivePositive = 0
+				}
+				else { // null
+//console.log('Null')
+				}
+			}
+		}
+		else {
+			if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
+				sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+				consecutivePositiveSectionData.addRows([
+					[previousName,numberOfConsecutivePositive,sortKey]
+				])						
+			}
+
+			previousName = name
+			numberOfConsecutivePositive = 0
+
+			for(let j = 3; j < 16; j++) {
+				let sectionPoint = data.getValue(i,j)
+
+				if(sectionPoint > 0) {
+//console.log('Positive')
+					numberOfConsecutivePositive++
+				}
+				else if(sectionPoint < 0) {
+//console.log('Negative')
+					if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
+						sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+						consecutivePositiveSectionData.addRows([
+							[previousName,numberOfConsecutivePositive,sortKey]
+						])						
+					}
+					numberOfConsecutivePositive = 0
+				}
+				else { // null
+//console.log('Null')
+				}
+			}
+		}
+	}
+	if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
+		sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+		consecutivePositiveSectionData.addRows([
+			[previousName,numberOfConsecutivePositive,sortKey]
+		])						
+	}
+
+	consecutivePositiveSectionData.sort([{column:2},{column:0}])
+
+	return consecutivePositiveSectionData
+}
+
 function getConsecutivePromotionData(data) {
 
 	let consecutivePromotionData = new google.visualization.DataTable()
@@ -433,7 +535,7 @@ function getNumberOfDecimalDigits(division) {
 	if((division == '期単位浮き率') || (division == '節単位浮き率')) {
 		numberOfDecimalDigits = 3
 	}
-	else if((division == '連続昇級回数') || (division == '期連続浮き回数')) {
+	else if((division == '連続昇級回数') || (division == '期連続浮き回数') || (division == '節連続浮き回数')) {
 		numberOfDecimalDigits = 0
 	}
 
@@ -464,6 +566,9 @@ function getQueryString(division) {
 	}
 	else if(division == '節単位浮き率') {
 		queryString = 'SELECT A,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y" ORDER BY A'
+	}
+	else if(division == '節連続浮き回数') {
+		queryString = 'SELECT A,B,C,I,J,K,L,M,N,O,P,Q,R,S,T,U WHERE V = "Y" AND H IS NOT NULL ORDER BY A,B,C'
 	}
 	else if(division == '連続昇級回数') {
 		queryString = 'SELECT A,B,C,G WHERE V = "Y" ORDER BY A,B,C'
@@ -518,6 +623,9 @@ function getAggregatedData(sheet,division,data) {
 	}
 	else if(division == '節単位浮き率') {
 		data = getSectionPositiveRateData(data,minimumSections)	
+	}
+	else if(division == '節連続浮き回数') {
+		data = getConsecutivePositiveSectionData(data,sheet)	
 	}
 	else if(division == '連続昇級回数') {
 		data = getConsecutivePromotionData(data)
