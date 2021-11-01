@@ -234,21 +234,21 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_ranking.html</loc>
-		<lastmod>2021-10-01</lastmod>
+		<lastmod>2021-11-01</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_results.html</loc>
-		<lastmod>2021-10-01</lastmod>
+		<lastmod>2021-11-01</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/ron2_stats.html</loc>
-		<lastmod>2021-10-01</lastmod>
+		<lastmod>2021-11-01</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.5</priority>
 	</url>
