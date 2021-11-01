@@ -150,14 +150,10 @@ function getConsecutivePositiveSectionData(data,sheet) {
 			for(let j = 3; j < 16; j++) {
 				let sectionPoint = data.getValue(i,j)
 
-//console.log(sectionPoint)
-
 				if(sectionPoint > 0) {
-//console.log('Positive')
 					numberOfConsecutivePositive++
 				}
 				else if(sectionPoint < 0) {
-//console.log('Negative')
 					if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
 						sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
 						consecutivePositiveSectionData.addRows([
@@ -167,7 +163,6 @@ function getConsecutivePositiveSectionData(data,sheet) {
 					numberOfConsecutivePositive = 0
 				}
 				else { // null
-//console.log('Null')
 				}
 			}
 		}
@@ -186,11 +181,9 @@ function getConsecutivePositiveSectionData(data,sheet) {
 				let sectionPoint = data.getValue(i,j)
 
 				if(sectionPoint > 0) {
-//console.log('Positive')
 					numberOfConsecutivePositive++
 				}
 				else if(sectionPoint < 0) {
-//console.log('Negative')
 					if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
 						sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
 						consecutivePositiveSectionData.addRows([
@@ -200,7 +193,6 @@ function getConsecutivePositiveSectionData(data,sheet) {
 					numberOfConsecutivePositive = 0
 				}
 				else { // null
-//console.log('Null')
 				}
 			}
 		}
