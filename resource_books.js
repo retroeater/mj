@@ -1,4 +1,4 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=書籍&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ/edit?sheet=書籍&headers=1'
 
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
@@ -21,7 +21,7 @@ function drawDashboard() {
 	let name			// A 著者名
 	let nameKana		// B 著者名かな
 	let org				// C 所属団体
-	let orgKana			// D 所属団体かな
+	let publisher		// D 出版社
 	let asin			// E ASIN
 	let url				// F 商品URL
 	let imageUrl		// G 商品画像URL
@@ -51,7 +51,7 @@ function drawDashboard() {
 			name = data.getValue(i,0)
 //			nameKana = data.getValue(i,1)
 //			org = data.getValue(i,2)
-//			orgKana = data.getValue(i,3)
+//			publisher = data.getValue(i,3)
 //			asin = data.getValue(i,4)
 			url = data.getValue(i,5)
 			imageUrl = data.getValue(i,6)
