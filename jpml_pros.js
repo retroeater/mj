@@ -549,7 +549,7 @@ function getFormattedRon2AveragePlacement(name,ron2AveragePlacement) {
 
 	if(ron2AveragePlacement) {
 		ron2AveragePlacement = ron2AveragePlacement.toFixed(2)
-		formattedRon2AveragePlacement = '<span class="' + ron2AveragePlacement + '"><a href="ron2_stats.html?name=' + name + '" target="_blank">' + ron2AveragePlacement + '</a></span>'
+		formattedRon2AveragePlacement = '<span class="' + ron2AveragePlacement + '"><a href="ron2_results.html?name=' + name + '" target="_blank">' + ron2AveragePlacement + '</a></span>'
 	}
 
 	return formattedRon2AveragePlacement
