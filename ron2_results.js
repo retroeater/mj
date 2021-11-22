@@ -85,6 +85,9 @@ if(search_name) {
 					width: '100%',
 					height: '80%'
 				},
+				hAxis: {
+					direction: -1
+				},
 				legend: {
 					position: 'bottom'
 				},
