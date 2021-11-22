@@ -62,7 +62,7 @@ function drawDashboard() {
 		chartData.addColumn('string','関連<br>記事')
 		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送<br>対局')
-		chartData.addColumn('string','ロン2<br>平着')
+		chartData.addColumn('string','ロン2<br>平順')
 //		chartData.addColumn('string','最終更新')
 
 		const data = response.getDataTable()
