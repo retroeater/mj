@@ -2,8 +2,8 @@ const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1Jd-WelbdQNrpLmL
 
 const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,O,P,Q,R'
 
-google.charts.load('current', {'packages':['table']});
-google.charts.setOnLoadCallback(drawTable);
+google.charts.load('current', {'packages':['table']})
+google.charts.setOnLoadCallback(drawTable)
 
 function drawTable() {
 
@@ -56,12 +56,13 @@ function drawChart() {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
-		
+
 		const data = response.getDataTable()
-		
-        const options = {
+
+		const options = {
 			chartArea: {
 				left: 50,
+				right: 20,
 				top: 20,
 				width: '100%',
 				height: '80%'
@@ -79,12 +80,12 @@ function drawChart() {
 	}
 }
 
-(function(){
-    let requestId;
-    window.addEventListener('resize', function(){
-        cancelAnimationFrame(requestId);
-        requestId = requestAnimationFrame(function(){
-            drawChart();
-        })
-    })
+(function() {
+	let requestId
+	window.addEventListener('resize', function() {
+		cancelAnimationFrame(requestId)
+		requestId = requestAnimationFrame(function() {
+			drawChart()
+		})
+	})
 })()
