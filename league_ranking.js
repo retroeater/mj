@@ -655,7 +655,7 @@ function reduceChartData(sheet,division,chartData) {
 			limit = 30
 		}
 		else if(division == '期単位浮き率') {
-			limit = 20
+			limit = 23
 		}
 		else if(division == '節単位浮き率') {
 			limit = 20
