@@ -128,7 +128,7 @@ function getConsecutivePositiveSectionData(data,sheet) {
 		numberOfMinimumConsecutivePositiveSections = 8
 	}
 	else if(sheet == '桜花') {
-		numberOfMinimumConsecutivePositiveSections = 5
+		numberOfMinimumConsecutivePositiveSections = 6
 	}
 	else if(sheet == 'JWRC') {
 		numberOfMinimumConsecutivePositiveSections = 5
