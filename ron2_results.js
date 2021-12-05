@@ -147,7 +147,7 @@ function drawDashboard() {
 		chartData.addColumn('string','平均和了点')
 		chartData.addColumn('string','放銃率')
 		chartData.addColumn('string','平均放銃点')
-		chartData.addColumn('string','リーチ率')
+		chartData.addColumn('string','立直率')
 		chartData.addColumn('string','副露率')
 		chartData.addColumn('string','最終対戦日')
 		
