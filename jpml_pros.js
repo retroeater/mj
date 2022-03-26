@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -44,6 +44,7 @@ function drawDashboard() {
 		chartData.addColumn('string','Instagram')
 		chartData.addColumn('string','YouTube')
 		chartData.addColumn('string','Blog')
+		chartData.addColumn('string','雀士<br>名鑑')
 		chartData.addColumn('string','Wikipedia')
 		chartData.addColumn('string','期<br>入会')
 		chartData.addColumn('string','段位')
@@ -110,6 +111,9 @@ function drawDashboard() {
 		let ron2AveragePlacement	// AO ロン2平均順位
 		let jpmlWrcSeasons			// AP JPML WRC出場回数
 		let tokushoSeasons			// AQ 特昇出場回数
+		let kinmaDirectoryUrl		// AR 雀士名鑑
+		let kinmaDirectoryImageUrl	// AS 雀士名鑑画像
+
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -156,14 +160,17 @@ function drawDashboard() {
 			ron2AveragePlacement = data.getValue(i,40)
 			jpmlWrcSeasons = data.getValue(i,41)
 			tokushoSeasons = data.getValue(i,42)
+			kinmaDirectoryUrl = data.getValue(i,43)
+			kinmaDirectoryImageUrl = data.getValue(i,44)
 
 			let formattedName = getFormattedName(name,sortKey,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id,ron2ImageUrl)
 			let formattedTwitter = getFormattedTwitter(twitterId,twitterImageUrl)
 			let formattedInstagram = getFormattedInstagram(instagramId)
 			let formattedYouTube = getFormattedYouTube(youTubeId,youTubeImageUrl)
-			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
 			let formattedBlog = getFormattedBlog(blogUrl,blogImageUrl)
+			let formattedKinmaDirectory = getFormattedKinmaDirectory(kinmaDirectoryUrl,kinmaDirectoryImageUrl)
+			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
 			let formattedProClass = getFormattedProClass(proClass,joined)
 			let formattedDan = getFormattedDan(danEn)			
 			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
@@ -189,6 +196,7 @@ function drawDashboard() {
 					formattedInstagram,
 					formattedYouTube,
 					formattedBlog,
+					formattedKinmaDirectory,
 					formattedWikipedia,
 					formattedProClass,
 					formattedDan,
@@ -446,6 +454,18 @@ function getFormattedJpmlWrcSeasons(name,jpmlWrcSeasons) {
 	}
 
 	return formattedJpmlWrcSeasons
+}
+
+function getFormattedKinmaDirectory(kinmaDirectoryUrl,kinmaDirectoryImageUrl) {
+
+	let formattedKinmaDirectory
+	const directoryIcon = 'img/125_arr_hoso.png'
+
+	if(kinmaDirectoryUrl) {
+		formattedKinmaDirectory = '<a href="' + kinmaDirectoryUrl + '" target="_blank"><img alt="雀士名鑑" class="pros" loading="lazy" src="' + kinmaDirectoryImageUrl + '" onError="this.onerror=null;this.src=\'' + directoryIcon + '\'" /></a>'
+	}
+
+	return formattedKinmaDirectory
 }
 
 function getFormattedLastUpdated(lastUpdated) {

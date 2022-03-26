@@ -3,14 +3,14 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/</loc>
-		<lastmod>2022-02-20</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/index.html</loc>
-		<lastmod>2022-02-20</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
@@ -73,28 +73,28 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_articles.html</loc>
-		<lastmod>2022-02-20</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_links.html</loc>
-		<lastmod>2022-03-03</lastmod>
+		<lastmod>2022-03-19</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_pros.html</loc>
-		<lastmod>2022-03-03</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/jpml_titles.html</loc>
-		<lastmod>2022-02-20</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -157,7 +157,7 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/resources_books.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -262,42 +262,42 @@
 
 	<url>
 		<loc>https://retroeater.github.io/mj/twitter_jpml.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/twitter_ranking.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/video_jpml.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/video_live.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/video_mtsuku.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://retroeater.github.io/mj/video_ranking.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2022-03-26</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.1</priority>
 	</url>
