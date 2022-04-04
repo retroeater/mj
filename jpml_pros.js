@@ -51,7 +51,7 @@ function drawDashboard() {
 		chartData.addColumn('string','出身地')
 		chartData.addColumn('string','誕生日')
 		chartData.addColumn('string','鳳凰<br>出場')
-		chartData.addColumn('string','鳳凰<br>38後')
+		chartData.addColumn('string','鳳凰<br>39前')
 		chartData.addColumn('string','鳳凰<br>最高')
 		chartData.addColumn('string','桜花<br>出場')
 		chartData.addColumn('string','桜花<br>16期')
@@ -242,7 +242,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'class_filter_div',
 			options: {
-				filterColumnIndex: 7,
+				filterColumnIndex: 8,
 				matchType: 'any',
 				ui: {
 					label: ' 期/入会年:'
@@ -257,10 +257,10 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 12,
+				filterColumnIndex: 13,
 				matchType: 'any',
 				ui: {
-					label: ' 38期後期:'
+					label: ' 39期前期:'
 				}
 			},
 			state: {
@@ -272,7 +272,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 15,
+				filterColumnIndex: 16,
 				matchType: 'any',
 				ui: {
 					label: '桜花16期:'

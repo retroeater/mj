@@ -420,7 +420,8 @@ function getLeagueRanks(data,chartData,search_name) {
 
 		let class_year_period = class_year + class_period
 
-		if((search_name == name) && (class_year_period != '38後')) { // 38期後期順位未反映
+//		if((search_name == name) && (class_year_period != '38後')) { // 38期後期順位未反映
+		if(search_name == name) {
 
 			let numberOfPeopleInUpperLeagues = getNumberOfPeopleInUpperLeagues(chartData,class_year_period,league)
 			let leagueRank = numberOfPeopleInUpperLeagues + rank
