@@ -43,7 +43,7 @@ function drawDashboard() {
 		chartData.addColumn('string','Twitter')
 		chartData.addColumn('string','Instagram')
 		chartData.addColumn('string','YouTube')
-		chartData.addColumn('string','Blog')
+		chartData.addColumn('string','ブログ')
 		chartData.addColumn('string','雀士<br>名鑑')
 		chartData.addColumn('string','Wikipedia')
 		chartData.addColumn('string','期<br>入会')
