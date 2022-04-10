@@ -21,6 +21,11 @@
 	margin-left: 20px;
 }
 
+div.contents {
+	position: relative;
+	top: 90px;
+}
+
 img.articles {
 	width: 120px;
 	height: 90px;
@@ -75,27 +80,27 @@ th {
 }
 
 .cal_wrapper {
-max-width: 960px;
-min-width: 300px;
-margin: 2.0833% auto;
+	max-width: 960px;
+	min-width: 300px;
+	margin: 2.0833% auto;
 }
 
 .googlecal {
-position: relative;
-padding-bottom: 100%;
-height: 0;
+	position: relative;
+	padding-bottom: 100%;
+	top: 50px;
 }
 
 .googlecal iframe {
-position: absolute;
-top: 0;
-left: 0;
-width: 100% !important;
-height: 100% !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .googlechart {
-	width: 100%; 
+	width: 100%;
 	min-height: 700px;
 }
 

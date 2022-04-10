@@ -17,22 +17,24 @@
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
-<div id="dashboard_div">
-	<div id="info_filter_div" class="mj-filter"></div>
-	<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
-		<option value="">部門を選択</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=通算得点">通算得点</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=通算得点/期">通算得点/期</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=期最高得点">期最高得点</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=期単位浮き率">期単位浮き率</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=期連続浮き回数">期連続浮き回数</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=節最高得点">節最高得点</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=節単位浮き率">節単位浮き率</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=節連続浮き回数">節連続浮き回数</option>
-		<option value="houou_ranking.html?sheet=鳳凰&division=連続昇級回数">連続昇級回数</option>
-	</select>
-	<div id="table_div"></div>
+<div class="contents">
+	<div id="dashboard_div">
+		<div id="info_filter_div" class="mj-filter"></div>
+		<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
+			<option value="">部門を選択</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=通算得点">通算得点</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=通算得点/期">通算得点/期</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=期最高得点">期最高得点</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=期単位浮き率">期単位浮き率</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=期連続浮き回数">期連続浮き回数</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=節最高得点">節最高得点</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=節単位浮き率">節単位浮き率</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=節連続浮き回数">節連続浮き回数</option>
+			<option value="houou_ranking.html?sheet=鳳凰&division=連続昇級回数">連続昇級回数</option>
+		</select>
+		<div id="table_div"></div>
+	</div>
+	<p>（※第17期後期から第38期後期まで、節最高得点・節単位浮き率は第23期前期以降、通算得点/期・期単位浮き率は10期以上、節単位浮き率は50節以上、研修リーグ・途中休場は集計対象外）</p>
 </div>
-<p>（※第17期後期から第38期後期まで、節最高得点・節単位浮き率は第23期前期以降、通算得点/期・期単位浮き率は10期以上、節単位浮き率は50節以上、研修リーグ・途中休場は集計対象外）</p>
 </body>
 </html>
