@@ -217,7 +217,8 @@ function drawDashboard() {
 				filterColumnIndex: 0,
 				matchType: 'any',
 				ui: {
-					label: ' 名前:'
+					label: '',
+					placeholder: '名前'
 				}
 			},
 			state: {
@@ -232,7 +233,8 @@ function drawDashboard() {
 				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
-					label: ' 期:'
+					label: '',
+					placeholder: '期'
 				}
 			},
 			state: {
@@ -241,13 +243,14 @@ function drawDashboard() {
 		})
 
 		const leagueFilter = new google.visualization.ControlWrapper({
-			controlType: 'CategoryFilter',
+			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
 				filterColumnIndex: 2,
 				matchType: 'any',
 				ui: {
-					label: ' リーグ:'
+					label: '',
+					placeholder: 'リーグ'
 				}
 			}
 		})

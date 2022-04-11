@@ -209,7 +209,8 @@ function drawDashboard() {
 				filterColumnIndex: 0,
 				matchType: 'any',
 				ui: {
-					label: ' 名前:'
+					label: '',
+					placeholder: '名前'
 				}
 			},
 			state: {

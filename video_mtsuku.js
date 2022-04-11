@@ -88,7 +88,8 @@ function drawDashboard() {
 				filterColumnIndex: 2,
 				matchType: 'any',
 				ui: {
-					label: '選手:'
+					label: '',
+					placeholder: '選手'
 				}
 			},
 			state: {

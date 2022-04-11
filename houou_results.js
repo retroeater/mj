@@ -228,7 +228,8 @@ function drawDashboard() {
 				filterColumnIndex: 0,
 				matchType: 'any',
 				ui: {
-					label: ' 名前:'
+					label: '',
+					placeholder: '名前'
 				}
 			},
 			state: {
@@ -243,7 +244,8 @@ function drawDashboard() {
 				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
-					label: ' 期:'
+					label: '',
+					placeholder: '期'
 				}
 			},
 			state: {
@@ -258,7 +260,8 @@ function drawDashboard() {
 				filterColumnIndex: 2,
 				matchType: 'any',
 				ui: {
-					label: ' リーグ:'
+					label: '',
+					caption: 'リーグ'
 				}
 			}
 		})

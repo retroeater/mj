@@ -67,7 +67,8 @@ function drawDashboard() {
 				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
-					label: '概要:'
+					label: '',
+					placeholder: '概要'
 				}
 			},
 			state: {

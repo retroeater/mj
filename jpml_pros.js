@@ -230,7 +230,8 @@ function drawDashboard() {
 				filterColumnIndex: 0,
 				matchType: 'any',
 				ui: {
-					label: ' 名前/Name:'
+					label: '',
+					placeholder: '名前/Name'
 				}
 			},
 			state: {
@@ -245,7 +246,8 @@ function drawDashboard() {
 				filterColumnIndex: 8,
 				matchType: 'any',
 				ui: {
-					label: ' 期/入会年:'
+					label: '',
+					placeholder: '期/入会年'
 				}
 			},
 			state: {
@@ -260,7 +262,8 @@ function drawDashboard() {
 				filterColumnIndex: 13,
 				matchType: 'any',
 				ui: {
-					label: ' 39期前期:'
+					label: '',
+					placeholder: '39期前期'
 				}
 			},
 			state: {
@@ -275,7 +278,8 @@ function drawDashboard() {
 				filterColumnIndex: 16,
 				matchType: 'any',
 				ui: {
-					label: '桜花16期:'
+					label: '',
+					placeholder: '桜花16期'
 				}
 			},
 			state: {

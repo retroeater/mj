@@ -75,7 +75,8 @@ function drawDashboard() {
 				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
-					label: '検索:'
+					label: '',
+					placeholder: '概要'
 				}
 			},
 			state: {

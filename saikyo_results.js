@@ -34,7 +34,11 @@ function drawDashboard() {
 			containerId: 'name_filter_div',
 			options: {
 				filterColumnIndex: 4,
-				matchType: 'any'
+				matchType: 'any',
+				ui: {
+					label: '',
+					placeholder: '名前'
+				}
 			},
 			state: {
 				value: search_name

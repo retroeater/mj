@@ -34,13 +34,15 @@ function drawDashboard() {
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
-		const categoryFilter = new google.visualization.ControlWrapper({
-			controlType: 'CategoryFilter',
-			containerId: 'category_filter_div',
+		const titleFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'title_filter_div',
 			options: {
-				filterColumnIndex: 1,
+				filterColumnIndex: 2,
+				matchType: 'any',
 				ui: {
-					sortValues: true
+					label: '',
+					placeholder: 'タイトル'
 				}
 			},
 		})
@@ -62,7 +64,7 @@ function drawDashboard() {
 		const view = new google.visualization.DataView(data)
 		view.setColumns([0,2,3,5])
 
-		dashboard.bind([categoryFilter], table)
+		dashboard.bind([titleFilter], table)
 		dashboard.draw(view)
 	}
 }

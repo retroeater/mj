@@ -31,7 +31,23 @@ function drawDashboard() {
 		const chartData = getChartData(searchMap['sheet'],searchMap['division'],data)
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
-		const infoFilter = getStringFilter('info_filter_div',1,'any','名前:',searchMap['name'])
+
+		const infoFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'info_filter_div',
+			options: {
+				filterColumnIndex: 1,
+				matchType: 'any',
+				ui: {
+					label: '',
+					placeholder: '名前'
+				}
+			},
+			state: {
+					value: searchMap['name']
+			}
+		})
+
 		const table = getTable('table_div',true,'100%','100%')
 		const view = new google.visualization.DataView(chartData)
 

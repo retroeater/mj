@@ -34,21 +34,26 @@ function drawDashboard() {
 			containerId: 'name_filter_div',
 			options: {
 				filterColumnIndex: 0,
-				matchType: 'any'
+				matchType: 'any',
+				ui: {
+					label: '',
+					placeholder: '名前'
+				}
 			},
 			state: {
 				value: search_name
 			}
 		})
 
-		const categoryFilter = new google.visualization.ControlWrapper({
-			controlType: 'CategoryFilter',
-			containerId: 'category_filter_div',
+		const titleFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'title_filter_div',
 			options: {
 				filterColumnIndex: 2,
+				matchType: 'any',
 				ui: {
-					caption: 'タイトル名',
-					sortValues: true
+					label: '',
+					placeholder: 'タイトル'
 				}
 			},
 		})
@@ -68,7 +73,7 @@ function drawDashboard() {
 		const view = new google.visualization.DataView(data)
 		view.setColumns([0,1,2,3,4,5])
 
-		dashboard.bind([nameFilter,categoryFilter], table)
+		dashboard.bind([nameFilter,titleFilter], table)
 		dashboard.draw(view)
 	}
 }

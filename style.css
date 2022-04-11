@@ -2,6 +2,14 @@
 	border: 0;
 }
 
+.mj-filter {
+	margin-left: 0px;
+}
+
+.mj-margin-text {
+	margin-left: 32px;
+	margin-top: 24px;
+}
 .mj-pros {
 	text-align: center;
 	white-space: nowrap;
@@ -10,15 +18,6 @@
 .mj-ron2 {
 	text-align: center;
 	white-space: nowrap;
-}
-
-.mj-margin-text {
-	margin-left: 32px;
-	margin-top: 24px;
-}
-
-.mj-filter {
-	margin-left: 20px;
 }
 
 img.articles {
