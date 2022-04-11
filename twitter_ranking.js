@@ -13,7 +13,7 @@ switch(division) {
 		break
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=TW&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1cMwbIfme5evsxU8LHFkEOPrmuo2wjWMdmUp5XPJOUo4/edit?sheet=TW&headers=1'
 
 const queryStatement = 'SELECT A,B,C,D WHERE E = "Y" ORDER BY ' + sortColumn + ' DESC LIMIT 100'
 
