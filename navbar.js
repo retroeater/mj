@@ -1,5 +1,5 @@
 document.write(
-'<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">' +
+'<nav class="navbar navbar-expand-lg navbar-dark bg-dark">' +
 	'<div class="container-fluid">' +
 		'<a class="navbar-brand" href="index.html">M</a>' +
 		'<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">' +
@@ -99,8 +99,10 @@ document.write(
 			'</ul>' +
 		'</div>' +
 	'</div>' +
-'</nav>' +
-
-'<!-- Bootstrap -- Bootstrap Bundle JS -->' +
-'<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>'
+	'<a class="btn" data-bs-toggle="collapse" href="#searchBoxes" role="button" aria-expanded="false" aria-controls="searchBoxes">' +
+		'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFFFFF" class="bi bi-search" viewBox="0 0 16 16">' +
+			'<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>' +
+		'</svg>' +
+	'</a>' +
+'</nav>'
 )

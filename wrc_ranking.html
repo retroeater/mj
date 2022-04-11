@@ -1,39 +1,48 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-H46MH7XT8V"></script>
-<script>
-	window.dataLayer = window.dataLayer || []
-	function gtag(){dataLayer.push(arguments)}
-	gtag('js', new Date())
-	gtag('config', 'G-H46MH7XT8V')
-</script>
-<script src="header.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>JPML WRCランキング</title>
-<script type="text/javascript" src="league_ranking.js"></script>
+<link rel="icon" href="favicon.ico">
+<!-- OGP for Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@retroeater">
+<meta name="twitter:domain" content="ryoei.pro">
+<meta name="twitter:title" content=">JPML WRCランキング">
+<meta name="twitter:description" content="JPML WRCリーグ成績ランキング。通算得点/期・期単位浮き率は5期以上、節単位浮き率は25節以上。">
+<meta name="twitter:image" content="https://ryoei.pro/jpml_pros.jpg">
+<!-- Stylesheets -->
+<link rel="stylesheet" media="screen" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" media="screen" href="style.css">
+<!-- JavaScripts -->
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script defer src="https://www.gstatic.com/charts/loader.js"></script>
+<script defer src="league_ranking.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=G-H46MH7XT8V"></script>
+<script defer src="ga4.js"></script>
 </head>
 <body>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
-<div class="contents">
-	<div id="dashboard_div">
+<div id="dashboard_div">
+	<div id="searchBoxes" class="collapse">
 		<div id="info_filter_div" class="mj-filter"></div>
-		<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
-			<option value="">部門を選択</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=通算得点">通算得点</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=通算得点/期">通算得点/期</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=期最高得点">期最高得点</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=期単位浮き率">期単位浮き率</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=期連続浮き回数">期連続浮き回数</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=節最高得点">節最高得点</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=節単位浮き率">節単位浮き率</option>
-			<option value="wrc_ranking.html?sheet=JWRC&division=節連続浮き回数">節連続浮き回数</option>
-		</select>
-		<div id="table_div"></div>
 	</div>
+	<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
+		<option value="">部門を選択</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=通算得点">通算得点</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=通算得点/期">通算得点/期</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=期最高得点">期最高得点</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=期単位浮き率">期単位浮き率</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=期連続浮き回数">期連続浮き回数</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=節最高得点">節最高得点</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=節単位浮き率">節単位浮き率</option>
+		<option value="wrc_ranking.html?sheet=JWRC&division=節連続浮き回数">節連続浮き回数</option>
+	</select>
+	<div id="table_div"></div>
 </div>
-<p>（※第1期から第10期まで、通算得点/期・期単位浮き率は5期以上、節単位浮き率は25節以上）</p>
 </body>
 </html>

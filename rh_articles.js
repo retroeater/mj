@@ -52,7 +52,7 @@ function drawDashboard() {
 				allowHtml: true,
 				width: '100%',
 				height: '100%',
-				showRowNumber: true,
+				showRowNumber: false,
 				sortColumn: 3,
 				sortAscending: false
 			}
