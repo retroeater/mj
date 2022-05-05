@@ -10,7 +10,7 @@ if(!search_date) {
 	search_date = ''
 }
 
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=ron2&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ/edit?sheet=ロン2&headers=1'
 
 let queryStatement = 'SELECT O,P,Q,R,S,T,U,V,W,X,Y,Z WHERE AI = "Y"'
 

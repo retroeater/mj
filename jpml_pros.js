@@ -63,8 +63,6 @@ function drawDashboard() {
 		chartData.addColumn('string','関連<br>記事')
 		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送<br>対局')
-		chartData.addColumn('string','ロン2<br>平順')
-//		chartData.addColumn('string','最終更新')
 
 		const data = response.getDataTable()
 
@@ -108,7 +106,7 @@ function drawDashboard() {
 		let numberOfVideos			// AL 関連動画
 		let tenhouId				// AM 天鳳ID
 		let instgramImageUrl		// AN Instagram画像
-		let ron2AveragePlacement	// AO ロン2平均順位
+//		let ron2AveragePlacement	// AO ロン2平均順位
 		let jpmlWrcSeasons			// AP JPML WRC出場回数
 		let tokushoSeasons			// AQ 特昇出場回数
 		let kinmaDirectoryUrl		// AR 雀士名鑑
@@ -157,7 +155,7 @@ function drawDashboard() {
 			numberOfVideos = data.getValue(i,37)
 //			tenhouId = data.getValue(i,38)
 //			instagramImageUrl = data.getValue(i,39)
-			ron2AveragePlacement = data.getValue(i,40)
+//			ron2AveragePlacement = data.getValue(i,40)
 			jpmlWrcSeasons = data.getValue(i,41)
 			tokushoSeasons = data.getValue(i,42)
 			kinmaDirectoryUrl = data.getValue(i,43)
@@ -185,8 +183,6 @@ function drawDashboard() {
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
 			let formattedVideos = getFormattedVideos(name,numberOfVideos)
 			let formattedLives = getFormattedLives(name,numberOfLives)
-			let formattedRon2AveragePlacement = getFormattedRon2AveragePlacement(name,ron2AveragePlacement)
-//			let formattedLastUpdated = getFormattedLastUpdated(lastUpdated)
 
 			chartData.addRows([
 				[
@@ -214,9 +210,7 @@ function drawDashboard() {
 					formattedFinals,
 					formattedArticles,
 					formattedVideos,
-					formattedLives,
-					formattedRon2AveragePlacement
-//					formattedLastUpdated
+					formattedLives
 				]			
 			])
 		}
@@ -565,18 +559,6 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 	}
 
 	return formattedRon2
-}
-
-function getFormattedRon2AveragePlacement(name,ron2AveragePlacement) {
-
-	let formattedRon2AveragePlacement
-
-	if(ron2AveragePlacement) {
-		ron2AveragePlacement = ron2AveragePlacement.toFixed(2)
-		formattedRon2AveragePlacement = '<span class="' + ron2AveragePlacement + '"><a href="ron2_results.html?name=' + name + '" target="_blank">' + ron2AveragePlacement + '</a></span>'
-	}
-
-	return formattedRon2AveragePlacement
 }
 
 function getFormattedSaikyoGames(name,saikyoGames) {
