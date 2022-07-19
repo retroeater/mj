@@ -41,7 +41,8 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">十段戦<br>Judan</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-						'<a class="dropdown-item" href="judan_38.html">第38期</a>' +
+					'<a class="dropdown-item" href="judan_39.html">第39期</a>' +
+					'<a class="dropdown-item" href="judan_38.html">第38期</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">JPML<br>WRC</a>' +
