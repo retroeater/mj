@@ -39,7 +39,7 @@ function drawDashboard() {
 
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','名前')
-		chartData.addColumn('string','ロン2')
+		chartData.addColumn('string','龍龍')
 		chartData.addColumn('string','Twitter')
 		chartData.addColumn('string','Instagram')
 		chartData.addColumn('string','YouTube')
@@ -79,7 +79,7 @@ function drawDashboard() {
 		let birthplaceJa			// K 出身地
 		let birthplaceEn			// L Birthplace
 		let birthday				// M 誕生日
-		let ron2Id					// N ロン2
+		let ron2Id					// N 龍龍
 		let twitterId				// O Twitter
 		let intagramId				// P Instagram
 		let youtubeId				// Q YouTube
@@ -102,11 +102,11 @@ function drawDashboard() {
 		let youTubeImageUrl			// AH YouTube画像
 		let hououSeasons			// AI 鳳凰戦出場回数
 		let oukaSeasons				// AJ 女流桜花出場回数
-		let ron2ImageUrl			// AK ロン2画像
+		let ron2ImageUrl			// AK 龍龍画像
 		let numberOfVideos			// AL 関連動画
 		let tenhouId				// AM 天鳳ID
 		let instgramImageUrl		// AN Instagram画像
-//		let ron2AveragePlacement	// AO ロン2平均順位
+//		let ron2AveragePlacement	// AO 旧ロン2平均順位
 		let jpmlWrcSeasons			// AP JPML WRC出場回数
 		let tokushoSeasons			// AQ 特昇出場回数
 		let kinmaDirectoryUrl		// AR 雀士名鑑
@@ -555,7 +555,7 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 	}
 
 	if(ron2Id) {
-		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="ロン2" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="龍龍" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
 	}
 
 	return formattedRon2
