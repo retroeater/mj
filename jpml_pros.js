@@ -555,7 +555,7 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 	}
 
 	if(ron2Id) {
-		formattedRon2 = '<a href="http://www.ron2.jp/pro_profile.html?id=' + ron2Id + '" target="_blank"><img alt="龍龍" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+		formattedRon2 = '<a href="https://ron2.jp/pro/' + ron2Id + '/" target="_blank"><img alt="龍龍" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
 	}
 
 	return formattedRon2
