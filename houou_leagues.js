@@ -7,7 +7,8 @@ if(!search_name) {
 	search_name = '佐々木寿人'
 }
 
-const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
+//const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
+const queryStatement = 'SELECT A,B,C,D,E,F'
 
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
