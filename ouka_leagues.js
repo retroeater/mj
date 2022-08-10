@@ -4,7 +4,7 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
 if(!search_name) {
-	search_name = '川原舞子'
+	search_name = '魚谷侑未'
 }
 
 const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
