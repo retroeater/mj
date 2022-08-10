@@ -7,8 +7,7 @@ if(!search_name) {
 	search_name = '魚谷侑未'
 }
 
-//const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
-const queryStatement = 'SELECT A,B,C,D,E,F'
+const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
 
 google.charts.load('current', {'packages':['corechart']})
 google.charts.setOnLoadCallback(drawChart)
