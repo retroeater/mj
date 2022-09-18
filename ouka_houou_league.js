@@ -85,7 +85,7 @@ function drawChart() {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: '第17期女流桜花✕第39期前期鳳凰リーグ',
+			title: '第17期女流桜花✕第39期後期鳳凰リーグ',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'

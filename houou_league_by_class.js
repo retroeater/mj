@@ -83,7 +83,7 @@ function drawChart() {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: 'リーグ✕期（39期前期時点）',
+			title: 'リーグ✕期（39期後期時点）',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
