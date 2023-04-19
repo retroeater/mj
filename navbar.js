@@ -22,10 +22,10 @@ document.write(
 						'<a class="dropdown-item" href="houou_ranking.html?sheet=鳳凰">ランキング</a>' +
 						'<a class="dropdown-item" href="houou_leagues.html">リーグ推移</a>' +
 						'<a class="dropdown-item" href="houou_league_by_class.html">リーグ✕期</a>' +
-						'<a class="dropdown-item" href="houou_38_a1.html">第38期A1リーグ</a>' +
-						'<a class="dropdown-item" href="houou_38_a2.html">第38期A2リーグ</a>' +
-						'<a class="dropdown-item" href="houou_37_a1.html">第37期A1リーグ</a>' +
-						'<a class="dropdown-item" href="houou_37_a2.html">第37期A2リーグ</a>' +
+//						'<a class="dropdown-item" href="houou_38_a1.html">第38期A1リーグ</a>' +
+//						'<a class="dropdown-item" href="houou_38_a2.html">第38期A2リーグ</a>' +
+//						'<a class="dropdown-item" href="houou_37_a1.html">第37期A1リーグ</a>' +
+//						'<a class="dropdown-item" href="houou_37_a2.html">第37期A2リーグ</a>' +
 						'<a class="dropdown-item" href="houou_results.html">成績詳細</a>' +
 					'</div>' +
 				'</li>' +
@@ -35,7 +35,7 @@ document.write(
 					'<a class="dropdown-item" href="ouka_leagues.html">リーグ推移</a>' +
 						'<a class="dropdown-item" href="ouka_league_by_class.html">リーグ✕期</a>' +
 						'<a class="dropdown-item" href="ouka_houou_league.html">桜花✕鳳凰リーグ</a>' +
-						'<a class="dropdown-item" href="ouka_16_a.html">第16期Aリーグ</a>' +
+//						'<a class="dropdown-item" href="ouka_16_a.html">第16期Aリーグ</a>' +
 						'<a class="dropdown-item" href="ouka_results.html">成績詳細</a>' +
 					'</div>' +
 				'</li>' +
