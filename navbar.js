@@ -14,6 +14,7 @@ document.write(
 						'<a class="dropdown-item" href="jpml_articles.html">記事</a>' +
 						'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
 						'<a class="dropdown-item" href="jpml_links.html">リンク</a>' +
+						'<a class="dropdown-item" href="jpml_twitter.html">Twitter</a>' +
 						'<a class="dropdown-item" href="maps.html">地図</a>' +
 					'</div>' +
 				'</li>' +
@@ -59,12 +60,6 @@ document.write(
 						'<a class="dropdown-item" href="video_jpml.html">連盟プロ</a>' +
 						'<a class="dropdown-item" href="video_live.html">放送対局</a>' +
 						'<a class="dropdown-item" href="video_mtsuku.html">Mつく</a>' +
-					'</div>' +
-				'</li>' +
-				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">ツイッター<br>Twitter</a>' +
-					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-						'<a class="dropdown-item" href="twitter_ranking.html">ランキング</a>' +
-						'<a class="dropdown-item" href="twitter_jpml.html">連盟プロ</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">リソース<br>Resource</a>' +
