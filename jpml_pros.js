@@ -28,7 +28,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS WHERE Y = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU WHERE Y = "Y"')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -63,6 +63,7 @@ function drawDashboard() {
 		chartData.addColumn('string','関連<br>記事')
 		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送<br>対局')
+		chartData.addColumn('string','Mリーグ')
 
 		const data = response.getDataTable()
 
@@ -111,7 +112,8 @@ function drawDashboard() {
 		let tokushoSeasons			// AQ 特昇出場回数
 		let kinmaDirectoryUrl		// AR 雀士名鑑
 		let kinmaDirectoryImageUrl	// AS 雀士名鑑画像
-
+		let mleagueYouTubeId		// AT MリーグYouTube
+		let mleagueYouTubeImageUrl	// AU MリーグYouTube画像
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -160,6 +162,8 @@ function drawDashboard() {
 			tokushoSeasons = data.getValue(i,42)
 			kinmaDirectoryUrl = data.getValue(i,43)
 			kinmaDirectoryImageUrl = data.getValue(i,44)
+			mleagueYouTubeId = data.getValue(i,45)
+			mleagueYouTubeImageUrl = data.getValue(i,46)
 
 			let formattedName = getFormattedName(name,sortKey,lastNameEn,firstNameEn)
 			let formattedRon2 = getFormattedRon2(ron2Id,ron2ImageUrl)
@@ -183,6 +187,7 @@ function drawDashboard() {
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
 			let formattedVideos = getFormattedVideos(name,numberOfVideos)
 			let formattedLives = getFormattedLives(name,numberOfLives)
+			let formattedMleagueYouTube = getFormattedYouTube(mLeagueYouTubeId,mleagueYouTubeImageUrl)
 
 			chartData.addRows([
 				[
@@ -210,7 +215,8 @@ function drawDashboard() {
 					formattedFinals,
 					formattedArticles,
 					formattedVideos,
-					formattedLives
+					formattedLives,
+					formattedMleagueYouTube
 				]			
 			])
 		}
