@@ -4,7 +4,7 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
 if(!search_name) {
-	search_name = '佐々木寿人'
+	search_name = 'HIRO柴田'
 }
 
 //const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
@@ -334,7 +334,8 @@ function drawChart() {
 			leagues_37_2,
 			leagues_38_1,
 			leagues_38_2,
-			leagues_39_1
+			leagues_39_1,
+			leagues_39_2
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
