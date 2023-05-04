@@ -187,7 +187,7 @@ function drawDashboard() {
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
 			let formattedVideos = getFormattedVideos(name,numberOfVideos)
 			let formattedLives = getFormattedLives(name,numberOfLives)
-			let formattedMleagueYouTube = getFormattedYouTube(mLeagueYouTubeId,mleagueYouTubeImageUrl)
+			let formattedMleagueYouTube = getFormattedYouTube(mleagueYouTubeId,mleagueYouTubeImageUrl)
 
 			chartData.addRows([
 				[
