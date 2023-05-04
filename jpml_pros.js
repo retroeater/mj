@@ -46,6 +46,7 @@ function drawDashboard() {
 		chartData.addColumn('string','ブログ')
 		chartData.addColumn('string','雀士<br>名鑑')
 		chartData.addColumn('string','Wikipedia')
+		chartData.addColumn('string','Mリーグ')
 		chartData.addColumn('string','期<br>入会')
 		chartData.addColumn('string','段位')
 		chartData.addColumn('string','出身地')
@@ -63,7 +64,6 @@ function drawDashboard() {
 		chartData.addColumn('string','関連<br>記事')
 		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送<br>対局')
-		chartData.addColumn('string','Mリーグ')
 
 		const data = response.getDataTable()
 
@@ -199,6 +199,7 @@ function drawDashboard() {
 					formattedBlog,
 					formattedKinmaDirectory,
 					formattedWikipedia,
+					formattedMleagueYouTube,
 					formattedProClass,
 					formattedDan,
 					formattedBirthplace,
@@ -215,8 +216,7 @@ function drawDashboard() {
 					formattedFinals,
 					formattedArticles,
 					formattedVideos,
-					formattedLives,
-					formattedMleagueYouTube
+					formattedLives
 				]			
 			])
 		}
@@ -243,7 +243,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'class_filter_div',
 			options: {
-				filterColumnIndex: 8,
+				filterColumnIndex: 9,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -259,7 +259,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 13,
+				filterColumnIndex: 14,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -275,7 +275,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 16,
+				filterColumnIndex: 17,
 				matchType: 'any',
 				ui: {
 					label: '',
