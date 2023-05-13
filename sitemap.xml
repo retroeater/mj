@@ -3,98 +3,70 @@
 
 	<url>
 		<loc>https://ryoei.pro/</loc>
-		<lastmod>2022-09-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/index.html</loc>
-		<lastmod>2022-09-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/houou_leagues.html</loc>
-		<lastmod>2022-04-04</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/houou_league_by_class.html</loc>
-		<lastmod>2022-09-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/houou_37_a1.html</loc>
-		<lastmod>2021-05-09</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/houou_37_a2.html</loc>
-		<lastmod>2021-05-09</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/houou_38_a1.html</loc>
-		<lastmod>2022-02-12</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>0.5</priority>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/houou_38_a2.html</loc>
-		<lastmod>2022-02-12</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>0.5</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/houou_ranking.html</loc>
-		<lastmod>2022-02-20</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/houou_results.html</loc>
-		<lastmod>2022-02-20</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_articles.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_links.html</loc>
-		<lastmod>2022-03-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_pros.html</loc>
-		<lastmod>2022-09-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_titles.html</loc>
-		<lastmod>2022-09-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -102,14 +74,14 @@
 	<url>
 		<loc>https://ryoei.pro/judan_38.html</loc>
 		<lastmod>2021-10-31</lastmod>
-		<changefreq>weekly</changefreq>
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/judan_39.html</loc>
 		<lastmod>2022-08-22</lastmod>
-		<changefreq>weekly</changefreq>
+		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
@@ -122,56 +94,49 @@
 
 	<url>
 		<loc>https://ryoei.pro/ouka_leagues.html</loc>
-		<lastmod>2021-12-05</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/ouka_league_by_class.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/ouka_houou_league.html</loc>
-		<lastmod>2022-09-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
-		<loc>https://ryoei.pro/ouka_16_a.html</loc>
-		<lastmod>2021-12-05</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>0.5</priority>
-	</url>
-
-	<url>
 		<loc>https://ryoei.pro/ouka_ranking.html</loc>
-		<lastmod>2021-12-05</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/ouka_results.html</loc>
-		<lastmod>2021-12-05</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/resource_books.html</loc>
-		<lastmod>2022-09-01</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/resource_dictionary.html</loc>
-		<lastmod>2022-04-04</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
@@ -185,7 +150,7 @@
 
 	<url>
 		<loc>https://ryoei.pro/resource_rules.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
@@ -220,91 +185,84 @@
 
 	<url>
 		<loc>https://ryoei.pro/rh_results.html</loc>
-		<lastmod>2022-09-19</lastmod>
-		<changefreq>yearly</changefreq>
+		<lastmod>2023-05-13</lastmod>
+		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/rh_results_detail.html</loc>
-		<lastmod>2022-09-19</lastmod>
-		<changefreq>yearly</changefreq>
+		<lastmod>2023-05-13</lastmod>
+		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/saikyo_results.html</loc>
-		<lastmod>2022-09-19</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/tokusho_ranking.html</loc>
-		<lastmod>2022-02-13</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/tokusho_results.html</loc>
-		<lastmod>2022-02-12</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/twitter_jpml.html</loc>
-		<lastmod>2022-08-22</lastmod>
-		<changefreq>daily</changefreq>
-		<priority>0.1</priority>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/twitter_ranking.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_jpml.html</loc>
-		<lastmod>2022-08-22</lastmod>
-		<changefreq>daily</changefreq>
+		<lastmod>2023-05-13</lastmod>
+		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_live.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_mtsuku.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_ranking.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/wrc_ranking.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/wrc_results.html</loc>
-		<lastmod>2022-08-22</lastmod>
+		<lastmod>2023-05-13</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
