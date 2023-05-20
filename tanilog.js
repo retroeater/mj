@@ -19,7 +19,7 @@ function drawDashboard() {
 	query.send(handleQueryResponse)
 
 	let twitterUrl		// A Twitter URL
-	let twitterImageUrl	// B 画像URL
+	let twitterImageUrl	// B Twitter画像URL
 	let twitterDate		// C 日付
 	let restaurantName	// D 店名
 	let menuName		// E メニュー
