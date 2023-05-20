@@ -113,7 +113,7 @@ function getFormattedImage(restaurantName,twitterUrl,twitterImageUrl) {
 	return formattedImage
 }
 
-function getFormattedTitle(menuName,restautantName,tags,restaurantUrl,twitterDate) {
+function getFormattedTitle(menuName,restautantName,restaurantUrl,tags,twitterDate) {
 
 	let formattedTitle
 
