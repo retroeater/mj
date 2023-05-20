@@ -117,7 +117,12 @@ function getFormattedTitle(menuName,restautantName,restaurantUrl,tags,twitterDat
 
 	let formattedTitle
 
-	formattedTitle = twitterDate + '<br>' + menuName + '<br><a href="' + restaurantUrl + '" target="_blank" style="text-decoration: none">' + restautantName + '</a><br>' + tags
+	if(restaurantUrl) {
+		formattedTitle = twitterDate + '<br>' + menuName + '<br><a href="' + restaurantUrl + '" target="_blank" style="text-decoration: none">' + restautantName + '</a><br>' + tags
+	}
+	else {
+		formattedTitle = twitterDate + '<br>' + menuName + '<br>' + restautantName + '<br>' + tags
+	}
 
 	return formattedTitle
 }
