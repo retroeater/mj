@@ -55,7 +55,7 @@ function drawDashboard() {
 			restaurantUrl = data.getValue(i,8)
 //			isVisible = data.getValue(i,9)
 
-			let formattedTitle = getFormattedTitle(menuName,restaurantName,tags,twitterDate)
+			let formattedTitle = getFormattedTitle(menuName,restaurantName,restaurantUrl,tags,twitterDate)
 			let formattedImage = getFormattedImage(restaurantName,twitterUrl,twitterImageUrl)
 
 			chartData.addRows([
@@ -108,16 +108,16 @@ function getFormattedImage(restaurantName,twitterUrl,twitterImageUrl) {
 	let formattedImage
 	const linkIcon = 'img/125_arr_hoso.png'
 
-	formattedImage = '<a href="' + twitterUrl + '" target="_blank" "><img alt="' + restaurantName + '" class="videos" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
+	formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + restaurantName + '" class="videos" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
 
 	return formattedImage
 }
 
-function getFormattedTitle(menuName,restautantName,tags,twitterDate) {
+function getFormattedTitle(menuName,restautantName,tags,restaurantUrl,twitterDate) {
 
 	let formattedTitle
 
-	formattedTitle = twitterDate + '<br>' + menuName + '<br>' + restautantName + '<br>' + tags
+	formattedTitle = twitterDate + '<br>' + menuName + '<br><a href="' + restaurantUrl + '" target="_blank">' + restautantName + '</a><br>' + tags
 
 	return formattedTitle
 }
