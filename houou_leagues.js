@@ -390,7 +390,7 @@ function drawChart() {
 				'#0000CC'  // 名前
 			],
 			curveType: 'function',
-			interpolateNulls: false,
+			interpolateNulls: true, // must be true for A1/A2 leagues
 			isStacked: true,
 			legend: {
 				position: 'bottom'
