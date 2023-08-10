@@ -73,6 +73,7 @@ function drawChart() {
 	let leagues_38_2 = ['38後',0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_39_1 = ['39前',0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_39_2 = ['39後',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_40_1 = ['40前',0,0,0,0,0,0,0,0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -222,7 +223,10 @@ function drawChart() {
 					case "39後":
 						leagues_39_2[league_index]++
 						break
-				}
+					case "40前":
+						leagues_40_1[league_index]++
+						break	
+					}
 			}
 
 			// 前期A1リーグ人数補完
@@ -335,7 +339,8 @@ function drawChart() {
 			leagues_38_1,
 			leagues_38_2,
 			leagues_39_1,
-			leagues_39_2
+			leagues_39_2,
+			leagues_40_1
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
