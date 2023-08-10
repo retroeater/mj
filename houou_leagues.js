@@ -7,7 +7,6 @@ if(!search_name) {
 	search_name = 'HIRO柴田'
 }
 
-//const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
 const queryStatement = 'SELECT A,B,C,D,E,F'
 
 google.charts.load('current', {'packages':['corechart']})
@@ -391,7 +390,7 @@ function drawChart() {
 				'#0000CC'  // 名前
 			],
 			curveType: 'function',
-			interpolateNulls: true,
+			interpolateNulls: false,
 			isStacked: true,
 			legend: {
 				position: 'bottom'
