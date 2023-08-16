@@ -66,11 +66,9 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">個人<br>Ryoei</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-						'<a class="dropdown-item" href="rh_bio.html">略歴</a>' +
 						'<a class="dropdown-item" href="rh_results.html">成績</a>' +
 						'<a class="dropdown-item" href="rh_results_detail.html">成績詳細</a>' +
 						'<a class="dropdown-item" href="rh_paifu.html">牌譜</a>' +
-						'<a class="dropdown-item" href="rh_articles.html">記事</a>' +
 						'<a class="dropdown-item" href="rh_links.html">リンク</a>' +
 					'</div>' +
 				'</li>' +
