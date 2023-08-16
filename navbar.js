@@ -64,7 +64,7 @@ document.write(
 						'<a class="dropdown-item" href="resource_rules.html">ルール</a>' +
 					'</div>' +
 				'</li>' +
-				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">個人<br>Ryoei</a>' +
+				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">良栄<br>Ryoei</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="rh_results.html">成績</a>' +
 						'<a class="dropdown-item" href="rh_results_detail.html">成績詳細</a>' +
