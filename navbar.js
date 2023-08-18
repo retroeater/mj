@@ -14,7 +14,7 @@ document.write(
 						'<a class="dropdown-item" href="jpml_articles.html">記事</a>' +
 						'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
 						'<a class="dropdown-item" href="jpml_links.html">リンク</a>' +
-						'<a class="dropdown-item" href="jpml_twitter.html">Twitter</a>' +
+						'<a class="dropdown-item" href="https://twitter.com/i/lists/1378864966321721344">Twitter</a>' +
 						'<a class="dropdown-item" href="maps.html">地図</a>' +
 					'</div>' +
 				'</li>' +
