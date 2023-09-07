@@ -24,7 +24,7 @@
 
 	<url>
 		<loc>https://ryoei.pro/houou_league_by_class.html</loc>
-		<lastmod>2023-05-13</lastmod>
+		<lastmod>2023-09-07</lastmod>
 		<changefreq>yearly</changefreq>
 		<priority>0.1</priority>
 	</url>
@@ -59,7 +59,7 @@
 
 	<url>
 		<loc>https://ryoei.pro/jpml_pros.html</loc>
-		<lastmod>2023-08-09</lastmod>
+		<lastmod>2023-09-07</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -108,7 +108,7 @@
 
 	<url>
 		<loc>https://ryoei.pro/resource_books.html</loc>
-		<lastmod>2023-08-09</lastmod>
+		<lastmod>2023-09-07</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -164,14 +164,14 @@
 
 	<url>
 		<loc>https://ryoei.pro/saikyo_results.html</loc>
-		<lastmod>2023-08-09</lastmod>
+		<lastmod>2023-09-07</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/tanilog.html</loc>
-		<lastmod>2023-08-09</lastmod>
+		<lastmod>2023-09-07</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -192,7 +192,7 @@
 
 	<url>
 		<loc>https://ryoei.pro/video_jpml.html</loc>
-		<lastmod>2023-08-09</lastmod>
+		<lastmod>2023-09-07</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -206,7 +206,7 @@
 
 	<url>
 		<loc>https://ryoei.pro/video_mtsuku.html</loc>
-		<lastmod>2023-05-13</lastmod>
+		<lastmod>2023-09-07</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.1</priority>
 	</url>
