@@ -45,7 +45,7 @@ function drawDashboard() {
 		chartData.addColumn('string','YouTube')
 		chartData.addColumn('string','ブログ')
 		chartData.addColumn('string','雀士<br>名鑑')
-		chartData.addColumn('string','Wikipedia')
+//		chartData.addColumn('string','Wikipedia')
 		chartData.addColumn('string','Mリーグ')
 		chartData.addColumn('string','期<br>入会')
 		chartData.addColumn('string','段位')
@@ -134,7 +134,7 @@ function drawDashboard() {
 			twitterId = data.getValue(i,14)
 			instagramId = data.getValue(i,15)
 			youTubeId = data.getValue(i,16)
-			wikipediaId = data.getValue(i,17)
+//			wikipediaId = data.getValue(i,17)
 			blogUrl = data.getValue(i,18)
 			hououLatestLeague = data.getValue(i,19)
 			hououHighestLeague = data.getValue(i,20)
@@ -172,7 +172,7 @@ function drawDashboard() {
 			let formattedYouTube = getFormattedYouTube(youTubeId,youTubeImageUrl)
 			let formattedBlog = getFormattedBlog(blogUrl,blogImageUrl)
 			let formattedKinmaDirectory = getFormattedKinmaDirectory(kinmaDirectoryUrl,kinmaDirectoryImageUrl)
-			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
+//			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
 			let formattedProClass = getFormattedProClass(proClass,joined)
 			let formattedDan = getFormattedDan(danEn)			
 			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
@@ -198,7 +198,7 @@ function drawDashboard() {
 					formattedYouTube,
 					formattedBlog,
 					formattedKinmaDirectory,
-					formattedWikipedia,
+//					formattedWikipedia,
 					formattedMleagueYouTube,
 					formattedProClass,
 					formattedDan,
@@ -243,7 +243,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'class_filter_div',
 			options: {
-				filterColumnIndex: 9,
+				filterColumnIndex: 8,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -259,7 +259,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 14,
+				filterColumnIndex: 13,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -275,7 +275,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 17,
+				filterColumnIndex: 16,
 				matchType: 'any',
 				ui: {
 					label: '',
