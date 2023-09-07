@@ -83,7 +83,7 @@ function drawChart() {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: 'リーグ✕期（17期時点）',
+			title: 'リーグ✕期（18期時点）',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
