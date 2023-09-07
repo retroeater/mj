@@ -75,7 +75,7 @@ function drawChart() {
 			},
 			vAxis: {
 				minValue: 0,
-				maxValue: 13,
+				maxValue: 14,
 				textPosition: 'left',
 				ticks: [{v:1,f:'E3'},{v:2,f:'E2'},{v:3,f:'E1'},{v:4,f:'D3'},{v:5,f:'D2'},{v:6,f:'D1'},{v:7,f:'C3'},{v:8,f:'C2'},{v:9,f:'C1'},{v:10,f:'B2'},{v:11,f:'B1'},{v:12,f:'A2'},{v:13,f:'A1'},{v:14,f:'鳳凰位'}]
 			},
