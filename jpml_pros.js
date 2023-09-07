@@ -52,7 +52,7 @@ function drawDashboard() {
 		chartData.addColumn('string','出身地')
 		chartData.addColumn('string','誕生日')
 		chartData.addColumn('string','鳳凰<br>出場')
-		chartData.addColumn('string','鳳凰<br>40前')
+		chartData.addColumn('string','鳳凰<br>40後')
 		chartData.addColumn('string','鳳凰<br>最高')
 		chartData.addColumn('string','桜花<br>出場')
 		chartData.addColumn('string','桜花<br>18期')
@@ -86,7 +86,7 @@ function drawDashboard() {
 		let youtubeId				// Q YouTube
 		let wikipediaId				// R Wikipedia
 		let blogUrl					// S Blog
-		let hououLatestLeague		// T 鳳凰戦40期前期リーグ
+		let hououLatestLeague		// T 鳳凰戦40期後期リーグ
 		let hououHighestLeague		// U 鳳凰戦最高到達リーグ
 		let numberOfFinals			// V 決勝進出
 		let numberOfArticles		// W 関連記事
@@ -95,7 +95,7 @@ function drawDashboard() {
 		let remarks					// Z 備考
 		let numberOfLives			// AA 放送対局
 		let saikyoGames				// AB 最強出場
-		let oukaLatestLeague		// AC 17期桜花
+		let oukaLatestLeague		// AC 18期桜花
 		let oukaHighestLeague		// AD 桜花最高
 		let danEn					// AE Dan
 		let twitterImageUrl			// AF Twitter画像
