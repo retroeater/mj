@@ -55,7 +55,7 @@ function drawDashboard() {
 		chartData.addColumn('string','鳳凰<br>40前')
 		chartData.addColumn('string','鳳凰<br>最高')
 		chartData.addColumn('string','桜花<br>出場')
-		chartData.addColumn('string','桜花<br>17期')
+		chartData.addColumn('string','桜花<br>18期')
 		chartData.addColumn('string','桜花<br>最高')
 		chartData.addColumn('string','JWRC<br>出場')
 		chartData.addColumn('string','特昇<br>出場')
