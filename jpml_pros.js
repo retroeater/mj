@@ -45,7 +45,6 @@ function drawDashboard() {
 		chartData.addColumn('string','YouTube')
 		chartData.addColumn('string','ブログ')
 		chartData.addColumn('string','雀士<br>名鑑')
-//		chartData.addColumn('string','Wikipedia')
 		chartData.addColumn('string','Mリーグ')
 		chartData.addColumn('string','期<br>入会')
 		chartData.addColumn('string','段位')
@@ -84,7 +83,6 @@ function drawDashboard() {
 		let twitterId				// O Twitter
 		let intagramId				// P Instagram
 		let youtubeId				// Q YouTube
-		let wikipediaId				// R Wikipedia
 		let blogUrl					// S Blog
 		let hououLatestLeague		// T 鳳凰戦40期後期リーグ
 		let hououHighestLeague		// U 鳳凰戦最高到達リーグ
@@ -134,7 +132,6 @@ function drawDashboard() {
 			twitterId = data.getValue(i,14)
 			instagramId = data.getValue(i,15)
 			youTubeId = data.getValue(i,16)
-//			wikipediaId = data.getValue(i,17)
 			blogUrl = data.getValue(i,18)
 			hououLatestLeague = data.getValue(i,19)
 			hououHighestLeague = data.getValue(i,20)
@@ -172,7 +169,6 @@ function drawDashboard() {
 			let formattedYouTube = getFormattedYouTube(youTubeId,youTubeImageUrl)
 			let formattedBlog = getFormattedBlog(blogUrl,blogImageUrl)
 			let formattedKinmaDirectory = getFormattedKinmaDirectory(kinmaDirectoryUrl,kinmaDirectoryImageUrl)
-//			let formattedWikipedia = getFormattedWikipedia(wikipediaId)
 			let formattedProClass = getFormattedProClass(proClass,joined)
 			let formattedDan = getFormattedDan(danEn)			
 			let formattedBirthplace = getFormattedBirthplace(birthplaceJa,birthplaceEn)
@@ -198,7 +194,6 @@ function drawDashboard() {
 					formattedYouTube,
 					formattedBlog,
 					formattedKinmaDirectory,
-//					formattedWikipedia,
 					formattedMleagueYouTube,
 					formattedProClass,
 					formattedDan,
@@ -616,17 +611,6 @@ function getFormattedVideos(name,numberOfVideos) {
 	}
 
 	return formattedVideos
-}
-
-function getFormattedWikipedia(wikipediaId) {
-
-	let formattedWikipedia
-
-	if(wikipediaId) {
-		formattedWikipedia = ' <a href="https://ja.wikipedia.org/wiki/' + wikipediaId + '" target="_blank"><img alt="Wikipedia" class="pros" src="img/Wikipedia%27s_W.svg" /></a> '
-	}
-
-	return formattedWikipedia	
 }
 
 function getFormattedYouTube(youTubeId,youTubeImageUrl) {
