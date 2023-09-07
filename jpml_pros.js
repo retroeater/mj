@@ -263,7 +263,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '40期前期'
+					placeholder: '40期後期'
 				}
 			},
 			state: {
@@ -279,7 +279,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '桜花17期'
+					placeholder: '桜花18期'
 				}
 			},
 			state: {
