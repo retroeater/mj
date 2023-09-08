@@ -43,6 +43,12 @@ img.live {
 	object-fit: cover;
 }
 
+img.logs {
+	width: 150px;
+	height: 90px;
+	object-fit: cover;
+}
+
 img.pros {
 	width: 48px;
 	height: 48px;

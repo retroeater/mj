@@ -108,7 +108,7 @@ function getFormattedImage(restaurantName,twitterUrl,twitterImageUrl) {
 	let formattedImage
 	const linkIcon = 'img/125_arr_hoso.png'
 
-	formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + restaurantName + '" class="videos" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
+	formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + restaurantName + '" class="logs" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
 
 	return formattedImage
 }
