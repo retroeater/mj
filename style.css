@@ -20,12 +20,6 @@
 	white-space: nowrap;
 }
 
-img.articles {
-	width: 120px;
-	height: 90px;
-	object-fit: cover;
-}
-
 img.dictionary {
 	width: 16px;
 	height: 16px;
@@ -37,21 +31,15 @@ img.links {
 	vertical-align: middle;
 }
 
-img.live {
-	width: 160px;
-	height: 90px;
-	object-fit: cover;
-}
-
-img.logs {
-	width: 150px;
-	height: 90px;
-	object-fit: cover;
-}
-
 img.pros {
 	width: 48px;
 	height: 48px;
+	object-fit: cover;
+}
+
+img.rectangle {
+	width: 160px;
+	height: 90px;
 	object-fit: cover;
 }
 
@@ -63,12 +51,6 @@ img.thumbnails {
 
 img.twitter {
 	fill: #00acee;
-}
-
-img.videos {
-	width: 160px;
-	height: 90px;
-	object-fit: cover;
 }
 
 input {
