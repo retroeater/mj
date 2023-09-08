@@ -10,6 +10,8 @@ if(search_name) {
 	queryStatement += ' AND A = "' + search_name + '"'
 }
 
+console.log(queryStatement)
+
 if(!search_tag) {
 	search_tag = ''
 }
