@@ -10,13 +10,9 @@ if(search_name) {
 	queryStatement += ' AND A = "' + search_name + '"'
 }
 
-console.log(queryStatement)
-
 if(!search_tag) {
 	search_tag = ''
 }
-
-//const queryStatement = 'SELECT B,C,D,E,F,G,H,I,J,K WHERE K = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -27,16 +23,17 @@ function drawDashboard() {
 	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
-	let twitterUrl		// A Twitter URL
-	let twitterImageUrl	// B Twitter 画像URL
-	let twitterDate		// C 日付
-	let restaurantName	// D 店名
-	let menuName		// E メニュー
-//	let stationName		// F 駅
-//	let categoryName	// G カテゴリ
-	let tags			// H タグ
-	let restaurantUrl	// I 店URL
-//	let isVisible		// J 表示
+//	let name			// A 名前
+	let twitterUrl		// B Twitter URL
+	let twitterImageUrl	// C Twitter 画像URL
+	let twitterDate		// D 日付
+	let restaurantName	// E 店名
+	let menuName		// F メニュー
+//	let stationName		// G 駅
+//	let categoryName	// H カテゴリ
+	let tags			// I タグ
+	let restaurantUrl	// J 店URL
+//	let isVisible		// K 表示
 
 	function handleQueryResponse(response) {
 
@@ -89,7 +86,7 @@ function drawDashboard() {
 				}
 			},
 			state: {
-				value: search_name
+				value: search_tag
 			}
 		})
 
