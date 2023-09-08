@@ -2,12 +2,19 @@ const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1y8xBxGpIt-C23cw
 
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
+let search_tag = params.get('tag')
 
-if(!search_name) {
-	search_name = ''
+let queryStatement = 'SELECT B,C,D,E,F,G,H,I,J,K WHERE K = "Y"'
+
+if(search_name) {
+	queryStatement = queryStatement + ' AND A = "' + search_name + '"'
 }
 
-const queryStatement = 'SELECT B,C,D,E,F,G,H,I,J,K WHERE K = "Y"'
+if(!search_tag) {
+	search_tag = ''
+}
+
+//const queryStatement = 'SELECT B,C,D,E,F,G,H,I,J,K WHERE K = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
