@@ -4,13 +4,10 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 let search_tag = params.get('tag')
 
-let queryStatement
+let queryStatement = 'SELECT B,C,D,E,F,G,H,I,J,K WHERE K = "Y"'
 
 if(search_name) {
-	queryStatement = 'SELECT B,C,D,E,F,G,H,I,J,K WHERE K = "Y" AND A = "' + search_name + '"'
-}
-else {
-	queryStatement = 'SELECT B,C,D,E,F,G,H,I,J,K WHERE K = "Y"'
+	queryStatement += ' AND A = "' + search_name + '"'
 }
 
 if(!search_tag) {
