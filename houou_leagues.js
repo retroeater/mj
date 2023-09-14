@@ -364,7 +364,7 @@ function drawChart() {
 				let class_year_period = chartData.getValue(j,0)
 
 				if(my_class_year_period == class_year_period) {
-					chartData.setValue(j,13,my_rank)
+					chartData.setValue(j,14,my_rank)
 				}
 			}	
 		}
@@ -406,7 +406,7 @@ function drawChart() {
 			},
 			seriesType: 'bars',
 			series: {
-				12: {
+				13: {
 					type:'line'
 				}
 			},
@@ -446,7 +446,6 @@ function getLeagueRanks(data,chartData,search_name) {
 
 		let class_year_period = class_year + class_period
 
-//		if((search_name == name) && (class_year_period != '38後')) { // 38期後期順位未反映
 		if(search_name == name) {
 
 			let numberOfPeopleInUpperLeagues = getNumberOfPeopleInUpperLeagues(chartData,class_year_period,league)
