@@ -458,7 +458,7 @@ function getFormattedJpmlWrcSeasons(name,jpmlWrcSeasons) {
 function getFormattedKinmaDirectory(kinmaDirectoryUrl,kinmaDirectoryImageUrl) {
 
 	let formattedKinmaDirectory
-	const directoryIcon = 'img/125_arr_hoso.png'
+	const directoryIcon = 'img/box-arrow-up-right.svg'
 
 	if(kinmaDirectoryUrl) {
 		formattedKinmaDirectory = '<a href="' + kinmaDirectoryUrl + '" target="_blank"><img alt="雀士名鑑" class="pros" loading="lazy" src="' + kinmaDirectoryImageUrl + '" onError="this.onerror=null;this.src=\'' + directoryIcon + '\'" /></a>'
@@ -556,7 +556,7 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 	}
 
 	if(ron2Id) {
-		formattedRon2 = '<a href="https://ron2.jp/pro/' + ron2Id + '/" target="_blank"><img alt="龍龍" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/125_arr_hoso.png\'" /></a>'
+		formattedRon2 = '<a href="https://ron2.jp/pro/' + ron2Id + '/" target="_blank"><img alt="龍龍" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/box-arrow-up-right.svg\'" /></a>'
 	}
 
 	return formattedRon2
