@@ -552,7 +552,7 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 	let formattedRon2
 
 	if(!ron2ImageUrl) {
-		ron2ImageUrl = 'img/125_arr_hoso.png'
+		ron2ImageUrl = 'img/box-arrow-up-right.svg'
 	}
 
 	if(ron2Id) {
