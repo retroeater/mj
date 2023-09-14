@@ -73,6 +73,7 @@ function drawChart() {
 	let leagues_39_1 = ['39前',0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_39_2 = ['39後',0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_40_1 = ['40前',0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_40_2 = ['40後',0,0,0,0,0,0,0,0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -224,7 +225,10 @@ function drawChart() {
 						break
 					case "40前":
 						leagues_40_1[league_index]++
-						break	
+						break
+					case "40後":
+						leagues_40_2[league_index]++
+						break
 					}
 			}
 
@@ -251,6 +255,7 @@ function drawChart() {
 			leagues_37_1[1] = leagues_37_2[1]
 			leagues_38_1[1] = leagues_38_2[1]
 			leagues_39_1[1] = leagues_39_2[1]
+			leagues_40_1[1] = leagues_40_2[1]
 
 			// 前期A2リーグ人数補完
 			leagues_18_1[2] = leagues_18_2[2]
@@ -275,6 +280,7 @@ function drawChart() {
 			leagues_37_1[2] = leagues_37_2[2]
 			leagues_38_1[2] = leagues_38_2[2]
 			leagues_39_1[2] = leagues_39_2[2]
+			leagues_40_1[2] = leagues_40_2[2]
 		}
 
 		let chartData = new google.visualization.DataTable()
@@ -291,6 +297,7 @@ function drawChart() {
 		chartData.addColumn('number','D3')
 		chartData.addColumn('number','E1')
 		chartData.addColumn('number','E2')
+		chartData.addColumn('number','E3')
 		chartData.addColumn('number',search_name)
 
 		chartData.addRows([
@@ -339,7 +346,8 @@ function drawChart() {
 			leagues_38_2,
 			leagues_39_1,
 			leagues_39_2,
-			leagues_40_1
+			leagues_40_1,
+			leagues_40_2
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
@@ -387,6 +395,7 @@ function drawChart() {
 				'#CCCCFF', // D3
 				'#CCCCCC', // E1
 				'#999999', // E2
+				'#666666', // E3
 				'#0000CC'  // 名前
 			],
 			curveType: 'function',
@@ -469,6 +478,7 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year_period,my_leagu
 		let d3 = chartData.getValue(i,10)
 		let e1 = chartData.getValue(i,11)
 		let e2 = chartData.getValue(i,12)
+		let e3 = chartData.getValue(i,13)
 
 		if(my_class_year_period == class_year_period) {
 		
@@ -508,7 +518,10 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year_period,my_leagu
 				case "E2":
 					numberOfPeopleInUpperLeagues = a1+a2+b1+b2+c1+c2+c3+d1+d2+d3+e1
 					break
-				}
+				case "E3":
+					numberOfPeopleInUpperLeagues = a1+a2+b1+b2+c1+c2+c3+d1+d2+d3+e1+e2
+					break
+			}
 		}
 	}
 
