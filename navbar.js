@@ -55,6 +55,7 @@ document.write(
 						'<a class="dropdown-item" href="video_jpml.html">連盟プロ</a>' +
 						'<a class="dropdown-item" href="video_live.html">放送対局</a>' +
 						'<a class="dropdown-item" href="video_mtsuku.html">Mつく</a>' +
+						'<a class="dropdown-item" href="video_en.html">English</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">リソース<br>Resource</a>' +
