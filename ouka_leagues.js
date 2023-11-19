@@ -44,6 +44,7 @@ function drawChart() {
 		let leagues_15 = ['15',0,0,0,0,null]
 		let leagues_16 = ['16',0,0,0,0,null]
 		let leagues_17 = ['17',0,0,0,0,null]
+		let leagues_18 = ['18',0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -106,7 +107,10 @@ function drawChart() {
 					case 17:
 						leagues_17[league_index]++
 						break
-					}
+					case 18:
+						leagues_18[league_index]++
+						break
+				}
 			}
 		}
 
@@ -135,7 +139,8 @@ function drawChart() {
 			leagues_14,
 			leagues_15,
 			leagues_16,
-			leagues_17
+			leagues_17,
+			leagues_18
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
