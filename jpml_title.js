@@ -7,7 +7,7 @@ if(!search_name) {
 	search_name = ''
 }
 
-const queryStatement = 'SELECT A,B,C,D,E,F,G,H WHERE H = "Y"'
+const queryStatement = 'SELECT A,B,C,D,E,F,G,H,I WHERE I = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
