@@ -140,14 +140,6 @@ function getFormattedImage(name,profileUrl,imageUrl) {
 		image = emptyIcon
 		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + image + '" onError="this.onerror=null;this.src=\'' + emptyIcon +'\'" />'
 	}
-/*
-	if(!imageUrl) {
-		imageUrl = linkIcon
-	}
 
-	if(profileUrl) {
-		formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
-	}
-*/
 	return formattedImage
 }
