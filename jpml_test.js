@@ -45,7 +45,7 @@ function drawDashboard() {
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
 			name = data.getValue(i,0)
-			sourceName = data.getValue(i,1)
+//			sourceName = data.getValue(i,1)
 //			sourcelUrl = data.getValue(i,2)
 //			sourceImageUrl = data.getValue(i,3)
 //			originalTitle = data.getValue(i,4)
@@ -55,7 +55,7 @@ function drawDashboard() {
 			publishedDate = data.getValue(i,8)
 //			isVisible = data.getValue(i,9)
 
-			let formattedTitle = getFormattedTitle(name,sourceName,title,publishedDate)
+			let formattedTitle = getFormattedTitle(name,title,publishedDate)
 			let formattedImage = getFormattedImage(title,url,imageUrl)
 
 			chartData.addRows([
@@ -113,11 +113,11 @@ function getFormattedImage(title,url,imageUrl) {
 	return formattedImage
 }
 
-function getFormattedTitle(name,channelName,title,publishedDate) {
+function getFormattedTitle(name,title,publishedDate) {
 
 	let formattedTitle
 
-	formattedTitle = publishedDate + '<br>' + title + '<br>' + channelName + '<br>' + name
+	formattedTitle = publishedDate + '<br>' + title + '<br>' + name
 
 	return formattedTitle
 }
