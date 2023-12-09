@@ -66,6 +66,8 @@ function drawDashboard() {
 					name,
 					rank,
 					title,
+					season,
+					year,
 					publishedDate
 				]			
 			])
