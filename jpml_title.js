@@ -123,14 +123,17 @@ function getFormattedImage(name,profileUrl,imageUrl) {
 
 	let formattedImage
 	const linkIcon = 'img/125_arr_hoso.png'
-
+	
 	formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" />'
 
 	if(profileUrl) {
-		formattedImage = '<a href="' + profileUrl + '" target="_blank" ">' + formattedImage + '</a>'
+		if(imageUrl) {
+			formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
+		}
+		else {
+			formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + linkIcon + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
+		}
 	}
-
-//	formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
 
 	return formattedImage
 }
