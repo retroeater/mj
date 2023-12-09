@@ -122,7 +122,8 @@ function drawDashboard() {
 function getFormattedImage(name,profileUrl,imageUrl) {
 
 	let formattedImage
-	const linkIcon = 'img/125_arr_hoso.png'
+//	const linkIcon = 'img/125_arr_hoso.png'
+	const linkIcon = 'img/102_h_24.png'
 
 	if(!imageUrl) {
 		imageUrl = linkIcon
