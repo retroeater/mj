@@ -7,7 +7,7 @@ if(!search_name) {
 	search_name = ''
 }
 
-const queryStatement = 'SELECT A,B,C,D,E,F,G,H WHERE H = "Y"'
+const queryStatement = 'SELECT A,B,C,D,E,F,G WHERE G = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -23,9 +23,8 @@ function drawDashboard() {
 	let imageUrl		// C 画像URL
 	let rank			// D 順位
 	let title			// E タイトル
-	let season			// F 期
-	let publishedDate	// G 日付
-	let isVisible		// H 表示
+	let publishedDate	// F 日付
+	let isVisible		// G 表示
 
 	function handleQueryResponse(response) {
 
@@ -39,7 +38,6 @@ function drawDashboard() {
 		chartData.addColumn('string','名前')
 		chartData.addColumn('number','順位')
 		chartData.addColumn('string','タイトル')
-		chartData.addColumn('number','期')
 		chartData.addColumn('string','日付')
 
 		const data = response.getDataTable()
@@ -51,9 +49,8 @@ function drawDashboard() {
 			imageUrl = data.getValue(i,2)
 			rank = data.getValue(i,3)
 			title = data.getValue(i,4)
-			season = data.getValue(i,5)
-			publishedDate = data.getValue(i,6)
-//			isVisible = data.getValue(i,7)
+			publishedDate = data.getValue(i,5)
+//			isVisible = data.getValue(i,6)
 
 			let formattedImage = getFormattedImage(name,profileUrl,imageUrl)
 
@@ -63,7 +60,6 @@ function drawDashboard() {
 					name,
 					rank,
 					title,
-					season,
 					publishedDate
 				]			
 			])
