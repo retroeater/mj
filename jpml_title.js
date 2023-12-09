@@ -122,9 +122,25 @@ function drawDashboard() {
 function getFormattedImage(name,profileUrl,imageUrl) {
 
 	let formattedImage
-//	const linkIcon = 'img/125_arr_hoso.png'
-	const linkIcon = 'img/102_h_24.png'
+	let image
 
+	const linkIcon = 'img/125_arr_hoso.png'
+	const emptyIcon = 'img/empty.png'
+
+	if(profileUrl) {
+		if(imageUrl) {
+			image = imageUrl
+		}
+		else {
+			image = linkIcon
+		}
+	}
+	else {
+		image = emptyIcon
+	}
+
+	formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + image + '" onError="this.onerror=null;this.src=\'' + emptyIcon +'\'" /></a>'
+/*
 	if(!imageUrl) {
 		imageUrl = linkIcon
 	}
@@ -132,6 +148,6 @@ function getFormattedImage(name,profileUrl,imageUrl) {
 	if(profileUrl) {
 		formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
 	}
-
+*/
 	return formattedImage
 }
