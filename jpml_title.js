@@ -134,12 +134,12 @@ function getFormattedImage(name,profileUrl,imageUrl) {
 		else {
 			image = linkIcon
 		}
+		formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + image + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
 	}
 	else {
 		image = emptyIcon
+		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + image + '" onError="this.onerror=null;this.src=\'' + emptyIcon +'\'" />'
 	}
-
-	formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + image + '" onError="this.onerror=null;this.src=\'' + emptyIcon +'\'" /></a>'
 /*
 	if(!imageUrl) {
 		imageUrl = linkIcon
