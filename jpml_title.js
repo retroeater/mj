@@ -37,9 +37,9 @@ function drawDashboard() {
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','画像')
 		chartData.addColumn('string','名前')
-		chartData.addColumn('string','順位')
+		chartData.addColumn('number','順位')
 		chartData.addColumn('string','タイトル')
-		chartData.addColumn('string','期')
+		chartData.addColumn('number','期')
 		chartData.addColumn('string','日付')
 
 		const data = response.getDataTable()
