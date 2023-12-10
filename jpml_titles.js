@@ -34,11 +34,11 @@ function drawDashboard() {
 		}
 
 		const chartData = new google.visualization.DataTable()
-		chartData.addColumn('string','画像')
-		chartData.addColumn('string','名前')
-		chartData.addColumn('number','順位')
-		chartData.addColumn('string','タイトル')
 		chartData.addColumn('string','日付')
+		chartData.addColumn('string','タイトル')
+		chartData.addColumn('number','順位')
+		chartData.addColumn('string','名前')
+		chartData.addColumn('string','詳細')
 
 		const data = response.getDataTable()
 
