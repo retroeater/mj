@@ -56,11 +56,11 @@ function drawDashboard() {
 
 			chartData.addRows([
 				[
-					formattedImage,
-					name,
-					rank,
+					publishedDate,
 					title,
-					publishedDate
+					rank,
+					name,
+					formattedImage
 				]			
 			])
 		}
@@ -71,7 +71,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'name_filter_div',
 			options: {
-				filterColumnIndex: 1,
+				filterColumnIndex: 3,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -87,7 +87,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'title_filter_div',
 			options: {
-				filterColumnIndex: 3,
+				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
 					label: '',
