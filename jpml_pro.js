@@ -38,7 +38,7 @@ function drawDashboard() {
 		}
 
 		const chartData = new google.visualization.DataTable()
-		chartData.addColumn('string','プロフィール')
+		chartData.addColumn('string',search_name)
 
 		const data = response.getDataTable()
 
