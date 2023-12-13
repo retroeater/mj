@@ -165,7 +165,7 @@ console.log('handleQueryResponse() started')
 		}
 
 		const chartData = new google.visualization.DataTable()
-		chartData.addColumn('string',"決勝進出")
+		chartData.addColumn('string','決勝進出')
 
 		const data = response.getDataTable()
 
