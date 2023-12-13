@@ -92,7 +92,7 @@ function drawDashboard() {
 
 		const view = new google.visualization.DataView(chartData)
 
-//		dashboard.bind([nameFilter,classFilter,leagueFilter,oukaFilter], table)
+		dashboard.bind(table)
 		dashboard.draw(view)
 	}
 }
