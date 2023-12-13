@@ -136,6 +136,8 @@ const spreadsheet_url_titles = 'https://docs.google.com/spreadsheets/d/1WxXJJ2vQ
 
 const queryStatement = 'SELECT A,B,C,D,E,F,G WHERE G = "Y" AND A = "' + search_name + '"'
 
+console.log(queryStatement)
+
 google.charts.load('current', {'packages':['table']});
 google.charts.setOnLoadCallback(drawTable);
 
@@ -154,6 +156,8 @@ function drawTable() {
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
+
+console.log('handleQueryResponse() started')
 
 		if(response.isError()) {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
@@ -182,6 +186,8 @@ function drawTable() {
 			}
 
 			profile += title + ' ' + rank + '位'
+
+console.log(profile)
 
 			chartData.addRows([
 				[
