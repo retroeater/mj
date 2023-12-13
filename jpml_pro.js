@@ -13,7 +13,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N WHERE N = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N WHERE N = "Y" AND A ="' + search_name + '"')
 	query.send(handleQueryResponse)
 
 	let name				// A 名前
@@ -60,13 +60,16 @@ function drawDashboard() {
 
 			let profile
 
-			profile = '<p><img src="' + imageUrl + '" alt="' + name + '" title="' + name + '" /></p>'
+			profile = '<p><img src="' + imageUrl + '" alt="' + name + '" title="' + name + '" width="100%" /></p>'
 			profile += name + '（' + fullNameJaKana + '）<br />'
 			profile += danJa + '<br />'
 			profile += birthplaceJa + '<br />'
 			profile += birthday + '<br />'
 			profile += hououLatestLeague + '<br />'
-			profile += oukaLatestLeague + '<br />'
+
+			if(oukaLatestLeague) {
+				profile += oukaLatestLeague + '<br />'
+			}
 
 			chartData.addRows([
 				[
