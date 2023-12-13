@@ -77,6 +77,22 @@ function drawDashboard() {
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
+		const nameFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'name_filter_div',
+			options: {
+				filterColumnIndex: 0,
+				matchType: 'any',
+				ui: {
+					label: '',
+					placeholder: '名前/Name'
+				}
+			},
+			state: {
+					value: search_name
+			}
+		})
+
 		const table = new google.visualization.ChartWrapper({
 			chartType: 'Table',
 			containerId: 'myTable',
@@ -92,7 +108,7 @@ function drawDashboard() {
 
 		const view = new google.visualization.DataView(chartData)
 
-		dashboard.bind(table)
+		dashboard.bind([nameFilter], table)
 		dashboard.draw(view)
 	}
 }
