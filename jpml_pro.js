@@ -160,6 +160,9 @@ function drawTable() {
 			return
 		}
 
+		const chartData = new google.visualization.DataTable()
+		chartData.addColumn('string',"決勝進出")
+
 		const data = response.getDataTable()
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
