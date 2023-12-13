@@ -141,6 +141,14 @@ google.charts.setOnLoadCallback(drawTable);
 
 function drawTable() {
 
+	let name
+	let url
+	let imageUrl
+	let rank
+	let title
+	let publishedDate
+	let isVisible
+
 	const query = new google.visualization.Query(spreadsheet_url)
 	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
@@ -153,6 +161,31 @@ function drawTable() {
 		}
 
 		const data = response.getDataTable()
+
+		for(let i = 0; i < data.getNumberOfRows(); i++) {
+
+			name = data.getValue(i,0)
+			url = data.getValue(i,1)
+			imageUrl = data.getValue(i,2)
+			rank = data.getValue(i,3)
+			title = data.getValue(i,4)
+			publishedDate = data.getValue(i,5)
+//			isVisible = data.getValue(i,6)
+
+			let profile
+
+			if(publishedDate) {
+				profile = publishedDate + ' ' 
+			}
+
+			profile += title + ' ' + rank + '位'
+
+			chartData.addRows([
+				[
+					profile
+				]			
+			])
+		}
 
 		const table = new google.visualization.Table(document.getElementById('myTable2'));
 
