@@ -195,7 +195,7 @@ function drawTable() {
 			height: '100%'
 		}
 
-		const view = new google.visualization.DataView(data)
+		const view = new google.visualization.DataView(chartData)
 
 		table.draw(view, options);
 	}
