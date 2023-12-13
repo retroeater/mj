@@ -58,8 +58,6 @@ function drawDashboard() {
 			youTubeId = data.getValue(i,11)
 			blogUrl = data.getValue(i,12)
 
-			let formattedDanJa = getFormattedDanJa(dan)
-
 			let profile
 
 			profile = '<p><img src="' + imageUrl + '" alt="' + name + '" title="' + name + '" width="100%" /></p>'
@@ -68,8 +66,11 @@ function drawDashboard() {
 				profile += name + '（' + fullNameJaKana + '）<br />'
 			}
 
-			if(formattedDanJa) {
+			if(dan) {
+				let formattedDanJa = getFormattedDanJa(dan)
 				profile += formattedDanJa + '<br />'
+				console.log('dan: ' + dan)
+				console.log('formattedDanJa: ' + formattedDanJa)
 			}
 
 			if(birthplaceJa) {
