@@ -149,7 +149,7 @@ function drawTable() {
 	let publishedDate
 	let isVisible
 
-	const query = new google.visualization.Query(spreadsheet_url)
+	const query = new google.visualization.Query(spreadsheet_url_titles)
 	query.setQuery(queryStatement)
 	query.send(handleQueryResponse)
 
