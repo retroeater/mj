@@ -69,8 +69,6 @@ function drawDashboard() {
 			if(dan) {
 				let formattedDanJa = getFormattedDanJa(dan)
 				profile += formattedDanJa + '<br />'
-				console.log('dan: ' + dan)
-				console.log('formattedDanJa: ' + formattedDanJa)
 			}
 
 			if(birthplaceJa) {
