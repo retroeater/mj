@@ -22,7 +22,7 @@ function drawDashboard() {
 	let birthday			// D 誕生日
 	let birthplaceJa		// E 出身地
 	let proClass			// F 期・入会年
-	let danJa				// G 段位
+	let dan					// G 段位
 	let hououLatestLeague	// H 鳳凰戦
 	let oukaLatestLeague	// I 女流桜花
 	let twitterId			// J Twitter
@@ -50,7 +50,7 @@ function drawDashboard() {
 			birthday = data.getValue(i,3)
 			birthplaceJa = data.getValue(i,4)
 			proClass = data.getValue(i,5)
-			danJa = data.getValue(i,6)
+			dan = data.getValue(i,6)
 			hououLatestLeague = data.getValue(i,7)
 			oukaLatestLeague = data.getValue(i,8)
 			twitterId = data.getValue(i,9)
@@ -58,14 +58,31 @@ function drawDashboard() {
 			youTubeId = data.getValue(i,11)
 			blogUrl = data.getValue(i,12)
 
+			let formattedDanJa = getFormattedDanJa(dan)
+
 			let profile
 
 			profile = '<p><img src="' + imageUrl + '" alt="' + name + '" title="' + name + '" width="100%" /></p>'
-			profile += name + '（' + fullNameJaKana + '）<br />'
-			profile += danJa + '<br />'
-			profile += birthplaceJa + '<br />'
-			profile += birthday + '<br />'
-			profile += hououLatestLeague + '<br />'
+
+			if(fullNameJaKana) {
+				profile += name + '（' + fullNameJaKana + '）<br />'
+			}
+
+			if(formattedDanJa) {
+				profile += formattedDanJa + '<br />'
+			}
+
+			if(birthplaceJa) {
+				profile += birthplaceJa + '<br />'
+			}
+
+			if(birthday) {
+				profile += birthday + '<br />'
+			}
+
+			if(hououLatestLeague) {
+				profile += hououLatestLeague + '<br />'
+			}
 
 			if(oukaLatestLeague) {
 				profile += oukaLatestLeague + '<br />'
@@ -114,6 +131,45 @@ function drawDashboard() {
 		dashboard.bind([nameFilter], table)
 		dashboard.draw(view)
 	}
+}
+
+function getFormattedDanJa(dan) {
+
+	let formattedDanJa
+
+	switch(dan) {
+		case 1:
+			formattedDanJa = '初段'
+			break
+		case 2:
+			formattedDanJa = 'ニ段'
+			break
+		case 3:
+			formattedDanJa = '三段'
+			break
+		case 4:
+			formattedDanJa = '四段'
+			break
+		case 5:
+			formattedDanJa = '五段'
+			break
+		case 6:
+			formattedDanJa = '六段'
+			break
+		case 7:
+			formattedDanJa = '七段'
+			break
+		case 8:
+			formattedDanJa = '八段'
+			break
+		case 9:
+			formattedDanJa = '九段'
+			break
+		default:
+			break
+	}	
+
+	return formattedDanJa
 }
 
 function getFormattedArticles(name,numberOfArticles) {
