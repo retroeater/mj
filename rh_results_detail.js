@@ -23,12 +23,12 @@ function drawTable() {
 		const table = new google.visualization.Table(document.getElementById('myTable'));
 
 		// 団体名フォーマット
-		const orgFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
-		orgFormatter.format(data,[2,3],2)
+//		const orgFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+//		orgFormatter.format(data,[2,3],2)
 
 		// タイトル名フォーマット
-		const titleFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
-		titleFormatter.format(data,[4,5],4)
+//		const titleFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+//		titleFormatter.format(data,[4,5],4)
 
 		// 対局名フォーマット
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
@@ -40,8 +40,8 @@ function drawTable() {
 		}
 
 		// 結果フォーマット
-		const resultFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
-		resultFormatter.format(data,[19,20],19)
+//		const resultFormatter = new google.visualization.PatternFormat('{0}<br>{1}')
+//		resultFormatter.format(data,[19,20],19)
 
 		const options = {
 			allowHtml: true,
