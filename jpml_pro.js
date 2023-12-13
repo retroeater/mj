@@ -2,7 +2,7 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
 if(search_name == 'null') {
-	search_name = ''
+	search_name = '平野良栄'
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=SDP&headers=1'
@@ -87,10 +87,7 @@ function drawDashboard() {
 				},
 				width: '100%',
 				height: '100%'
-			},
-			state: {
-				value: search_joined
-			}			
+			}
 		})
 
 		const view = new google.visualization.DataView(chartData)
