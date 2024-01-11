@@ -364,11 +364,11 @@ function drawChart() {
 				let class_year_period = chartData.getValue(j,0)
 
 				if(my_class_year_period == class_year_period) {
-//					chartData.setValue(j,14,my_rank)
+					chartData.setValue(j,14,my_rank)
 //					直近期は最終節終了時まで順位反映しない
-					if(class_year_period != '40後') {
-						chartData.setValue(j,14,my_rank)
-					}
+//					if(class_year_period != '40後') {
+//						chartData.setValue(j,14,my_rank)
+//					}
 				}
 			}	
 		}
