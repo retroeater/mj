@@ -53,7 +53,6 @@ document.write(
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">動画<br>Video</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="video_ranking.html">ランキング</a>' +
-						'<a class="dropdown-item" href="video_jpml.html">連盟プロ</a>' +
 						'<a class="dropdown-item" href="video_live.html">放送対局</a>' +
 						'<a class="dropdown-item" href="video_mtsuku.html">Mつく</a>' +
 						'<a class="dropdown-item" href="video_en.html">English</a>' +

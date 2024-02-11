@@ -61,7 +61,7 @@ function drawDashboard() {
 		chartData.addColumn('string','最強<br>出場')
 		chartData.addColumn('string','決勝<br>進出')
 		chartData.addColumn('string','関連<br>記事')
-		chartData.addColumn('string','関連<br>動画')
+//		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送<br>対局')
 
 		const data = response.getDataTable()
@@ -102,7 +102,7 @@ function drawDashboard() {
 		let hououSeasons			// AI 鳳凰戦出場回数
 		let oukaSeasons				// AJ 女流桜花出場回数
 		let ron2ImageUrl			// AK 龍龍画像
-		let numberOfVideos			// AL 関連動画
+//		let numberOfVideos			// AL 関連動画
 		let tenhouId				// AM 天鳳ID
 		let instgramImageUrl		// AN Instagram画像
 //		let ron2AveragePlacement	// AO 旧ロン2平均順位
@@ -151,7 +151,7 @@ function drawDashboard() {
 			hououSeasons = data.getValue(i,34)
 			oukaSeasons = data.getValue(i,35)
 			ron2ImageUrl = data.getValue(i,36)
-			numberOfVideos = data.getValue(i,37)
+//			numberOfVideos = data.getValue(i,37)
 //			tenhouId = data.getValue(i,38)
 //			instagramImageUrl = data.getValue(i,39)
 //			ron2AveragePlacement = data.getValue(i,40)
@@ -181,7 +181,7 @@ function drawDashboard() {
 			let formattedSaikyoGames = getFormattedSaikyoGames(name,saikyoGames)
 			let formattedFinals = getFormattedFinals(name,numberOfFinals)
 			let formattedArticles = getFormattedArticles(name,numberOfArticles)
-			let formattedVideos = getFormattedVideos(name,numberOfVideos)
+//			let formattedVideos = getFormattedVideos(name,numberOfVideos)
 			let formattedLives = getFormattedLives(name,numberOfLives)
 			let formattedMleagueYouTube = getFormattedYouTube(mleagueYouTubeId,mleagueYouTubeImageUrl)
 
@@ -210,7 +210,7 @@ function drawDashboard() {
 					formattedSaikyoGames,
 					formattedFinals,
 					formattedArticles,
-					formattedVideos,
+//					formattedVideos,
 					formattedLives
 				]			
 			])
@@ -600,6 +600,7 @@ function getFormattedTwitter(twitterId,twitterImageUrl) {
 	return formattedTwitter	
 }
 
+/*
 function getFormattedVideos(name,numberOfVideos) {
 
 	let sortKey
@@ -612,6 +613,7 @@ function getFormattedVideos(name,numberOfVideos) {
 
 	return formattedVideos
 }
+*/
 
 function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
