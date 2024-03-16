@@ -13,7 +13,6 @@ document.write(
 						'<a class="dropdown-item" href="jpml_pros.html">プロ</a>' +
 						'<a class="dropdown-item" href="jpml_articles.html">記事</a>' +
 						'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
-						'<a class="dropdown-item" href="https://calendar.google.com/calendar/u/0/embed?ctz=Asia/Tokyo&src=Y182YmFodHU4azJtbmdlcG5pY3UyajEyYTEwZ0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=cnlvZWkubmV0X3VxOTFtN2txMnM5NGQ0YWsxYmZhcWh2aHEwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cnlvZWkubmV0X2QydTgwZTJjZDIwY3JzNGtibmF2OXNhMXRrQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cnlvZWkubmV0XzNqb25jaXRjOGk4ZWFjZTE2YW44OG9nODk0QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y192cjRqYnFscXM2dHBkNWk1Y3B0MnVqdjJsa0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=amEuamFwYW5lc2UjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%230B8043&color=%233F51B5&color=%23D81B60&color=%23E4C441&color=%23E67C73&color=%23616161&showCalendars=1&showDate=1&showNav=1&showPrint=0&showTabs=0&showTitle=0&showTz=0" target="_blank">カレンダー</a>' +
 						'<a class="dropdown-item" href="jpml_test.html">プロテスト</a>' +
 						'<a class="dropdown-item" href="jpml_logs.html">ログ</a>' +
 						'<a class="dropdown-item" href="jpml_links.html">リンク</a>' +
@@ -59,6 +58,7 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">リソース<br>Resource</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+						'<a class="dropdown-item" href="https://calendar.google.com/calendar/u/0/embed?ctz=Asia/Tokyo&src=Y182YmFodHU4azJtbmdlcG5pY3UyajEyYTEwZ0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=cnlvZWkubmV0X3VxOTFtN2txMnM5NGQ0YWsxYmZhcWh2aHEwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cnlvZWkubmV0X2QydTgwZTJjZDIwY3JzNGtibmF2OXNhMXRrQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cnlvZWkubmV0XzNqb25jaXRjOGk4ZWFjZTE2YW44OG9nODk0QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y192cjRqYnFscXM2dHBkNWk1Y3B0MnVqdjJsa0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=amEuamFwYW5lc2UjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%230B8043&color=%233F51B5&color=%23D81B60&color=%23E4C441&color=%23E67C73&color=%23616161&showCalendars=1&showDate=1&showNav=1&showPrint=0&showTabs=0&showTitle=0&showTz=0" target="_blank">カレンダー</a>' +
 						'<a class="dropdown-item" href="https://booklog.jp/users/retroeater" target="_blank">書籍</a>' +
 						'<a class="dropdown-item" href="resource_dictionary.html">辞書</a>' +
 						'<a class="dropdown-item" href="resource_efficiency.html">牌効率</a>' +
