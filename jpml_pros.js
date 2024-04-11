@@ -51,7 +51,7 @@ function drawDashboard() {
 		chartData.addColumn('string','出身地')
 		chartData.addColumn('string','誕生日')
 		chartData.addColumn('string','鳳凰<br>出場')
-		chartData.addColumn('string','鳳凰<br>40後')
+		chartData.addColumn('string','鳳凰<br>41前')
 		chartData.addColumn('string','鳳凰<br>最高')
 		chartData.addColumn('string','桜花<br>出場')
 		chartData.addColumn('string','桜花<br>18期')
@@ -84,7 +84,7 @@ function drawDashboard() {
 		let intagramId				// P Instagram
 		let youtubeId				// Q YouTube
 		let blogUrl					// S Blog
-		let hououLatestLeague		// T 鳳凰戦40期後期リーグ
+		let hououLatestLeague		// T 鳳凰戦41期前期リーグ
 		let hououHighestLeague		// U 鳳凰戦最高到達リーグ
 		let numberOfFinals			// V 決勝進出
 		let numberOfArticles		// W 関連記事
@@ -258,7 +258,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '40期後期'
+					placeholder: '41期前期'
 				}
 			},
 			state: {
