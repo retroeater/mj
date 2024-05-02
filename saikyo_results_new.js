@@ -146,14 +146,14 @@ function getFormattedTitle(gameDate,fiscalYear,gameName,gameStage,gameTable,play
 
 	if(playerResult) {
 		if(playerRank) {
-			playerResult = playerRank + '位' + playerResult
+			playerResult = '<br>' + playerRank + '位' + playerResult
 		}	
 	}
 	else {
 		playerResult = ''
 	}
 
-	formattedTitle = gameTitle + '<br>' + gameName + '<br>' + playerResult + '<br>' + playerName
+	formattedTitle = gameTitle + '<br>' + gameName + '<br>' + playerName + playerResult
 
 	return formattedTitle
 }
