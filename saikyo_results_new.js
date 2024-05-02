@@ -149,7 +149,7 @@ function getFormattedTitle(gameDate,fiscalYear,gameName,gameStage,gameTable,play
 			playerResult = '<br>' + playerRank + '位' + playerResult
 		}
 		else {
-			playerResult = '<br>'
+			playerResult = '<br>' + playerResult
 		}
 	}
 	else {
