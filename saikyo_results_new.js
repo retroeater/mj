@@ -131,7 +131,7 @@ function getFormattedTitle(gameDate,fiscalYear,gameName,gameStage,gameTable,play
 	let gameTitle
 
 	if(gameDate) {
-		gameTitle = gateDate + '<br>' + '麻雀最強戦' + fiscalYear
+		gameTitle = gameDate + '<br>' + '麻雀最強戦' + fiscalYear
 	}
 	else {
 		gameTitle = '麻雀最強戦' + fiscalYear
