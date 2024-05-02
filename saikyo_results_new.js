@@ -128,21 +128,32 @@ function getFormattedImage(playerName,playerTwitterId,playerImageUrl) {
 function getFormattedTitle(gameDate,fiscalYear,gameName,gameStage,gameTable,playerRank,playerResult,playerName) {
 
 	let formattedTitle
+	let gameTitle
 
-	if(gameTable) {
-		gameStage += '（' + gameTable + '卓）'
+	if(gameDate) {
+		gameTitle = gateDate + '<br>' + '麻雀最強戦' + fiscalYear
+	}
+	else {
+		gameTitle = '麻雀最強戦' + fiscalYear
+	}
+
+	if(gameTable === '-') {
+		gameName += gameStage
+	}
+	else {
+		gameName += gameStage + '（' + gameTable + '卓）'
 	}
 
 	if(playerResult) {
 		if(playerRank) {
-			playerResult += '（' + playerRank + '位）'
+			playerResult = playerRank + '位' + playerResult
 		}	
 	}
 	else {
 		playerResult = ''
 	}
 
-	formattedTitle = gameDate + '<br>' + '麻雀最強戦' + fiscalYear + '<br>' + gameName + '<br>' + gameStage + '<br>' + playerResult + '<br>' + playerName
+	formattedTitle = gameTitle + '<br>' + gameName + '<br>' + playerResult + '<br>' + playerName
 
 	return formattedTitle
 }
