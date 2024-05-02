@@ -31,7 +31,7 @@ function drawDashboard() {
 	let playerRank		// F 順位
 	let playerResult	// G 結果
 	let playerName		// H 名前
-	let playertwitterId	// I Twitter ID
+	let playerTwitterId	// I Twitter ID
 	let playerImageUrl	// J 画像URL
 //	let isVisible		// K 表示
 
@@ -58,7 +58,7 @@ function drawDashboard() {
 			playerRank = data.getValue(i,5)
 			playerResult = data.getValue(i,6)
 			playerName = data.getValue(i,7)
-			playertwitterId = data.getValue(i,8)
+			playerTwitterId = data.getValue(i,8)
 			playerImageUrl = data.getValue(i,9)
 //			isVisible = data.getValue(i,10)
 
@@ -113,12 +113,10 @@ function drawDashboard() {
 function getFormattedImage(playerName,playerTwitterId,playerImageUrl) {
 
 	let formattedImage
-	let playerTwitterUrl
 	const twitterIcon = 'img/twitter.svg'
 
 	if(playerTwitterId) {
-//		formattedImage = '<a href="' + playerTwitterUrl + '" target="_blank"><img alt="' + playerName + '" class="rectangle" loading="lazy" src="' + playerImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
-		formattedImage = '<a href="' + playerTwitterUrl + '" target="_blank"><img alt="' + playerName + '" class="rectangle" loading="lazy" src="' + playerImageUrl + '" onError="this.onerror=null;this.src=\'' + twitterIcon + '\'" /></a>'
+		formattedImage = '<a href="https://twitter.com/' + playerTwitterId + '" target="_blank"><img alt="' + playerName + '" class="rectangle" loading="lazy" src="' + playerImageUrl + '" onError="this.onerror=null;this.src=\'' + twitterIcon + '\'" /></a>'
 	}
 	else if(playerImageUrl) {
 		formattedImage = '<img alt="' + playerName + '" class="rectangle" loading="lazy" src="' + playerImageUrl + '" onError="this.onerror=null;this.src=\'\';" />'
