@@ -141,7 +141,7 @@ function getFormattedTitle(gameDate,fiscalYear,gameName,gameStage,gameTable,play
 		gameName += ' ' + gameStage
 	}
 	else {
-		gameName += ' ' + gameStage + '（' + gameTable + '卓）'
+		gameName += ' ' + gameStage + ' ' + gameTable + '卓'
 	}
 
 	if(playerResult) {
