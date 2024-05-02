@@ -130,11 +130,16 @@ function getFormattedTitle(gameDate,fiscalYear,gameName,gameStage,gameTable,play
 	let formattedTitle
 
 	if(gameTable) {
-		gameStage += '（' + gameTable + '）'
+		gameStage += '（' + gameTable + '卓）'
 	}
 
-	if(playerRank) {
-		playerResult += '（' + playerRank + '）'
+	if(playerResult) {
+		if(playerRank) {
+			playerResult += '（' + playerRank + '位）'
+		}	
+	}
+	else {
+		playerResult = ''
 	}
 
 	formattedTitle = gameDate + '<br>' + '麻雀最強戦' + fiscalYear + '<br>' + gameName + '<br>' + gameStage + '<br>' + playerResult + '<br>' + playerName
