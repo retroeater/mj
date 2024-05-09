@@ -54,7 +54,7 @@ function drawDashboard() {
 		chartData.addColumn('string','鳳凰<br>41前')
 		chartData.addColumn('string','鳳凰<br>最高')
 		chartData.addColumn('string','桜花<br>出場')
-		chartData.addColumn('string','桜花<br>18期')
+		chartData.addColumn('string','桜花<br>19期')
 		chartData.addColumn('string','桜花<br>最高')
 		chartData.addColumn('string','JWRC<br>出場')
 		chartData.addColumn('string','特昇<br>出場')
@@ -93,7 +93,7 @@ function drawDashboard() {
 		let remarks					// Z 備考
 		let numberOfLives			// AA 放送対局
 		let saikyoGames				// AB 最強出場
-		let oukaLatestLeague		// AC 18期桜花
+		let oukaLatestLeague		// AC 19期桜花
 		let oukaHighestLeague		// AD 桜花最高
 		let danEn					// AE Dan
 		let twitterImageUrl			// AF Twitter画像
@@ -274,7 +274,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '桜花18期'
+					placeholder: '桜花19期'
 				}
 			},
 			state: {
@@ -599,21 +599,6 @@ function getFormattedTwitter(twitterId,twitterImageUrl) {
 
 	return formattedTwitter	
 }
-
-/*
-function getFormattedVideos(name,numberOfVideos) {
-
-	let sortKey
-	let formattedVideos
-
-	if(numberOfVideos != 0) {
-		sortKey = ('0000' + numberOfVideos).slice(-4)
-		formattedVideos = '<span class="' + sortKey + '">' + '<a href="./video_jpml.html?name=' + name + '" target="_blank">' + numberOfVideos + '件</a></span>'
-	}
-
-	return formattedVideos
-}
-*/
 
 function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
