@@ -195,7 +195,7 @@ function drawChart() {
 			},
 			seriesType: 'bars',
 			series: {
-				4: {
+				5: {
 					type:'line'
 				}
 			},
