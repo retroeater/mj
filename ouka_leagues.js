@@ -4,7 +4,7 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
 if(!search_name) {
-	search_name = '白銀紗希'
+	search_name = '魚谷侑未'
 }
 
 const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
@@ -45,6 +45,7 @@ function drawChart() {
 		let leagues_16 = ['16',0,0,0,0,null]
 		let leagues_17 = ['17',0,0,0,0,null]
 		let leagues_18 = ['18',0,0,0,0,null]
+		let leagues_19 = ['19',0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -110,7 +111,10 @@ function drawChart() {
 					case 18:
 						leagues_18[league_index]++
 						break
-				}
+					case 19:
+						leagues_19[league_index]++
+						break
+					}
 			}
 		}
 
@@ -120,6 +124,7 @@ function drawChart() {
 		chartData.addColumn('number','B')
 		chartData.addColumn('number','C1')
 		chartData.addColumn('number','C2')
+		chartData.addColumn('number','C3')
 		chartData.addColumn('number',search_name)
 
 		chartData.addRows([
@@ -140,7 +145,8 @@ function drawChart() {
 			leagues_15,
 			leagues_16,
 			leagues_17,
-			leagues_18
+			leagues_18,
+			leagues_19
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
@@ -178,6 +184,7 @@ function drawChart() {
 				'#FFEECC', // B
 				'#EEFFDD', // C1
 				'#CCEEFF', // C2
+				'#CCCCCC', // C3
 				'#0000CC'  // 名前
 			],
 			curveType: 'function',
@@ -238,6 +245,7 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year,my_league) {
 		let b = chartData.getValue(i,2)
 		let c1 = chartData.getValue(i,3)
 		let c2 = chartData.getValue(i,4)
+		let c3 = chartData.getValue(i,5)
 
 		if(my_class_year == class_year) {
 		
@@ -253,7 +261,10 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year,my_league) {
 				case "C2":
 					numberOfPeopleInUpperLeagues = a+b+c1
 					break
-			}
+				case "C3":
+					numberOfPeopleInUpperLeagues = a+b+c1+c2
+					break
+				}
 		}
 	}
 
