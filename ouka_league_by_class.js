@@ -69,21 +69,21 @@ function drawChart() {
 			hAxis: {
 				direction: -1,
 				minValue:  0,
-				maxValue: 39,
+				maxValue: 41,
 				textPosition: 'bottom',
-				ticks: [{v:1,f:'1期'},{v:2,f:'2期'},{v:3,f:'3期'},{v:4,f:'4期'},{v:5,f:'5期'},{v:6,f:'6期'},{v:7,f:'7期'},{v:8,f:'8期'},{v:9,f:'9期'},{v:10,f:'10期'},{v:11,f:'11期'},{v:12,f:'12期'},{v:13,f:'13期'},{v:14,f:'14期'},{v:15,f:'15期'},{v:16,f:'16期'},{v:17,f:'17期'},{v:18,f:'18期'},{v:19,f:'19期'},{v:20,f:'20期'},{v:21,f:'21期'},{v:22,f:'22期'},{v:23,f:'23期'},{v:24,f:'24期'},{v:25,f:'25期'},{v:26,f:'26期'},{v:27,f:'27期'},{v:28,f:'28期'},{v:29,f:'29期'},{v:30,f:'30期'},{v:31,f:'31期'},{v:32,f:'32期'},{v:33,f:'33期'},{v:34,f:'34期'},{v:35,f:'35期'},{v:36,f:'36期'},{v:37,f:'37期'},{v:38,f:'38期'}]
+				ticks: [{v:1,f:'1期'},{v:2,f:'2期'},{v:3,f:'3期'},{v:4,f:'4期'},{v:5,f:'5期'},{v:6,f:'6期'},{v:7,f:'7期'},{v:8,f:'8期'},{v:9,f:'9期'},{v:10,f:'10期'},{v:11,f:'11期'},{v:12,f:'12期'},{v:13,f:'13期'},{v:14,f:'14期'},{v:15,f:'15期'},{v:16,f:'16期'},{v:17,f:'17期'},{v:18,f:'18期'},{v:19,f:'19期'},{v:20,f:'20期'},{v:21,f:'21期'},{v:22,f:'22期'},{v:23,f:'23期'},{v:24,f:'24期'},{v:25,f:'25期'},{v:26,f:'26期'},{v:27,f:'27期'},{v:28,f:'28期'},{v:29,f:'29期'},{v:30,f:'30期'},{v:31,f:'31期'},{v:32,f:'32期'},{v:33,f:'33期'},{v:34,f:'34期'},{v:35,f:'35期'},{v:36,f:'36期'},{v:37,f:'37期'},{v:38,f:'38期'},{v:39,f:'39期'},{v:40,f:'40期'}]
 			},
 			vAxis: {
 				minValue: 0,
-				maxValue: 6,
+				maxValue: 7,
 				textPosition: 'left',
-				ticks: [{v:1,f:'C2'},{v:2,f:'C1'},{v:3,f:'B'},{v:4,f:'A'},{v:5,f:'桜花'}]
+				ticks: [{v:1,f:'C3'},{v:2,f:'C2'},{v:3,f:'C1'},{v:4,f:'B'},{v:5,f:'A'},{v:6,f:'桜花'}]
 			},
 			sizeAxis:  {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: 'リーグ✕期（18期時点）',
+			title: 'リーグ✕期（19期時点）',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
@@ -117,21 +117,24 @@ function getLeagueId(league) {
 	let leagueId = ""
 	
 	switch(league) {
-	case "桜花":
-		leagueId = 5
-		break
-	case "A":
-		leagueId = 4
-		break
-	case "B":
-		leagueId = 3
-		break
-	case "C1":
-		leagueId = 2
-		break
-	case "C2":
-		leagueId = 1
-		break
+		case "桜花":
+			leagueId = 6
+			break
+		case "A":
+			leagueId = 5
+			break
+		case "B":
+			leagueId = 4
+			break
+		case "C1":
+			leagueId = 3
+			break
+		case "C2":
+			leagueId = 2
+			break
+		case "C3":
+			leagueId = 1
+			break
 	}
 
 	return leagueId
