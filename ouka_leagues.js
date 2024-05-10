@@ -161,7 +161,7 @@ function drawChart() {
 				let class_year = chartData.getValue(j,0)
 
 				if(my_class_year == class_year) {
-					chartData.setValue(j,5,my_rank)
+					chartData.setValue(j,6,my_rank)
 				}
 			}	
 		}
