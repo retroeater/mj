@@ -77,15 +77,15 @@ function drawChart() {
 			},
 			vAxis: {
 				minValue: 0,
-				maxValue: 6,
+				maxValue: 7,
 				textPosition: 'left',
-				ticks: [{v:1,f:'C2'},{v:2,f:'C1'},{v:3,f:'B'},{v:4,f:'A'},{v:5,f:'桜花'}]
+				ticks: [{v:1,f:'C3'},{v:2,f:'C2'},{v:3,f:'C1'},{v:4,f:'B'},{v:5,f:'A'},{v:6,f:'桜花'}]
 			},
 			sizeAxis:  {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: '第18期女流桜花✕第40期後期鳳凰リーグ',
+			title: '第19期女流桜花✕第41期後期鳳凰リーグ',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
@@ -170,21 +170,24 @@ function getOukaLeagueId(league) {
 	let leagueId = ""
 	
 	switch(league) {
-	case "桜花":
-		leagueId = 5
-		break
-	case "A":
-		leagueId = 4
-		break
-	case "B":
-		leagueId = 3
-		break
-	case "C1":
-		leagueId = 2
-		break
-	case "C2":
-		leagueId = 1
-		break
+		case "桜花":
+			leagueId = 6
+			break
+		case "A":
+			leagueId = 5
+			break
+		case "B":
+			leagueId = 4
+			break
+		case "C1":
+			leagueId = 3
+			break
+		case "C2":
+			leagueId = 2
+			break
+		case "C3":
+			leagueId = 1
+			break
 	}
 
 	return leagueId
