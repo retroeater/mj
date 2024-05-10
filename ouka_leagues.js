@@ -27,25 +27,25 @@ function drawChart() {
 
 		const data = response.getDataTable()
 
-		let leagues_01 = ['1',0,0,0,0,null]
-		let leagues_02 = ['2',0,0,0,0,null]
-		let leagues_03 = ['3',0,0,0,0,null]
-		let leagues_04 = ['4',0,0,0,0,null]
-		let leagues_05 = ['5',0,0,0,0,null]
-		let leagues_06 = ['6',0,0,0,0,null]
-		let leagues_07 = ['7',0,0,0,0,null]
-		let leagues_08 = ['8',0,0,0,0,null]
-		let leagues_09 = ['9',0,0,0,0,null]
-		let leagues_10 = ['10',0,0,0,0,null]
-		let leagues_11 = ['11',0,0,0,0,null]
-		let leagues_12 = ['12',0,0,0,0,null]
-		let leagues_13 = ['13',0,0,0,0,null]
-		let leagues_14 = ['14',0,0,0,0,null]
-		let leagues_15 = ['15',0,0,0,0,null]
-		let leagues_16 = ['16',0,0,0,0,null]
-		let leagues_17 = ['17',0,0,0,0,null]
-		let leagues_18 = ['18',0,0,0,0,null]
-		let leagues_19 = ['19',0,0,0,0,null]
+		let leagues_01 = ['1',0,0,0,0,0,null]
+		let leagues_02 = ['2',0,0,0,0,0,null]
+		let leagues_03 = ['3',0,0,0,0,0,null]
+		let leagues_04 = ['4',0,0,0,0,0,null]
+		let leagues_05 = ['5',0,0,0,0,0,null]
+		let leagues_06 = ['6',0,0,0,0,0,null]
+		let leagues_07 = ['7',0,0,0,0,0,null]
+		let leagues_08 = ['8',0,0,0,0,0,null]
+		let leagues_09 = ['9',0,0,0,0,0,null]
+		let leagues_10 = ['10',0,0,0,0,0,null]
+		let leagues_11 = ['11',0,0,0,0,0,null]
+		let leagues_12 = ['12',0,0,0,0,0,null]
+		let leagues_13 = ['13',0,0,0,0,0,null]
+		let leagues_14 = ['14',0,0,0,0,0,null]
+		let leagues_15 = ['15',0,0,0,0,0,null]
+		let leagues_16 = ['16',0,0,0,0,0,null]
+		let leagues_17 = ['17',0,0,0,0,0,null]
+		let leagues_18 = ['18',0,0,0,0,0,null]
+		let leagues_19 = ['19',0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -114,7 +114,7 @@ function drawChart() {
 					case 19:
 						leagues_19[league_index]++
 						break
-					}
+				}
 			}
 		}
 
@@ -174,8 +174,8 @@ function drawChart() {
 			},
 //			axisTitlePosition: 'out',
 			chartArea: {
-				left: 20,
-				top: 20,
+				left: 21,
+				top: 21,
 				width: '100%',
 				height: '80%'
 			},
@@ -264,7 +264,7 @@ function getNumberOfPeopleInUpperLeagues(chartData,my_class_year,my_league) {
 				case "C3":
 					numberOfPeopleInUpperLeagues = a+b+c1+c2
 					break
-				}
+			}
 		}
 	}
 
