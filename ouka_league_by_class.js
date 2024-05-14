@@ -44,32 +44,7 @@ function drawChart() {
 		}
 
 		chartData.addRows(rows)
-	/*
-		let id
-		let proClass
-		let leagueId
-		let league
-		let numberOfPeople
 
-		for(let i = 0; i < data.getNumberOfRows(); i++) {
-
-			idString = String(data.getValue(i,2))
-			proClass = data.getValue(i,0)
-			league = data.getValue(i,1)
-			leagueId = getLeagueId(league)
-			numberOfPeople = data.getValue(i,2)
-
-			chartData.addRows([
-				[
-					idString,
-					proClass,
-					leagueId,
-					league,
-					numberOfPeople
-				]
-			])
-		}
-*/
 		const options = {
 			bubble: {
 				opacity: 0.8,
