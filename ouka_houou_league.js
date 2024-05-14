@@ -115,82 +115,38 @@ function drawChart() {
 
 function getHououLeagueId(league) {
 
-	let leagueId = ""
-	
-	switch(league) {
-		case "鳳凰位":
-			leagueId = 14
-			break
-		case "A1":
-			leagueId = 13
-			break
-		case "A2":
-			leagueId = 12
-			break
-		case "B1":
-			leagueId = 11
-			break
-		case "B2":
-			leagueId = 10
-			break
-		case "C1":
-			leagueId = 9
-			break
-		case "C2":
-			leagueId = 8
-			break
-		case "C3":
-			leagueId = 7
-			break
-		case "D1":
-			leagueId = 6
-			break
-		case "D2":
-			leagueId = 5
-			break
-		case "D3":
-			leagueId = 4
-			break
-		case "E1":
-			leagueId = 3
-			break
-		case "E2":
-			leagueId = 2
-			break
-		case "E3":
-			leagueId = 1
-			break
-	}
+	const leagueMap = {
+		'鳳凰位': 14,
+		'A1': 13,
+		'A2': 12,
+		'B1': 11,
+		'B2': 10,
+		'C1': 9,
+		'C2': 8,
+		'C3': 7,
+		'D1': 6,
+		'D2': 5,
+        'D3': 4,
+		'E1': 3,
+		'E2': 2,
+		'E3': 1
+    }
 
-	return leagueId
+	return leagueMap[league] || 0
 }
 
 function getOukaLeagueId(league) {
 
-	let leagueId = ""
-	
-	switch(league) {
-		case "桜花":
-			leagueId = 6
-			break
-		case "A":
-			leagueId = 5
-			break
-		case "B":
-			leagueId = 4
-			break
-		case "C1":
-			leagueId = 3
-			break
-		case "C2":
-			leagueId = 2
-			break
-		case "C3":
-			leagueId = 1
-			break
-	}
+	const leagueMap = {
+		'桜花': 6,
+		'A': 5,
+		'B': 4,
+		'C1': 3,
+		'C2': 2,
+		'C3': 1
+    }
 
-	return leagueId
+	return leagueMap[league] || 0
 }
 
 (function(){
