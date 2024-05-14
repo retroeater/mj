@@ -50,6 +50,89 @@ function drawDashboard() {
 		chartData.addColumn('string','放送<br>対局')
 
 		const data = response.getDataTable()
+		const rows = []
+		
+		for (let i = 0; i < data.getNumberOfRows(); i++) {
+
+			let name = data.getValue(i,0)
+			let sortKey = data.getValue(i,1)
+//			let lastNameJaKanji = data.getValue(i,2)
+//			let firstNameJaKanji = data.getValue(i,3)
+//			let lastNameJaKana = data.getValue(i,4)
+//			let firstNameJaKana = data.getValue(i,5)
+			let lastNameEn = data.getValue(i,6)
+			let firstNameEn = data.getValue(i,7)
+			let proClass = data.getValue(i,8)
+			let joined = data.getValue(i,9)
+			let birthplaceJa = data.getValue(i,10)
+			let birthplaceEn = data.getValue(i,11)
+			let birthday = data.getValue(i,12)
+			let ron2Id = data.getValue(i,13)
+			let twitterId = data.getValue(i,14)
+			let instagramId = data.getValue(i,15)
+			let youTubeId = data.getValue(i,16)
+			let blogUrl = data.getValue(i,18)
+			let hououLatestLeague = data.getValue(i,19)
+			let hououHighestLeague = data.getValue(i,20)
+			let numberOfFinals = data.getValue(i,21)
+			let numberOfArticles = data.getValue(i,22)
+//			let lastUpdated = data.getValue(i,23)
+//			let isVisible = data.getValue(i,24)
+//			let remarks = data.getValue(i,25)
+			let numberOfLives = data.getValue(i,26)
+			let saikyoGames = data.getValue(i,27)
+			let oukaLatestLeague = data.getValue(i,28)
+			let oukaHighestLeague = data.getValue(i,29)
+			let danEn = data.getValue(i,30)
+			let twitterImageUrl = data.getValue(i,31)
+			let blogImageUrl = data.getValue(i,32)
+			let youTubeImageUrl = data.getValue(i,33)
+			let hououSeasons = data.getValue(i,34)
+			let oukaSeasons = data.getValue(i,35)
+			let ron2ImageUrl = data.getValue(i,36)
+//			let numberOfVideos = data.getValue(i,37)
+//			let tenhouId = data.getValue(i,38)
+//			let instagramImageUrl = data.getValue(i,39)
+//			let ron2AveragePlacement = data.getValue(i,40)
+			let jpmlWrcSeasons = data.getValue(i,41)
+			let tokushoSeasons = data.getValue(i,42)
+			let kinmaDirectoryUrl = data.getValue(i,43)
+			let kinmaDirectoryImageUrl = data.getValue(i,44)
+			let mleagueYouTubeId = data.getValue(i,45)
+			let mleagueYouTubeImageUrl = data.getValue(i,46)
+
+			const row = [
+				getFormattedName(name, sortKey, lastNameEn, firstNameEn),
+				getFormattedRon2(ron2Id, ron2ImageUrl),
+				getFormattedTwitter(twitterId, twitterImageUrl),
+				getFormattedInstagram(instagramId),
+				getFormattedYouTube(youTubeId, youTubeImageUrl),
+				getFormattedBlog(blogUrl, blogImageUrl),
+				getFormattedKinmaDirectory(kinmaDirectoryUrl, kinmaDirectoryImageUrl),
+				getFormattedYouTube(mleagueYouTubeId, mleagueYouTubeImageUrl),
+				getFormattedProClass(proClass, joined),
+				getFormattedDan(danEn),
+				getFormattedBirthplace(birthplaceJa, birthplaceEn),	birthday,
+				getFormattedHououSeasons(name, hououSeasons),
+				hououLatestLeague,
+				getFormattedHououHighestLeague(name, hououHighestLeague),
+				getFormattedOukaSeasons(name, oukaSeasons),
+				oukaLatestLeague,
+				getFormattedOukaHighestLeague(name, oukaHighestLeague),
+				getFormattedJpmlWrcSeasons(name, jpmlWrcSeasons),
+				getFormattedTokushoSeasons(name, tokushoSeasons),
+				getFormattedSaikyoGames(name, saikyoGames),
+				getFormattedFinals(name, numberOfFinals),
+				getFormattedArticles(name, numberOfArticles),
+				getFormattedLives(name, numberOfLives)
+			]
+			rows.push(row)
+		}
+		
+		chartData.addRows(rows)
+
+	/*
+		const data = response.getDataTable()
 
 		let	name					// A 名前
 		let sortKey					// B ソートキー
@@ -201,6 +284,7 @@ function drawDashboard() {
 			])
 		}
 
+*/
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
 		const nameFilter = new google.visualization.ControlWrapper({
