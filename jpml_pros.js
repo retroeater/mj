@@ -222,23 +222,11 @@ function drawDashboard() {
 }
 
 function getArticles(name, numberOfArticles) {
-
-	let sortKey = ('0000' + numberOfArticles).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + numberOfArticles + '件</a></span>'
+	return getInternalLink(getSortKey(numberOfArticles), './jpml_articles.html', 'name', name, numberOfArticles, '件')
 }
 
-function getBirthInfo(birthday, birthplaceJa) {
-
-	if(!birthday) {
-		birthday = ''
-	}
-
-	if(!birthplaceJa) {
-		birthplaceJa = ''
-	}
-
-	return '<span class="' + birthday + '">' + birthday + '<br>' + birthplaceJa + '<br></span>'
+function getBirthInfo(birthday = '', birthplaceJa = '') {
+	return `<span class="${birthday}">${birthday}<br>${birthplaceJa}<br></span>`
 }
 
 function getBlog(blogUrl, blogImageUrl) {
@@ -269,31 +257,16 @@ function getExternalLink(url, imgUrl, altText, altImgUrl) {
 }
 
 function getFinals(name, numberOfFinals) {
-
-	let sortKey = ('0000' + numberOfFinals).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./jpml_titles.html?name=' + name + '" target="_blank">' + numberOfFinals + '回</a></span>'
+	return getInternalLink(getSortKey(numberOfFinals), './jpml_titles.html', 'name', name, numberOfFinals, '回')
 }
 
 function getHououHighestLeague(name, hououHighestLeague) {
-
-	let sortKey
-
-	if(hououHighestLeague == "鳳凰位") {
-		sortKey = "00"
-	}
-	else {
-		sortKey = hououHighestLeague
-	}
-
-	return '<span class="' + sortKey + '">' + '<a href="./houou_leagues.html?name=' + name + '" target="_blank">' + hououHighestLeague + '</a></span>'
+	const sortKey = hououHighestLeague === "鳳凰位" ? "00" : hououHighestLeague
+	return getInternalLink(getSortKey(sortKey), './houou_leagues.html', 'name', name, hououHighestLeague, '')
 }
 
 function getHououSeasons(name, hououSeasons) {
-
-	let sortKey = ('0000' + hououSeasons).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./houou_results.html?name=' + name + '" target="_blank">' + hououSeasons + '回</a></span>'
+	return getInternalLink(getSortKey(hououSeasons), './houou_results.html', 'name', name, hououSeasons, '回')
 }
 
 function getInstagram(instagramId) {
@@ -305,10 +278,7 @@ function getInternalLink(sortKey, baseUrl, paramName, param, value, unit) {
 }
 
 function getJpmlWrcSeasons(name, jpmlWrcSeasons) {
-
-	let sortKey = ('0000' + jpmlWrcSeasons).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./wrc_results.html?name=' + name + '" target="_blank">' + jpmlWrcSeasons + '回</a></span>'
+	return getInternalLink(getSortKey(jpmlWrcSeasons), './wrc_results.html', 'name', name, jpmlWrcSeasons, '回')
 }
 
 function getKinmaDirectory(kinmaDirectoryUrl, kinmaDirectoryImageUrl) {
@@ -316,28 +286,16 @@ function getKinmaDirectory(kinmaDirectoryUrl, kinmaDirectoryImageUrl) {
 }
 
 function getLives(name, numberOfLives) {
-
-	let sortKey = ('0000' + numberOfLives).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./video_live.html?name=' + name + '" target="_blank">' + numberOfLives + '件</a></span>'
+	return getInternalLink(getSortKey(numberOfLives), './video_live.html', 'name', name, numberOfLives, '件')
 }
 
 function getName(name, sortKey, lastNameEn = '', firstNameEn = '') {
-	return '<span class="' + sortKey + '">' + name + '<br>' + lastNameEn + ' ' + firstNameEn + '</span>'
+	return `<span class="${sortKey}">${name}<br>${lastNameEn} ${firstNameEn}</span>`
 }
 
 function getOukaHighestLeague(name, oukaHighestLeague) {
-
-	let sortKey
-
-	if(oukaHighestLeague == "桜花") {
-		sortKey = "00"
-	}
-	else {
-		sortKey = oukaHighestLeague
-	}
-
-	return '<span class="' + sortKey + '">' + '<a href="./ouka_leagues.html?name=' + name + '" target="_blank">' + oukaHighestLeague + '</a></span>'
+	const sortKey = oukaHighestLeague === "桜花" ? "00" : oukaHighestLeague
+	return getInternalLink(getSortKey(sortKey), './ouka_leagues.html', 'name', name, oukaHighestLeague, '')
 }
 
 function getOukaSeasons(name, oukaSeasons) {
@@ -345,7 +303,7 @@ function getOukaSeasons(name, oukaSeasons) {
 }
 
 function getProClass(proClass, joined) {
-	return '<span class="' + joined + '">' + proClass + '期<br>' + joined + '</span>'
+	return `<span class="${joined}">${proClass}期<br>${joined}</span>`
 }
 
 function getRon2(ron2Id, ron2ImageUrl) {
@@ -367,8 +325,8 @@ function getSearchParam(params, paramName) {
 	return param
 }
 
-function getSortKey(number) {
-	return ('0000' + number).slice(-4)
+function getSortKey(key) {
+	return ('00000' + key).slice(-5)
 }
 
 function getTokushoSeasons(name, tokushoSeasons) {
