@@ -103,7 +103,8 @@ function drawDashboard() {
 
 			const row = [
 				getFormattedName(name, sortKey, lastNameEn, firstNameEn),
-				getFormattedRon2(ron2Id, ron2ImageUrl),
+				ron2Id ? getFormattedRon2(ron2Id, ron2ImageUrl) : '',
+//				getFormattedRon2(ron2Id, ron2ImageUrl),
 				getFormattedTwitter(twitterId, twitterImageUrl),
 				getFormattedInstagram(instagramId),
 				getFormattedYouTube(youTubeId, youTubeImageUrl),
