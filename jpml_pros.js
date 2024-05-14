@@ -5,17 +5,6 @@ const search_joined = getSearchParam(params, 'joined')
 const search_league = getSearchParam(params, 'league')
 const search_ouka = getSearchParam(params, 'ouka')
 
-function getSearchParam(params, paramName) {
-
-	let param = params.get(paramName)
-
-	if(param == 'null') {
-		param = ''
-	}
-
-	return param
-}
-
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=pro&headers=1'
 
 google.charts.load('current', {'packages':['table','controls']});
@@ -606,4 +595,15 @@ function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 	}
 
 	return formattedYouTube	
+}
+
+function getSearchParam(params, paramName) {
+
+	let param = params.get(paramName)
+
+	if(param == 'null') {
+		param = ''
+	}
+
+	return param
 }
