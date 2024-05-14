@@ -102,30 +102,30 @@ function drawDashboard() {
 			let mleagueYouTubeImageUrl = data.getValue(i,46)
 
 			const row = [
-				getFormattedName(name, sortKey, lastNameEn, firstNameEn),
-				ron2Id ? getFormattedRon2(ron2Id, ron2ImageUrl) : '',
-				twitterId ? getFormattedTwitter(twitterId, twitterImageUrl) : '',
-				instagramId ? getFormattedInstagram(instagramId) : '',
-				youTubeId ? getFormattedYouTube(youTubeId, youTubeImageUrl) : '',
-				blogUrl ? getFormattedBlog(blogUrl, blogImageUrl) : '',
-				kinmaDirectoryUrl ? getFormattedKinmaDirectory(kinmaDirectoryUrl, kinmaDirectoryImageUrl) : '',
-				mleagueYouTubeId ? getFormattedYouTube(mleagueYouTubeId, mleagueYouTubeImageUrl) :'',
-				proClass ? getFormattedProClass(proClass, joined) : '',
-				danEn ? getFormattedDan(danEn) : '',
-				birthplaceJa ? getFormattedBirthplace(birthplaceJa, birthplaceEn) : '',
+				getName(name, sortKey, lastNameEn, firstNameEn),
+				ron2Id ? getRon2(ron2Id, ron2ImageUrl) : '',
+				twitterId ? getTwitter(twitterId, twitterImageUrl) : '',
+				instagramId ? getInstagram(instagramId) : '',
+				youTubeId ? getYouTube(youTubeId, youTubeImageUrl) : '',
+				blogUrl ? getBlog(blogUrl, blogImageUrl) : '',
+				kinmaDirectoryUrl ? getKinmaDirectory(kinmaDirectoryUrl, kinmaDirectoryImageUrl) : '',
+				mleagueYouTubeId ? getYouTube(mleagueYouTubeId, mleagueYouTubeImageUrl) :'',
+				proClass ? getProClass(proClass, joined) : '',
+				danEn ? getDan(danEn) : '',
+				birthplaceJa ? getBirthplace(birthplaceJa, birthplaceEn) : '',
 				birthday,
-				getFormattedHououSeasons(name, hououSeasons),
+				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
 				hououLatestLeague,
-				hououHighestLeague ? getFormattedHououHighestLeague(name, hououHighestLeague) : '',
-				oukaSeasons ? getFormattedOukaSeasons(name, oukaSeasons) : '',
+				hououHighestLeague ? getHououHighestLeague(name, hououHighestLeague) : '',
+				oukaSeasons ? getOukaSeasons(name, oukaSeasons) : '',
 				oukaLatestLeague,
-				oukaHighestLeague ? getFormattedOukaHighestLeague(name, oukaHighestLeague) : '',
-				jpmlWrcSeasons ? getFormattedJpmlWrcSeasons(name, jpmlWrcSeasons) : '',
-				tokushoSeasons ? getFormattedTokushoSeasons(name, tokushoSeasons) : '',
-				saikyoGames ? getFormattedSaikyoGames(name, saikyoGames) : '',
-				numberOfFinals ? getFormattedFinals(name, numberOfFinals) : '',
-				numberOfArticles ? getFormattedArticles(name, numberOfArticles) : '',
-				numberOfLives ? getFormattedLives(name, numberOfLives) : ''
+				oukaHighestLeague ? getOukaHighestLeague(name, oukaHighestLeague) : '',
+				jpmlWrcSeasons ? getJpmlWrcSeasons(name, jpmlWrcSeasons) : '',
+				tokushoSeasons ? getTokushoSeasons(name, tokushoSeasons) : '',
+				saikyoGames ? getSaikyoGames(name, saikyoGames) : '',
+				numberOfFinals ? getFinals(name, numberOfFinals) : '',
+				numberOfArticles ? getArticles(name, numberOfArticles) : '',
+				numberOfLives ? getLives(name, numberOfLives) : ''
 			]
 			rows.push(row)
 		}
@@ -221,38 +221,24 @@ function drawDashboard() {
 	}
 }
 
-function getFormattedArticles(name,numberOfArticles) {
+function getArticles(name, numberOfArticles) {
 
-	let sortKey
-	let formattedArticles
+	let sortKey = ('0000' + numberOfArticles).slice(-4)
 
-	if(numberOfArticles != 0) {
-		sortKey = ('0000' + numberOfArticles).slice(-4)
-		formattedArticles = '<span class="' + sortKey + '">' + '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + numberOfArticles + '件</a></span>'
-	}
-
-	return formattedArticles
+	return '<span class="' + sortKey + '">' + '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + numberOfArticles + '件</a></span>'
 }
 
-function getFormattedBirthplace(birthplaceJa,birthplaceEn) {
-
-	let formattedBirthplace
-
-	if(birthplaceJa) {
-		formattedBirthplace = '<span class="' + birthplaceEn + '">' + birthplaceJa + '<br>' + birthplaceEn + '</span>'
-	}
-
-	return formattedBirthplace
+function getBirthplace(birthplaceJa, birthplaceEn) {
+	return '<span class="' + birthplaceEn + '">' + birthplaceJa + '<br>' + birthplaceEn + '</span>'
 }
 
-function getFormattedBlog(blogUrl,blogImageUrl) {
-	return getHyperlinkTags(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
+function getBlog(blogUrl, blogImageUrl) {
+	return getExternalLink(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
 }
 
-function getFormattedDan(danEn) {
+function getDan(danEn) {
 
 	let danJa
-	let formattedDan
 
 	switch(danEn) {
 		case 1:
@@ -286,30 +272,19 @@ function getFormattedDan(danEn) {
 			break
 	}
 
-	if(danEn) {
-		formattedDan = '<span class="' + danEn + '">' + danJa + '</span>'
-	}
-
-	return formattedDan
+	return '<span class="' + danEn + '">' + danJa + '</span>'
 }
 
-function getFormattedFinals(name,numberOfFinals) {
+function getFinals(name, numberOfFinals) {
 
-	let sortKey
-	let formattedFinals
+	let sortKey = ('0000' + numberOfFinals).slice(-4)
 
-	if(numberOfFinals != 0) {
-		sortKey = ('0000' + numberOfFinals).slice(-4)
-		formattedFinals = '<span class="' + sortKey + '">' + '<a href="./jpml_titles.html?name=' + name + '" target="_blank">' + numberOfFinals + '回</a></span>'
-	}
-
-	return formattedFinals
+	return '<span class="' + sortKey + '">' + '<a href="./jpml_titles.html?name=' + name + '" target="_blank">' + numberOfFinals + '回</a></span>'
 }
 
-function getFormattedHououHighestLeague(name,hououHighestLeague) {
+function getHououHighestLeague(name, hououHighestLeague) {
 
 	let sortKey
-	let formattedHououHighestLeague
 
 	if(hououHighestLeague == "鳳凰位") {
 		sortKey = "00"
@@ -318,88 +293,45 @@ function getFormattedHououHighestLeague(name,hououHighestLeague) {
 		sortKey = hououHighestLeague
 	}
 
-	if(hououHighestLeague) {
-		formattedHououHighestLeague = '<span class="' + sortKey + '">' + '<a href="./houou_leagues.html?name=' + name + '" target="_blank">' + hououHighestLeague + '</a></span>'
-	}
-
-	return formattedHououHighestLeague
+	return '<span class="' + sortKey + '">' + '<a href="./houou_leagues.html?name=' + name + '" target="_blank">' + hououHighestLeague + '</a></span>'
 }
 
-function getFormattedHououSeasons(name,hououSeasons) {
+function getHououSeasons(name, hououSeasons) {
+
+	let sortKey = ('0000' + hououSeasons).slice(-4)
+
+	return '<span class="' + sortKey + '">' + '<a href="./houou_results.html?name=' + name + '" target="_blank">' + hououSeasons + '回</a></span>'
+}
+
+function getInstagram(instagramId) {
+	return getExternalLink('http://instagram.com/' + instagramId, 'img/instagram.svg', 'Instagram', 'img/instagram.svg')
+}
+
+function getJpmlWrcSeasons(name, jpmlWrcSeasons) {
+
+	let sortKey = ('0000' + jpmlWrcSeasons).slice(-4)
+
+	return '<span class="' + sortKey + '">' + '<a href="./wrc_results.html?name=' + name + '" target="_blank">' + jpmlWrcSeasons + '回</a></span>'
+}
+
+function getKinmaDirectory(kinmaDirectoryUrl, kinmaDirectoryImageUrl) {
+	return getExternalLink(kinmaDirectoryUrl, kinmaDirectoryImageUrl, '雀士名鑑', 'img/box-arrow-up-right.svg')
+}
+
+function getLives(name, numberOfLives) {
+
+	let sortKey = ('0000' + numberOfLives).slice(-4)
+
+	return '<span class="' + sortKey + '">' + '<a href="./video_live.html?name=' + name + '" target="_blank">' + numberOfLives + '件</a></span>'
+}
+
+function getName(name, sortKey, lastNameEn = '', firstNameEn = '') {
+	return '<span class="' + sortKey + '">' + name + '<br>' + lastNameEn + ' ' + firstNameEn + '</span>'
+}
+
+function getOukaHighestLeague(name, oukaHighestLeague) {
 
 	let sortKey
-	let formattedHououSeasons
-
-	if(hououSeasons) {
-		sortKey = ('0000' + hououSeasons).slice(-4)
-		formattedHououSeasons = '<span class="' + sortKey + '">' + '<a href="./houou_results.html?name=' + name + '" target="_blank">' + hououSeasons + '回</a></span>'
-	}
-
-	return formattedHououSeasons
-}
-
-function getFormattedInstagram(instagramId) {
-	return getHyperlinkTags('http://instagram.com/' + instagramId, 'img/instagram.svg', 'Instagram', 'img/instagram.svg')
-}
-
-function getFormattedJpmlWrcSeasons(name,jpmlWrcSeasons) {
-
-	let sortKey
-	let formattedJpmlWrcSeasons
-
-	if(jpmlWrcSeasons) {
-		sortKey = ('0000' + jpmlWrcSeasons).slice(-4)
-		formattedJpmlWrcSeasons = '<span class="' + sortKey + '">' + '<a href="./wrc_results.html?name=' + name + '" target="_blank">' + jpmlWrcSeasons + '回</a></span>'
-	}
-
-	return formattedJpmlWrcSeasons
-}
-
-function getFormattedKinmaDirectory(kinmaDirectoryUrl,kinmaDirectoryImageUrl) {
-	return getHyperlinkTags(kinmaDirectoryUrl, kinmaDirectoryImageUrl, '雀士名鑑', 'img/box-arrow-up-right.svg')
-}
-
-function getFormattedLastUpdated(lastUpdated) {
-
-	let formattedLastUpdated
-
-	if(lastUpdated) {
-		formattedLastUpdated = lastUpdated.getFullYear() + '-' + ('00' + (lastUpdated.getMonth()+1)).slice(-2) + '-' + ('00' + lastUpdated.getDate()).slice(-2)
-	}
-
-	return formattedLastUpdated
-}
-
-function getFormattedLives(name,numberOfLives) {
-
-	let sortKey
-	let formattedLives
-
-	if(numberOfLives != 0) {
-		sortKey = ('0000' + numberOfLives).slice(-4)
-		formattedLives = '<span class="' + sortKey + '">' + '<a href="./video_live.html?name=' + name + '" target="_blank">' + numberOfLives + '件</a></span>'
-	}
-
-	return formattedLives
-}
-
-function getFormattedName(name,sortKey,lastNameEn,firstNameEn) {
-
-	let formattedName = name
-
-	// nullを空文字列に変換
-	if(!lastNameEn)  {lastNameEn = ""}
-	if(!firstNameEn) {firstNameEn = ""}
-
-	formattedName = '<span class="' + sortKey + '">' + name + '<br>' + lastNameEn + ' ' + firstNameEn + '</span>'
-
-	return formattedName
-}
-
-function getFormattedOukaHighestLeague(name,oukaHighestLeague) {
-
-	let sortKey
-	let formattedOukaHighestLeague
 
 	if(oukaHighestLeague == "桜花") {
 		sortKey = "00"
@@ -408,76 +340,47 @@ function getFormattedOukaHighestLeague(name,oukaHighestLeague) {
 		sortKey = oukaHighestLeague
 	}
 
-	if(oukaHighestLeague) {
-		formattedOukaHighestLeague = '<span class="' + sortKey + '">' + '<a href="./ouka_leagues.html?name=' + name + '" target="_blank">' + oukaHighestLeague + '</a></span>'
-	}
-
-	return formattedOukaHighestLeague
+	return '<span class="' + sortKey + '">' + '<a href="./ouka_leagues.html?name=' + name + '" target="_blank">' + oukaHighestLeague + '</a></span>'
 }
 
-function getFormattedOukaSeasons(name,oukaSeasons) {
+function getOukaSeasons(name, oukaSeasons) {
 
-	let sortKey
-	let formattedOukaSeasons
+	let sortKey = ('0000' + oukaSeasons).slice(-4)
 
-	if(oukaSeasons) {
-		sortKey = ('0000' + oukaSeasons).slice(-4)
-		formattedOukaSeasons = '<span class="' + sortKey + '">' + '<a href="./ouka_results.html?name=' + name + '" target="_blank">' + oukaSeasons + '回</a></span>'
-	}
-
-	return formattedOukaSeasons
+	return '<span class="' + sortKey + '">' + '<a href="./ouka_results.html?name=' + name + '" target="_blank">' + oukaSeasons + '回</a></span>'
 }
 
-function getFormattedProClass(proClass,joined) {
-
-	let formattedProClass
-
-	if(proClass) {
-		formattedProClass = '<span class="' + joined + '">' + proClass + '期<br>' + joined + '</span>'
-	}
-
-	return formattedProClass
+function getProClass(proClass, joined) {
+	return '<span class="' + joined + '">' + proClass + '期<br>' + joined + '</span>'
 }
 
-function getFormattedRon2(ron2Id,ron2ImageUrl) {
-	return getHyperlinkTags('https://ron2.jp/pro/' + ron2Id, ron2ImageUrl, '龍龍', 'img/box-arrow-up-right.svg')
+function getRon2(ron2Id, ron2ImageUrl) {
+	return getExternalLink('https://ron2.jp/pro/' + ron2Id, ron2ImageUrl, '龍龍', 'img/box-arrow-up-right.svg')
 }
 
-function getFormattedSaikyoGames(name,saikyoGames) {
+function getSaikyoGames(name, saikyoGames) {
 
-	let sortKey
-	let formattedSaikyoGames
+	let sortKey = ('0000' + saikyoGames).slice(-4)
 
-	if(saikyoGames) {
-		sortKey = ('0000' + saikyoGames).slice(-4)
-		formattedSaikyoGames = '<span class="' + sortKey + '">' + '<a href="./saikyo_results.html?name=' + name + '" target="_blank">' + saikyoGames + '回</a></span>'
-	}
-
-	return formattedSaikyoGames
+	return '<span class="' + sortKey + '">' + '<a href="./saikyo_results.html?name=' + name + '" target="_blank">' + saikyoGames + '回</a></span>'
 }
 
-function getFormattedTokushoSeasons(name,tokushoSeasons) {
+function getTokushoSeasons(name, tokushoSeasons) {
 
-	let sortKey
-	let formattedTokushoSeasons
+	let sortKey = ('0000' + tokushoSeasons).slice(-4)
 
-	if(tokushoSeasons) {
-		sortKey = ('0000' + tokushoSeasons).slice(-4)
-		formattedTokushoSeasons = '<span class="' + sortKey + '">' + '<a href="./tokusho_results.html?name=' + name + '" target="_blank">' + tokushoSeasons + '回</a></span>'
-	}
-
-	return formattedTokushoSeasons
+	return '<span class="' + sortKey + '">' + '<a href="./tokusho_results.html?name=' + name + '" target="_blank">' + tokushoSeasons + '回</a></span>'
 }
 
-function getFormattedTwitter(twitterId,twitterImageUrl) {
-	return getHyperlinkTags('http://twitter.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
+function getTwitter(twitterId, twitterImageUrl) {
+	return getExternalLink('http://twitter.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
 }
 
-function getFormattedYouTube(youTubeId,youTubeImageUrl) {
-	return getHyperlinkTags('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
+function getYouTube(youTubeId, youTubeImageUrl) {
+	return getExternalLink('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
 }
 
-function getHyperlinkTags(url, imgUrl, altText, altImgUrl) {
+function getExternalLink(url, imgUrl, altText, altImgUrl) {
     return `<a href="${url}" target="_blank"><img alt="${altText}" class="pros" loading="lazy" src="${imgUrl}" onError="this.onerror=null;this.src='${altImgUrl}'" /></a>`
 }
 
