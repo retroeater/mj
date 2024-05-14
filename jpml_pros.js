@@ -1,9 +1,9 @@
 const params = (new URL(document.location)).searchParams
 
-const search_name = getSearchParam('name')
-const search_joined = getSearchParam('joined')
-const search_league = getSearchParam('league')
-const search_ouka = getSearchParam('ouka')
+const search_name = getSearchParam(params, 'name')
+const search_joined = getSearchParam(params, 'joined')
+const search_league = getSearchParam(params, 'league')
+const search_ouka = getSearchParam(params, 'ouka')
 
 function getSearchParam(params, paramName) {
 
