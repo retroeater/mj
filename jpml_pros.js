@@ -21,7 +21,7 @@ function drawDashboard() {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
-
+/*
 		const chartData = new google.visualization.DataTable()
 		chartData.addColumn('string','名前')
 		chartData.addColumn('string','龍龍')
@@ -48,6 +48,34 @@ function drawDashboard() {
 		chartData.addColumn('string','関連<br>記事')
 //		chartData.addColumn('string','関連<br>動画')
 		chartData.addColumn('string','放送<br>対局')
+*/
+		const chartData = new google.visualization.DataTable();
+		const columns = [
+			'名前',
+			'龍龍',
+			'Twitter',
+			'Instagram',
+			'YouTube',
+			'ブログ',
+			'雀士<br>名鑑',
+			'Mリーグ',
+			'期<br>入会',
+			'段位',
+			'誕生日<br>出身地',
+			'鳳凰<br>出場',
+			'鳳凰<br>41前',
+			'鳳凰<br>最高',
+			'桜花<br>出場',
+			'桜花<br>19期',
+			'桜花<br>最高',
+			'JWRC<br>出場',
+			'特昇<br>出場',
+			'最強<br>出場',
+			'決勝<br>進出',
+			'関連<br>記事',
+			'放送<br>対局'
+		]
+		columns.forEach(col => chartData.addColumn('string', col))
 
 		const data = response.getDataTable()
 		const rows = []
@@ -243,7 +271,7 @@ function getBirthInfo(birthday, birthplaceJa) {
 function getBlog(blogUrl, blogImageUrl) {
 	return getExternalLink(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
 }
-
+/*
 function getDan(danEn) {
 
 	let danJa
@@ -281,6 +309,30 @@ function getDan(danEn) {
 	}
 
 	return '<span class="' + danEn + '">' + danJa + '</span>'
+}
+*/
+
+function getDan(danEn) {
+
+	const danMap = {
+		1: '初段',
+		2: 'ニ段',
+		3: '三段',
+		4: '四段',
+		5: '五段',
+		6: '六段',
+		7: '七段',
+		8: '八段',
+		9: '九段'
+    }
+
+    const danJa = danMap[danEn] || ''
+
+    return `<span class="${danEn}">${danJa}</span>`
+}
+
+function getExternalLink(url, imgUrl, altText, altImgUrl) {
+    return `<a href="${url}" target="_blank"><img alt="${altText}" class="pros" loading="lazy" src="${imgUrl}" onError="this.onerror=null;this.src='${altImgUrl}'" /></a>`
 }
 
 function getFinals(name, numberOfFinals) {
@@ -386,10 +438,6 @@ function getTwitter(twitterId, twitterImageUrl) {
 
 function getYouTube(youTubeId, youTubeImageUrl) {
 	return getExternalLink('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
-}
-
-function getExternalLink(url, imgUrl, altText, altImgUrl) {
-    return `<a href="${url}" target="_blank"><img alt="${altText}" class="pros" loading="lazy" src="${imgUrl}" onError="this.onerror=null;this.src='${altImgUrl}'" /></a>`
 }
 
 function getSearchParam(params, paramName) {
