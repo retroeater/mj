@@ -229,11 +229,11 @@ function getArticles(name, numberOfArticles) {
 
 function getBirthInfo(birthday, birthplaceJa) {
 
-	if(birthday == 'null') {
+	if(!birthday) {
 		birthday = ''
 	}
 
-	if(birthplaceJa == 'null') {
+	if(!birthplaceJa) {
 		birthplaceJa = ''
 	}
 
