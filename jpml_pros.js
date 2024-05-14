@@ -237,7 +237,7 @@ function getBirthInfo(birthday, birthplaceJa) {
 		birthplaceJa = ''
 	}
 
-	return '<span class="' + birthday + '">' + birthday + '<br>' + birthplaceJa + '</span>'
+	return '<span class="' + birthday + '">' + birthday + '<br>' + birthplaceJa + '<br></span>'
 }
 
 function getBlog(blogUrl, blogImageUrl) {
