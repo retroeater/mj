@@ -33,7 +33,7 @@ function drawDashboard() {
 		chartData.addColumn('string','Mリーグ')
 		chartData.addColumn('string','期<br>入会')
 		chartData.addColumn('string','段位')
-		chartData.addColumn('string','出身地')
+//		chartData.addColumn('string','出身地')
 		chartData.addColumn('string','誕生日<br>出身地')
 		chartData.addColumn('string','鳳凰<br>出場')
 		chartData.addColumn('string','鳳凰<br>41前')
@@ -65,7 +65,7 @@ function drawDashboard() {
 			let proClass = data.getValue(i,8)
 			let joined = data.getValue(i,9)
 			let birthplaceJa = data.getValue(i,10)
-			let birthplaceEn = data.getValue(i,11)
+//			let birthplaceEn = data.getValue(i,11)
 			let birthday = data.getValue(i,12)
 			let ron2Id = data.getValue(i,13)
 			let twitterId = data.getValue(i,14)
@@ -112,7 +112,6 @@ function drawDashboard() {
 				mleagueYouTubeId ? getYouTube(mleagueYouTubeId, mleagueYouTubeImageUrl) :'',
 				proClass ? getProClass(proClass, joined) : '',
 				danEn ? getDan(danEn) : '',
-				birthplaceJa ? getBirthplace(birthplaceJa, birthplaceEn) : '',
 				(birthday) || (birthplaceJa) ? getBirthInfo(birthday, birthplaceJa) : '',
 				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
 				hououLatestLeague,
@@ -228,12 +227,8 @@ function getArticles(name, numberOfArticles) {
 	return '<span class="' + sortKey + '">' + '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + numberOfArticles + '件</a></span>'
 }
 
-function getBirthInfo(birthday, birthplaceJa) {
+function getBirthInfo(birthday = '', birthplaceJa = '') {
 	return '<span class="' + birthday + '">' + birthday + '<br>' + birthplaceJa + '</span>'
-}
-
-function getBirthplace(birthplaceJa, birthplaceEn) {
-	return '<span class="' + birthplaceEn + '">' + birthplaceJa + '<br>' + birthplaceEn + '</span>'
 }
 
 function getBlog(blogUrl, blogImageUrl) {
