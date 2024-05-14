@@ -353,7 +353,7 @@ function getRon2(ron2Id, ron2ImageUrl) {
 }
 
 function getSaikyoGames(name, saikyoGames) {
-	return getInternalLink(getSortKey(saikyoGames), './saikyo_results.html', 'name', name, saikyoGames, '回')
+	return getInternalLink(getSortKey(saikyoGames), './saikyo_results.html', 'tag', name, saikyoGames, '回')
 }
 
 function getSearchParam(params, paramName) {
