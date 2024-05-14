@@ -225,7 +225,16 @@ function getArticles(name, numberOfArticles) {
 	return getInternalLink(getSortKey(numberOfArticles), './jpml_articles.html', 'name', name, numberOfArticles, '件')
 }
 
-function getBirthInfo(birthday = '', birthplaceJa = '') {
+function getBirthInfo(birthday, birthplaceJa) {
+
+	if(!birthday) {
+		birthday = ''
+	}
+
+	if(!birthplaceJa) {
+		birthplaceJa = ''
+	}
+
 	return `<span class="${birthday}">${birthday}<br>${birthplaceJa}<br></span>`
 }
 
