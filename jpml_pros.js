@@ -300,6 +300,10 @@ function getInstagram(instagramId) {
 	return getExternalLink('http://instagram.com/' + instagramId, 'img/instagram.svg', 'Instagram', 'img/instagram.svg')
 }
 
+function getInternalLink(sortKey, baseUrl, paramName, param, value, unit) {
+	return `<span class="${sortKey}"><a href="${baseUrl}?${paramName}=${param}" target="_blank">${value}${unit}</a></span>`
+}
+
 function getJpmlWrcSeasons(name, jpmlWrcSeasons) {
 
 	let sortKey = ('0000' + jpmlWrcSeasons).slice(-4)
@@ -337,10 +341,7 @@ function getOukaHighestLeague(name, oukaHighestLeague) {
 }
 
 function getOukaSeasons(name, oukaSeasons) {
-
-	let sortKey = ('0000' + oukaSeasons).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./ouka_results.html?name=' + name + '" target="_blank">' + oukaSeasons + '回</a></span>'
+	return getInternalLink(getSortKey(oukaSeasons), './ouka_results.html', 'name', name, oukaSeasons, '回')
 }
 
 function getProClass(proClass, joined) {
@@ -352,30 +353,7 @@ function getRon2(ron2Id, ron2ImageUrl) {
 }
 
 function getSaikyoGames(name, saikyoGames) {
-
-	let sortKey = ('0000' + saikyoGames).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./saikyo_results.html?name=' + name + '" target="_blank">' + saikyoGames + '回</a></span>'
-}
-
-/*
-function getTokushoSeasons(name, tokushoSeasons) {
-
-	let sortKey = ('0000' + tokushoSeasons).slice(-4)
-
-	return '<span class="' + sortKey + '">' + '<a href="./tokusho_results.html?name=' + name + '" target="_blank">' + tokushoSeasons + '回</a></span>'
-}
-*/
-function getTokushoSeasons(name, tokushoSeasons) {
-	return getInternalLink(getSortKey(tokushoSeasons), './tokusho_results.html', 'name', name, tokushoSeasons, '回')
-}
-
-function getTwitter(twitterId, twitterImageUrl) {
-	return getExternalLink('http://twitter.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
-}
-
-function getYouTube(youTubeId, youTubeImageUrl) {
-	return getExternalLink('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
+	return getInternalLink(getSortKey(saikyoGames), './saikyo_results.html', 'name', name, saikyoGames, '回')
 }
 
 function getSearchParam(params, paramName) {
@@ -389,10 +367,18 @@ function getSearchParam(params, paramName) {
 	return param
 }
 
-function getInternalLink(sortKey, baseUrl, paramName, param, value, unit) {
-	return `<span class="${sortKey}"><a href="${baseUrl}?${paramName}=${param}" target="_blank">${value}${unit}</a></span>`
-}
-
 function getSortKey(number) {
 	return ('0000' + number).slice(-4)
+}
+
+function getTokushoSeasons(name, tokushoSeasons) {
+	return getInternalLink(getSortKey(tokushoSeasons), './tokusho_results.html', 'name', name, tokushoSeasons, '回')
+}
+
+function getTwitter(twitterId, twitterImageUrl) {
+	return getExternalLink('http://twitter.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
+}
+
+function getYouTube(youTubeId, youTubeImageUrl) {
+	return getExternalLink('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
 }
