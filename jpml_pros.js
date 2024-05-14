@@ -227,7 +227,16 @@ function getArticles(name, numberOfArticles) {
 	return '<span class="' + sortKey + '">' + '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + numberOfArticles + '件</a></span>'
 }
 
-function getBirthInfo(birthday = '', birthplaceJa = '') {
+function getBirthInfo(birthday, birthplaceJa) {
+
+	if(birthday == 'null') {
+		birthday = ''
+	}
+
+	if(birthplaceJa == 'null') {
+		birthplaceJa = ''
+	}
+
 	return '<span class="' + birthday + '">' + birthday + '<br>' + birthplaceJa + '</span>'
 }
 
