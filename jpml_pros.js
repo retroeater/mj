@@ -358,11 +358,16 @@ function getSaikyoGames(name, saikyoGames) {
 	return '<span class="' + sortKey + '">' + '<a href="./saikyo_results.html?name=' + name + '" target="_blank">' + saikyoGames + '回</a></span>'
 }
 
+/*
 function getTokushoSeasons(name, tokushoSeasons) {
 
 	let sortKey = ('0000' + tokushoSeasons).slice(-4)
 
 	return '<span class="' + sortKey + '">' + '<a href="./tokusho_results.html?name=' + name + '" target="_blank">' + tokushoSeasons + '回</a></span>'
+}
+*/
+function getTokushoSeasons(name, tokushoSeasons) {
+	return getInternalLink(getSortKey(tokushoSeasons), './tokusho_results.html', 'name', name, tokushoSeasons, '回')
 }
 
 function getTwitter(twitterId, twitterImageUrl) {
@@ -382,4 +387,12 @@ function getSearchParam(params, paramName) {
 	}
 
 	return param
+}
+
+function getInternalLink(sortKey, baseUrl, paramName, param, value, unit) {
+	return `<span class="${sortKey}"><a href="${baseUrl}?${paramName}=${param}" target="_blank">${value}${unit}</a></span>`
+}
+
+function getSortKey(number) {
+	return ('0000' + number).slice(-4)
 }
