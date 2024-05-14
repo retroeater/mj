@@ -1,23 +1,19 @@
 const params = (new URL(document.location)).searchParams
-let search_name = params.get('name')
-let search_joined = params.get('joined')
-let search_league = params.get('league')
-let search_ouka = params.get('ouka')
 
-if(search_name == 'null') {
-	search_name = ''
-}
+const search_name = getSearchParam('name')
+const search_joined = getSearchParam('joined')
+const search_league = getSearchParam('league')
+const search_ouka = getSearchParam('ouka')
 
-if(search_joined == 'null') {
-	search_joined = ''
-}
+function getSearchParam(params, paramName) {
 
-if(search_league == 'null') {
-	search_league = ''
-}
+	let param = params.get(paramName)
 
-if(search_ouka == 'null') {
-	search_ouka = ''
+	if(param == 'null') {
+		param = ''
+	}
+
+	return param
 }
 
 const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=pro&headers=1'
