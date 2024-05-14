@@ -247,10 +247,9 @@ function getFormattedBirthplace(birthplaceJa,birthplaceEn) {
 function getFormattedBlog(blogUrl,blogImageUrl) {
 
 	let formattedBlog
-	const blogIcon = 'img/journal-text.svg'
 
 	if(blogUrl) {
-		formattedBlog = '<a href="' + blogUrl + '" target="_blank"><img alt="Blog" class="pros" loading="lazy" src="' + blogImageUrl + '" onError="this.onerror=null;this.src=\'' + blogIcon + '\'" /></a>'
+		formattedBlog = getHyperlinkTags(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
 	}
 
 	return formattedBlog
@@ -348,10 +347,9 @@ function getFormattedHououSeasons(name,hououSeasons) {
 function getFormattedInstagram(instagramId) {
 
 	let formattedInstagram
-	const instagramIcon = 'img/instagram.svg'
 
 	if(instagramId) {
-		formattedInstagram = ' <a href="http://instgram.com/' + instagramId + '" target="_blank"><img alt="Instagram" class="pros" src="' + instagramIcon + '" /></a> '
+		formattedInstagram = getHyperlinkTags('http://instgram.com/' + instagramId, 'img/instagram.svg', 'Instagram', 'img/instagram.svg')
 	}
 
 	return formattedInstagram
@@ -466,12 +464,8 @@ function getFormattedRon2(ron2Id,ron2ImageUrl) {
 
 	let formattedRon2
 
-	if(!ron2ImageUrl) {
-		ron2ImageUrl = 'img/box-arrow-up-right.svg'
-	}
-
 	if(ron2Id) {
-		formattedRon2 = '<a href="https://ron2.jp/pro/' + ron2Id + '/" target="_blank"><img alt="龍龍" class="pros" loading="lazy" src="' + ron2ImageUrl + '" onError="this.onerror=null;this.src=\'img/box-arrow-up-right.svg\'" /></a>'
+		formattedRon2 = getHyperlinkTags('https://ron2.jp/pro/' + ron2Id, ron2ImageUrl, '龍龍', 'img/box-arrow-up-right.svg')
 	}
 
 	return formattedRon2
@@ -506,27 +500,15 @@ function getFormattedTokushoSeasons(name,tokushoSeasons) {
 function getFormattedTwitter(twitterId,twitterImageUrl) {
 
 	let formattedTwitter
-	const twitterIcon = 'img/twitter.svg'
 
 	if(twitterId) {
-		formattedTwitter = ' <a href="http://twitter.com/' + twitterId + '" target="_blank"><img alt="Twitter" class="pros" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + twitterIcon + '\'" /></a>'
+		formattedTwitter = getHyperlinkTags('http://twitter.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
 	}
 
 	return formattedTwitter	
 }
-/*
-function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
-	let formattedYouTube
-	const youtubeIcon = 'img/youtube.svg'
 
-	if(youTubeId) {
-		formattedYouTube = '<a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" class="pros" loading="lazy" src="' + youTubeImageUrl + '" onError="this.onerror=null;this.src=\'' + youtubeIcon + '\'" /></a>'
-	}
-
-	return formattedYouTube	
-}
-*/
 function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
 	let formattedYouTube
@@ -538,6 +520,10 @@ function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 	return formattedYouTube	
 }
 
+function getHyperlinkTags(url, imgUrl, altText, altImgUrl) {
+    return `<a href="${url}" target="_blank"><img alt="${altText}" class="pros" loading="lazy" src="${imgUrl}" onError="this.onerror=null;this.src='${altImgUrl}'" /></a>`
+}
+
 function getSearchParam(params, paramName) {
 
 	let param = params.get(paramName)
@@ -547,8 +533,4 @@ function getSearchParam(params, paramName) {
 	}
 
 	return param
-}
-
-function getHyperlinkTags(url, imgUrl, altText, altImgUrl) {
-    return `<a href="${url}" target="_blank"><img alt="${altText}" class="pros" loading="lazy" src="${imgUrl}" onError="this.onerror=null;this.src='${altImgUrl}'" /></a>`
 }
