@@ -113,7 +113,7 @@ function drawDashboard() {
 				proClass ? getProClass(proClass, joined) : '',
 				danEn ? getDan(danEn) : '',
 				birthplaceJa ? getBirthplace(birthplaceJa, birthplaceEn) : '',
-				(birthday) || (birthplaceJa) ? getBirthdayAndBirthplace(birthday, birthplaceJa) : '',
+				(birthday) || (birthplaceJa) ? getBirthInfo(birthday, birthplaceJa) : '',
 				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
 				hououLatestLeague,
 				hououHighestLeague ? getHououHighestLeague(name, hououHighestLeague) : '',
