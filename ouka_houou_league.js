@@ -85,7 +85,7 @@ function drawChart() {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: '第19期女流桜花✕第41期後期鳳凰リーグ',
+			title: '第19期女流桜花✕第41期前期鳳凰リーグ',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
