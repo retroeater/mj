@@ -514,7 +514,7 @@ function getFormattedTwitter(twitterId,twitterImageUrl) {
 
 	return formattedTwitter	
 }
-
+/*
 function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
 	let formattedYouTube
@@ -522,6 +522,17 @@ function getFormattedYouTube(youTubeId,youTubeImageUrl) {
 
 	if(youTubeId) {
 		formattedYouTube = '<a href="http://youtube.com/channel/' + youTubeId + '" target="_blank"><img alt="YouTube" class="pros" loading="lazy" src="' + youTubeImageUrl + '" onError="this.onerror=null;this.src=\'' + youtubeIcon + '\'" /></a>'
+	}
+
+	return formattedYouTube	
+}
+*/
+function getFormattedYouTube(youTubeId,youTubeImageUrl) {
+
+	let formattedYouTube
+
+	if(youTubeId) {
+		formattedYouTube = getHyperlinkTags('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')	
 	}
 
 	return formattedYouTube	
@@ -536,4 +547,8 @@ function getSearchParam(params, paramName) {
 	}
 
 	return param
+}
+
+function getHyperlinkTags(url, imgUrl, altText, altImgUrl) {
+    return `<a href="${url}" target="_blank"><img alt="${altText}" class="pros" loading="lazy" src="${imgUrl}" onError="this.onerror=null;this.src='${altImgUrl}'" /></a>`
 }
