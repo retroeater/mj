@@ -26,7 +26,25 @@ function drawChart() {
 		chartData.addColumn('number','人数')
 
 		const data = response.getDataTable()
+		const rows = []
 
+		for (let i = 0; i < data.getNumberOfRows(); i++) {
+			const proClass = data.getValue(i, 0)
+			const league = data.getValue(i, 1)
+			const leagueId = getLeagueId(league)
+			const numberOfPeople = data.getValue(i, 2)
+	
+			rows.push([
+				String(numberOfPeople),
+				proClass,
+				leagueId,
+				league,
+				numberOfPeople
+			])
+		}
+
+		chartData.addRows(rows)
+	/*
 		let id
 		let proClass
 		let leagueId
@@ -51,7 +69,7 @@ function drawChart() {
 				]
 			])
 		}
-
+*/
 		const options = {
 			bubble: {
 				opacity: 0.8,
@@ -115,30 +133,16 @@ function drawChart() {
 
 function getLeagueId(league) {
 
-	let leagueId = ""
-	
-	switch(league) {
-		case "桜花":
-			leagueId = 6
-			break
-		case "A":
-			leagueId = 5
-			break
-		case "B":
-			leagueId = 4
-			break
-		case "C1":
-			leagueId = 3
-			break
-		case "C2":
-			leagueId = 2
-			break
-		case "C3":
-			leagueId = 1
-			break
+	const leagueMap = {
+		'桜花'	: 6,
+		'A'		: 5,
+		'B'		: 4,
+		'C1'	: 3,
+		'C2'	: 2,
+		'C3'	: 1
 	}
 
-	return leagueId
+	return leagueMap[league] || 0
 }
 
 (function(){
