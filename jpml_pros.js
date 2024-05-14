@@ -21,34 +21,7 @@ function drawDashboard() {
 			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
 			return
 		}
-/*
-		const chartData = new google.visualization.DataTable()
-		chartData.addColumn('string','名前')
-		chartData.addColumn('string','龍龍')
-		chartData.addColumn('string','Twitter')
-		chartData.addColumn('string','Instagram')
-		chartData.addColumn('string','YouTube')
-		chartData.addColumn('string','ブログ')
-		chartData.addColumn('string','雀士<br>名鑑')
-		chartData.addColumn('string','Mリーグ')
-		chartData.addColumn('string','期<br>入会')
-		chartData.addColumn('string','段位')
-//		chartData.addColumn('string','出身地')
-		chartData.addColumn('string','誕生日<br>出身地')
-		chartData.addColumn('string','鳳凰<br>出場')
-		chartData.addColumn('string','鳳凰<br>41前')
-		chartData.addColumn('string','鳳凰<br>最高')
-		chartData.addColumn('string','桜花<br>出場')
-		chartData.addColumn('string','桜花<br>19期')
-		chartData.addColumn('string','桜花<br>最高')
-		chartData.addColumn('string','JWRC<br>出場')
-		chartData.addColumn('string','特昇<br>出場')
-		chartData.addColumn('string','最強<br>出場')
-		chartData.addColumn('string','決勝<br>進出')
-		chartData.addColumn('string','関連<br>記事')
-//		chartData.addColumn('string','関連<br>動画')
-		chartData.addColumn('string','放送<br>対局')
-*/
+
 		const chartData = new google.visualization.DataTable();
 		const columns = [
 			'名前',
@@ -271,46 +244,6 @@ function getBirthInfo(birthday, birthplaceJa) {
 function getBlog(blogUrl, blogImageUrl) {
 	return getExternalLink(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
 }
-/*
-function getDan(danEn) {
-
-	let danJa
-
-	switch(danEn) {
-		case 1:
-			danJa = '初段'
-			break
-		case 2:
-			danJa = 'ニ段'
-			break
-		case 3:
-			danJa = '三段'
-			break
-		case 4:
-			danJa = '四段'
-			break
-		case 5:
-			danJa = '五段'
-			break
-		case 6:
-			danJa = '六段'
-			break
-		case 7:
-			danJa = '七段'
-			break
-		case 8:
-			danJa = '八段'
-			break
-		case 9:
-			danJa = '九段'
-			break
-		default:
-			break
-	}
-
-	return '<span class="' + danEn + '">' + danJa + '</span>'
-}
-*/
 
 function getDan(danEn) {
 
