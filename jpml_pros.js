@@ -246,14 +246,7 @@ function getFormattedBirthplace(birthplaceJa,birthplaceEn) {
 }
 
 function getFormattedBlog(blogUrl,blogImageUrl) {
-
-	let formattedBlog
-
-	if(blogUrl) {
-		formattedBlog = getHyperlinkTags(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
-	}
-
-	return formattedBlog
+	return getHyperlinkTags(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
 }
 
 function getFormattedDan(danEn) {
@@ -346,14 +339,7 @@ function getFormattedHououSeasons(name,hououSeasons) {
 }
 
 function getFormattedInstagram(instagramId) {
-
-	let formattedInstagram
-
-	if(instagramId) {
-		formattedInstagram = getHyperlinkTags('http://instgram.com/' + instagramId, 'img/instagram.svg', 'Instagram', 'img/instagram.svg')
-	}
-
-	return formattedInstagram
+	return getHyperlinkTags('http://instagram.com/' + instagramId, 'img/instagram.svg', 'Instagram', 'img/instagram.svg')
 }
 
 function getFormattedJpmlWrcSeasons(name,jpmlWrcSeasons) {
@@ -370,15 +356,7 @@ function getFormattedJpmlWrcSeasons(name,jpmlWrcSeasons) {
 }
 
 function getFormattedKinmaDirectory(kinmaDirectoryUrl,kinmaDirectoryImageUrl) {
-
-	let formattedKinmaDirectory
-	const directoryIcon = 'img/box-arrow-up-right.svg'
-
-	if(kinmaDirectoryUrl) {
-		formattedKinmaDirectory = '<a href="' + kinmaDirectoryUrl + '" target="_blank"><img alt="雀士名鑑" class="pros" loading="lazy" src="' + kinmaDirectoryImageUrl + '" onError="this.onerror=null;this.src=\'' + directoryIcon + '\'" /></a>'
-	}
-
-	return formattedKinmaDirectory
+	return getHyperlinkTags(kinmaDirectoryUrl, kinmaDirectoryImageUrl, '雀士名鑑', 'img/box-arrow-up-right.svg')
 }
 
 function getFormattedLastUpdated(lastUpdated) {
@@ -462,14 +440,7 @@ function getFormattedProClass(proClass,joined) {
 }
 
 function getFormattedRon2(ron2Id,ron2ImageUrl) {
-
-	let formattedRon2
-
-	if(ron2Id) {
-		formattedRon2 = getHyperlinkTags('https://ron2.jp/pro/' + ron2Id, ron2ImageUrl, '龍龍', 'img/box-arrow-up-right.svg')
-	}
-
-	return formattedRon2
+	return getHyperlinkTags('https://ron2.jp/pro/' + ron2Id, ron2ImageUrl, '龍龍', 'img/box-arrow-up-right.svg')
 }
 
 function getFormattedSaikyoGames(name,saikyoGames) {
@@ -499,26 +470,11 @@ function getFormattedTokushoSeasons(name,tokushoSeasons) {
 }
 
 function getFormattedTwitter(twitterId,twitterImageUrl) {
-
-	let formattedTwitter
-
-	if(twitterId) {
-		formattedTwitter = getHyperlinkTags('http://twitter.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
-	}
-
-	return formattedTwitter	
+	return getHyperlinkTags('http://twitter.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
 }
 
-
 function getFormattedYouTube(youTubeId,youTubeImageUrl) {
-
-	let formattedYouTube
-
-	if(youTubeId) {
-		formattedYouTube = getHyperlinkTags('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')	
-	}
-
-	return formattedYouTube	
+	return getHyperlinkTags('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
 }
 
 function getHyperlinkTags(url, imgUrl, altText, altImgUrl) {
