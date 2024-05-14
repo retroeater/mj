@@ -34,7 +34,7 @@ function drawDashboard() {
 		chartData.addColumn('string','期<br>入会')
 		chartData.addColumn('string','段位')
 		chartData.addColumn('string','出身地')
-		chartData.addColumn('string','誕生日')
+		chartData.addColumn('string','誕生日<br>出身地')
 		chartData.addColumn('string','鳳凰<br>出場')
 		chartData.addColumn('string','鳳凰<br>41前')
 		chartData.addColumn('string','鳳凰<br>最高')
@@ -113,7 +113,7 @@ function drawDashboard() {
 				proClass ? getProClass(proClass, joined) : '',
 				danEn ? getDan(danEn) : '',
 				birthplaceJa ? getBirthplace(birthplaceJa, birthplaceEn) : '',
-				birthday,
+				(birthday) || (birthplaceJa) ? getBirthdayAndBirthplace(birthday, birthplaceJa) : '',
 				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
 				hououLatestLeague,
 				hououHighestLeague ? getHououHighestLeague(name, hououHighestLeague) : '',
@@ -226,6 +226,10 @@ function getArticles(name, numberOfArticles) {
 	let sortKey = ('0000' + numberOfArticles).slice(-4)
 
 	return '<span class="' + sortKey + '">' + '<a href="./jpml_articles.html?name=' + name + '" target="_blank">' + numberOfArticles + '件</a></span>'
+}
+
+function getBirthInfo(birthday, birthplaceJa) {
+	return '<span class="' + birthday + '">' + birthday + '<br>' + birthplaceJa + '</span>'
 }
 
 function getBirthplace(birthplaceJa, birthplaceEn) {
