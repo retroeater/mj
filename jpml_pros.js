@@ -298,7 +298,16 @@ function getLives(name, numberOfLives) {
 	return getInternalLink(getSortKey(numberOfLives), './video_live.html', 'name', name, numberOfLives, '件')
 }
 
-function getName(name, sortKey, lastNameEn = '', firstNameEn = '') {
+function getName(name, sortKey, lastNameEn, firstNameEn) {
+
+	if(!lastNameEn) {
+		lastNameEn = ''
+	}
+
+	if(!firstNameEn) {
+		firstNameEn = ''
+	}
+
 	return `<span class="${sortKey}">${name}<br>${lastNameEn} ${firstNameEn}</span>`
 }
 
