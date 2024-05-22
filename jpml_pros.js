@@ -235,7 +235,7 @@ function getBirthInfo(birthday, birthplaceJa) {
 		birthplaceJa = ''
 	}
 
-	return `<span class="${birthday}">${birthday}<br>${birthplaceJa}<br></span>`
+	return `<span class="${birthday}">${birthday}<br />${birthplaceJa}<br /></span>`
 }
 
 function getBlog(blogUrl, blogImageUrl) {
@@ -308,7 +308,7 @@ function getName(name, sortKey, lastNameEn, firstNameEn) {
 		firstNameEn = ''
 	}
 
-	return `<span class="${sortKey}">${name}<br>${lastNameEn} ${firstNameEn}</span>`
+	return `<span class="${sortKey}">${name}<br />${lastNameEn} ${firstNameEn}<br /></span>`
 }
 
 function getOukaHighestLeague(name, oukaHighestLeague) {
