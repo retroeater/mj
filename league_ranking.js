@@ -166,19 +166,21 @@ function getConsecutivePositiveSectionData(data,sheet) {
 			for(let j = 3; j < 16; j++) {
 				let sectionPoint = data.getValue(i,j)
 
-				if(sectionPoint > 0) {
-					numberOfConsecutivePositive++
-				}
-				else if(sectionPoint < 0) {
-					if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
-						sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
-						consecutivePositiveSectionData.addRows([
-							[previousName,numberOfConsecutivePositive,sortKey]
-						])						
+				if(sectionPoint != null) {
+					if(sectionPoint >= 0) {
+						numberOfConsecutivePositive++
 					}
-					numberOfConsecutivePositive = 0
-				}
-				else { // null
+					else if(sectionPoint < 0) {
+						if(numberOfConsecutivePositive >= numberOfMinimumConsecutivePositiveSections) {
+							sortKey = SORT_KEY_OFFSET - numberOfConsecutivePositive
+							consecutivePositiveSectionData.addRows([
+								[previousName,numberOfConsecutivePositive,sortKey]
+							])						
+						}
+						numberOfConsecutivePositive = 0
+					}
+					else { // null
+					}
 				}
 			}
 		}
