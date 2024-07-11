@@ -662,7 +662,7 @@ function reduceChartData(sheet,division,chartData) {
 	// TODO: Limit以下に同スコアがいる場合の考慮
 	if(sheet == '鳳凰') {
 		if(division == '節単位浮き率') {
-			limit = 55
+			limit = 50
 		}
 	}
 	else if(sheet == '桜花') {
@@ -676,7 +676,7 @@ function reduceChartData(sheet,division,chartData) {
 			limit = 23
 		}
 		else if(division == '節単位浮き率') {
-			limit = 25
+			limit = 20
 		}
 	}
 	else if(sheet == 'JWRC') {
@@ -690,7 +690,7 @@ function reduceChartData(sheet,division,chartData) {
 			limit = 22
 		}
 		else if(division == '節単位浮き率') {
-			limit = 25
+			limit = 40
 		}
 	}
 	else if(sheet == '特昇') {
@@ -701,7 +701,7 @@ function reduceChartData(sheet,division,chartData) {
 			limit = 11
 		}
 		else if(division == '節単位浮き率') {
-			limit = 15
+			limit = 10
 		}
 	}
 
