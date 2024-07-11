@@ -309,7 +309,7 @@ function getSectionPositiveRateData(data,minimumSections) {
 
 			let sectionScore = data.getValue(i,section)
 
-			if(sectionScore > 0) {
+			if(sectionScore >= 0) {
 				numberOfPositiveScores++
 			}
 			else if(sectionScore < 0){
