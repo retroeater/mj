@@ -690,7 +690,7 @@ function reduceChartData(sheet,division,chartData) {
 			limit = 22
 		}
 		else if(division == '節単位浮き率') {
-			limit = 40
+			limit = 27
 		}
 	}
 	else if(sheet == '特昇') {
