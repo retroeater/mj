@@ -115,14 +115,15 @@ function getFormattedImage(playerNameJa,twitterId,twitterImageUrl) {
 
 	let twitterUrl = getTwitterUrl(twitterId)
 
+	if(!twitterImageUrl) {
+		twitterImageUrl = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png'
+	}
+
 	if(twitterId) {
 		formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + playerNameJa + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
 	}
-	else if(twitterImageUrl) {
-		formattedImage = '<img alt="' + playerNameJa + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
-	}
 	else {
-		formattedImage = ''
+		formattedImage = '<img alt="' + playerNameJa + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
 	}
 
 	return formattedImage
