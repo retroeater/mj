@@ -135,11 +135,11 @@ function getFormattedProfile(playerId,playerNameEn,playerType,playerOrg,teamName
 		playerOrgEn = 'Mu'
 	}
 
-	if(playerOrg) {
-		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn + '<br>' + playerOrg + ' / ' + playerOrgEn
+	if(playerOrg == '-') {
+		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn
 	}
 	else {
-		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn
+		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn + '<br>' + playerOrg + ' / ' + playerOrgEn
 	}
 
 	return formattedProfile
