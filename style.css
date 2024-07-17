@@ -53,6 +53,12 @@ img.twitter {
 	fill: #00acee;
 }
 
+img.x {
+	width: 80px;
+	height: 80px;
+	object-fit: cover;	
+}
+
 input {
 	width: 100px
 }

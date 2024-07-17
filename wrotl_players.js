@@ -113,7 +113,7 @@ function getFormattedImage(playerName,twitterId,twitterImageUrl) {
 
 	let twitterUrl = getTwitterUrl(twitterId)
 
-	formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + playerName + '" class="thumbnails" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
+	formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + playerName + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
 
 	return formattedImage
 }
