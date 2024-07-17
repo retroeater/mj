@@ -118,6 +118,9 @@ function getFormattedImage(playerNameJa,twitterId,twitterImageUrl) {
 	if(twitterId) {
 		formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + playerNameJa + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
 	}
+	else if(twitterImageUrl) {
+		formattedImage = '<img alt="' + playerNameJa + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
+	}
 	else {
 		formattedImage = ''
 	}
