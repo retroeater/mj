@@ -53,9 +53,10 @@ function drawDashboard() {
 			playerType = data.getValue(i,2)
 			playerOrg = data.getValue(i,3)
 			teamId = data.getValue(i,4)
-			teamName = data.getValue(i,5)
-			twitterId = data.getValue(i,6)
-			twitterImageUrl = data.getValue(i,7)
+			teamType = data.getValue(i,5)
+			teamName = data.getValue(i,6)
+			twitterId = data.getValue(i,7)
+			twitterImageUrl = data.getValue(i,8)
 
 			let formattedImage = getFormattedImage(playerName,twitterId,twitterImageUrl)
 			let formattedProfile = getFormattedProfile(playerId,playerType,playerOrg,teamName)
