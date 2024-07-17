@@ -116,7 +116,7 @@ function getFormattedImage(playerNameJa,twitterId,twitterImageUrl) {
 	let twitterUrl = getTwitterUrl(twitterId)
 
 	if(!twitterImageUrl) {
-		twitterImageUrl = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png'
+		twitterImageUrl = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_200x200.png'
 	}
 
 	if(twitterId) {
