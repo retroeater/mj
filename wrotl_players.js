@@ -125,10 +125,10 @@ function getFormattedProfile(playerId,playerType,playerOrg,teamName) {
 		formattedProfile = teamName + '<br>' + playerId + '/ FirstName LastName<br>' + playerOrg + 'orgEnglishNameHere'
 	}
 	else {
-		formattedTitle = teamName + '<br>' + playerId + '/ FirstName LastName'
+		formattedProfile = teamName + '<br>' + playerId + '/ FirstName LastName'
 	}
 
-	return formattedTitle
+	return formattedProfile
 }
 
 function getTwitterUrl(twitterId) {
