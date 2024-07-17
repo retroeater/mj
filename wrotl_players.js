@@ -123,9 +123,20 @@ function getFormattedImage(playerNameJa,twitterId,twitterImageUrl) {
 function getFormattedProfile(playerId,playerNameEn,playerType,playerOrg,teamName) {
 
 	let formattedProfile
+	let playerOrgEn
+
+	if(playerOrg == '日本プロ麻雀連盟') {
+		playerOrgEn = 'JPML'
+	}
+	else if(playerOrg == '日本プロ麻雀協会') {
+		playerOrgEn = 'NPM'
+	}
+	else if(playerOrg == '麻将連合') {
+		playerOrgEn = 'Mu'
+	}
 
 	if(playerOrg) {
-		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn + '<br>' + playerOrg + 'orgEnglishNameHere'
+		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn + '<br>' + playerOrg + ' / ' + playerOrgEn
 	}
 	else {
 		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn
