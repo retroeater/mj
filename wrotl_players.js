@@ -119,7 +119,7 @@ function getFormattedImage(playerNameJa,twitterId,twitterImageUrl) {
 		formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + playerNameJa + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
 	}
 	else {
-		formattedImage = 'NO IMAGE'
+		formattedImage = ''
 	}
 
 	return formattedImage
@@ -141,10 +141,15 @@ function getFormattedProfile(playerId,playerNameEn,playerType,playerOrg,teamName
 	}
 
 	if(playerOrg == '-') {
-		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn
+		formattedProfile = teamName + '<br>' + playerId
 	}
 	else {
-		formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn + '<br>' + playerOrg + ' / ' + playerOrgEn
+		if(playerNameEn) {
+			formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn + '<br>' + playerOrg + ' / ' + playerOrgEn
+		}
+		else {
+			formattedProfile = teamName + '<br>' + playerId + '<br>' + playerOrg + ' / ' + playerOrgEn
+		}
 	}
 
 	return formattedProfile
