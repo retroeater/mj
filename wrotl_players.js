@@ -81,7 +81,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: 'Profile'
+					placeholder: 'Search'
 				}
 			},
 			state: {
