@@ -49,7 +49,7 @@ document.write(
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item"><a class="nav-link" href="saikyo_results.html">最強戦<br>Saikyo</a></li>' +
-				'<li class="nav-item"><a class="nav-link" href="wrotl_players.html">最強戦<br>WROTL</a></li>' +
+				'<li class="nav-item"><a class="nav-link" href="wrotl_players.html">WROTL<br>2024</a></li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">動画<br>Video</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="video_live.html">放送対局</a>' +
