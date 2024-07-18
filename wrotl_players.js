@@ -27,7 +27,7 @@ function drawDashboard() {
 	let playerNameJa	// B 選手名Ⓟなし（日本語）
 	let playerNameEn	// C 選手名Ⓟなし（英語）
 	let playerType		// D 選手区分
-	let playerOrg		// E 所属
+	let playerOrgJa		// E 所属（日本語）
 	let teamId			// F チームID
 	let teamType		// G チーム区分
 	let teamName		// H チーム名
@@ -53,7 +53,7 @@ function drawDashboard() {
 			playerNameJa = data.getValue(i,1)
 			playerNameEn = data.getValue(i,2)
 			playerType = data.getValue(i,3)
-			playerOrg = data.getValue(i,4)
+			playerOrgJa = data.getValue(i,4)
 			teamId = data.getValue(i,5)
 			teamType = data.getValue(i,6)
 			teamName = data.getValue(i,7)
@@ -61,7 +61,7 @@ function drawDashboard() {
 			twitterImageUrl = data.getValue(i,9)
 
 			let formattedImage = getFormattedImage(playerNameJa,twitterId,twitterImageUrl)
-			let formattedProfile = getFormattedProfile(playerId,playerNameEn,playerType,playerOrg,teamName)
+			let formattedProfile = getFormattedProfile(playerId,playerNameEn,playerOrgJa,teamName)
 
 			chartData.addRows([
 				[
@@ -111,15 +111,18 @@ function drawDashboard() {
 function getFormattedImage(playerNameJa,twitterId,twitterImageUrl) {
 
 	let formattedImage
-	const linkIcon = 'img/125_arr_hoso.png'
+	let twitterUrl
+	const linkIcon = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_200x200.png'
 
-	let twitterUrl = getTwitterUrl(twitterId)
-
-	if(!twitterImageUrl) {
-		twitterImageUrl = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_200x200.png'
+	if(twitterId != '-') {
+		twitterUrl = getTwitterUrl(twitterId)
 	}
 
-	if(twitterId) {
+	if(twitterImageUrl == '-') {
+		twitterImageUrl = linkIcon
+	}
+
+	if(twitterUrl) {
 		formattedImage = '<a href="' + twitterUrl + '" target="_blank"><img alt="' + playerNameJa + '" class="x" loading="lazy" src="' + twitterImageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" /></a>'
 	}
 	else {
@@ -129,31 +132,36 @@ function getFormattedImage(playerNameJa,twitterId,twitterImageUrl) {
 	return formattedImage
 }
 
-function getFormattedProfile(playerId,playerNameEn,playerType,playerOrg,teamName) {
+function getFormattedProfile(playerId,playerNameEn,playerOrgJa,teamName) {
 
 	let formattedProfile
-	let playerOrgEn
 
-	if(playerOrg == '日本プロ麻雀連盟') {
-		playerOrgEn = 'JPML'
-	}
-	else if(playerOrg == '日本プロ麻雀協会') {
-		playerOrgEn = 'NPM'
-	}
-	else if(playerOrg == '麻将連合') {
-		playerOrgEn = 'Mu'
-	}
+	let playerName
 
-	if(playerOrg == '-') {
-		formattedProfile = teamName + '<br>' + playerId
+	if(playerNameEn == '-') {
+		playerName = playerId
 	}
 	else {
-		if(playerNameEn) {
-			formattedProfile = teamName + '<br>' + playerId + ' / ' + playerNameEn + '<br>' + playerOrg + ' / ' + playerOrgEn
-		}
-		else {
-			formattedProfile = teamName + '<br>' + playerId + '<br>' + playerOrg + ' / ' + playerOrgEn
-		}
+		playerName = playerId + ' / ' + playerNameEn
+	}
+
+	let playerOrg
+
+	if(playerOrgJa == '日本プロ麻雀連盟') {
+		playerOrg = playerOrgJa + ' / JPML'
+	}
+	else if(playerOrgJa == '日本プロ麻雀協会') {
+		playerOrg = playerOrgJa + ' / NPM'
+	}
+	else if(playerOrgJa == '麻将連合') {
+		playerOrg = playerOrgJa + ' / Mu'
+	}
+
+	if(playerOrg) {
+		formattedProfile = teamName + '<br>' + playerName + '<br>' + playerOrg
+	}
+	else {
+		formattedProfile = teamName + '<br>' + playerName
 	}
 
 	return formattedProfile
