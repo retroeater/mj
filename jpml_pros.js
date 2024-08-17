@@ -42,7 +42,7 @@ function drawDashboard() {
 			'桜花<br>19期',
 			'桜花<br>最高',
 			'JWRC<br>出場',
-			'特昇<br>出場',
+//			'特昇<br>出場',
 			'最強<br>出場',
 			'決勝<br>進出',
 			'関連<br>記事',
@@ -96,7 +96,7 @@ function drawDashboard() {
 //			let instagramImageUrl = data.getValue(i,39)
 //			let ron2AveragePlacement = data.getValue(i,40)
 			let jpmlWrcSeasons = data.getValue(i,41)
-			let tokushoSeasons = data.getValue(i,42)
+//			let tokushoSeasons = data.getValue(i,42)
 			let kinmaDirectoryUrl = data.getValue(i,43)
 			let kinmaDirectoryImageUrl = data.getValue(i,44)
 			let mleagueYouTubeId = data.getValue(i,45)
@@ -121,7 +121,7 @@ function drawDashboard() {
 				oukaLatestLeague,
 				oukaHighestLeague ? getOukaHighestLeague(name, oukaHighestLeague) : '',
 				jpmlWrcSeasons ? getJpmlWrcSeasons(name, jpmlWrcSeasons) : '',
-				tokushoSeasons ? getTokushoSeasons(name, tokushoSeasons) : '',
+//				tokushoSeasons ? getTokushoSeasons(name, tokushoSeasons) : '',
 				saikyoGames ? getSaikyoGames(name, saikyoGames) : '',
 				numberOfFinals ? getFinals(name, numberOfFinals) : '',
 				numberOfArticles ? getArticles(name, numberOfArticles) : '',
@@ -345,10 +345,6 @@ function getSearchParam(params, paramName) {
 
 function getSortKey(key) {
 	return ('00000' + key).slice(-5)
-}
-
-function getTokushoSeasons(name, tokushoSeasons) {
-	return getInternalLink(getSortKey(tokushoSeasons), './tokusho_results.html', 'name', name, tokushoSeasons, '回')
 }
 
 function getTwitter(twitterId, twitterImageUrl) {
