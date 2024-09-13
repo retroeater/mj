@@ -36,7 +36,7 @@ function drawDashboard() {
 			'段位',
 			'誕生日<br>出身地',
 			'鳳凰<br>出場',
-			'鳳凰<br>41前',
+			'鳳凰<br>41後',
 			'鳳凰<br>最高',
 			'桜花<br>出場',
 			'桜花<br>19期',
@@ -174,7 +174,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '41期前期'
+					placeholder: '41期後期'
 				}
 			},
 			state: {
