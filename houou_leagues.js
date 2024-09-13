@@ -75,6 +75,7 @@ function drawChart() {
 	let leagues_40_1 = ['40前',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_40_2 = ['40後',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_41_1 = ['41前',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_41_2 = ['41後',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -233,7 +234,10 @@ function drawChart() {
 					case "41前":
 						leagues_41_1[league_index]++
 						break
-						}
+					case "41後":
+						leagues_41_2[league_index]++
+						break
+				}
 			}
 
 			// 前期A1リーグ人数補完
@@ -260,6 +264,7 @@ function drawChart() {
 			leagues_38_1[1] = leagues_38_2[1]
 			leagues_39_1[1] = leagues_39_2[1]
 			leagues_40_1[1] = leagues_40_2[1]
+			leagues_41_1[1] = leagues_41_2[1]
 
 			// 前期A2リーグ人数補完
 			leagues_18_1[2] = leagues_18_2[2]
@@ -285,6 +290,7 @@ function drawChart() {
 			leagues_38_1[2] = leagues_38_2[2]
 			leagues_39_1[2] = leagues_39_2[2]
 			leagues_40_1[2] = leagues_40_2[2]
+			leagues_41_1[2] = leagues_41_2[2]
 		}
 
 		let chartData = new google.visualization.DataTable()
@@ -352,7 +358,8 @@ function drawChart() {
 			leagues_39_2,
 			leagues_40_1,
 			leagues_40_2,
-			leagues_41_1
+			leagues_41_1,
+			leagues_41_2
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
@@ -371,7 +378,7 @@ function drawChart() {
 				if(my_class_year_period == class_year_period) {
 					chartData.setValue(j,14,my_rank)
 //					直近期は最終節終了時まで順位反映しない
-					if(class_year_period != '41前') {
+					if(class_year_period != '41後') {
 						chartData.setValue(j,14,my_rank)
 					}
 				}
