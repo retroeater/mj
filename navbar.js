@@ -54,7 +54,7 @@ document.write(
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">リソース<br>Resource</a>' +
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="resource_calendar.html" target="_blank">カレンダー</a>' +
-						'<a class="dropdown-item" href="https://booklog.jp/users/retroeater" target="_blank">書籍</a>' +
+						'<a class="dropdown-item" href="resource_books.html" target="_blank">書籍</a>' +
 						'<a class="dropdown-item" href="resource_dictionary.html">辞書</a>' +
 						'<a class="dropdown-item" href="resource_efficiency.html">牌効率</a>' +
 						'<a class="dropdown-item" href="resource_rules.html">ルール</a>' +
