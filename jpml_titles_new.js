@@ -104,13 +104,13 @@ function drawDashboard() {
 function getFormattedImage(name,profileUrl,imageUrl) {
 
 	let formattedImage
-	const twitterIcon = 'img/twitter.svg'
+	const linkIcon = 'img/125_arr_hoso.png'
 
 	if(imageUrl) {
-		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + twitterIcon + '\'" />'
+		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
 	}
 	else {
-		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + twitterIcon + '" onError="this.onerror=null;this.src=\'' + twitterIcon + '\'" />'
+		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + linkIcon + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
 	}
 
 		if(profileUrl) {
@@ -124,7 +124,11 @@ function getFormattedTitle(publishedDate,title,rank,name) {
 
 	let formattedTitle
 
-	formattedTitle = publishedDate + '<br>' + title + '<br>' + name + '<br>' + rank
+	if(publishedDate) {
+		formattedTitle = publishedDate + '<br>'
+	}
+
+	formattedTitle = formattedTitle + title + '<br>' + name + '<br>' + rank + '位'
 
 	return formattedTitle
 }
