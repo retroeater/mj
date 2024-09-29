@@ -2,12 +2,17 @@ const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA6
 
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
+let search_tag = params.get('tag')
 
-if(!search_name) {
-	search_name = ''
+let queryStatement = 'SELECT A,B,C,D,E,F WHERE G = "Y"'
+
+if(search_name) {
+	queryStatement += ' AND A = "' + search_name + '"'
 }
 
-const queryStatement = 'SELECT A,B,C,D,E,F,G WHERE G = "Y"'
+if(!search_tag) {
+	search_tag = ''
+}
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -24,7 +29,7 @@ function drawDashboard() {
 	let rank			// D 順位
 	let title			// E タイトル
 	let publishedDate	// F 日付
-	let isVisible		// G 表示
+//	let isVisible		// G 表示
 
 	function handleQueryResponse(response) {
 
@@ -34,12 +39,9 @@ function drawDashboard() {
 		}
 
 		const chartData = new google.visualization.DataTable()
-		chartData.addColumn('string','日付')
-		chartData.addColumn('string','タイトル')
-		chartData.addColumn('number','順位')
-		chartData.addColumn('string','名前')
-		chartData.addColumn('string','詳細')
-
+		chartData.addColumn('string','写真')
+		chartData.addColumn('string','概要')
+		
 		const data = response.getDataTable()
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
@@ -50,50 +52,34 @@ function drawDashboard() {
 			rank = data.getValue(i,3)
 			title = data.getValue(i,4)
 			publishedDate = data.getValue(i,5)
-//			isVisible = data.getValue(i,6)
 
 			let formattedImage = getFormattedImage(name,profileUrl,imageUrl)
+			let formattedTitle = getFormattedTitle(publishedDate,title,rank,name)
 
 			chartData.addRows([
 				[
-					publishedDate,
-					title,
-					rank,
-					name,
-					formattedImage
+					formattedImage,
+					formattedTitle
 				]			
 			])
 		}
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
-		const nameFilter = new google.visualization.ControlWrapper({
+		const infoFilter = new google.visualization.ControlWrapper({
 			controlType: 'StringFilter',
-			containerId: 'name_filter_div',
-			options: {
-				filterColumnIndex: 3,
-				matchType: 'any',
-				ui: {
-					label: '',
-					placeholder: '名前'
-				}
-			},
-			state: {
-				value: search_name
-			}
-		})
-
-		const titleFilter = new google.visualization.ControlWrapper({
-			controlType: 'StringFilter',
-			containerId: 'title_filter_div',
+			containerId: 'info_filter_div',
 			options: {
 				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: 'タイトル'
+					placeholder: '概要'
 				}
 			},
+			state: {
+				value: search_tag
+			}
 		})
 
 		const table = new google.visualization.ChartWrapper({
@@ -110,7 +96,7 @@ function drawDashboard() {
 
 		const view = new google.visualization.DataView(chartData)
 
-		dashboard.bind([nameFilter,titleFilter], table)
+		dashboard.bind([infoFilter], table)
 		dashboard.draw(view)
 	}
 }
@@ -118,24 +104,31 @@ function drawDashboard() {
 function getFormattedImage(name,profileUrl,imageUrl) {
 
 	let formattedImage
-	let image
+	const linkIcon = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_200x200.png'
 
-	const linkIcon = 'img/125_arr_hoso.png'
-	const emptyIcon = 'img/empty.png'
-
-	if(profileUrl) {
-		if(imageUrl) {
-			image = imageUrl
-		}
-		else {
-			image = linkIcon
-		}
-		formattedImage = '<a href="' + profileUrl + '" target="_blank" "><img alt="' + name + '" class="rectangle" loading="lazy" src="' + image + '" onError="this.onerror=null;this.src=\'' + linkIcon +'\'" /></a>'
+	if(imageUrl) {
+		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
 	}
 	else {
-		image = emptyIcon
-		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + image + '" onError="this.onerror=null;this.src=\'' + emptyIcon +'\'" />'
+		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + linkIcon + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
 	}
 
+		if(profileUrl) {
+			formattedImage = '<a href="' + profileUrl + '" target="_blank">' + formattedImage + '</a>'
+		}
+
 	return formattedImage
+}
+
+function getFormattedTitle(publishedDate,title,rank,name) {
+
+	let formattedTitle = ""
+
+	if(publishedDate) {
+		formattedTitle = publishedDate + '<br>'
+	}
+
+	formattedTitle = formattedTitle + title + '<br>' + name + '<br>' + rank + '位'
+
+	return formattedTitle
 }
