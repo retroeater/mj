@@ -104,7 +104,7 @@ function drawDashboard() {
 function getFormattedImage(name,profileUrl,imageUrl) {
 
 	let formattedImage
-	const linkIcon = 'img/125_arr_hoso.png'
+	const linkIcon = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_200x200.png'
 
 	if(imageUrl) {
 		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
@@ -122,7 +122,7 @@ function getFormattedImage(name,profileUrl,imageUrl) {
 
 function getFormattedTitle(publishedDate,title,rank,name) {
 
-	let formattedTitle
+	let formattedTitle = ""
 
 	if(publishedDate) {
 		formattedTitle = publishedDate + '<br>'
