@@ -150,6 +150,9 @@ function getFormattedProfile(playerId,playerNameJa,playerNameEn,playerOrgJa) {
 	else if(playerOrgJa == '麻将連合') {
 		playerOrg = playerOrgJa + ' / Mu'
 	}
+	else if(playerOrgJa == '最高位戦日本プロ麻雀協会') {
+		playerOrg = playerOrgJa + ' / Saikouisen'
+	}
 
 	formattedProfile = '【' + playerId + '】<br>' + playerName + '<br>' + playerOrg
 
