@@ -153,8 +153,12 @@ function getFormattedProfile(playerId,playerNameJa,playerNameEn,playerOrgJa) {
 	else if(playerOrgJa == '最高位戦日本プロ麻雀協会') {
 		playerOrg = playerOrgJa + ' / Saikouisen'
 	}
+	else {
+		playerOrg = playerOrgJa
+	}
 
-	formattedProfile = '【' + playerId + '】<br>' + playerName + '<br>' + playerOrg
+	formattedProfile = playerName + '<br>' + playerOrg
+//	formattedProfile = '【' + playerId + '】<br>' + playerName + '<br>' + playerOrg
 
 	return formattedProfile
 }
