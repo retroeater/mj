@@ -1,4 +1,4 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1aluO6f_1B0caL72cDt0bfwFrJnX1Py6s4Oqm82uLBAA/edit?sheet=選手&headers=1'
+const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1_xupRciIfdLYielUvIoAcmwUdyd0a_3a-opkj6IYe6M/edit?sheet=選手&headers=1'
 
 const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
