@@ -157,8 +157,7 @@ function getFormattedProfile(playerId,playerNameJa,playerNameEn,playerOrgJa) {
 		playerOrg = playerOrgJa
 	}
 
-	formattedProfile = playerName + '<br>' + playerOrg
-//	formattedProfile = '【' + playerId + '】<br>' + playerName + '<br>' + playerOrg
+	formattedProfile = '【' + playerId + '】<br>' + playerName + '<br>' + playerOrg
 
 	return formattedProfile
 }
