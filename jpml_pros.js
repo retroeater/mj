@@ -26,7 +26,7 @@ function drawDashboard() {
 		const columns = [
 			'名前',
 			'龍龍',
-			'Twitter',
+			'X',
 			'Instagram',
 			'YouTube',
 			'ブログ',
