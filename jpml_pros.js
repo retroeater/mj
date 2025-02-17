@@ -246,7 +246,7 @@ function getDan(danEn) {
 
 	const danMap = {
 		1: '初段',
-		2: 'ニ段',
+		2: '二段',
 		3: '三段',
 		4: '四段',
 		5: '五段',
