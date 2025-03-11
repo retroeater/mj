@@ -358,7 +358,8 @@ function drawChart() {
 			leagues_39_2,
 			leagues_40_1,
 			leagues_40_2,
-			leagues_41_1
+			leagues_41_1,
+			leagues_41_2
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
@@ -377,9 +378,9 @@ function drawChart() {
 				if(my_class_year_period == class_year_period) {
 					chartData.setValue(j,14,my_rank)
 //					直近期は最終節終了時まで順位反映しない
-					if(class_year_period != '41後') {
+//					if(class_year_period != '41後') {
 						chartData.setValue(j,14,my_rank)
-					}
+//					}
 				}
 			}	
 		}
