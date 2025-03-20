@@ -56,7 +56,6 @@ document.write(
 						'<a class="dropdown-item" href="resource_books.html" target="_blank">書籍</a>' +
 						'<a class="dropdown-item" href="resource_dictionary.html">辞書</a>' +
 						'<a class="dropdown-item" href="resource_efficiency.html">牌効率</a>' +
-						'<a class="dropdown-item" href="resource_rules.html">ルール</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">良栄<br>Ryoei</a>' +
