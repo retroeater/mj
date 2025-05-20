@@ -4,7 +4,7 @@ const params = (new URL(document.location)).searchParams
 let search_name = params.get('name')
 
 if(!search_name) {
-	search_name = '魚谷侑未'
+	search_name = '清水香織'
 }
 
 const queryStatement = 'SELECT A,B,C,D,E,F WHERE F > 0'
@@ -46,6 +46,7 @@ function drawChart() {
 		let leagues_17 = ['17',0,0,0,0,0,null]
 		let leagues_18 = ['18',0,0,0,0,0,null]
 		let leagues_19 = ['19',0,0,0,0,0,null]
+		let leagues_20 = ['20',0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -114,6 +115,9 @@ function drawChart() {
 					case 19:
 						leagues_19[league_index]++
 						break
+					case 20:
+						leagues_20[league_index]++
+						break
 				}
 			}
 		}
@@ -146,7 +150,8 @@ function drawChart() {
 			leagues_16,
 			leagues_17,
 			leagues_18,
-			leagues_19
+			leagues_19,
+			leagues_20
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
