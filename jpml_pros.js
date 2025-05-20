@@ -39,7 +39,7 @@ function drawDashboard() {
 			'鳳凰<br>42前',
 			'鳳凰<br>最高',
 			'桜花<br>出場',
-			'桜花<br>19期',
+			'桜花<br>20期',
 			'桜花<br>最高',
 			'JWRC<br>出場',
 //			'特昇<br>出場',
@@ -190,7 +190,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '桜花19期'
+					placeholder: '桜花20期'
 				}
 			},
 			state: {
