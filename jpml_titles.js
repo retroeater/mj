@@ -131,7 +131,7 @@ function getFormattedTitle(publishedDate,title,rank,name) {
 	formattedTitle = formattedTitle + title + '<br>' + name
 
 	if(rank) {
-		formattedTitle = formattedTitle + name + '<br>' + rank + '位'
+		formattedTitle = formattedTitle + '<br>' + rank + '位'
 	}
 
 	return formattedTitle
