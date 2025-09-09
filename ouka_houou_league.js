@@ -85,7 +85,7 @@ function drawChart() {
 				maxSize: 50,
 				minSize: 10
 			},
-			title: '第20期女流桜花✕第42期前期鳳凰リーグ',
+			title: '第20期女流桜花✕第42期後期鳳凰リーグ',
 			titlePosition: 'in',
 			tooltip: {
 				trigger:  'none'
