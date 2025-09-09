@@ -77,6 +77,7 @@ function drawChart() {
 	let leagues_41_1 = ['41前',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_41_2 = ['41後',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_42_1 = ['42前',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_42_2 = ['42後',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -241,6 +242,9 @@ function drawChart() {
 					case "42前":
 						leagues_42_1[league_index]++
 						break
+					case "42後":
+						leagues_42_2[league_index]++
+						break
 				}
 			}
 
@@ -269,6 +273,7 @@ function drawChart() {
 			leagues_39_1[1] = leagues_39_2[1]
 			leagues_40_1[1] = leagues_40_2[1]
 			leagues_41_1[1] = leagues_41_2[1]
+			leagues_42_1[1] = leagues_42_2[1]
 
 			// 前期A2リーグ人数補完
 			leagues_18_1[2] = leagues_18_2[2]
@@ -295,6 +300,7 @@ function drawChart() {
 			leagues_39_1[2] = leagues_39_2[2]
 			leagues_40_1[2] = leagues_40_2[2]
 			leagues_41_1[2] = leagues_41_2[2]
+			leagues_42_1[2] = leagues_42_2[2]
 		}
 
 		let chartData = new google.visualization.DataTable()
