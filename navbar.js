@@ -14,7 +14,6 @@ document.write(
 						'<a class="dropdown-item" href="jpml_articles.html">記事</a>' +
 						'<a class="dropdown-item" href="jpml_titles.html">タイトル</a>' +
 						'<a class="dropdown-item" href="jpml_test.html">プロテスト</a>' +
-						'<a class="dropdown-item" href="jpml_logs.html">ログ</a>' +
 						'<a class="dropdown-item" href="jpml_links.html">リンク</a>' +
 						'<a class="dropdown-item" href="https://twitter.com/i/lists/1378864966321721344" target="_blank">X</a>' +
 					'</div>' +
@@ -54,6 +53,7 @@ document.write(
 					'<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
 						'<a class="dropdown-item" href="resource_calendar.html" target="_blank">カレンダー</a>' +
 						'<a class="dropdown-item" href="resource_books.html" target="_blank">書籍</a>' +
+						'<a class="dropdown-item" href="resource_logs.html">ログ</a>' +
 						'<a class="dropdown-item" href="resource_dictionary.html">辞書</a>' +
 						'<a class="dropdown-item" href="resource_efficiency.html">牌効率</a>' +
 					'</div>' +
