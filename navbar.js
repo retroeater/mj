@@ -16,7 +16,7 @@ document.write(
 						'<a class="dropdown-item" href="jpml_test.html">プロテスト</a>' +
 						'<a class="dropdown-item" href="jpml_logs.html">ログ</a>' +
 						'<a class="dropdown-item" href="jpml_links.html">リンク</a>' +
-						'<a class="dropdown-item" href="https://twitter.com/i/lists/1378864966321721344" target="_blank">Twitter</a>' +
+						'<a class="dropdown-item" href="https://twitter.com/i/lists/1378864966321721344" target="_blank">X</a>' +
 					'</div>' +
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">鳳凰戦<br>Houou</a>' +
