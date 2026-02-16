@@ -13,7 +13,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W WHERE X = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V WHERE W = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -25,7 +25,6 @@ function drawDashboard() {
 		const chartData = new google.visualization.DataTable();
 		const columns = [
 			'名前',
-			'出身地',
 			'龍龍',
 			'X',
 			'YouTube',
@@ -51,32 +50,30 @@ function drawDashboard() {
 			let sortKey = data.getValue(i,1)
 			let lastNameEn = data.getValue(i,2)
 			let firstNameEn = data.getValue(i,3)
-			let birthplaceJa = data.getValue(i,4)
-			let ron2Id = data.getValue(i,5)
-			let ron2ImageUrl = data.getValue(i,6)
-			let twitterId = data.getValue(i,7)
-			let twitterImageUrl = data.getValue(i,8)
-			let youTubeId = data.getValue(i,9)
-			let youTubeImageUrl = data.getValue(i,10)
-			let blogUrl = data.getValue(i,11)
-			let blogImageUrl = data.getValue(i,12)
-			let hououSeasons = data.getValue(i,13)
-			let hououLatestLeague = data.getValue(i,14)
-			let hououHighestLeague = data.getValue(i,15)
-			let oukaSeasons = data.getValue(i,16)
-			let oukaLatestLeague = data.getValue(i,17)
-			let oukaHighestLeague = data.getValue(i,18)
-			let saikyoGames = data.getValue(i,19)
-			let numberOfFinals = data.getValue(i,20)
-			let numberOfLives = data.getValue(i,21)
+			let ron2Id = data.getValue(i,4)
+			let ron2ImageUrl = data.getValue(i,5)
+			let xId = data.getValue(i,6)
+			let xImageUrl = data.getValue(i,7)
+			let youTubeId = data.getValue(i,8)
+			let youTubeImageUrl = data.getValue(i,9)
+			let noteId = data.getValue(i,10)
+			let noteImageUrl = data.getValue(i,11)
+			let hououSeasons = data.getValue(i,12)
+			let hououLatestLeague = data.getValue(i,13)
+			let hououHighestLeague = data.getValue(i,14)
+			let oukaSeasons = data.getValue(i,15)
+			let oukaLatestLeague = data.getValue(i,16)
+			let oukaHighestLeague = data.getValue(i,17)
+			let saikyoGames = data.getValue(i,18)
+			let numberOfFinals = data.getValue(i,19)
+			let numberOfLives = data.getValue(i,20)
 
 			const row = [
 				getName(name, sortKey, lastNameEn, firstNameEn),
-				birthplaceJa ? getBirthInfo(birthplaceJa) : '',
 				ron2Id ? getRon2(ron2Id, ron2ImageUrl) : '',
-				twitterId ? getTwitter(twitterId, twitterImageUrl) : '',
+				xId ? getX(xId, xImageUrl) : '',
 				youTubeId ? getYouTube(youTubeId, youTubeImageUrl) : '',
-				blogUrl ? getBlog(blogUrl, blogImageUrl) : '',
+				noteId ? getNote(noteId, noteImageUrl) : '',
 				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
 				hououLatestLeague,
 				hououHighestLeague ? getHououHighestLeague(name, hououHighestLeague) : '',
@@ -165,14 +162,6 @@ function drawDashboard() {
 	}
 }
 
-function getBirthInfo(birthplaceJa) {
-	return `<span>${birthplaceJa}</span>`
-}
-
-function getBlog(blogUrl, blogImageUrl) {
-	return getExternalLink(blogUrl, blogImageUrl, 'Blog', 'img/journal-text.svg')
-}
-
 function getExternalLink(url, imgUrl, altText, altImgUrl) {
     return `<a href="${url}" target="_blank"><img alt="${altText}" class="pros" loading="lazy" src="${imgUrl}" onError="this.onerror=null;this.src='${altImgUrl}'" /></a>`
 }
@@ -211,6 +200,10 @@ function getName(name, sortKey, lastNameEn, firstNameEn) {
 	return `<span class="${sortKey}">${name}<br />${lastNameEn} ${firstNameEn}<br /></span>`
 }
 
+function getNote(noteId, noteImageUrl) {
+	return getExternalLink('https://note.com/' + noteId, noteImageUrl, 'note', 'img/note.svg')
+}
+
 function getOukaHighestLeague(name, oukaHighestLeague) {
 	const sortKey = oukaHighestLeague === "桜花" ? "00" : oukaHighestLeague
 	return getInternalLink(getSortKey(sortKey), './ouka_leagues.html', 'name', name, oukaHighestLeague, '')
@@ -243,10 +236,10 @@ function getSortKey(key) {
 	return ('00000' + key).slice(-5)
 }
 
-function getTwitter(twitterId, twitterImageUrl) {
-	return getExternalLink('http://x.com/' + twitterId, twitterImageUrl, 'Twitter', 'img/twitter.svg')
+function getX(xId, xImageUrl) {
+	return getExternalLink('https://x.com/' + xId, xImageUrl, 'X', 'img/x.svg')
 }
 
 function getYouTube(youTubeId, youTubeImageUrl) {
-	return getExternalLink('http://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
+	return getExternalLink('https://youtube.com/channel/' + youTubeId, youTubeImageUrl, 'YouTube', 'img/youtube.svg')
 }
