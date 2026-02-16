@@ -148,7 +148,7 @@ function drawDashboard() {
 					tableCell: 'mj-pros'
 				},
 				width: '100%',
-				height: '100%'
+				height: '800px'
 			},
 			state: {
 				value: search_joined
