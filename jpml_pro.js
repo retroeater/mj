@@ -166,7 +166,7 @@ function drawDashboard() {
 }
 
 function getBirthInfo(birthplaceJa) {
-	return `<span class="${birthday}">${birthplaceJa}</span>`
+	return `<span>${birthplaceJa}</span>`
 }
 
 function getBlog(blogUrl, blogImageUrl) {
