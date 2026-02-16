@@ -139,7 +139,10 @@ function drawDashboard() {
 			}
 		})
 
+		let dynamicHeight = window.innerHeight + "px"
+
 		const table = new google.visualization.ChartWrapper({
+
 			chartType: 'Table',
 			containerId: 'myTable',
 			options : {
@@ -148,7 +151,7 @@ function drawDashboard() {
 					tableCell: 'mj-pros'
 				},
 				width: '100%',
-				height: '800px'
+				height: dynamicHeight
 			},
 			state: {
 				value: search_joined
