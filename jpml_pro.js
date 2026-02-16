@@ -237,7 +237,7 @@ function getSortKey(key) {
 }
 
 function getX(xId, xImageUrl) {
-	return getExternalLink('https://x.com/' + xId, xImageUrl, 'X', 'img/x.svg')
+	return getExternalLink('https://x.com/' + xId, xImageUrl, 'X', 'img/x.png')
 }
 
 function getYouTube(youTubeId, youTubeImageUrl) {
