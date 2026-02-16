@@ -24,6 +24,7 @@ function drawDashboard() {
 
 		const chartData = new google.visualization.DataTable();
 		const columns = [
+// TODO		'所属<br>出身地',
 			'名前',
 			'龍龍',
 			'X',
@@ -111,7 +112,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 7,
+				filterColumnIndex: 6,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -127,7 +128,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 10,
+				filterColumnIndex: 9,
 				matchType: 'any',
 				ui: {
 					label: '',
