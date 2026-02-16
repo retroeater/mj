@@ -160,7 +160,7 @@ function drawDashboard() {
 
 		const view = new google.visualization.DataView(chartData)
 
-		dashboard.bind([nameFilter,classFilter,leagueFilter,oukaFilter], table)
+		dashboard.bind([nameFilter,leagueFilter,oukaFilter], table)
 		dashboard.draw(view)
 	}
 }
