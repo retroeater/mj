@@ -13,7 +13,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W WHERE X = "Y"')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W WHERE X = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -114,7 +114,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 9,
+				filterColumnIndex: 7,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -130,7 +130,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 11,
+				filterColumnIndex: 10,
 				matchType: 'any',
 				ui: {
 					label: '',
