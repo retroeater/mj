@@ -54,10 +54,10 @@ function drawDashboard() {
 			let ron2ImageUrl = data.getValue(i,5)
 			let xId = data.getValue(i,6)
 			let xImageUrl = data.getValue(i,7)
-			let youTubeId = data.getValue(i,8)
-			let youTubeImageUrl = data.getValue(i,9)
-			let noteId = data.getValue(i,10)
-			let noteImageUrl = data.getValue(i,11)
+			let noteId = data.getValue(i,8)
+			let noteImageUrl = data.getValue(i,9)
+			let youTubeId = data.getValue(i,10)
+			let youTubeImageUrl = data.getValue(i,11)
 			let hououSeasons = data.getValue(i,12)
 			let hououLatestLeague = data.getValue(i,13)
 			let hououHighestLeague = data.getValue(i,14)
@@ -72,8 +72,8 @@ function drawDashboard() {
 				getName(name, sortKey, lastNameEn, firstNameEn),
 				ron2Id ? getRon2(ron2Id, ron2ImageUrl) : '',
 				xId ? getX(xId, xImageUrl) : '',
-				youTubeId ? getYouTube(youTubeId, youTubeImageUrl) : '',
 				noteId ? getNote(noteId, noteImageUrl) : '',
+				youTubeId ? getYouTube(youTubeId, youTubeImageUrl) : '',
 				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
 				hououLatestLeague,
 				hououHighestLeague ? getHououHighestLeague(name, hououHighestLeague) : '',
