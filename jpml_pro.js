@@ -114,7 +114,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 12,
+				filterColumnIndex: 9,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -130,7 +130,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 15,
+				filterColumnIndex: 11,
 				matchType: 'any',
 				ui: {
 					label: '',
