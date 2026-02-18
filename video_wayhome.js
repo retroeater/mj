@@ -7,7 +7,7 @@ if(!search_name) {
 	search_name = ''
 }
 
-const queryStatement = 'SELECT A,B,C,D,E WHERE F = "Y"'
+const queryStatement = 'SELECT A,B,C,D,E,F WHERE G = "Y"'
 
 google.charts.load('current', {'packages':['table','controls']})
 google.charts.setOnLoadCallback(drawDashboard)
@@ -19,10 +19,11 @@ function drawDashboard() {
 	query.send(handleQueryResponse)
 
 	let interviewee		// A 出演者
-	let publishedDate	// B 公開日
-	let title			// C タイトル
-	let url				// D URL
-	let imageUrl		// E 画像URL
+	let xId				// B X ID
+	let publishedDate	// C 公開日
+	let title			// D タイトル
+	let url				// E URL
+	let imageUrl		// F 画像URL
 
 	function handleQueryResponse(response) {
 
@@ -40,13 +41,14 @@ function drawDashboard() {
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
 			interviewee = data.getValue(i,0)
-			publishedDate = data.getValue(i,1)
-			title = data.getValue(i,2)
-			url = data.getValue(i,3)
-			imageUrl = data.getValue(i,4)
+			xId = data.getValue(i,1)
+			publishedDate = data.getValue(i,2)
+			title = data.getValue(i,3)
+			url = data.getValue(i,4)
+			imageUrl = data.getValue(i,5)
 
 			let formattedImage = getFormattedImage(title,url,imageUrl)
-			let formattedInfo = getFormattedInfo(interviewee,publishedDate,title)
+			let formattedInfo = getFormattedInfo(interviewee,xId,publishedDate,title)
 
 			chartData.addRows([
 				[
@@ -105,11 +107,15 @@ function getFormattedImage(title,url,imageUrl) {
 	return formattedImage
 }
 
-function getFormattedInfo(interviewee,publishedDate,title) {
+function getFormattedInfo(interviewee,xId,publishedDate,title) {
 
 	let formattedInfo
 
-	formattedInfo = publishedDate + '<br>' + interviewee + '<br>' + title
+	formattedInfo = publishedDate + '<br>'+ title + '<br>' + interviewee + '<br>' 
+
+	if(xId) {
+		formattedInfo += 'https://x.com/' + xId
+	}
 
 	return formattedInfo
 }
