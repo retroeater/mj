@@ -114,7 +114,7 @@ function getFormattedInfo(interviewee,xId,publishedDate,title) {
 	formattedInfo = publishedDate + '<br>'+ title + '<br>' + interviewee + '<br>' 
 
 	if(xId) {
-		formattedInfo += 'https://x.com/' + xId
+		formattedInfo += '<a href="https://x.com/' + xId + '">@' + xId + '</a>'
 	}
 
 	return formattedInfo
