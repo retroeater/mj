@@ -1,7 +1,7 @@
 const params = (new URL(document.location)).searchParams
 
+const search_place = getSearchParam(params, 'place')
 const search_name = getSearchParam(params, 'name')
-const search_joined = getSearchParam(params, 'joined')
 const search_league = getSearchParam(params, 'league')
 const search_ouka = getSearchParam(params, 'ouka')
 
@@ -95,6 +95,22 @@ function drawDashboard() {
 
 		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
 
+		const placeFilter = new google.visualization.ControlWrapper({
+			controlType: 'StringFilter',
+			containerId: 'place_filter_div',
+			options: {
+				filterColumnIndex: 0,
+				matchType: 'any',
+				ui: {
+					label: '',
+					placeholder: '所属/出身地'
+				}
+			},
+			state: {
+					value: search_place
+			}
+		})
+
 		const nameFilter = new google.visualization.ControlWrapper({
 			controlType: 'StringFilter',
 			containerId: 'name_filter_div',
@@ -164,7 +180,7 @@ function drawDashboard() {
 
 		const view = new google.visualization.DataView(chartData)
 
-		dashboard.bind([nameFilter,leagueFilter,oukaFilter], table)
+		dashboard.bind([placeFilter,nameFilter,leagueFilter,oukaFilter], table)
 		dashboard.draw(view)
 	}
 }
