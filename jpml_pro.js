@@ -221,6 +221,11 @@ function getOukaSeasons(name, oukaSeasons) {
 }
 
 function getPlaces(office, hometown) {
+
+		if(!hometown) {
+		hometown = ''
+	}
+
 	return `<span>${office}<br />${hometown}<br /></span>`
 }
 
