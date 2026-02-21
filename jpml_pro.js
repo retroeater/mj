@@ -162,7 +162,6 @@ function drawDashboard() {
 		let dynamicHeight = window.innerHeight + "px"
 
 		const table = new google.visualization.ChartWrapper({
-
 			chartType: 'Table',
 			containerId: 'myTable',
 			options : {
@@ -172,10 +171,7 @@ function drawDashboard() {
 				},
 				width: '100%',
 				height: dynamicHeight
-			},
-			state: {
-				value: search_joined
-			}			
+			}
 		})
 
 		const view = new google.visualization.DataView(chartData)
