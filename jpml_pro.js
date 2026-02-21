@@ -13,7 +13,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V WHERE W = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X WHERE Y = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -24,7 +24,7 @@ function drawDashboard() {
 
 		const chartData = new google.visualization.DataTable();
 		const columns = [
-// TODO		'所属<br>出身地',
+			'所属<br>出身地',
 			'名前',
 			'龍龍',
 			'X',
@@ -51,25 +51,28 @@ function drawDashboard() {
 			let sortKey = data.getValue(i,1)
 			let lastNameEn = data.getValue(i,2)
 			let firstNameEn = data.getValue(i,3)
-			let ron2Id = data.getValue(i,4)
-			let ron2ImageUrl = data.getValue(i,5)
-			let xId = data.getValue(i,6)
-			let xImageUrl = data.getValue(i,7)
-			let noteId = data.getValue(i,8)
-			let noteImageUrl = data.getValue(i,9)
-			let youTubeId = data.getValue(i,10)
-			let youTubeImageUrl = data.getValue(i,11)
-			let hououSeasons = data.getValue(i,12)
-			let hououLatestLeague = data.getValue(i,13)
-			let hououHighestLeague = data.getValue(i,14)
-			let oukaSeasons = data.getValue(i,15)
-			let oukaLatestLeague = data.getValue(i,16)
-			let oukaHighestLeague = data.getValue(i,17)
-			let saikyoGames = data.getValue(i,18)
-			let numberOfFinals = data.getValue(i,19)
-			let numberOfLives = data.getValue(i,20)
+			let office = data.getValue(i,4)
+			let hometown = data.getValue(i,5)
+			let ron2Id = data.getValue(i,6)
+			let ron2ImageUrl = data.getValue(i,7)
+			let xId = data.getValue(i,8)
+			let xImageUrl = data.getValue(i,9)
+			let noteId = data.getValue(i,10)
+			let noteImageUrl = data.getValue(i,11)
+			let youTubeId = data.getValue(i,12)
+			let youTubeImageUrl = data.getValue(i,13)
+			let hououSeasons = data.getValue(i,14)
+			let hououLatestLeague = data.getValue(i,15)
+			let hououHighestLeague = data.getValue(i,16)
+			let oukaSeasons = data.getValue(i,17)
+			let oukaLatestLeague = data.getValue(i,18)
+			let oukaHighestLeague = data.getValue(i,19)
+			let saikyoGames = data.getValue(i,20)
+			let numberOfFinals = data.getValue(i,21)
+			let numberOfLives = data.getValue(i,22)
 
 			const row = [
+				getPlaces(office, hometown),
 				getName(name, sortKey, lastNameEn, firstNameEn),
 				ron2Id ? getRon2(ron2Id, ron2ImageUrl) : '',
 				xId ? getX(xId, xImageUrl) : '',
@@ -96,7 +99,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'name_filter_div',
 			options: {
-				filterColumnIndex: 0,
+				filterColumnIndex: 1,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -112,7 +115,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'league_filter_div',
 			options: {
-				filterColumnIndex: 6,
+				filterColumnIndex: 7,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -128,7 +131,7 @@ function drawDashboard() {
 			controlType: 'StringFilter',
 			containerId: 'ouka_filter_div',
 			options: {
-				filterColumnIndex: 9,
+				filterColumnIndex: 10,
 				matchType: 'any',
 				ui: {
 					label: '',
@@ -215,6 +218,10 @@ function getOukaHighestLeague(name, oukaHighestLeague) {
 
 function getOukaSeasons(name, oukaSeasons) {
 	return getInternalLink(getSortKey(oukaSeasons), './ouka_results.html', 'name', name, oukaSeasons, '回')
+}
+
+function getPlaces(office, hometown) {
+	return `<span>${office}<br />${hometown}<br /></span>`
 }
 
 function getRon2(ron2Id, ron2ImageUrl) {
