@@ -45,7 +45,7 @@ function drawDashboard() {
 //			'特昇<br>出場',
 			'最強<br>出場',
 			'決勝<br>進出',
-			'関連<br>記事',
+//			'関連<br>記事',
 			'放送<br>対局'
 		]
 		columns.forEach(col => chartData.addColumn('string', col))
@@ -124,7 +124,7 @@ function drawDashboard() {
 //				tokushoSeasons ? getTokushoSeasons(name, tokushoSeasons) : '',
 				saikyoGames ? getSaikyoGames(name, saikyoGames) : '',
 				numberOfFinals ? getFinals(name, numberOfFinals) : '',
-				numberOfArticles ? getArticles(name, numberOfArticles) : '',
+//				numberOfArticles ? getArticles(name, numberOfArticles) : '',
 				numberOfLives ? getLives(name, numberOfLives) : ''
 			]
 			rows.push(row)
