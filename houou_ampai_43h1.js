@@ -35,8 +35,8 @@ function drawDashboard() {
 		}
 
 		const chartData = new google.visualization.DataTable()
-		chartData.addColumn('string','X')
-		chartData.addColumn('string','Profile')
+		chartData.addColumn('string','名前')
+		chartData.addColumn('string','リーグ')
 		
 		const data = response.getDataTable()
 
