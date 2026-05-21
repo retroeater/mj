@@ -83,13 +83,15 @@ function drawDashboard() {
 			}
 		})
 
+		let dynamicHeight = window.innerHeight + "px"
+
 		const table = new google.visualization.ChartWrapper({
 			chartType: 'Table',
 			containerId: 'table_div',
 			options : {
 				allowHtml: true,
 				width: '100%',
-				height: '100%',
+				height: dynamicHeight,
 				page: 'enable',
 				pageSize: 200
 			}
