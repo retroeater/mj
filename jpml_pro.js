@@ -13,7 +13,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X WHERE Y = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA WHERE Y = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -70,6 +70,7 @@ function drawDashboard() {
 			let saikyoGames = data.getValue(i,20)
 			let numberOfFinals = data.getValue(i,21)
 			let numberOfLives = data.getValue(i,22)
+			let ampaiUrl = data.getValue(i,23)
 
 			const row = [
 				getPlaces(office, hometown),
@@ -79,7 +80,7 @@ function drawDashboard() {
 				noteId ? getNote(noteId, noteImageUrl) : '',
 				youTubeId ? getYouTube(youTubeId, youTubeImageUrl) : '',
 				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
-				hououLatestLeague,
+				hououLatestLeague ? getHououLatestLeague(hououLatestLeague, ampaiUrl) : '',
 				hououHighestLeague ? getHououHighestLeague(name, hououHighestLeague) : '',
 				oukaSeasons ? getOukaSeasons(name, oukaSeasons) : '',
 				oukaLatestLeague,
@@ -135,7 +136,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '43期前期'
+					placeholder: '鳳凰43前'
 				}
 			},
 			state: {
@@ -192,6 +193,10 @@ function getFinals(name, numberOfFinals) {
 function getHououHighestLeague(name, hououHighestLeague) {
 	const sortKey = hououHighestLeague === "鳳凰位" ? "00" : hououHighestLeague
 	return getInternalLink(getSortKey(sortKey), './houou_leagues.html', 'name', name, hououHighestLeague, '')
+}
+
+function getHououLatestLeague(hououLatestLeague, ampaiUrl) {
+	return getInternalLink(getSortKey(hououLatestLeague), ampaiUrl, null, null, hououLatestLeague, '')
 }
 
 function getHououSeasons(name, hououSeasons) {
