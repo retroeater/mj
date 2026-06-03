@@ -135,7 +135,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '43期前期'
+					placeholder: '鳳凰43前'
 				}
 			},
 			state: {
