@@ -70,7 +70,7 @@ function drawDashboard() {
 			let saikyoGames = data.getValue(i,20)
 			let numberOfFinals = data.getValue(i,21)
 			let numberOfLives = data.getValue(i,22)
-			let ampaiUrl = data.getValue(i,23)
+			let ampaiUrl = data.getValue(i,24)
 
 			const row = [
 				getPlaces(office, hometown),
