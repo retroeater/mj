@@ -13,7 +13,7 @@ google.charts.setOnLoadCallback(drawDashboard)
 function drawDashboard() {
 
 	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X WHERE Y = "Y" ORDER BY B ASC')
+	query.setQuery('SELECT A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,AA,AB WHERE Y = "Y" ORDER BY B ASC')
 	query.send(handleQueryResponse)
 
 	function handleQueryResponse(response) {
@@ -29,7 +29,7 @@ function drawDashboard() {
 			'龍龍',
 			'X',
 			'note',
-			'YouTube',
+			'You<br>Tube',
 			'鳳凰<br>出場',
 			'鳳凰<br>43前',
 			'鳳凰<br>最高',
@@ -70,6 +70,8 @@ function drawDashboard() {
 			let saikyoGames = data.getValue(i,20)
 			let numberOfFinals = data.getValue(i,21)
 			let numberOfLives = data.getValue(i,22)
+			let hououAmpaiUrl = data.getValue(i,24)
+			let oukaAmpaiUrl = data.getValue(i,25)
 
 			const row = [
 				getPlaces(office, hometown),
@@ -79,10 +81,10 @@ function drawDashboard() {
 				noteId ? getNote(noteId, noteImageUrl) : '',
 				youTubeId ? getYouTube(youTubeId, youTubeImageUrl) : '',
 				hououSeasons ? getHououSeasons(name, hououSeasons) : '',
-				hououLatestLeague,
+				hououLatestLeague ? getHououLatestLeague(hououLatestLeague, hououAmpaiUrl) : '',
 				hououHighestLeague ? getHououHighestLeague(name, hououHighestLeague) : '',
 				oukaSeasons ? getOukaSeasons(name, oukaSeasons) : '',
-				oukaLatestLeague,
+				oukaLatestLeague ? getOukaLatestLeague(oukaLatestLeague, oukaAmpaiUrl) : '',
 				oukaHighestLeague ? getOukaHighestLeague(name, oukaHighestLeague) : '',
 				saikyoGames ? getSaikyoGames(name, saikyoGames) : '',
 				numberOfFinals ? getFinals(name, numberOfFinals) : '',
@@ -151,7 +153,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '桜花20期'
+					placeholder: '桜花21期'
 				}
 			},
 			state: {
@@ -194,6 +196,10 @@ function getHououHighestLeague(name, hououHighestLeague) {
 	return getInternalLink(getSortKey(sortKey), './houou_leagues.html', 'name', name, hououHighestLeague, '')
 }
 
+function getHououLatestLeague(hououLatestLeague, hououAmpaiUrl) {
+	return getInternalLink(getSortKey(hououLatestLeague), hououAmpaiUrl, null, null, hououLatestLeague, '')
+}
+
 function getHououSeasons(name, hououSeasons) {
 	return getInternalLink(getSortKey(hououSeasons), './houou_results.html', 'name', name, hououSeasons, '回')
 }
@@ -226,6 +232,10 @@ function getNote(noteId, noteImageUrl) {
 function getOukaHighestLeague(name, oukaHighestLeague) {
 	const sortKey = oukaHighestLeague === "桜花" ? "00" : oukaHighestLeague
 	return getInternalLink(getSortKey(sortKey), './ouka_leagues.html', 'name', name, oukaHighestLeague, '')
+}
+
+function getOukaLatestLeague(oukaLatestLeague, oukaAmpaiUrl) {
+	return getInternalLink(getSortKey(oukaLatestLeague), oukaAmpaiUrl, null, null, oukaLatestLeague, '')
 }
 
 function getOukaSeasons(name, oukaSeasons) {
