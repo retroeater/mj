@@ -29,7 +29,7 @@ function drawDashboard() {
 			'龍龍',
 			'X',
 			'note',
-			'YouTube',
+			'You<br>Tube',
 			'鳳凰<br>出場',
 			'鳳凰<br>43前',
 			'鳳凰<br>最高',
