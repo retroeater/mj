@@ -78,6 +78,7 @@ function drawChart() {
 	let leagues_41_2 = ['41後',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_42_1 = ['42前',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 	let leagues_42_2 = ['42後',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
+	let leagues_43_1 = ['43前',0,0,0,0,0,0,0,0,0,0,0,0,0,null]
 
 		for(let i = 0; i < data.getNumberOfRows(); i++) {
 
@@ -244,6 +245,9 @@ function drawChart() {
 						break
 					case "42後":
 						leagues_42_2[league_index]++
+						break
+					case "43前":
+						leagues_43_1[league_index]++
 						break
 				}
 			}
