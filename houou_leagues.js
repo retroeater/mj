@@ -371,7 +371,8 @@ function drawChart() {
 			leagues_41_1,
 			leagues_41_2,
 			leagues_42_1,
-			leagues_42_2
+			leagues_42_2,
+			leagues_43_1
 		])
 
 		let leagueRanks = getLeagueRanks(data,chartData,search_name)
