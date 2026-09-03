@@ -31,7 +31,7 @@ function drawDashboard() {
 			'note',
 			'You<br>Tube',
 			'鳳凰<br>出場',
-			'鳳凰<br>43前',
+			'鳳凰<br>43後',
 			'鳳凰<br>最高',
 			'桜花<br>出場',
 			'桜花<br>21期',
@@ -137,7 +137,7 @@ function drawDashboard() {
 				matchType: 'any',
 				ui: {
 					label: '',
-					placeholder: '鳳凰43前'
+					placeholder: '鳳凰43後'
 				}
 			},
 			state: {
