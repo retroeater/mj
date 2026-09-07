@@ -110,6 +110,7 @@ th {
 #pros_table {
 	border-collapse: collapse;
 	width: 100%;
+	font-size: 13px;
 }
 
 #pros_table thead th {
@@ -122,26 +123,37 @@ th {
 	vertical-align: middle;
 }
 
-#pros_table tbody tr {
-	height: 80px;
+/* Bootstrapの.tableはtd/th側に背景色を明示指定するため、
+   tr側ではなくtd側に縞模様を指定する(こちらの方が優先される) */
+#pros_table tbody tr:nth-child(odd) > td {
+	background-color: #fafafa;
 }
 
-#pros_table tbody tr:nth-child(odd) {
-	background-color: #f2f2f2;
-}
-
-#pros_table tbody tr:nth-child(even) {
+#pros_table tbody tr:nth-child(even) > td {
 	background-color: #ffffff;
 }
 
 #pros_table td {
 	height: 80px;
-	vertical-align: middle;
+	padding: 0;
+}
+
+/* tdのheightは中身が多いと伸びてしまうため、
+   中身を固定高さ+overflow:hiddenのdivで包んで確実に80pxへ固定する */
+#pros_table .cell-content {
+	height: 80px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	text-align: center;
+	padding: 0 8px;
 }
 
 /* 「所属/出身地」「名前」列のみ左揃え */
-#pros_table td:nth-child(1),
-#pros_table td:nth-child(2) {
+#pros_table td:nth-child(1) .cell-content,
+#pros_table td:nth-child(2) .cell-content {
+	align-items: flex-start;
 	text-align: left;
 }

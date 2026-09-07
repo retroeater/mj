@@ -44,8 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	applyFilters()
 
 	// 列ヘッダークリックでソート。
-	// theadに1つだけリスナーを付けるイベント委譲方式にして、
-	// th自体への直接バインドより確実に動くようにしている。
+	// theadに1つだけリスナーを付けるイベント委譲方式。
 	const thead = table.querySelector('thead')
 	const tbody = table.querySelector('tbody')
 	const headerCells = Array.from(table.querySelectorAll('thead th'))
@@ -68,8 +67,21 @@ document.addEventListener('DOMContentLoaded', function () {
 		rows.sort(function (a, b) {
 			const cellA = a.children[colIndex]
 			const cellB = b.children[colIndex]
+
 			const valA = (cellA && cellA.dataset.sort !== undefined) ? cellA.dataset.sort : (cellA ? cellA.textContent.trim() : '')
 			const valB = (cellB && cellB.dataset.sort !== undefined) ? cellB.dataset.sort : (cellB ? cellB.textContent.trim() : '')
+
+			// 龍龍/X/note/YouTubeなど「空欄は常に下」指定の列は、
+			// 昇順/降順の向きに関わらず空欄を最後に固定する
+			const emptyLast = !!(cellA && cellA.dataset.emptylast === '1')
+			if (emptyLast) {
+				const aEmpty = valA === ''
+				const bEmpty = valB === ''
+				if (aEmpty !== bEmpty) {
+					return aEmpty ? 1 : -1
+				}
+			}
+
 			if (valA < valB) return ascending ? -1 : 1
 			if (valA > valB) return ascending ? 1 : -1
 			return 0
