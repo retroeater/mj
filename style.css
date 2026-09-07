@@ -91,6 +91,7 @@ th {
 .googlecal { padding-bottom: 75%; }
 }
 
+
 /* ==== jpml_pros.html 選手データベース用(最終版) ==== */
 
 .mj-filter-input {
@@ -98,9 +99,13 @@ th {
 	max-width: 100%;
 }
 
+/* 列幅を固定するため table-layout: fixed を使う。
+   幅の内訳: 「名前」150px + それ以外14列 × 56px = 934px
+   列構成を変更したときは、この width の値も更新すること。 */
 #pros_table {
+	table-layout: fixed;
+	width: 934px;
 	border-collapse: collapse;
-	width: 100%;
 	font-size: 13px;
 	line-height: 1.25;
 	/* 旧サイト(Google Charts)のline-heightはnormal(約1.15)。
@@ -111,17 +116,27 @@ th {
    text-align:center / white-space:nowrap を当てていたので、それを踏襲する */
 #pros_table thead th,
 #pros_table td {
+	width: 56px;
 	text-align: center;
 	vertical-align: middle;
 	white-space: nowrap;
-	min-width: 80px;
 	box-sizing: border-box;
+	padding: 4px;
+	/* 横padding 4px×2 = 8px。56px - 8px = 48px となり画像がちょうど収まる */
+}
+
+/* 「名前」列のみ広くとる。
+   実データの最長は英字表記の19文字(例: Kambayashi Tsuyoshi)で約124px。
+   左右padding 8px×2 を足して余裕を見た値。 */
+#pros_table thead th:nth-child(2),
+#pros_table td:nth-child(2) {
+	width: 150px;
+	padding: 4px 8px;
 }
 
 #pros_table thead th {
 	position: sticky;
 	top: 0;
-	z-index: 3;
 	background-color: #dbe6f4;
 	background-image: linear-gradient(to bottom, #f0f5fc, #dbe6f4);
 	/* ヘッダー色は別タスクで再検討予定の暫定値 */
@@ -132,7 +147,6 @@ th {
    height は最小値として働くので、中身が56pxに収まる前提で成立している。 */
 #pros_table td {
 	height: 56px;
-	padding: 4px 8px;
 }
 
 /* 縞模様。Bootstrapの.tableクラスは外したが、
@@ -167,7 +181,21 @@ th {
 	left: 0; /* 2列目は jpml_pros.js が実測値に置き換える */
 }
 
+/* 重なり順(手前ほど大きい値)。
+   4: 固定列のヘッダー(縦固定と横固定が交差する2セル)
+   3: 通常のヘッダー … 横スクロール時に固定列ヘッダーへ潜り込ませる
+   2: 固定列のデータセル … 横スクロール時に通常セルより手前
+   指定なし: 通常のデータセル */
+#pros_table thead th {
+	z-index: 3;
+}
+
+#pros_table thead th:nth-child(1),
+#pros_table thead th:nth-child(2) {
+	z-index: 4;
+}
+
 #pros_table td:nth-child(1),
 #pros_table td:nth-child(2) {
-	z-index: 1;
+	z-index: 2;
 }
