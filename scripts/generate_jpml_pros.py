@@ -91,13 +91,6 @@ def esc(value) -> str:
     return html.escape(str(value))
 
 
-def fmt_num(value):
-    """スプレッドシートから返る数値はfloat(例: 5.0)になっているため、
-    整数値であれば小数点以下を表示しないよう整形する"""
-    if isinstance(value, float) and value.is_integer():
-        return int(value)
-    return value
-
 
 def get_external_link(url, img_url, alt_text, alt_img_url) -> str:
     return (
@@ -191,12 +184,6 @@ def build_row_html(row) -> str:
         _unused_x_col,
         houou_ampai_url, ouka_ampai_url,
     ) = row
-
-    houou_seasons = fmt_num(houou_seasons)
-    ouka_seasons = fmt_num(ouka_seasons)
-    saikyo_games = fmt_num(saikyo_games)
-    number_of_finals = fmt_num(number_of_finals)
-    number_of_lives = fmt_num(number_of_lives)
 
     houou_highest_sort = "00" if houou_highest_league == "鳳凰位" else houou_highest_league
     ouka_highest_sort = "00" if ouka_highest_league == "桜花" else ouka_highest_league

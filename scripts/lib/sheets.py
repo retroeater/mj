@@ -43,7 +43,20 @@ def fetch_sheet(spreadsheet_id: str, sheet_name: str, query: str) -> list:
     rows = []
     for row in data["table"]["rows"]:
         cells = row.get("c") or []
-        values = [cell["v"] if cell else None for cell in cells]
+        values = [_normalize(cell["v"]) if cell else None for cell in cells]
         rows.append(values)
 
     return rows
+
+
+def _normalize(value):
+    """gvizは数値セルをJSONの数値で返すため、Python側ではfloatになる。
+    そのままf-stringに埋めるとIDや件数が "6010.0" のようになり、
+    URLや表示が壊れる(例: https://ron2.jp/pro/6010.0)。
+
+    整数値のfloatはintに変換して、スプレッドシート上の見た目に合わせる。
+    小数部を持つ値(3.5など)は意味があるためそのまま残す。
+    """
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    return value
