@@ -15,6 +15,8 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    # 845人分を1秒間隔で取得するため15分程度かかる。余裕を持たせる
+    timeout-minutes: 40
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v4
@@ -28,7 +30,10 @@ jobs:
 
       - name: 龍龍の画像と照合
         run: |
-          python3 scripts/check_ron2_images.py --json result.json | tee summary.txt
+          # tee にパイプすると python の終了コードが隠れてしまうため、
+          # pipefail を有効にしてスクリプトの失敗でジョブを止める
+          set -o pipefail
+          python3 scripts/check_ron2_images.py --json result.json 2>&1 | tee summary.txt
 
       - name: 実行サマリに表示
         run: |
@@ -46,7 +51,7 @@ jobs:
             const fs = require('fs');
             const r = JSON.parse(fs.readFileSync('result.json', 'utf8'));
             const TITLE = '龍龍画像の同期確認';
-            const total = r.mismatched.length + r.missing_api.length + r.no_thumb.length;
+            const total = r.mismatched.length + r.not_found.length + r.no_image.length + r.unparsable.length;
 
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner, repo: context.repo.repo,
@@ -84,20 +89,29 @@ jobs:
                   `| [${m.name}](https://ron2.jp/pro/${m.id}) | ${m.current_url} | ${m.site_url} |`),
                 '');
             }
-            if (r.no_thumb.length) {
+            if (r.no_image.length) {
               sections.push(
-                `### 龍龍側に画像が未設定 (${r.no_thumb.length}件)`,
-                'サイトでは表示できていますが、龍龍側の登録が外れています。',
+                `### 龍龍側に画像がない (${r.no_image.length}件)`,
+                'サイトでは表示できていますが、龍龍側の写真が外れています。',
                 '',
-                ...r.no_thumb.map(m => `- [${m.name}](https://ron2.jp/pro/${m.id})`),
+                ...r.no_image.map(m => `- [${m.name}](https://ron2.jp/pro/${m.id})`),
                 '');
             }
-            if (r.missing_api.length) {
+            if (r.not_found.length) {
               sections.push(
-                `### 龍龍側に選手が見つからない (${r.missing_api.length}件)`,
+                `### 龍龍のページが見つからない (${r.not_found.length}件)`,
                 '退会や非公開化の可能性があります。掲載の要否をご確認ください。',
                 '',
-                ...r.missing_api.map(m => `- [${m.name}](https://ron2.jp/pro/${m.id})`),
+                ...r.not_found.map(m => `- [${m.name}](https://ron2.jp/pro/${m.id})`),
+                '');
+            }
+            if (r.unparsable.length) {
+              sections.push(
+                `### 取得・解析に失敗 (${r.unparsable.length}件)`,
+                '一時的な通信エラーか、龍龍側のHTML構造が変わった可能性があります。',
+                '件数が多い場合は scripts/check_ron2_images.py の解析部分の見直しが必要です。',
+                '',
+                ...r.unparsable.map(m => `- [${m.name}](https://ron2.jp/pro/${m.id}) — ${m.error || ''}`),
                 '');
             }
             sections.push('---', '_スプレッドシートを更新すると解消します。次回の確認で差異がなければ、このissueは自動的に閉じられます。_');

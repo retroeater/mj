@@ -6,17 +6,18 @@ jpml_pros.html で表示している画像が一致しているかを確認す�
 サイトには古い写真が表示され続ける。この食い違いは
 リンク切れ検知(check_image_links.py)では拾えないため別に確認する。
 
-ron2.jp は WordPress で動いており、選手データは `pro` という
-カスタム投稿タイプで公開されている。REST API を使えば
-per_page=100 で1リクエストあたり100人分を取得できるので、
-845人でも9リクエストで済む。個別ページを845回取得するより
-相手サーバーへの負荷が桁違いに小さい。
+当初は WordPress REST API (/wp-json/wp/v2/pro) を使う実装だったが、
+ron2.jp では nginx の段階で /wp-json/ が403になるため使えない。
+HTMLページ (/pro/<ID>/) は200で取得できるので、そちらを解析する。
+1人1リクエストになるので、間隔を空けて順に取得する。
 
 使い方:
     python3 scripts/check_ron2_images.py
     python3 scripts/check_ron2_images.py --json out.json
+    python3 scripts/check_ron2_images.py --limit 5   # 動作確認用に件数を絞る
 """
 import argparse
+import html as html_mod
 import json
 import os
 import pathlib
@@ -24,30 +25,25 @@ import re
 import sys
 import time
 import urllib.error
-import urllib.parse
 import urllib.request
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
 TARGET_HTML = REPO_ROOT / "jpml_pros.html"
 
-API_BASE = "https://ron2.jp/wp-json/wp/v2/pro"
-PER_PAGE = 100
-REQUEST_INTERVAL = 1.0   # 相手サーバーへの配慮。1秒あけて順に取得する
+PROFILE_URL = "https://ron2.jp/pro/{id}/"
+REQUEST_INTERVAL = 1.0   # 相手サーバーへの配慮。1人あたり1秒あける
 TIMEOUT = 30
-# ron2.jp は Wordfence を導入しており、ボットらしい User-Agent は 403 で弾かれる。
-# 通常のブラウザと同じヘッダーを送る。環境変数 RON2_USER_AGENT で上書きできる。
+
+# ボットらしいUser-Agentは弾かれることがあるため、通常のブラウザとして振る舞う
 USER_AGENT = os.environ.get(
     "RON2_USER_AGENT",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
 )
-
-# ブラウザが送る一般的なヘッダー一式。これがないと弾かれることがある。
 REQUEST_HEADERS = {
     "User-Agent": USER_AGENT,
-    "Accept": "application/json, text/plain, */*",
+    "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
     "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
-    "Referer": "https://ron2.jp/pro/",
 }
 
 # サイト側: <a href="https://ron2.jp/pro/6010"><img alt="合澤雄貴 龍龍" src="...">
@@ -56,114 +52,106 @@ SITE_PATTERN = re.compile(
     r'<img[^>]*alt="([^"]*)"[^>]*src="([^"]+)"'
 )
 
+# 龍龍側: <h2 class='pro-name'>合澤 雄貴（あいざわ ゆうき）</h2><img src="..." width="150" />
+RON2_NAME = re.compile(r"<h2[^>]*class=['\"]pro-name['\"][^>]*>(.*?)</h2>", re.S)
+RON2_IMAGE = re.compile(
+    r"<h2[^>]*class=['\"]pro-name['\"].*?<img[^>]*src=[\"']([^\"']+)[\"']", re.S
+)
+
 
 def load_site_images():
     """サイトで表示中の画像を {龍龍ID: (選手名, 画像URL)} で返す"""
-    html = TARGET_HTML.read_text(encoding="utf-8")
+    page = TARGET_HTML.read_text(encoding="utf-8")
     result = {}
-    for pro_id, alt, url in SITE_PATTERN.findall(html):
+    for pro_id, alt, url in SITE_PATTERN.findall(page):
         name = alt.replace(" 龍龍", "").strip()
         result[str(pro_id)] = (name, url)
     return result
 
 
-def fetch_json(url):
+def parse_profile(page):
+    """選手ページのHTMLから (選手名, 画像URL) を取り出す"""
+    name_m = RON2_NAME.search(page)
+    img_m = RON2_IMAGE.search(page)
+    name = html_mod.unescape(re.sub(r"<[^>]+>", "", name_m.group(1))).strip() if name_m else None
+    url = html_mod.unescape(img_m.group(1)).strip() if img_m else None
+    return name, url
+
+
+def fetch_profile(pro_id):
+    """1人分の選手ページを取得して解析する。
+    戻り値: (選手名, 画像URL, エラー内容)"""
+    url = PROFILE_URL.format(id=pro_id)
     req = urllib.request.Request(url, headers=REQUEST_HEADERS)
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as res:
-        return json.loads(res.read().decode("utf-8")), res.headers
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as res:
+            page = res.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as e:
+        return None, None, f"HTTP {e.code}"
+    except Exception as e:
+        return None, None, f"{type(e).__name__}"
 
-
-def fetch_ron2_images():
-    """龍龍APIから {龍龍ID: (選手名, 150x150画像URL)} を取得する"""
-    result = {}
-    page = 1
-    total_pages = None
-
-    while True:
-        params = urllib.parse.urlencode({"per_page": PER_PAGE, "page": page, "_embed": "1"})
-        url = f"{API_BASE}?{params}"
-        print(f"  取得中: page {page}" + (f"/{total_pages}" if total_pages else ""), file=sys.stderr)
-
-        try:
-            data, headers = fetch_json(url)
-        except urllib.error.HTTPError as e:
-            if e.code == 400 and total_pages is not None:
-                break  # ページ範囲を超えた
-            # 何が起きたか分かるよう、本文の冒頭も表示してから終了する
-            body = ""
-            try:
-                body = e.read().decode("utf-8", "replace")[:500]
-            except Exception:
-                pass
-            print(f"\n龍龍APIの取得に失敗しました: HTTP {e.code} {e.reason}", file=sys.stderr)
-            print(f"  URL: {url}", file=sys.stderr)
-            if body:
-                print(f"  応答: {body}", file=sys.stderr)
-            if e.code in (403, 406, 429):
-                print("  → WAFやレート制限で遮断されている可能性があります。", file=sys.stderr)
-            raise SystemExit(1)
-        except urllib.error.URLError as e:
-            print(f"\n龍龍APIに接続できませんでした: {e.reason}", file=sys.stderr)
-            print(f"  URL: {url}", file=sys.stderr)
-            raise SystemExit(1)
-
-        if total_pages is None:
-            total_pages = int(headers.get("X-WP-TotalPages", 0)) or None
-
-        if not data:
-            break
-
-        for item in data:
-            pro_id = str(item.get("id"))
-            name = (item.get("acf") or {}).get("name", "")
-            thumb = None
-            media = (item.get("_embedded") or {}).get("wp:featuredmedia") or []
-            if media and isinstance(media[0], dict):
-                sizes = ((media[0].get("media_details") or {}).get("sizes") or {})
-                thumb = (sizes.get("thumbnail") or {}).get("source_url")
-            result[pro_id] = (name, thumb)
-
-        if total_pages and page >= total_pages:
-            break
-        page += 1
-        time.sleep(REQUEST_INTERVAL)
-
-    return result
+    name, img = parse_profile(page)
+    if name is None and img is None:
+        # ページは取れたが構造が想定と違う。龍龍側のデザイン変更が疑われる
+        return None, None, "解析できず(HTML構造の変更?)"
+    return name, img, None
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", help="結果をJSONで書き出すパス")
+    parser.add_argument("--limit", type=int, help="確認する人数の上限(動作確認用)")
     args = parser.parse_args()
 
     site = load_site_images()
-    print(f"サイト側: {len(site)}件の龍龍画像", file=sys.stderr)
+    targets = sorted(site.items())
+    if args.limit:
+        targets = targets[: args.limit]
 
-    print("龍龍APIから現在の画像を取得します...", file=sys.stderr)
-    ron2 = fetch_ron2_images()
-    print(f"龍龍API: {len(ron2)}件", file=sys.stderr)
+    total = len(targets)
+    est = int(total * REQUEST_INTERVAL / 60)
+    print(f"{total}人分の選手ページを確認します(所要およそ{est}分)", file=sys.stderr)
 
-    mismatched = []   # 画像が差し替わっている
-    missing_api = []  # 龍龍側に選手が見つからない
-    no_thumb = []     # 龍龍側に画像が設定されていない
+    mismatched, not_found, unparsable, no_image = [], [], [], []
+    consecutive_errors = 0
 
-    for pro_id, (name, site_url) in sorted(site.items()):
-        if pro_id not in ron2:
-            missing_api.append({"id": pro_id, "name": name, "site_url": site_url})
+    for i, (pro_id, (name, site_url)) in enumerate(targets, 1):
+        if i > 1:
+            time.sleep(REQUEST_INTERVAL)
+        if i % 100 == 0:
+            print(f"  {i}/{total}", file=sys.stderr)
+
+        ron2_name, ron2_url, error = fetch_profile(pro_id)
+        entry = {"id": pro_id, "name": name, "site_url": site_url}
+
+        if error:
+            consecutive_errors += 1
+            # 一時的な失敗ではなく遮断されている場合、残りを続けても無意味なので止める
+            if consecutive_errors >= 20:
+                print(f"\n連続20件で失敗したため中断します(最後のエラー: {error})", file=sys.stderr)
+                print("  遮断されている可能性があります。", file=sys.stderr)
+                raise SystemExit(1)
+            if error.startswith("HTTP 404"):
+                not_found.append(entry)
+            else:
+                entry["error"] = error
+                unparsable.append(entry)
             continue
-        api_name, api_url = ron2[pro_id]
-        if not api_url:
-            no_thumb.append({"id": pro_id, "name": name, "site_url": site_url})
-        elif api_url != site_url:
-            mismatched.append({
-                "id": pro_id, "name": name or api_name,
-                "site_url": site_url, "current_url": api_url,
-            })
 
-    print(f"\n確認: {len(site)}件")
+        consecutive_errors = 0
+        if not ron2_url:
+            no_image.append(entry)
+        elif ron2_url != site_url:
+            entry["current_url"] = ron2_url
+            entry["ron2_name"] = ron2_name
+            mismatched.append(entry)
+
+    print(f"\n確認: {total}件")
     print(f"  画像が差し替わっている: {len(mismatched)}件")
-    print(f"  龍龍側に選手が見つからない: {len(missing_api)}件")
-    print(f"  龍龍側に画像が未設定: {len(no_thumb)}件")
+    print(f"  ページが見つからない(404): {len(not_found)}件")
+    print(f"  龍龍側に画像がない: {len(no_image)}件")
+    print(f"  取得・解析に失敗: {len(unparsable)}件")
 
     if mismatched:
         print("\n[画像の差し替え]")
@@ -171,22 +159,23 @@ def main():
             print(f"  {m['name']} (ID:{m['id']})")
             print(f"    現在サイト: {m['site_url']}")
             print(f"    龍龍の最新: {m['current_url']}")
-    if missing_api:
-        print("\n[龍龍側に見つからない]")
-        for m in missing_api:
-            print(f"  {m['name']} (ID:{m['id']})")
-    if no_thumb:
-        print("\n[龍龍側に画像が未設定]")
-        for m in no_thumb:
-            print(f"  {m['name']} (ID:{m['id']})")
+    for label, items in (("[ページが見つからない]", not_found),
+                         ("[龍龍側に画像がない]", no_image),
+                         ("[取得・解析に失敗]", unparsable)):
+        if items:
+            print(f"\n{label}")
+            for m in items:
+                suffix = f" — {m['error']}" if m.get("error") else ""
+                print(f"  {m['name']} (ID:{m['id']}){suffix}")
 
     if args.json:
         pathlib.Path(args.json).write_text(
             json.dumps({
-                "checked": len(site),
+                "checked": total,
                 "mismatched": mismatched,
-                "missing_api": missing_api,
-                "no_thumb": no_thumb,
+                "not_found": not_found,
+                "no_image": no_image,
+                "unparsable": unparsable,
             }, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
