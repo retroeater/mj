@@ -43,27 +43,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	applyFilters()
 
-	// 列ヘッダークリックでソート(data-sort属性があればそちらを、無ければ表示テキストを使用)
-	const headers = table.querySelectorAll('thead th')
-	headers.forEach(function (th, colIndex) {
+	// 列ヘッダークリックでソート。
+	// theadに1つだけリスナーを付けるイベント委譲方式にして、
+	// th自体への直接バインドより確実に動くようにしている。
+	const thead = table.querySelector('thead')
+	const tbody = table.querySelector('tbody')
+	const headerCells = Array.from(table.querySelectorAll('thead th'))
+	const sortDirections = new Array(headerCells.length).fill(true) // true=昇順
+
+	headerCells.forEach(function (th) {
 		th.style.cursor = 'pointer'
-		let ascending = true
-		th.addEventListener('click', function () {
-			const tbody = table.querySelector('tbody')
-			const rows = Array.from(tbody.querySelectorAll('tr'))
+	})
 
-			rows.sort(function (a, b) {
-				const cellA = a.children[colIndex]
-				const cellB = b.children[colIndex]
-				const valA = cellA.dataset.sort !== undefined ? cellA.dataset.sort : cellA.textContent.trim()
-				const valB = cellB.dataset.sort !== undefined ? cellB.dataset.sort : cellB.textContent.trim()
-				if (valA < valB) return ascending ? -1 : 1
-				if (valA > valB) return ascending ? 1 : -1
-				return 0
-			})
+	thead.addEventListener('click', function (event) {
+		const th = event.target.closest('th')
+		if (!th || !thead.contains(th)) return
 
-			rows.forEach(function (row) { tbody.appendChild(row) })
-			ascending = !ascending
+		const colIndex = headerCells.indexOf(th)
+		if (colIndex === -1) return
+
+		const ascending = sortDirections[colIndex]
+		const rows = Array.from(tbody.querySelectorAll('tr'))
+
+		rows.sort(function (a, b) {
+			const cellA = a.children[colIndex]
+			const cellB = b.children[colIndex]
+			const valA = (cellA && cellA.dataset.sort !== undefined) ? cellA.dataset.sort : (cellA ? cellA.textContent.trim() : '')
+			const valB = (cellB && cellB.dataset.sort !== undefined) ? cellB.dataset.sort : (cellB ? cellB.textContent.trim() : '')
+			if (valA < valB) return ascending ? -1 : 1
+			if (valA > valB) return ascending ? 1 : -1
+			return 0
 		})
+
+		rows.forEach(function (row) { tbody.appendChild(row) })
+		sortDirections[colIndex] = !ascending
 	})
 })

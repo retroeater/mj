@@ -55,10 +55,10 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <div id="dashboard_div">
 \t<div id="searchBoxes" class="collapse">
-\t\t<div class="mj-filter"><input type="text" id="place_filter" class="form-control" placeholder="所属/出身地"></div>
-\t\t<div class="mj-filter"><input type="text" id="name_filter" class="form-control" placeholder="名前/Name"></div>
-\t\t<div class="mj-filter"><input type="text" id="league_filter" class="form-control" placeholder="鳳凰43後"></div>
-\t\t<div class="mj-filter"><input type="text" id="ouka_filter" class="form-control" placeholder="桜花21期"></div>
+\t\t<div class="mj-filter"><input type="text" id="place_filter" class="mj-filter-input" placeholder="所属/出身地"></div>
+\t\t<div class="mj-filter"><input type="text" id="name_filter" class="mj-filter-input" placeholder="名前/Name"></div>
+\t\t<div class="mj-filter"><input type="text" id="league_filter" class="mj-filter-input" placeholder="鳳凰43後"></div>
+\t\t<div class="mj-filter"><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
 \t</div>
 \t<div id="myTable">
 \t\t<table class="table" id="pros_table">
@@ -89,6 +89,14 @@ def esc(value) -> str:
     if value is None:
         return ""
     return html.escape(str(value))
+
+
+def fmt_num(value):
+    """スプレッドシートから返る数値はfloat(例: 5.0)になっているため、
+    整数値であれば小数点以下を表示しないよう整形する"""
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    return value
 
 
 def get_external_link(url, img_url, alt_text, alt_img_url) -> str:
@@ -181,6 +189,12 @@ def build_row_html(row) -> str:
         houou_ampai_url, ouka_ampai_url,
     ) = row
 
+    houou_seasons = fmt_num(houou_seasons)
+    ouka_seasons = fmt_num(ouka_seasons)
+    saikyo_games = fmt_num(saikyo_games)
+    number_of_finals = fmt_num(number_of_finals)
+    number_of_lives = fmt_num(number_of_lives)
+
     houou_highest_sort = "00" if houou_highest_league == "鳳凰位" else houou_highest_league
     ouka_highest_sort = "00" if ouka_highest_league == "桜花" else ouka_highest_league
 
@@ -217,7 +231,10 @@ def build_row_html(row) -> str:
         tds.append(f"<td{sort_attr}>{content}</td>")
 
     place_value = esc(get_places(office, hometown))
-    name_value = esc(f"{name or ''} {last_name_en or ''} {first_name_en or ''}")
+    # 元のGoogle Charts版では、name列のセルHTMLに<span class="かな読み">を
+    # 埋め込むことで、非表示のかな読みも検索対象になっていた。
+    # data-name にも同様に読み(sort_key)を含めて、その挙動を復元する。
+    name_value = esc(f"{name or ''} {sort_key or ''} {last_name_en or ''} {first_name_en or ''}")
     league_value = esc(houou_latest_league or "")
     ouka_value = esc(ouka_latest_league or "")
 
