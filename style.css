@@ -100,7 +100,7 @@ th {
 .googlecal { padding-bottom: 75%; }
 }
 
-/* ==== jpml_pros.html 選手データベース用 ==== */
+/* ==== jpml_pros.html 選手データベース用(完成版) ==== */
 
 .mj-filter-input {
 	width: 100px;
@@ -111,16 +111,19 @@ th {
 	border-collapse: collapse;
 	width: 100%;
 	font-size: 13px;
+	table-layout: fixed;
 }
 
 #pros_table thead th {
 	position: sticky;
 	top: 0;
-	background: #ffffff;
 	z-index: 1;
-	cursor: pointer;
 	text-align: center;
 	vertical-align: middle;
+	background-color: #dbe6f4;
+	background-image: linear-gradient(to bottom, #f0f5fc, #dbe6f4);
+	/* ↑旧サイト(Google Charts)相当のグラデーションの目安です。
+	   色味が違う場合は teach ください、調整します。 */
 }
 
 /* Bootstrapの.tableはtd/th側に背景色を明示指定するため、
@@ -133,15 +136,24 @@ th {
 	background-color: #ffffff;
 }
 
-#pros_table td {
-	height: 80px;
-	padding: 0;
+/* ホバー時のハイライト。上記の縞模様より必ず後に書くこと(競合時に勝たせるため) */
+#pros_table tbody tr:hover > td {
+	background-color: #d6e9f8 !important;
 }
 
-/* tdのheightは中身が多いと伸びてしまうため、
+#pros_table td {
+	height: 80px;
+	max-height: 80px;
+	padding: 0;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+/* tdのheightだけでは中身が多いと伸びてしまうため、
    中身を固定高さ+overflow:hiddenのdivで包んで確実に80pxへ固定する */
 #pros_table .cell-content {
 	height: 80px;
+	max-height: 80px;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
@@ -149,11 +161,29 @@ th {
 	justify-content: center;
 	text-align: center;
 	padding: 0 8px;
+	box-sizing: border-box;
 }
 
-/* 「所属/出身地」「名前」列のみ左揃え */
-#pros_table td:nth-child(1) .cell-content,
+/* 「所属/出身地」列は中央揃え */
+#pros_table td:nth-child(1) .cell-content {
+	align-items: center;
+	text-align: center;
+}
+
+/* 「名前」列のみ左揃え */
 #pros_table td:nth-child(2) .cell-content {
 	align-items: flex-start;
 	text-align: left;
+}
+
+/* 「龍龍」以降(3列目以降)は明示的に中央揃え */
+#pros_table td:nth-child(n+3) .cell-content {
+	align-items: center !important;
+	text-align: center !important;
+}
+
+#pros_table img.pros {
+	width: 48px !important;
+	height: 48px !important;
+	object-fit: cover;
 }

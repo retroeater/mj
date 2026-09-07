@@ -44,14 +44,19 @@ document.addEventListener('DOMContentLoaded', function () {
 	applyFilters()
 
 	// 列ヘッダークリックでソート。
-	// theadに1つだけリスナーを付けるイベント委譲方式。
+	// 龍龍/X/note/YouTube列(2〜5列目, 0-indexed)は、
+	// かな順ソートが未実装のためいったんソート対象から除外する。
+	const NO_SORT_COLUMNS = [2, 3, 4, 5]
+
 	const thead = table.querySelector('thead')
 	const tbody = table.querySelector('tbody')
 	const headerCells = Array.from(table.querySelectorAll('thead th'))
 	const sortDirections = new Array(headerCells.length).fill(true) // true=昇順
 
-	headerCells.forEach(function (th) {
-		th.style.cursor = 'pointer'
+	headerCells.forEach(function (th, index) {
+		if (!NO_SORT_COLUMNS.includes(index)) {
+			th.style.cursor = 'pointer'
+		}
 	})
 
 	thead.addEventListener('click', function (event) {
@@ -60,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		const colIndex = headerCells.indexOf(th)
 		if (colIndex === -1) return
+		if (NO_SORT_COLUMNS.includes(colIndex)) return
 
 		const ascending = sortDirections[colIndex]
 		const rows = Array.from(tbody.querySelectorAll('tr'))
@@ -67,21 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		rows.sort(function (a, b) {
 			const cellA = a.children[colIndex]
 			const cellB = b.children[colIndex]
-
 			const valA = (cellA && cellA.dataset.sort !== undefined) ? cellA.dataset.sort : (cellA ? cellA.textContent.trim() : '')
 			const valB = (cellB && cellB.dataset.sort !== undefined) ? cellB.dataset.sort : (cellB ? cellB.textContent.trim() : '')
-
-			// 龍龍/X/note/YouTubeなど「空欄は常に下」指定の列は、
-			// 昇順/降順の向きに関わらず空欄を最後に固定する
-			const emptyLast = !!(cellA && cellA.dataset.emptylast === '1')
-			if (emptyLast) {
-				const aEmpty = valA === ''
-				const bEmpty = valB === ''
-				if (aEmpty !== bEmpty) {
-					return aEmpty ? 1 : -1
-				}
-			}
-
 			if (valA < valB) return ascending ? -1 : 1
 			if (valA > valB) return ascending ? 1 : -1
 			return 0
