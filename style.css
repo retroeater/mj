@@ -1,3 +1,23 @@
+/* ==== 全ページ共通のフォント ====
+   Windowsの游ゴシックUIは小さい文字だと線が細く読みにくいため、
+   太めのYu Gothic Mediumを優先する。Webフォントは読み込まない。
+
+   .google-visualization-* は Google Charts が生成するテーブルのクラス名。
+   Charts側が独自のfont-familyを当ててくるため、クラスを明示して上書きする。
+   (jpml_pros.html は静的HTMLなので table セレクタで足りるが、
+    他ページはまだ Charts 依存のためこの指定が必要)
+
+   index.html は style.css を読み込まないので影響を受けない。 */
+body,
+table,
+.google-visualization-table-table,
+.google-visualization-table-table td,
+.google-visualization-table-table th {
+	font-family: "Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif;
+	font-feature-settings: "palt";      /* 日本語の字詰め */
+	font-variant-numeric: tabular-nums; /* 数字を等幅にして桁を揃える */
+}
+
 .mj-filter {
 	margin-left: 0px;
 }
@@ -76,11 +96,6 @@ th {
 	border-collapse: collapse;
 	font-size: 13px;
 	line-height: 1.25;
-	/* Windowsの游ゴシックUIは13pxだと線が細く読みにくいため、
-	   太めのYu Gothic Mediumを優先する。Webフォントは読み込まない。 */
-	font-family: "Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif;
-	font-feature-settings: "palt";      /* 日本語の字詰め */
-	font-variant-numeric: tabular-nums; /* 数字を等幅にして桁を揃える */
 	/* 旧サイト(Google Charts)のline-heightはnormal(約1.15)。
 	   Bootstrap既定の1.5だと1行あたり6px余分に高くなるため詰めている。 */
 }
