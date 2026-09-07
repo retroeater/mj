@@ -1,0 +1,107 @@
+name: 画像リンク切れの検知
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # 毎週月曜 03:00 JST (= 日曜 18:00 UTC)
+    - cron: '0 18 * * 0'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          ref: cloudflare
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 画像リンクを確認
+        run: |
+          python3 scripts/check_image_links.py --json result.json | tee summary.txt
+
+      - name: 実行サマリに表示
+        run: |
+          {
+            echo '## 画像リンク切れの検知結果'
+            echo '```'
+            cat summary.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 結果をissueに反映
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const result = JSON.parse(fs.readFileSync('result.json', 'utf8'));
+            const TITLE = '画像リンク切れの検知結果';
+
+            // 同じissueを使い回す(毎回新規作成すると乱立するため)
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = issues.data.find(i => i.title === TITLE);
+
+            if (result.broken.length === 0) {
+              // 復旧していたらissueを閉じる
+              if (existing) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner, repo: context.repo.repo,
+                  issue_number: existing.number,
+                  body: `${result.checked}件を確認し、リンク切れは検出されませんでした。`,
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner, repo: context.repo.repo,
+                  issue_number: existing.number, state: 'closed',
+                });
+              }
+              core.info('リンク切れなし');
+              return;
+            }
+
+            const byHost = Object.entries(result.by_host)
+              .sort((a, b) => b[1] - a[1])
+              .map(([h, n]) => `| ${h} | ${n} |`).join('\n');
+            const byStatus = Object.entries(result.by_status)
+              .sort((a, b) => b[1] - a[1])
+              .map(([s, n]) => `| ${s} | ${n} |`).join('\n');
+            const details = result.broken
+              .map(b => `- \`${b.status}\` ${b.alt} — ${b.url}`).join('\n');
+
+            const body = [
+              `${result.checked}件を確認し、**${result.broken.length}件**が取得できませんでした。`,
+              '',
+              '### ホスト別', '| ホスト | 件数 |', '| --- | --- |', byHost,
+              '', '### ステータス別', '| ステータス | 件数 |', '| --- | --- |', byStatus,
+              '', '### 詳細', details,
+              '',
+              '---',
+              '_スプレッドシートの画像URLを更新すると解消します。次回の検知で解決していれば、このissueは自動的に閉じられます。_',
+            ].join('\n');
+
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: existing.number, body,
+              });
+              core.info(`issue #${existing.number} を更新しました`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: TITLE, body,
+              });
+              core.info(`issue #${created.data.number} を作成しました`);
+            }
