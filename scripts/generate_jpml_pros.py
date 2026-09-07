@@ -39,6 +39,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>プロ</title>
+<meta name="description" content="日本プロ麻雀連盟所属の1000名超のプロ雀士のデータベース。所属・出身地、鳳凰戦・女流桜花の所属リーグ等で検索可能。各選手の龍龍・X・note・YouTubeへのリンクも掲載。">
 <link rel="icon" href="favicon.ico">
 <!-- Stylesheets -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -53,15 +54,18 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
+<h1 class="visually-hidden">日本プロ麻雀連盟 プロ雀士データベース</h1>
+
 <div id="dashboard_div">
 \t<div id="searchBoxes" class="collapse">
-\t\t<div class="mj-filter"><input type="text" id="place_filter" class="mj-filter-input" placeholder="所属/出身地"></div>
-\t\t<div class="mj-filter"><input type="text" id="name_filter" class="mj-filter-input" placeholder="名前/Name"></div>
-\t\t<div class="mj-filter"><input type="text" id="league_filter" class="mj-filter-input" placeholder="鳳凰43後"></div>
-\t\t<div class="mj-filter"><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
+\t\t<div class="mj-filter"><label class="visually-hidden" for="place_filter">所属・出身地で検索</label><input type="text" id="place_filter" class="mj-filter-input" placeholder="所属/出身地"></div>
+\t\t<div class="mj-filter"><label class="visually-hidden" for="name_filter">名前で検索</label><input type="text" id="name_filter" class="mj-filter-input" placeholder="名前/Name"></div>
+\t\t<div class="mj-filter"><label class="visually-hidden" for="league_filter">鳳凰戦43期後期の所属リーグで検索</label><input type="text" id="league_filter" class="mj-filter-input" placeholder="鳳凰43後"></div>
+\t\t<div class="mj-filter"><label class="visually-hidden" for="ouka_filter">女流桜花21期の所属リーグで検索</label><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
 \t</div>
 \t<div id="myTable">
 \t\t<table id="pros_table">
+\t\t\t<caption class="visually-hidden">日本プロ麻雀連盟所属のプロ雀士一覧。所属・出身地、SNS、タイトル戦の成績等。</caption>
 \t\t\t<thead>
 \t\t\t\t<tr>{header_cells}</tr>
 \t\t\t</thead>
@@ -231,7 +235,10 @@ def build_row_html(row) -> str:
         sort_attr = f' data-sort="{esc(sort_value)}"' if sort_value is not None else ""
         tds.append(f"<td{sort_attr}>{content}</td>")
 
-    place_value = esc(get_places(office, hometown))
+    # 表示用の get_places() は <br /> を含むため、そのままエスケープすると
+    # data-place に "&lt;br /&gt;" が入り、「br」で検索すると全行がヒットする。
+    # 検索用の文字列は生の値から別に組み立てる。
+    place_value = esc(" ".join(filter(None, [office, hometown])))
     # 元のGoogle Charts版では、name列のセルHTMLに<span class="かな読み">を
     # 埋め込むことで、非表示のかな読みも検索対象になっていた。
     # data-name にも同様に読み(sort_key)を含めて、その挙動を復元する。
@@ -253,7 +260,7 @@ def main():
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
     row_html = "\n".join(build_row_html(row) for row in raw_rows)
-    header_cells = "".join(f"<th>{h}</th>" for h in HEADERS)
+    header_cells = "".join(f'<th scope="col">{h}</th>' for h in HEADERS)
 
     output = PAGE_TEMPLATE.format(header_cells=header_cells, rows=row_html)
     OUTPUT_PATH.write_text(output, encoding="utf-8")
