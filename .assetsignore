@@ -1,2 +1,11 @@
+# Cloudflareへ公開しないファイル・フォルダ。
+# wrangler.jsonc の assets.directory が "./" (リポジトリ全体)のため、
+# 開発用のファイルは明示的に除外しないとURLで直接ダウンロードできてしまう。
+
+scripts
+.assetsignore
 .git
+.github
+.gitignore
 .vscode
+wrangler.jsonc

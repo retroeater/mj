@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  検索エンジン向けのサイトマップ。以下は意図的に除外している:
+    404.html              エラーページ(noindex指定済み)
+    tanilog.html          resource_logs.html への転送用ページ
+    saikyo_mens.html      年1回の単発企画用。常設ページではない
+    resource_calendar.html / resource_books.html
+                          _redirects で外部サイトへ301転送しており実体がない
+  ページを追加・削除したときは、このファイルの更新も忘れないこと。
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<url>
@@ -124,20 +133,6 @@
 		<loc>https://ryoei.pro/video_en.html</loc>
 		<lastmod>2026-09-07</lastmod>
 		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/resource_calendar.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.4</priority>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/resource_books.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>yearly</changefreq>
 		<priority>0.4</priority>
 	</url>
 
