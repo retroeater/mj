@@ -56,25 +56,22 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <h1 class="visually-hidden">日本プロ麻雀連盟 プロ雀士データベース</h1>
 
-<div id="dashboard_div">
-\t<div id="searchBoxes" class="collapse">
-\t\t<div class="mj-filter"><label class="visually-hidden" for="place_filter">所属・出身地で検索</label><input type="text" id="place_filter" class="mj-filter-input" placeholder="所属/出身地"></div>
-\t\t<div class="mj-filter"><label class="visually-hidden" for="name_filter">名前で検索</label><input type="text" id="name_filter" class="mj-filter-input" placeholder="名前/Name"></div>
-\t\t<div class="mj-filter"><label class="visually-hidden" for="league_filter">鳳凰戦43期後期の所属リーグで検索</label><input type="text" id="league_filter" class="mj-filter-input" placeholder="鳳凰43後"></div>
-\t\t<div class="mj-filter"><label class="visually-hidden" for="ouka_filter">女流桜花21期の所属リーグで検索</label><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
-\t</div>
-\t<div id="myTable">
-\t\t<table id="pros_table">
-\t\t\t<caption class="visually-hidden">日本プロ麻雀連盟所属のプロ雀士一覧。所属・出身地、SNS、タイトル戦の成績等。</caption>
-\t\t\t<thead>
-\t\t\t\t<tr>{header_cells}</tr>
-\t\t\t</thead>
-\t\t\t<tbody>
-{rows}
-\t\t\t</tbody>
-\t\t</table>
-\t</div>
+<div id="searchBoxes" class="collapse">
+\t<div class="mj-filter"><label class="visually-hidden" for="place_filter">所属・出身地で検索</label><input type="text" id="place_filter" class="mj-filter-input" placeholder="所属/出身地"></div>
+\t<div class="mj-filter"><label class="visually-hidden" for="name_filter">名前で検索</label><input type="text" id="name_filter" class="mj-filter-input" placeholder="名前/Name"></div>
+\t<div class="mj-filter"><label class="visually-hidden" for="league_filter">鳳凰戦43期後期の所属リーグで検索</label><input type="text" id="league_filter" class="mj-filter-input" placeholder="鳳凰43後"></div>
+\t<div class="mj-filter"><label class="visually-hidden" for="ouka_filter">女流桜花21期の所属リーグで検索</label><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
 </div>
+
+<table id="pros_table">
+\t<caption class="visually-hidden">日本プロ麻雀連盟所属のプロ雀士一覧。所属・出身地、SNS、タイトル戦の成績等。</caption>
+\t<thead>
+\t\t<tr>{header_cells}</tr>
+\t</thead>
+\t<tbody>
+{rows}
+\t</tbody>
+</table>
 </body>
 </html>
 """

@@ -1,7 +1,3 @@
-.mj-border-zero {
-	border: 0;
-}
-
 .mj-filter {
 	margin-left: 0px;
 }
@@ -58,37 +54,9 @@ th {
 	text-align: center;
 }
 
-.cal_wrapper {
-	max-width: 960px;
-	min-width: 300px;
-	margin: 2.0833% auto;
-}
-
-.googlecal {
-	position: relative;
-	padding-bottom: 100%;
-}
-
-.googlecal iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100% !important;
-	height: 100% !important;
-}
-
 .googlechart {
 	width: 100%;
 	min-height: 700px;
-}
-
-.judan-chart {
-	width: 100%; 
-	min-height: 1200px;
-}
-
-@media only screen and (min-width: 768px) {
-.googlecal { padding-bottom: 75%; }
 }
 
 
