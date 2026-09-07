@@ -61,7 +61,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 \t\t<div class="mj-filter"><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
 \t</div>
 \t<div id="myTable">
-\t\t<table class="table" id="pros_table">
+\t\t<table id="pros_table">
 \t\t\t<thead>
 \t\t\t\t<tr>{header_cells}</tr>
 \t\t\t</thead>
@@ -117,12 +117,15 @@ def get_internal_link(base_url, param_name, param, value, unit) -> str:
 def get_name(name, last_name_en, first_name_en) -> str:
     last_name_en = last_name_en or ""
     first_name_en = first_name_en or ""
-    return f"{esc(name)}<br />{esc(last_name_en)} {esc(first_name_en)}<br />"
+    return f"{esc(name)}<br />{esc(last_name_en)} {esc(first_name_en)}"
 
 
 def get_places(office, hometown) -> str:
     hometown = hometown or ""
-    return f"{esc(office)}<br />{esc(hometown)}<br />"
+    # 出身地が空のときは改行ごと省く(空行が出て行高が伸びるのを防ぐ)
+    if not hometown:
+        return esc(office)
+    return f"{esc(office)}<br />{esc(hometown)}"
 
 
 def get_ron2(ron2_id, ron2_image_url) -> str:
@@ -199,37 +202,36 @@ def build_row_html(row) -> str:
     ouka_highest_sort = "00" if ouka_highest_league == "桜花" else ouka_highest_league
 
     cells = [
-        (get_places(office, hometown), None, False),
-        (get_name(name, last_name_en, first_name_en), sort_key, False),
-        (get_ron2(ron2_id, ron2_image_url) if ron2_id else "", None, False),
-        (get_x(x_id, x_image_url) if x_id else "", None, False),
-        (get_note(note_id, note_image_url) if note_id else "", None, False),
-        (get_youtube(youtube_id, youtube_image_url) if youtube_id else "", None, False),
+        (get_places(office, hometown), None),
+        (get_name(name, last_name_en, first_name_en), sort_key),
+        (get_ron2(ron2_id, ron2_image_url) if ron2_id else "", None),
+        (get_x(x_id, x_image_url) if x_id else "", None),
+        (get_note(note_id, note_image_url) if note_id else "", None),
+        (get_youtube(youtube_id, youtube_image_url) if youtube_id else "", None),
         (get_houou_seasons(name, houou_seasons) if houou_seasons else "",
-         get_sort_key(houou_seasons) if houou_seasons else None, False),
+         get_sort_key(houou_seasons) if houou_seasons else None),
         (get_houou_latest_league(houou_latest_league, houou_ampai_url) if houou_latest_league else "",
-         get_sort_key(houou_latest_league) if houou_latest_league else None, False),
+         get_sort_key(houou_latest_league) if houou_latest_league else None),
         (get_houou_highest_league(name, houou_highest_league) if houou_highest_league else "",
-         get_sort_key(houou_highest_sort) if houou_highest_league else None, False),
+         get_sort_key(houou_highest_sort) if houou_highest_league else None),
         (get_ouka_seasons(name, ouka_seasons) if ouka_seasons else "",
-         get_sort_key(ouka_seasons) if ouka_seasons else None, False),
+         get_sort_key(ouka_seasons) if ouka_seasons else None),
         (get_ouka_latest_league(ouka_latest_league, ouka_ampai_url) if ouka_latest_league else "",
-         get_sort_key(ouka_latest_league) if ouka_latest_league else None, False),
+         get_sort_key(ouka_latest_league) if ouka_latest_league else None),
         (get_ouka_highest_league(name, ouka_highest_league) if ouka_highest_league else "",
-         get_sort_key(ouka_highest_sort) if ouka_highest_league else None, False),
+         get_sort_key(ouka_highest_sort) if ouka_highest_league else None),
         (get_saikyo_games(name, saikyo_games) if saikyo_games else "",
-         get_sort_key(saikyo_games) if saikyo_games else None, False),
+         get_sort_key(saikyo_games) if saikyo_games else None),
         (get_finals(name, number_of_finals) if number_of_finals else "",
-         get_sort_key(number_of_finals) if number_of_finals else None, False),
+         get_sort_key(number_of_finals) if number_of_finals else None),
         (get_lives(name, number_of_lives) if number_of_lives else "",
-         get_sort_key(number_of_lives) if number_of_lives else None, False),
+         get_sort_key(number_of_lives) if number_of_lives else None),
     ]
 
     tds = []
-    for content, sort_value, empty_last in cells:
+    for content, sort_value in cells:
         sort_attr = f' data-sort="{esc(sort_value)}"' if sort_value is not None else ""
-        empty_last_attr = ' data-emptylast="1"' if empty_last else ""
-        tds.append(f'<td{sort_attr}{empty_last_attr}>{content}</td>')
+        tds.append(f"<td{sort_attr}>{content}</td>")
 
     place_value = esc(get_places(office, hometown))
     # 元のGoogle Charts版では、name列のセルHTMLに<span class="かな読み">を
