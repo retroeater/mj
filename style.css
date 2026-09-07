@@ -108,6 +108,11 @@ th {
 	border-collapse: collapse;
 	font-size: 13px;
 	line-height: 1.25;
+	/* Windowsの游ゴシックUIは13pxだと線が細く読みにくいため、
+	   太めのYu Gothic Mediumを優先する。Webフォントは読み込まない。 */
+	font-family: "Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif;
+	font-feature-settings: "palt";      /* 日本語の字詰め */
+	font-variant-numeric: tabular-nums; /* 数字を等幅にして桁を揃える */
 	/* 旧サイト(Google Charts)のline-heightはnormal(約1.15)。
 	   Bootstrap既定の1.5だと1行あたり6px余分に高くなるため詰めている。 */
 }
@@ -145,6 +150,14 @@ th {
    height は最小値として働くので、中身が56pxに収まる前提で成立している。 */
 #pros_table td {
 	height: 56px;
+}
+
+/* 画面外の行はレイアウト・描画を省く。1,102行あっても実際に描くのは
+   表示中の十数行だけになる。DOMには残るのでCtrl+Fや読み上げは従来どおり動く。
+   contain-intrinsic-size で未描画時の高さを伝え、スクロールバーが暴れるのを防ぐ。 */
+#pros_table tbody tr {
+	content-visibility: auto;
+	contain-intrinsic-size: auto 56px;
 }
 
 /* 縞模様。Bootstrapの.tableクラスは外したが、

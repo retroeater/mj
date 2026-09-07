@@ -93,10 +93,21 @@ def esc(value) -> str:
 
 
 def get_external_link(url, img_url, alt_text, alt_img_url) -> str:
+    """外部プロフィールへの画像リンクを生成する。
+
+    読み込み失敗時の差し替え先は data-fallback 属性で渡し、
+    jpml_pros.js 側でまとめて処理する。以前は img ごとに onerror 属性を
+    書いていたが、同じ文字列が約1,900回繰り返されてHTMLの9%を占めていた。
+    インラインハンドラを持たないことは、将来のCSP導入の前提にもなる。
+
+    width/height を属性で明示するのは、読み込み前に高さ0で計算されて
+    レイアウトがずれる(CLS)のを防ぐため。
+    """
     return (
         f'<a href="{esc(url)}" target="_blank">'
         f'<img alt="{esc(alt_text)}" class="pros" loading="lazy" '
-        f"src=\"{esc(img_url)}\" onerror=\"this.onerror=null;this.src='{esc(alt_img_url)}'\" />"
+        f'width="48" height="48" '
+        f'src="{esc(img_url)}" data-fallback="{esc(alt_img_url)}" />'
         f"</a>"
     )
 
@@ -121,20 +132,20 @@ def get_places(office, hometown) -> str:
     return f"{esc(office)}<br />{esc(hometown)}"
 
 
-def get_ron2(ron2_id, ron2_image_url) -> str:
-    return get_external_link(f"https://ron2.jp/pro/{ron2_id}", ron2_image_url, "龍龍", "img/box-arrow-up-right.svg")
+def get_ron2(name, ron2_id, ron2_image_url) -> str:
+    return get_external_link(f"https://ron2.jp/pro/{ron2_id}", ron2_image_url, f"{name} 龍龍", "img/box-arrow-up-right.svg")
 
 
-def get_x(x_id, x_image_url) -> str:
-    return get_external_link(f"https://x.com/{x_id}", x_image_url, "X", "img/x.png")
+def get_x(name, x_id, x_image_url) -> str:
+    return get_external_link(f"https://x.com/{x_id}", x_image_url, f"{name} X", "img/x.png")
 
 
-def get_note(note_id, note_image_url) -> str:
-    return get_external_link(f"https://note.com/{note_id}", note_image_url, "note", "img/note.svg")
+def get_note(name, note_id, note_image_url) -> str:
+    return get_external_link(f"https://note.com/{note_id}", note_image_url, f"{name} note", "img/note.svg")
 
 
-def get_youtube(youtube_id, youtube_image_url) -> str:
-    return get_external_link(f"https://youtube.com/channel/{youtube_id}", youtube_image_url, "YouTube", "img/youtube.svg")
+def get_youtube(name, youtube_id, youtube_image_url) -> str:
+    return get_external_link(f"https://youtube.com/channel/{youtube_id}", youtube_image_url, f"{name} YouTube", "img/youtube.svg")
 
 
 def get_houou_seasons(name, houou_seasons):
@@ -191,10 +202,10 @@ def build_row_html(row) -> str:
     cells = [
         (get_places(office, hometown), None),
         (get_name(name, last_name_en, first_name_en), sort_key),
-        (get_ron2(ron2_id, ron2_image_url) if ron2_id else "", None),
-        (get_x(x_id, x_image_url) if x_id else "", None),
-        (get_note(note_id, note_image_url) if note_id else "", None),
-        (get_youtube(youtube_id, youtube_image_url) if youtube_id else "", None),
+        (get_ron2(name, ron2_id, ron2_image_url) if ron2_id else "", None),
+        (get_x(name, x_id, x_image_url) if x_id else "", None),
+        (get_note(name, note_id, note_image_url) if note_id else "", None),
+        (get_youtube(name, youtube_id, youtube_image_url) if youtube_id else "", None),
         (get_houou_seasons(name, houou_seasons) if houou_seasons else "",
          get_sort_key(houou_seasons) if houou_seasons else None),
         (get_houou_latest_league(houou_latest_league, houou_ampai_url) if houou_latest_league else "",

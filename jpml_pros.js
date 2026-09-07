@@ -16,10 +16,34 @@ document.addEventListener('DOMContentLoaded', function () {
 		return value && value !== 'null' ? value : ''
 	}
 
+	// 画像の読み込み失敗を1箇所でまとめて処理する(旧: imgごとのonerror属性)。
+	// error イベントはバブリングしないため、キャプチャフェーズで受ける。
+	document.addEventListener('error', function (event) {
+		const img = event.target
+		if (!(img instanceof HTMLImageElement)) return
+		const fallback = img.dataset.fallback
+		if (!fallback) return
+		delete img.dataset.fallback // 代替画像も失敗した場合の無限ループを防ぐ
+		img.src = fallback
+	}, true)
+
 	placeInput.value = getSearchParam('place')
 	nameInput.value = getSearchParam('name')
 	leagueInput.value = getSearchParam('league')
 	oukaInput.value = getSearchParam('ouka')
+
+	// 検索対象は毎回変わらないので、行と小文字化済みの検索用文字列を
+	// 最初に1度だけ組み立てて使い回す(1,102行×4項目のtoLowerCaseを毎打鍵
+	// 実行していたのをやめる)
+	const rowIndex = Array.from(table.querySelectorAll('tbody tr')).map(function (row) {
+		return {
+			row: row,
+			place: row.dataset.place.toLowerCase(),
+			name: row.dataset.name.toLowerCase(),
+			league: row.dataset.league.toLowerCase(),
+			ouka: row.dataset.ouka.toLowerCase()
+		}
+	})
 
 	function applyFilters() {
 		const place = placeInput.value.toLowerCase()
@@ -27,18 +51,29 @@ document.addEventListener('DOMContentLoaded', function () {
 		const league = leagueInput.value.toLowerCase()
 		const ouka = oukaInput.value.toLowerCase()
 
-		table.querySelectorAll('tbody tr').forEach(function (row) {
+		for (const entry of rowIndex) {
 			const matches =
-				row.dataset.place.toLowerCase().includes(place) &&
-				row.dataset.name.toLowerCase().includes(name) &&
-				row.dataset.league.toLowerCase().includes(league) &&
-				row.dataset.ouka.toLowerCase().includes(ouka)
-			row.style.display = matches ? '' : 'none'
-		})
+				entry.place.includes(place) &&
+				entry.name.includes(name) &&
+				entry.league.includes(league) &&
+				entry.ouka.includes(ouka)
+			// 状態が変わる行だけ書き換える。毎回1,102行に代入すると
+			// そのたびにレイアウトが再計算されて重くなる
+			if (entry.row.hidden === matches) {
+				entry.row.hidden = !matches
+			}
+		}
+	}
+
+	// 打鍵ごとに走らせず、入力が落ち着いてから1度だけ実行する
+	let filterTimer = null
+	function scheduleFilters() {
+		clearTimeout(filterTimer)
+		filterTimer = setTimeout(applyFilters, 120)
 	}
 
 	;[placeInput, nameInput, leagueInput, oukaInput].forEach(function (input) {
-		input.addEventListener('input', applyFilters)
+		input.addEventListener('input', scheduleFilters)
 	})
 
 	applyFilters()
@@ -80,7 +115,11 @@ document.addEventListener('DOMContentLoaded', function () {
 			return 0
 		})
 
-		rows.forEach(function (row) { tbody.appendChild(row) })
+		// appendChildを1行ずつ繰り返すとその都度レイアウトが動くため、
+		// DocumentFragmentにまとめてから一括で差し替える
+		const fragment = document.createDocumentFragment()
+		rows.forEach(function (row) { fragment.appendChild(row) })
+		tbody.appendChild(fragment)
 		sortDirections[colIndex] = !ascending
 	})
 
