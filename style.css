@@ -91,7 +91,6 @@ th {
 .googlecal { padding-bottom: 75%; }
 }
 
-
 /* ==== jpml_pros.html 選手データベース用(最終版) ==== */
 
 .mj-filter-input {
@@ -136,10 +135,8 @@ th {
 
 #pros_table thead th {
 	position: sticky;
-	top: 0;
-	background-color: #dbe6f4;
-	background-image: linear-gradient(to bottom, #f0f5fc, #dbe6f4);
-	/* ヘッダー色は別タスクで再検討予定の暫定値 */
+	top: var(--navbar-height, 90px);
+	background-color: #fafafa;
 }
 
 /* 行の高さ。画像48px + 上下padding 4px×2 = 56px。
@@ -152,11 +149,11 @@ th {
 /* 縞模様。Bootstrapの.tableクラスは外したが、
    td側に指定しておく方が他のスタイルと競合しにくい */
 #pros_table tbody tr:nth-child(odd) > td {
-	background-color: #fafafa;
+	background-color: #ffffff;
 }
 
 #pros_table tbody tr:nth-child(even) > td {
-	background-color: #ffffff;
+	background-color: #fafafa;
 }
 
 /* ホバー時のハイライト。縞模様より後に書くこと */
@@ -198,4 +195,23 @@ th {
 #pros_table td:nth-child(1),
 #pros_table td:nth-child(2) {
 	z-index: 2;
+}
+
+/* 上部メニューを画面幅いっぱいで固定する(旧サイトの挙動)。
+   旧サイトはGoogle Chartsのテーブル自体がスクロール領域を持っていたため
+   ページ全体はスクロールせず、結果的にメニューが留まって見えていた。
+   現在はページ全体がスクロールするので、明示的に position:fixed で固定する。
+   :has() でこのページ(選手データベース)だけに限定し、他ページには影響させない。
+   --navbar-height は jpml_pros.js が実測値を設定する。 */
+body:has(#pros_table) nav.navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1030; /* Bootstrapのfixed-top相当。テーブルのsticky(最大4)より手前 */
+}
+
+/* 固定したメニューの分だけ本文を押し下げる */
+body:has(#pros_table) {
+	padding-top: var(--navbar-height, 90px);
 }

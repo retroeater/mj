@@ -88,6 +88,15 @@ document.addEventListener('DOMContentLoaded', function () {
 	// 1列目の幅は内容に応じて変わる(nowrap指定で自動調整)ため、
 	// 2列目のsticky位置(left)は固定値では決め打ちできず、
 	// 実際にレンダリングされた1列目の幅を都度測ってJSで設定する。
+	// 上部のBootstrapメニューを画面上部に固定するため、その実測高さを
+	// CSS変数に渡す。フォントや折り返しで高さが変わるので固定値にしない。
+	function updateNavbarOffset() {
+		const navbar = document.querySelector('nav.navbar')
+		if (!navbar) return
+		const height = navbar.getBoundingClientRect().height
+		document.documentElement.style.setProperty('--navbar-height', height + 'px')
+	}
+
 	function updateStickyOffsets() {
 		const firstColCells = table.querySelectorAll('thead th:nth-child(1), tbody td:nth-child(1)')
 		if (firstColCells.length === 0) return
@@ -98,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		})
 	}
 
-	updateStickyOffsets()
-	window.addEventListener('resize', updateStickyOffsets)
+	function updateLayout() {
+		updateNavbarOffset()
+		updateStickyOffsets()
+	}
+
+	updateLayout()
+	window.addEventListener('resize', updateLayout)
 })
