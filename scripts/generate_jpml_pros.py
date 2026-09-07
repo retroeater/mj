@@ -42,10 +42,10 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta name="description" content="日本プロ麻雀連盟所属の1000名超のプロ雀士のデータベース。所属・出身地、鳳凰戦・女流桜花の所属リーグ等で検索可能。各選手の龍龍・X・note・YouTubeへのリンクも掲載。">
 <link rel="icon" href="favicon.ico">
 <!-- Stylesheets -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" media="screen" href="style.css">
 <!-- JavaScripts -->
-<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script defer src="jpml_pros.js"></script>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "94ce55f4f1b7441e9b6e6c8201207512"}}'></script>
