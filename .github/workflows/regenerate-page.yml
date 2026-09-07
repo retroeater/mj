@@ -1,0 +1,37 @@
+name: ページの再生成
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_page:
+        description: '再生成するページ'
+        required: true
+        type: choice
+        options:
+          - jpml_pros
+        # 他ページ用のスクリプトを追加したら、ここにも選択肢を増やす
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          ref: cloudflare
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 対象ページを再生成
+        run: python3 scripts/generate_${{ github.event.inputs.target_page }}.py
+
+      - name: 変更をコミット・push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ${{ github.event.inputs.target_page }}.html
+          git diff --cached --quiet || git commit -m "chore: regenerate ${{ github.event.inputs.target_page }}.html via GitHub Actions"
+          git push origin cloudflare
