@@ -1,0 +1,118 @@
+name: 龍龍画像の同期確認
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # 毎週月曜 04:00 JST (= 日曜 19:00 UTC)
+    # リンク切れ検知(03:00 JST)の1時間後にずらして実行する
+    - cron: '0 19 * * 0'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          ref: cloudflare
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 龍龍の画像と照合
+        run: |
+          python3 scripts/check_ron2_images.py --json result.json | tee summary.txt
+
+      - name: 実行サマリに表示
+        run: |
+          {
+            echo '## 龍龍画像の同期確認'
+            echo '```'
+            cat summary.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 結果をissueに反映
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const r = JSON.parse(fs.readFileSync('result.json', 'utf8'));
+            const TITLE = '龍龍画像の同期確認';
+            const total = r.mismatched.length + r.missing_api.length + r.no_thumb.length;
+
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', per_page: 100,
+            });
+            const existing = issues.data.find(i => i.title === TITLE);
+
+            if (total === 0) {
+              if (existing) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner, repo: context.repo.repo,
+                  issue_number: existing.number,
+                  body: `${r.checked}件を確認し、すべて龍龍の最新画像と一致していました。`,
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner, repo: context.repo.repo,
+                  issue_number: existing.number, state: 'closed',
+                });
+              }
+              core.info('差異なし');
+              return;
+            }
+
+            const sections = [];
+            sections.push(`${r.checked}件を確認し、**${total}件**に差異がありました。`, '');
+
+            if (r.mismatched.length) {
+              sections.push(
+                `### 画像が差し替えられている (${r.mismatched.length}件)`,
+                '龍龍側で写真が変わっています。スプレッドシートのURLを「龍龍の最新」に更新してください。',
+                '',
+                '| 選手 | 龍龍の最新 | 現在サイトで表示中 |',
+                '| --- | --- | --- |',
+                ...r.mismatched.map(m =>
+                  `| [${m.name}](https://ron2.jp/pro/${m.id}) | ${m.current_url} | ${m.site_url} |`),
+                '');
+            }
+            if (r.no_thumb.length) {
+              sections.push(
+                `### 龍龍側に画像が未設定 (${r.no_thumb.length}件)`,
+                'サイトでは表示できていますが、龍龍側の登録が外れています。',
+                '',
+                ...r.no_thumb.map(m => `- [${m.name}](https://ron2.jp/pro/${m.id})`),
+                '');
+            }
+            if (r.missing_api.length) {
+              sections.push(
+                `### 龍龍側に選手が見つからない (${r.missing_api.length}件)`,
+                '退会や非公開化の可能性があります。掲載の要否をご確認ください。',
+                '',
+                ...r.missing_api.map(m => `- [${m.name}](https://ron2.jp/pro/${m.id})`),
+                '');
+            }
+            sections.push('---', '_スプレッドシートを更新すると解消します。次回の確認で差異がなければ、このissueは自動的に閉じられます。_');
+
+            const body = sections.join('\n');
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: existing.number, body,
+              });
+              core.info(`issue #${existing.number} を更新しました`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: TITLE, body,
+              });
+              core.info(`issue #${created.data.number} を作成しました`);
+            }
