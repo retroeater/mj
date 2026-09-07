@@ -100,7 +100,11 @@ th {
 .googlecal { padding-bottom: 75%; }
 }
 
-/* ==== jpml_pros.html 選手データベース用(完成版) ==== */
+
+/* ==== jpml_pros.html 選手データベース用(完成版v3) ==== */
+/* このコメントから次の区切りまでを丸ごと1ブロックとして扱ってください。
+   以前追記した同種のブロック(v1/v2含む)がある場合は、
+   必ず全て削除してからこちらに置き換えてください。 */
 
 .mj-filter-input {
 	width: 100px;
@@ -111,19 +115,45 @@ th {
 	border-collapse: collapse;
 	width: 100%;
 	font-size: 13px;
-	table-layout: fixed;
+	/* table-layout:fixedは指定しない。
+	   「所属/出身地」「名前」列は内容の長さに応じて幅を自動調整したいため、
+	   通常のauto(内容基準)のレイアウトを使う。 */
 }
 
 #pros_table thead th {
 	position: sticky;
 	top: 0;
-	z-index: 1;
+	z-index: 3;
 	text-align: center;
 	vertical-align: middle;
 	background-color: #dbe6f4;
 	background-image: linear-gradient(to bottom, #f0f5fc, #dbe6f4);
-	/* ↑旧サイト(Google Charts)相当のグラデーションの目安です。
-	   色味が違う場合は teach ください、調整します。 */
+	min-width: 80px;
+	/* ヘッダー色は別タスクで再検討予定の暫定値 */
+}
+
+/* 全列共通: 縦横中央揃え、行の高さをぴったり80pxに固定。
+   overflow:hiddenを併用することで、中身が多くても80pxを超えて伸びない。 */
+#pros_table td {
+	height: 80px;
+	max-height: 80px;
+	overflow: hidden;
+	box-sizing: border-box;
+	text-align: center;
+	vertical-align: middle;
+	padding: 4px 8px;
+	min-width: 80px;
+}
+
+/* 「所属/出身地」「名前」列は、一番長い値でも折り返さない幅を
+   自動確保するため、テキストの自動折り返しを止める
+   (<br>による意図的な改行はnowrapでも効くので、office/hometownの
+   改行表示はそのまま維持される) */
+#pros_table td:nth-child(1),
+#pros_table td:nth-child(2),
+#pros_table thead th:nth-child(1),
+#pros_table thead th:nth-child(2) {
+	white-space: nowrap;
 }
 
 /* Bootstrapの.tableはtd/th側に背景色を明示指定するため、
@@ -136,54 +166,35 @@ th {
 	background-color: #ffffff;
 }
 
-/* ホバー時のハイライト。上記の縞模様より必ず後に書くこと(競合時に勝たせるため) */
+/* ホバー時のハイライト。縞模様より必ず後に書くこと(競合時に勝たせるため) */
 #pros_table tbody tr:hover > td {
 	background-color: #d6e9f8 !important;
-}
-
-#pros_table td {
-	height: 80px;
-	max-height: 80px;
-	padding: 0;
-	overflow: hidden;
-	box-sizing: border-box;
-}
-
-/* tdのheightだけでは中身が多いと伸びてしまうため、
-   中身を固定高さ+overflow:hiddenのdivで包んで確実に80pxへ固定する */
-#pros_table .cell-content {
-	height: 80px;
-	max-height: 80px;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-	padding: 0 8px;
-	box-sizing: border-box;
-}
-
-/* 「所属/出身地」列は中央揃え */
-#pros_table td:nth-child(1) .cell-content {
-	align-items: center;
-	text-align: center;
-}
-
-/* 「名前」列のみ左揃え */
-#pros_table td:nth-child(2) .cell-content {
-	align-items: flex-start;
-	text-align: left;
-}
-
-/* 「龍龍」以降(3列目以降)は明示的に中央揃え */
-#pros_table td:nth-child(n+3) .cell-content {
-	align-items: center !important;
-	text-align: center !important;
 }
 
 #pros_table img.pros {
 	width: 48px !important;
 	height: 48px !important;
 	object-fit: cover;
+}
+
+/* 横スクロール時に1・2列目(所属/出身地・名前)を固定表示する。
+   2列目のleft位置は1列目の実測幅によって変わるため、
+   jpml_pros.js側でJSにより動的に設定している(ここでは初期値のみ)。 */
+#pros_table td:nth-child(1),
+#pros_table thead th:nth-child(1) {
+	position: sticky;
+	left: 0;
+	z-index: 1;
+}
+
+#pros_table td:nth-child(2),
+#pros_table thead th:nth-child(2) {
+	position: sticky;
+	left: 0; /* jpml_pros.js が実測値に置き換える */
+	z-index: 1;
+}
+
+#pros_table thead th:nth-child(1),
+#pros_table thead th:nth-child(2) {
+	z-index: 3; /* 上固定(sticky top)と左固定(sticky left)が交差する見出しは最前面に */
 }

@@ -83,4 +83,21 @@ document.addEventListener('DOMContentLoaded', function () {
 		rows.forEach(function (row) { tbody.appendChild(row) })
 		sortDirections[colIndex] = !ascending
 	})
+
+	// 横スクロール時、1・2列目(所属/出身地・名前)を固定表示にする。
+	// 1列目の幅は内容に応じて変わる(nowrap指定で自動調整)ため、
+	// 2列目のsticky位置(left)は固定値では決め打ちできず、
+	// 実際にレンダリングされた1列目の幅を都度測ってJSで設定する。
+	function updateStickyOffsets() {
+		const firstColCells = table.querySelectorAll('thead th:nth-child(1), tbody td:nth-child(1)')
+		if (firstColCells.length === 0) return
+		const width = firstColCells[0].getBoundingClientRect().width
+
+		table.querySelectorAll('thead th:nth-child(2), tbody td:nth-child(2)').forEach(function (cell) {
+			cell.style.left = width + 'px'
+		})
+	}
+
+	updateStickyOffsets()
+	window.addEventListener('resize', updateStickyOffsets)
 })

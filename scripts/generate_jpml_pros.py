@@ -229,7 +229,7 @@ def build_row_html(row) -> str:
     for content, sort_value, empty_last in cells:
         sort_attr = f' data-sort="{esc(sort_value)}"' if sort_value is not None else ""
         empty_last_attr = ' data-emptylast="1"' if empty_last else ""
-        tds.append(f'<td{sort_attr}{empty_last_attr}><div class="cell-content">{content}</div></td>')
+        tds.append(f'<td{sort_attr}{empty_last_attr}>{content}</td>')
 
     place_value = esc(get_places(office, hometown))
     # 元のGoogle Charts版では、name列のセルHTMLに<span class="かな読み">を
