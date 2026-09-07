@@ -18,6 +18,7 @@ per_page=100 で1リクエストあたり100人分を取得できるので、
 """
 import argparse
 import json
+import os
 import pathlib
 import re
 import sys
@@ -33,10 +34,21 @@ API_BASE = "https://ron2.jp/wp-json/wp/v2/pro"
 PER_PAGE = 100
 REQUEST_INTERVAL = 1.0   # 相手サーバーへの配慮。1秒あけて順に取得する
 TIMEOUT = 30
-USER_AGENT = (
-    "Mozilla/5.0 (compatible; ryoei.pro image sync checker; "
-    "+https://ryoei.pro/jpml_pros.html)"
+# ron2.jp は Wordfence を導入しており、ボットらしい User-Agent は 403 で弾かれる。
+# 通常のブラウザと同じヘッダーを送る。環境変数 RON2_USER_AGENT で上書きできる。
+USER_AGENT = os.environ.get(
+    "RON2_USER_AGENT",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
 )
+
+# ブラウザが送る一般的なヘッダー一式。これがないと弾かれることがある。
+REQUEST_HEADERS = {
+    "User-Agent": USER_AGENT,
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+    "Referer": "https://ron2.jp/pro/",
+}
 
 # サイト側: <a href="https://ron2.jp/pro/6010"><img alt="合澤雄貴 龍龍" src="...">
 SITE_PATTERN = re.compile(
@@ -56,7 +68,7 @@ def load_site_images():
 
 
 def fetch_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    req = urllib.request.Request(url, headers=REQUEST_HEADERS)
     with urllib.request.urlopen(req, timeout=TIMEOUT) as res:
         return json.loads(res.read().decode("utf-8")), res.headers
 
@@ -77,7 +89,23 @@ def fetch_ron2_images():
         except urllib.error.HTTPError as e:
             if e.code == 400 and total_pages is not None:
                 break  # ページ範囲を超えた
-            raise
+            # 何が起きたか分かるよう、本文の冒頭も表示してから終了する
+            body = ""
+            try:
+                body = e.read().decode("utf-8", "replace")[:500]
+            except Exception:
+                pass
+            print(f"\n龍龍APIの取得に失敗しました: HTTP {e.code} {e.reason}", file=sys.stderr)
+            print(f"  URL: {url}", file=sys.stderr)
+            if body:
+                print(f"  応答: {body}", file=sys.stderr)
+            if e.code in (403, 406, 429):
+                print("  → WAFやレート制限で遮断されている可能性があります。", file=sys.stderr)
+            raise SystemExit(1)
+        except urllib.error.URLError as e:
+            print(f"\n龍龍APIに接続できませんでした: {e.reason}", file=sys.stderr)
+            print(f"  URL: {url}", file=sys.stderr)
+            raise SystemExit(1)
 
         if total_pages is None:
             total_pages = int(headers.get("X-WP-TotalPages", 0)) or None
