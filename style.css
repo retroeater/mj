@@ -91,6 +91,7 @@ th {
 .googlecal { padding-bottom: 75%; }
 }
 
+
 /* ==== jpml_pros.html 選手データベース用(最終版) ==== */
 
 .mj-filter-input {
@@ -135,7 +136,7 @@ th {
 
 #pros_table thead th {
 	position: sticky;
-	top: var(--navbar-height, 90px);
+	top: var(--content-offset, 90px);
 	background-color: #fafafa;
 }
 
@@ -213,5 +214,18 @@ body:has(#pros_table) nav.navbar {
 
 /* 固定したメニューの分だけ本文を押し下げる */
 body:has(#pros_table) {
-	padding-top: var(--navbar-height, 90px);
+	padding-top: var(--content-offset, 90px);
+}
+
+/* 虫眼鏡で開く検索ボックスも画面に固定する。
+   通常のフローに置くとスクロールで画面外に流れてしまうため。
+   位置はメニューの直下・画面左端。開閉に応じて --content-offset が
+   更新され、本文とテーブルヘッダーが自動的に下へずれる。 */
+#searchBoxes {
+	position: fixed;
+	top: var(--navbar-height, 90px);
+	left: 0;
+	z-index: 1020; /* メニュー(1030)より奥、テーブルのsticky(最大4)より手前 */
+	background-color: #ffffff;
+	padding: 4px;
 }

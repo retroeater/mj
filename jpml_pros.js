@@ -88,13 +88,24 @@ document.addEventListener('DOMContentLoaded', function () {
 	// 1列目の幅は内容に応じて変わる(nowrap指定で自動調整)ため、
 	// 2列目のsticky位置(left)は固定値では決め打ちできず、
 	// 実際にレンダリングされた1列目の幅を都度測ってJSで設定する。
-	// 上部のBootstrapメニューを画面上部に固定するため、その実測高さを
-	// CSS変数に渡す。フォントや折り返しで高さが変わるので固定値にしない。
-	function updateNavbarOffset() {
+	// 上部のBootstrapメニューと検索ボックスは画面に固定表示するため、
+	// その実測高さをCSS変数に渡す。フォントや折り返し、検索ボックスの
+	// 開閉で高さが変わるので固定値にはしない。
+	//   --navbar-height : メニューの高さ(検索ボックスのtop位置に使う)
+	//   --content-offset: メニュー + 検索ボックスの高さ
+	//                     (本文のpadding-topとテーブルヘッダーのtop位置に使う)
+	function updateOffsets() {
 		const navbar = document.querySelector('nav.navbar')
+		const searchBoxes = document.getElementById('searchBoxes')
 		if (!navbar) return
-		const height = navbar.getBoundingClientRect().height
-		document.documentElement.style.setProperty('--navbar-height', height + 'px')
+
+		const navbarHeight = navbar.getBoundingClientRect().height
+		// 閉じているときはdisplay:noneなのでoffsetHeightは0になる
+		const searchHeight = searchBoxes ? searchBoxes.offsetHeight : 0
+
+		const root = document.documentElement.style
+		root.setProperty('--navbar-height', navbarHeight + 'px')
+		root.setProperty('--content-offset', (navbarHeight + searchHeight) + 'px')
 	}
 
 	function updateStickyOffsets() {
@@ -108,10 +119,31 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function updateLayout() {
-		updateNavbarOffset()
+		updateOffsets()
 		updateStickyOffsets()
 	}
 
 	updateLayout()
 	window.addEventListener('resize', updateLayout)
+
+	// スマホではハンバーガーメニューの開閉でナビバーの高さが変わるが、
+	// これはresizeイベントを発火しないため、--navbar-height が古いままになり
+	// 本文が潜り込む。ナビバー自体のサイズ変化を直接監視して追従させる。
+	// メニューの開閉(ハンバーガー)や検索ボックスの開閉は resize を発火しないため、
+	// 要素自体のサイズ変化を監視して追従させる。
+	if (typeof ResizeObserver !== 'undefined') {
+		const observer = new ResizeObserver(updateLayout)
+		const navbar = document.querySelector('nav.navbar')
+		const searchBoxes = document.getElementById('searchBoxes')
+		if (navbar) observer.observe(navbar)
+		if (searchBoxes) observer.observe(searchBoxes)
+	}
+
+	// display:none の要素は ResizeObserver が反応しない環境もあるため、
+	// Bootstrapの開閉イベントでも明示的に更新する(アニメーション完了時)
+	const searchBoxesEl = document.getElementById('searchBoxes')
+	if (searchBoxesEl) {
+		searchBoxesEl.addEventListener('shown.bs.collapse', updateLayout)
+		searchBoxesEl.addEventListener('hidden.bs.collapse', updateLayout)
+	}
 })
