@@ -8,4 +8,5 @@ scripts
 .github
 .gitignore
 .vscode
+CLAUDE.md
 wrangler.jsonc
