@@ -1,4 +1,12 @@
-User-agent: *
-Allow: /
+# Cloudflare が AI Crawl Control の管理 robots.txt をこのファイルの前に
+# 付け足して配信するため、User-agent と Allow はそちらで宣言済み。
+# ここに書くと User-agent: * のブロックが二重になるので Sitemap だけ残す。
+#
+# Cloudflare 側の内容(参考):
+#   Content-Signal: search=yes, ai-train=no, use=reference
+#   検索エンジンと AI の検索・回答は許可、AI の学習用クローラーは拒否
+#   (GPTBot / ClaudeBot / CCBot / Google-Extended など)
+#
+# 実際に配信される内容は https://ryoei.pro/robots.txt で確認できる。
 
 Sitemap: https://ryoei.pro/sitemap.xml
