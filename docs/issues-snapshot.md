@@ -535,12 +535,37 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 ## #76 Cloudflare WAFを有効にする
 
 - 状態: OPEN / 作成: 2026-09-08
-- ラベル: 状況: 保留, 分野: セキュリティ
+- ラベル: 分野: セキュリティ
 
 ### 本文
 
 無料プランでもマネージドルールの一部が使え、既知の攻撃パターンを遮断できる。ただし現時点では優先度が低い。静的配信でフォームもデータベースもなく、守るべき攻撃面がほとんどないため。
 着手すべきタイミングは、ドメイン切替の後(ゾーン設定はドメインをCloudflareに移してからでないと行えない)か、SDPデータベースで選手が自分の情報を編集する仕組みを作るとき(フォームと認証が入るため必須)。
+
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+Pro へアップグレードしたため、保留の理由が解消した。着手可能。
+
+## 着手時の注意
+
+Super Bot Fight Mode を有効にする際、/cdn-cgi/rum を
+ブロックしないこと。Cloudflare Web Analytics のビーコンが
+データを送信する先であり、塞ぐと訪問者側で404や503が発生する。
+
+## あわせて確認すること
+
+Pro では以下も使えるようになっているため、着手前に整理しておく。
+
+- カスタムルールが5→20に増えている
+- Polish(画像最適化)がエッジで効くため、#14(優先度の低い画像を
+  最適化する)の前提が変わる可能性がある。#14 に着手する前に
+  Polish で足りるか確認したほうがよい
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ---
 
@@ -1670,7 +1695,7 @@ https://claude.ai/code/session_01G4xEKGRnEDdr48pfKvQqqG
 
 ## #19 アクセス解析をサーバーサイド方式に変える
 
-- 状態: OPEN / 作成: 2026-09-07
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: インフラ, 対象: 全ページ
 
 ### 本文
@@ -1679,6 +1704,69 @@ https://claude.ai/code/session_01G4xEKGRnEDdr48pfKvQqqG
 
 ---
 <sub>移行前のタスク番号: 40</sub>
+
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+Cloudflare Pro へアップグレードしたことで、Analytics Engine を
+自前で実装せずに目的を達成できたためクローズする。
+
+## 前提が2つ崩れた
+
+1. Workers Paid(月$5)が必要 → 不要だった
+   Analytics Engine の料金表には Workers Free の行があり
+   (1日10万データポイント書き込み/1万読み取りクエリ)、
+   現時点では Analytics Engine 自体が課金開始前だった。
+   実測トラフィックは24時間で3,030リクエストなので、
+   仮に自前実装しても Free 枠で収まっていた。
+
+2. クエリ文字列は自前実装でしか取れない → 取れた
+   Pro の HTTP Traffic 分析は Query string をフィルタ条件に
+   使える。?name= 付きのリクエストは24時間で314件あり、
+   鳳凰戦・女流桜花の成績ページに集中していることが分かった。
+
+## Pro で取れるようになったもの
+
+- パス別の内訳(Free では出なかった)
+- クエリ文字列によるフィルタ
+- Cache status / Source browser / Source device type /
+  Data center / Source ASN などの軸
+- リダイレクトページ(tanilog等)を含む全リクエスト
+  ※ JSビーコンでは301のため計測できなかった
+
+## Pro でも取れないもの
+
+- 選手名ごとの集計。Query string はフィルタには使えるが
+  値ごとの内訳は出ない。Download data も表示中の上位5系列を
+  15分刻みで出すだけ。
+  → ここは Google Search Console で代替する(実際に
+    元氏なづは・白銀紗希・野村駿など個別の選手名が確認できている)
+- Bot score。ディメンション一覧に存在しない(Business以上)
+
+## 自前実装を見送った理由
+
+Analytics Engine を使うには Worker スクリプトの追加と
+run_worker_first の設定が必要で、その副作用として
+_headers の5行と _redirects の3行が worker-first の経路で
+効かなくなるため Worker 側への移設が必要だった。
+現行サイトはいずれ新サイトに置き換わる方針(docs/new-site-design.md)
+であり、本番経路に Worker を挟む恒久的な複雑さに見合わないと判断した。
+
+## 副次的な発見
+
+この調査の過程で html_handling の既定による余計なリダイレクトが
+判明し、#89 として起票した。
+
+## 残る論点
+
+JSビーコン(static.cloudflareinsights.com)自体は動いたままである。
+これを外すかどうかは #9 (CSP) の設計に属する判断のため、
+本issueには含めない。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ---
 
