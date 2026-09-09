@@ -7,32 +7,32 @@
           {
             "type": "command",
             "if": "Bash(gh issue create *)",
-            "command": "cd /workspaces/mj && python3 scripts/generate_issues_snapshot.py 2>/dev/null || true"
+            "command": "cd /workspaces/mj && python3 scripts/build_issues_snapshot.py 2>/dev/null || true"
           },
           {
             "type": "command",
             "if": "Bash(gh issue close *)",
-            "command": "cd /workspaces/mj && python3 scripts/generate_issues_snapshot.py 2>/dev/null || true"
+            "command": "cd /workspaces/mj && python3 scripts/build_issues_snapshot.py 2>/dev/null || true"
           },
           {
             "type": "command",
             "if": "Bash(gh issue reopen *)",
-            "command": "cd /workspaces/mj && python3 scripts/generate_issues_snapshot.py 2>/dev/null || true"
+            "command": "cd /workspaces/mj && python3 scripts/build_issues_snapshot.py 2>/dev/null || true"
           },
           {
             "type": "command",
             "if": "Bash(gh issue edit *)",
-            "command": "cd /workspaces/mj && python3 scripts/generate_issues_snapshot.py 2>/dev/null || true"
+            "command": "cd /workspaces/mj && python3 scripts/build_issues_snapshot.py 2>/dev/null || true"
           },
           {
             "type": "command",
             "if": "Bash(gh issue comment *)",
-            "command": "cd /workspaces/mj && python3 scripts/generate_issues_snapshot.py 2>/dev/null || true"
+            "command": "cd /workspaces/mj && python3 scripts/build_issues_snapshot.py 2>/dev/null || true"
           },
           {
             "type": "command",
             "if": "Bash(gh issue delete *)",
-            "command": "cd /workspaces/mj && python3 scripts/generate_issues_snapshot.py 2>/dev/null || true"
+            "command": "cd /workspaces/mj && python3 scripts/build_issues_snapshot.py 2>/dev/null || true"
           }
         ]
       }

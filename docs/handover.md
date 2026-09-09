@@ -133,8 +133,12 @@ Claude Codeは Codespace のターミナルで動いている（`/workspaces/mj`
   `対象:`（jpml_pros/index/houou_results/全ページ）
 - 優先順位は Projects ボード（`ryoei.pro enhancements`）の並びで表す
 - 完了分もcloseした状態で残している（判断の経緯を後から追えるように）
-- **`docs/issues-snapshot.md` は本文込みのエクスポート。** 古くなるので、
-  正確な状態は `gh issue list` で確認すること
+- **`docs/issues-snapshot.md` は本文込みのエクスポート。**
+  `docs/issues-snapshot.md` は Claude Code の PostToolUse フックで
+  `gh issue` 操作のたびに自動再生成される
+  (`scripts/build_issues_snapshot.py`)。
+  ワークフローではないため、Codespace の外で issue を操作した場合は
+  反映されない。念のため正確な状態は `gh issue list` で確認すること
 
 ---
 

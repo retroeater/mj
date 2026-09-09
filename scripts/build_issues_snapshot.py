@@ -6,7 +6,7 @@ gh issueコマンド実行後のPostToolUseフックから呼ばれる想定の�
 失敗してもClaude Codeの動作は止めない(呼び出し側で `|| true` する)。
 
 使い方:
-    python3 scripts/generate_issues_snapshot.py
+    python3 scripts/build_issues_snapshot.py
 """
 import datetime
 import json
