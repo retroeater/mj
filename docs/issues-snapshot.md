@@ -108,8 +108,8 @@ _headers で対応する)。
 
 ## #91 Super Bot Fight Modeの有効化を検討する
 
-- 状態: OPEN / 作成: 2026-09-09
-- ラベル: 状況: 保留, 分野: セキュリティ
+- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- ラベル: 分野: セキュリティ
 
 ### 本文
 
@@ -138,11 +138,52 @@ AI学習用クローラー（GPTBot/ClaudeBot等）は
 AI Crawl Control で既にブロック済み。重複しないよう
 設定範囲を確認すること。
 
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+#90 の実測を受けて、対応不要と判断する。
+
+## 理由1: 最大の塊に手が出ない
+
+Pro の Super Bot Fight Mode で遮断・チャレンジできるのは
+「Definitely automated」のみ。「Likely automated」への対処は
+Pro では使えない（Business以上、または Bot Management が必要）。
+
+実測では Likely Automated が1,330件（41%）で最大。
+Pro で対処できる Automated は849件（26%）にとどまる。
+
+## 理由2: 遮断する実益が薄い
+
+- Security Analytics 上で既にカテゴリ別に分離できているため、
+  人間のトラフィックだけを見たければフィルタすれば足りる
+- 404の内訳は .env / phpinfo.php を狙う脆弱性スキャンだが、
+  当サイトはPHPも .env も持たない完全な静的サイトであり、
+  すべて404で終わる（#89 のコメント参照）
+- Workers の負荷も1日3千リクエスト規模で、Free枠の
+  30分の1程度
+
+## 理由3: 誤検知のリスクを負う側に立つ
+
+得られるのは26%分のノイズ削減のみで、その対価として
+実在の訪問者を弾く可能性を負うことになる。
+JavaScript Detections を使う場合は #9（CSP）との競合も生じる。
+
+## 再検討する条件
+
+- Business プランへ移行した場合
+- スクレイピングによる実害（帯域・Workers課金・データ転載）が
+  観測された場合
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
+
 ---
 
 ## #90 Bot Reportでボットトラフィックの比率を把握する
 
-- 状態: OPEN / 作成: 2026-09-09
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -174,6 +215,67 @@ Security → Bots から参照できる。
 
 - Super Bot Fight Mode を有効にするか（別issue）
 - 今後アクセス数を語るときに、どちらの数字を基準にするか
+
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+Security → Analytics → Bot analysis で確認した。
+
+## 結果（2026-09-09、直近24時間）
+
+| 分類 | リクエスト | 割合 |
+| --- | --- | --- |
+| Likely Automated | 1,330 | 41% |
+| Likely Human | 964 | 29% |
+| Automated | 849 | 26% |
+| Verified Bot | 110 | 3% |
+| Unknown | 21 | - |
+| 合計 | 3,270 | |
+
+## 分かったこと
+
+**ボットが約7割。** エッジのユニーク訪問者197に対し
+Web Analytics の訪問が75だった差は、これで説明がつく。
+
+当初「Googlebot などの検証済みクローラーが主因」と推測していたが
+外れていた。Verified Bot はわずか110件で、実体は素性の分からない
+自動化トラフィックだった。
+
+Source ASN が裏付けになっている。
+
+| ASN | リクエスト | 性質 |
+| --- | --- | --- |
+| 2516 KDDI | 661 | 一般回線 |
+| 16276 OVH SAS | 555 | データセンター |
+| 396982 Google LLC | 515 | データセンター |
+
+Source IP も 158.69.55.148（OVH）369件、34.51.149.165
+（Google Cloud）226件と特定IPに集中している。
+ryoei.pro:8080 への36件も含め、スキャンの類とみられる。
+
+## 注意: 自分のアクセスが混入している
+
+Source IP の最多は 240b:10:9f05:5810:... の517件だが、
+これは作業者本人の回線（同一 /56 プレフィックスであることを
+確認済み）。本日は終日検証作業をしていたため、
+この日の数字には自分の分が含まれる。
+
+## 今後の使い分け
+
+| 見たいもの | 使う画面 |
+| --- | --- |
+| 訪問者の動向・ページ人気 | Web Analytics（ビーコンのため人間のみ） |
+| ステータスコード・キャッシュ・攻撃・ボット | Security Analytics / HTTP Traffic |
+
+## 前提の訂正
+
+Bot Report の場所は Security → Analytics → Bot analysis タブ。
+（当初 Security → Bots と記載していたが誤り）
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ---
 
@@ -219,7 +321,7 @@ B. 拡張子なしに統一する
 - インデックスされているのが .html と拡張子なしのどちらか
 - 両方の形が重複して登録されていないか
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-09):
 
@@ -277,6 +379,45 @@ Edge status code = 404 を数日観測してから判断する。
 なお _redirects でワイルドカード（例: /:page /:page.html 301）を
 使うのは避けること。CSSやJSなど拡張子付きの静的ファイルまで
 巻き込む恐れがある。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
+
+**retroeater** (2026-09-09):
+
+残作業（拡張子なしURLの404対応）は不要と判断した。
+
+## 404の内訳（2026-09-09、直近24時間）
+
+Edge status codes = 404 で絞り込んだ結果、
+上位はすべて脆弱性スキャンだった。
+
+| パス | リクエスト |
+| --- | --- |
+| /beta/phpinfo.php | 24 |
+| /postmark/.env | 24 |
+| /cron/.env | 21 |
+| /project/.env | 21 |
+| /api/v1/.env | 21 |
+
+拡張子なしURL（/houou_results 等）は上位に1件も現れていない。
+よって _redirects への個別301の追加は行わない。
+
+なお当サイトはPHPも .env も持たない完全な静的サイトのため、
+これらのスキャンはすべて404で終わり実害はない。
+404が746件（全体の23%）出ていること自体は、
+Cloudflareのエッジで完結している証拠でもある。
+
+## 効果測定のベースライン
+
+同時点で 307 Temporary Redirect が366件記録されている。
+これは本対応（html_handling: "none"）の適用前、
+本日12時頃のドメイン切替から適用時点までに発生した分と
+みられる。
+
+翌日以降にこの数値がゼロ近くまで下がれば、
+本対応の効果が数字で確認できる。2026-09-10 以降に再確認すること。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
