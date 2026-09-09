@@ -2,3 +2,4 @@ _site
 
 Gemfile.lock
 __pycache__/
+.wrangler/
