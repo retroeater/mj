@@ -52,9 +52,23 @@ Cloudflare への移行を進める中で改善点を洗い出し、50件以上�
 | ドメイン | `ryoei.pro` / `www.ryoei.pro`。DNS・レジストラともCloudflare |
 | 旧環境 | GitHub Pages（`gh-pages` ブランチ）。切り戻し用に残している（#84で無効化予定） |
 | ビルド | **なし**。静的ファイルをそのまま配信する |
+| プラン | **Cloudflare Pro**（2026年9月9日〜）。$25/月 |
 
 `wrangler.jsonc` の `assets.directory` がリポジトリ全体（`./`）を指すため、
 公開したくないファイルは `.assetsignore` に列挙している。
+
+`html_handling` は `"none"` を明示している（#89）。
+既定の `auto-trailing-slash` だと `/file.html` が `/file` へ
+307リダイレクトされ、canonical・og:url・sitemap がすべて
+リダイレクト先を指す状態になるため。
+
+**この設定はディレクトリインデックスの解決も無効にする。**
+そのため `_redirects` の先頭にある次の1行が必須で、
+これを消すとトップページが404になる。
+
+```
+/  /index.html  200
+```
 
 ### ページ構成
 
@@ -147,7 +161,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 | ドメイン | 用途 |
 |---|---|
 | `www.gstatic.com` / `docs.google.com` | Google Charts（21ページ） |
-| `static.cloudflareinsights.com` | Web Analytics |
+| `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | `fonts.googleapis.com` / `fonts.gstatic.com` | index.html のフォント |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -166,11 +180,14 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **#7** | 他21ページのGoogle Charts依存を解消 | **最大の残件。** #9・#19の前提でもある |
+| **#7** | 他21ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
+| #92 | 静的アセットのブラウザキャッシュを効かせる | #89完了後に着手。Freeプランで実施可 |
+| #90 | Bot Reportでボット比率を把握 | 設定変更なし。見るだけ。#91の判断材料 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
+| #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | Proで解禁 |
 | #9 | CSP設定 | #7の後にやると強いポリシーが書ける |
-| #19 | アクセス解析のサーバーサイド化 | Workers Paid（月$5）の判断が必要 |
 | #78 | OGP画像を作成 | 画像制作が必要 |
+| #4 | SentryでJSエラー検知 | |
 
 ### #7 の進め方（検討済み）
 
@@ -213,6 +230,11 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 - **CTRは約4%**（表示48回・クリック2回）。掲載順位は1〜12位と悪くない
 - 原因は `<title>` と考えられ、#5で26ページ分を整備した（効果の測定はこれから）
 - 削除済みURL（`jpml_articles.html` 等）へのアクセスは**0件**だった
+- Search Console にインデックスされているのは **`.html` 形式のみ**。
+  拡張子なしURLは1件も登録されていない（#89の判断根拠）
+- `?name=` 付きURLの中身は「上位が突出せず裾野が広い」分布。
+  元氏なづは・白銀紗希・野村駿・猿川真寿・如月明日香などが
+  1〜3回ずつ。選手個別ページを作る構想（新サイト）の後押しになる
 
 ### 外部サービス
 
@@ -229,6 +251,53 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
   `robots.txt` は `Sitemap:` の宣言のみにしている
 - AI学習用クローラー（GPTBot/ClaudeBot等）はブロック、検索エンジンとAIの検索・回答は許可
 - Tiered Cache は**効果がない**（Workersの静的アセットにはオリジンサーバーがないため）
+
+### Cloudflare Pro でできること・できないこと
+
+**HTTP Traffic 分析（Analytics → Traffic）**
+
+- パス別の内訳が出る（Freeでは出ない）
+- **Query string をフィルタ条件に使える。** ただし値ごとの
+  内訳は出ないため、「どの選手名が多いか」は
+  Search Console 側で見る
+- 他の軸: Cache status / Source browser / Source device type /
+  Data center / Source ASN / Edge status code など
+- Download data は表示中の上位5系列を15分刻みで出すのみ。
+  生ログではない
+- Bot score はこの画面にはない。Bot Report は
+  Security → Bots の別画面
+
+**オリジンを前提とする機能は効かない**
+
+Workers静的アセットにはオリジンサーバーが存在しないため、
+以下はいずれも効果がないか対象がない。#71（Tiered Cache）を
+見送ったのと同じ理由。
+
+| 機能 | 判断 |
+|---|---|
+| Polish | 不採用。自前画像は11枚178KBで、主要3枚はすでにWebP。選手画像1,985枚は外部7ドメインにあり対象外 |
+| Mirage | 不採用。同上に加え、`<img>`をエッジで書き換えるため #9 と競合 |
+| Argo Smart Routing | 不採用。Proに含まれず別課金（月$5＋$0.10/GB） |
+| Load Balancing | 不採用。別課金かつ分散対象がない |
+
+### トラフィックの実測値（2026年9月9日）
+
+**ドメイン切替が同日12時頃のため、以下は約10時間分。
+1日分の数字ではない。**
+
+| 出所 | 数値 |
+|---|---|
+| エッジ / 総リクエスト | 3,030（キャッシュ済み2,430・未キャッシュ602） |
+| エッジ / ユニーク訪問者 | 197 |
+| Web Analytics / ページビュー | 114 |
+| Web Analytics / 訪問 | 75 |
+
+ユニーク197に対し訪問75。差はクローラーとJS非実行分と推測
+しているが、内訳は #90 で確認する。
+
+サーバーサイド計測を自前で作る場合（#19で検討・見送り）も、
+この規模なら Analytics Engine の Free 枠（1日10万書き込み）に
+十分収まる。
 
 ---
 
