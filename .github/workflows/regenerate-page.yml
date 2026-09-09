@@ -1,25 +1,28 @@
 name: ページの再生成
 
+# 対象ページは scripts/generate_<ページ名>.py の有無から自動で判別する。
+# 新しいページを自動化するときは生成スクリプトを1本足すだけでよく、
+# このファイルを書き換える必要はない。
+
 on:
   workflow_dispatch:
     inputs:
       target_page:
-        description: '再生成するページ'
+        description: '再生成するページ。all ですべて。複数ならスペース区切り'
         required: true
-        type: choice
-        options:
-          - jpml_pros
-        # 他ページ用のスクリプトを追加したら、ここにも選択肢を増やす
+        default: 'all'
+        type: string
 
   push:
     branches:
       - cloudflare
     paths:
-      # jpml_pros関連のソースが変更されたら自動でjpml_pros.htmlを再生成する。
-      # 他ページを自動化したら、同様のpathsエントリを追加する。
-      - 'jpml_pros.js'
-      - 'scripts/generate_jpml_pros.py'
-      - 'scripts/lib/sheets.py'
+      # 生成スクリプトか、ページ専用のJSが変わったときに動かす。
+      # 実際にどのページを作り直すかは scripts/regenerate.py が判定する。
+      # 生成物(*.html)は対象外なので、自分のコミットで再帰的に動くことはない。
+      - 'scripts/generate_*.py'
+      - 'scripts/lib/**'
+      - '*.js'
 
 jobs:
   regenerate:
@@ -29,30 +32,36 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: cloudflare
+          fetch-depth: 2   # 変更ファイルを調べるため直前のコミットも取得する
 
       - name: Pythonをセットアップ
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: 対象ページを決定
-        id: target
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "page=${{ github.event.inputs.target_page }}" >> "$GITHUB_OUTPUT"
-          else
-            # push トリガー時は、変更されたファイル群に対応する
-            # jpml_pros で固定(自動化ページが増えたらここも要拡張)
-            echo "page=jpml_pros" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: 対象ページを再生成
-        run: python3 scripts/generate_${{ steps.target.outputs.page }}.py
+        id: regen
+        run: |
+          set -o pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python3 scripts/regenerate.py ${{ github.event.inputs.target_page }} \
+              | tee /tmp/targets.txt
+          else
+            # 直前のコミットとの差分から、作り直すべきページを判定する
+            git diff --name-only HEAD^ HEAD > /tmp/changed.txt || true
+            echo "変更されたファイル:"
+            cat /tmp/changed.txt
+            python3 scripts/regenerate.py --changed $(cat /tmp/changed.txt) \
+              | tee /tmp/targets.txt
+          fi
+          echo "files=$(cat /tmp/targets.txt)" >> "$GITHUB_OUTPUT"
 
       - name: 変更をコミット・push
+        if: steps.regen.outputs.files != ''
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ${{ steps.target.outputs.page }}.html
-          git diff --cached --quiet || git commit -m "chore: regenerate ${{ steps.target.outputs.page }}.html via GitHub Actions"
+          git add ${{ steps.regen.outputs.files }}
+          git diff --cached --quiet && echo "変更なし" && exit 0
+          git commit -m "chore: regenerate ${{ steps.regen.outputs.files }} via GitHub Actions"
           git push origin cloudflare
