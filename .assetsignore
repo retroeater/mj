@@ -4,6 +4,7 @@
 
 scripts
 .assetsignore
+.claude
 .git
 .github
 .gitignore

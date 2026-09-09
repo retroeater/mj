@@ -10,14 +10,21 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 {{end}}'
 ```
 
-生成日時: 2026-09-09
+生成日時: 2026-09-23
 
 | # | タイトル | 状態 | ラベル |
 | --- | --- | --- | --- |
-| #77 | index.htmlのtestimonialsセクション(コメントアウト)を整理する | OPEN | 分野: 整理・保守 対象: index |
+| #84 | GitHub Pagesを無効化する | OPEN | 状況: 保留 分野: インフラ |
+| #83 | INP(Interaction to Next Paint)を測定して改善余地を確認する | OPEN | 分野: パフォーマンス 対象: jpml_pros |
+| #82 | SNSシェア・URLコピーボタンを設置する | OPEN | 状況: 保留 分野: UI/UX |
+| #81 | index.htmlのコメントアウト済みセクションを整理する | CLOSED | 分野: 整理・保守 対象: index |
+| #80 | index.htmlのコメントアウト済みセクションを整理する | CLOSED | 分野: 整理・保守 対象: index |
+| #79 | URLパラメータの選手名をタブのタイトルに反映する | OPEN | 状況: 保留 分野: SEO 対象: 全ページ |
+| #78 | OGP画像を作成して og:image を設定する | OPEN | 分野: SEO 対象: 全ページ |
+| #77 | index.htmlのtestimonialsセクション(コメントアウト)を整理する | CLOSED | 分野: 整理・保守 対象: index |
 | #76 | Cloudflare WAFを有効にする | OPEN | 状況: 保留 分野: セキュリティ |
-| #75 | 選手データベースの表にaria属性を追加する | OPEN | 分野: SEO 対象: jpml_pros |
-| #74 | prefers-reduced-motionに対応する | OPEN | 分野: UI/UX 対象: index |
+| #75 | 選手データベースの表にaria属性を追加する | CLOSED | 分野: SEO 対象: jpml_pros |
+| #74 | prefers-reduced-motionに対応する | CLOSED | 分野: UI/UX 対象: index |
 | #73 | index.htmlのスクリプトにdeferを付ける | CLOSED | 分野: パフォーマンス 対象: index |
 | #72 | 龍龍画像URLを150x150に統一する | CLOSED | 分野: パフォーマンス 対象: jpml_pros |
 | #71 | Tiered Cacheを有効にする | CLOSED | 分野: インフラ |
@@ -73,20 +80,20 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 | #21 | Astroへの移行を検討する | OPEN | 状況: 保留 分野: 整理・保守 対象: 全ページ |
 | #20 | jpml_titles.html をAstroで試作する | OPEN | 分野: 整理・保守 対象: jpml_titles |
 | #19 | アクセス解析をサーバーサイド方式に変える | OPEN | 分野: インフラ 対象: 全ページ |
-| #18 | Cloudflare Registrarへドメインを移管する | OPEN | 分野: インフラ |
-| #17 | Email Routingで独自ドメインのメールアドレスを作る | OPEN | 分野: インフラ |
+| #18 | Cloudflare Registrarへドメインを移管する | CLOSED | 分野: インフラ |
+| #17 | Email Routingで独自ドメインのメールアドレスを作る | OPEN | 状況: 保留 分野: インフラ |
 | #16 | ドメインをCloudflareへ切り替える | CLOSED | 分野: インフラ |
 | #15 | index.htmlが別系統の構造になっている件 | OPEN | 状況: 保留 分野: 整理・保守 対象: index |
 | #14 | 優先度の低い画像を最適化する | OPEN | 分野: パフォーマンス 対象: index |
 | #13 | 構造化データ(JSON-LD)を追加する | OPEN | 分野: SEO 対象: jpml_pros |
-| #12 | OGPタグを追加する | OPEN | 分野: SEO 対象: 全ページ |
-| #11 | 旧URLのインデックス状況を確認しリダイレクトを判断する | CLOSED | 状況: 待ち 分野: SEO |
-| #10 | Search Consoleのインデックス状況を確認する | CLOSED | 状況: 待ち 分野: SEO |
+| #12 | OGPタグを追加する | CLOSED | 分野: SEO 対象: 全ページ |
+| #11 | 旧URLのインデックス状況を確認しリダイレクトを判断する | CLOSED | 分野: SEO |
+| #10 | Search Consoleのインデックス状況を確認する | CLOSED | 分野: SEO |
 | #9 | CSP(Content-Security-Policy)を設定する | OPEN | 分野: セキュリティ 対象: 全ページ |
 | #8 | 龍龍の所属・出身地等との照合 | OPEN | 分野: 自動化 対象: jpml_pros |
 | #7 | 他20ページのGoogle Charts依存を解消する | OPEN | 分野: パフォーマンス 対象: 全ページ |
 | #6 | ワークフローのpushトリガーを汎用化する | OPEN | 分野: 自動化 |
-| #5 | 他ページへのSEO展開 | OPEN | 分野: SEO 対象: 全ページ |
+| #5 | 他ページへのSEO展開 | CLOSED | 分野: SEO 対象: 全ページ |
 | #4 | Sentryを導入してJSエラーを検知する | OPEN | 分野: 自動化 対象: jpml_pros |
 | #3 | YouTubeチャンネルアイコンの一致確認 | OPEN | 状況: 待ち 分野: 自動化 対象: jpml_pros |
 | #2 | 龍龍画像の同期確認を運用に乗せる | CLOSED | 分野: 自動化 対象: jpml_pros |
