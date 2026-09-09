@@ -12,7 +12,97 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-09
 
-件数: 91件（open/closed含む）。番号降順。
+件数: 92件（open/closed含む）。番号降順。
+
+---
+
+## #92 静的アセットのブラウザキャッシュを効かせる
+
+- 状態: OPEN / 作成: 2026-09-09
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+Workers静的アセットの既定のCache-Controlは「キャッシュしてよいが
+毎回鮮度を確認せよ」という指定になっており、変更のない
+ライブラリやフォントに対しても毎回リクエストが発生している。
+
+ETagが付くため中身の再ダウンロードは起きない(304が返る)が、
+往復のラウンドトリップは毎回かかる。
+
+## 実測(2026-09-09、24時間)
+
+| パス | リクエスト |
+| --- | --- |
+| /assets/vendor/bootstrap/css/bootstrap.min.css | 124 |
+| /style.css | 110 |
+| /assets/vendor/bootstrap/js/bootstrap.bundle.min.js | 105 |
+| /navbar.js | 87 |
+
+## 方針: 3段階に分ける
+
+ファイル名にバージョンやハッシュが入っていないため、
+一律に長いTTLを付けるとライブラリ更新時に古い版が残る。
+
+### 第1段(長期・1年)
+内容が変わったらファイル名を変える運用ができるもの。
+
+- assets/vendor/boxicons/fonts/boxicons.woff2
+- assets/vendor/bootstrap-icons/fonts/bootstrap-icons.woff2
+- /img/* (11ファイル)
+- /favicon.ico
+- /apple-touch-icon.png
+
+Cache-Control: public, max-age=31536000, immutable
+
+### 第2段(中期・30日)
+assets/vendor/ 配下のライブラリ。パスにバージョンが
+入っていないため1年は危険だが、更新頻度は低い。
+
+Cache-Control: public, max-age=2592000
+
+※ ライブラリを更新した際は Cloudflare のキャッシュパージだけでは
+　 ブラウザキャッシュは消えない。更新時はパスを変えるか、
+　 TTLの経過を待つ必要がある。この点をREADMEかCLAUDE.mdに
+　 書き残すこと。
+
+### 第3段(現状維持)
+- HTMLページ全27枚(データ再生成があるため)
+- ルート直下の .js / .css (サイト編集で変わるため)
+
+将来これらにもTTLを付けたい場合は、ファイル名にハッシュを
+入れる仕組みが先に必要。現行サイトでそこまでやる価値は薄く、
+新サイト(docs/new-site-design.md)側の設計事項とする。
+
+## 実装
+
+_headers に追記する。既存のセキュリティヘッダのブロックは
+そのまま残すこと。_headers のルールは上から順に評価され、
+より具体的なパスのルールを先に書く必要がある点に注意。
+
+## 事前確認
+
+現在の既定値を実測してから着手すること。
+
+curl -sI https://ryoei.pro/assets/vendor/bootstrap/css/bootstrap.min.css \
+  | grep -i "cache-control\|etag"
+
+## 事後確認
+
+1. 上記と同じcurlで Cache-Control が意図した値になっていること
+2. HTMLページのCache-Controlが変わっていないこと
+3. Cloudflare の HTTP Traffic 分析で Cache status の内訳を
+   数日後に確認し、リクエスト数が減っているか見る
+
+## 依存
+
+#89 (html_handling) の対応完了後に着手すること。
+どちらも配信まわりの変更のため、同時に動かすと
+問題の切り分けが難しくなる。
+
+なお本件は Pro プランとは無関係で、Free プランでも実施できる
+内容である(Proで解禁されたキャッシュルールの増枠を使うのではなく、
+_headers で対応する)。
 
 ---
 
