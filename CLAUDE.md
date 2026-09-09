@@ -35,3 +35,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `.assetsignore` に開発用ファイルを列挙。公開対象を増やさないこと
 - タスクはGitHub Issuesで管理
 - ビルド・lint・テストの自動化コマンドはなし。HTML/JSの変更はブラウザで直接確認する
+
+## 応答について
+- 日本語で応答すること
