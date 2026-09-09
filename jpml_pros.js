@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const NO_SORT_COLUMNS = [2, 3, 4, 5]
 
 	const thead = table.querySelector('thead')
-	const tbody = table.querySelector('tbody')
+	let tbody = table.querySelector('tbody')   // ソート時に差し替えるので let
 	const headerCells = Array.from(table.querySelectorAll('thead th'))
 	const sortDirections = new Array(headerCells.length).fill(true) // true=昇順
 
@@ -124,11 +124,13 @@ document.addEventListener('DOMContentLoaded', function () {
 			return 0
 		})
 
-		// appendChildを1行ずつ繰り返すとその都度レイアウトが動くため、
-		// DocumentFragmentにまとめてから一括で差し替える
-		const fragment = document.createDocumentFragment()
-		rows.forEach(function (row) { fragment.appendChild(row) })
-		tbody.appendChild(fragment)
+		// 既存のtbodyに1102行を移動させるとレイアウト計算が繰り返される。
+		// 新しいtbodyを組み立ててから丸ごと入れ替えると、
+		// 文書に反映されるのが1回で済む(#86)。
+		const newBody = document.createElement('tbody')
+		rows.forEach(function (row) { newBody.appendChild(row) })
+		table.replaceChild(newBody, tbody)
+		tbody = newBody   // 以降の処理が新しいtbodyを見るように差し替える
 		sortDirections[colIndex] = !ascending
 
 		// 読み上げ利用者に、どの列がどの向きで並んでいるかを伝える
