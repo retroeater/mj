@@ -12,7 +12,51 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-09
 
-件数: 88件（open/closed含む）。番号降順。
+件数: 89件（open/closed含む）。番号降順。
+
+---
+
+## #89 html_handlingの既定により全ページで余計なリダイレクトが発生している
+
+- 状態: OPEN / 作成: 2026-09-09
+- ラベル: 分野: SEO, 対象: 全ページ
+
+### 本文
+
+Pro移行後のHTTP Traffic分析で、同一ページが拡張子ありとなしの
+2系統で記録されていることが判明した。
+
+24時間の実測(?name=付きで絞り込んだ数字):
+| パス | リクエスト |
+| --- | --- |
+| /houou_results | 81 |
+| /houou_results.html | 73 |
+| /houou_leagues.html | 67 |
+| /houou_leagues | 63 |
+
+原因は wrangler.jsonc で html_handling を明示していないこと。
+既定の "auto-trailing-slash" では /file.html が /file へ
+リダイレクトされる。
+
+影響:
+- navbar.js の全リンクが .html を指しており、毎回307を経由している
+- sitemap.xml の28件すべてが .html
+- og:url が27ページすべて .html
+- _redirects の転送先も /resource_logs.html?name=谷岡育夫 で、
+  301の直後に307が入る
+- リダイレクトされるcanonical/og:urlは検索エンジンにソフトエラーと
+  みなされる。#5 のtitle整備の効果測定にも影響する
+
+対応案:
+A. wrangler.jsonc に "html_handling": "none" を追加する
+   1行で済み、リポジトリ側は無変更。ただし拡張子なしURLが404になる
+B. 拡張子なしに統一する
+   navbar.js / sitemap.xml / og:url / _redirects /
+   scripts/apply_page_meta.py / scripts/generate_jpml_pros.py を書き換え
+
+判断の前に Google Search Console を確認すること:
+- インデックスされているのが .html と拡張子なしのどちらか
+- 両方の形が重複して登録されていないか
 
 ---
 
