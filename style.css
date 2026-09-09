@@ -152,10 +152,13 @@ th {
 
 /* 画面外の行はレイアウト・描画を省く。1,102行あっても実際に描くのは
    表示中の十数行だけになる。DOMには残るのでCtrl+Fや読み上げは従来どおり動く。
-   contain-intrinsic-size で未描画時の高さを伝え、スクロールバーが暴れるのを防ぐ。 */
+   contain-intrinsic-size で未描画時の高さを伝え、スクロールバーが暴れるのを防ぐ。
+   auto を付けない固定値にしている。行の高さは56px固定で実測値を記憶する必要が
+   なく、autoの「一度描画した実測値を記憶する」動作は、1102行が一斉に移動する
+   ソート時には記憶の照合が負荷になっていた(#83のINP測定で描画に467ms)。 */
 #pros_table tbody tr {
 	content-visibility: auto;
-	contain-intrinsic-size: auto 56px;
+	contain-intrinsic-size: 56px;
 }
 
 /* 縞模様。Bootstrapの.tableクラスは外したが、
