@@ -18,7 +18,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 ## #88 index.cssのServices・Breadcrumbsセクションを削除する
 
-- 状態: OPEN / 作成: 2026-09-09
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -35,6 +35,20 @@ Testimonials/Contact)を削除した際、範囲外だったが同様に未使�
 いずれもHTML側のセクション自体が既に削除済み(Services: #80、
 他ページ用のbreadcrumbはこのサイトで使っていない)で、対応するCSSだけが
 取り残されている。#80と同様、全セレクタの未使用を確認した上で削除する。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
+
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+Services・Breadcrumbsセクションを削除した(コミット de9d3eb)。
+
+`.services`/`.icon-box`、`.breadcrumbs` のセレクタがindex.htmlに
+存在しないことを確認済み。747行→645行(102行減)。波括弧・コメントの
+対応、index.htmlの表示崩れがないことも確認済み。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
