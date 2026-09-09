@@ -82,7 +82,10 @@ def main():
     for page in targets:
         script = SCRIPTS_DIR / f"generate_{page}.py"
         print(f"\n== {page} ==", file=sys.stderr)
-        result = subprocess.run([sys.executable, str(script)], cwd=REPO_ROOT)
+        # 生成スクリプト自身の標準出力(進捗表示)がここで拾われ、
+        # 呼び出し元のstdout(=最終行の対象ページ一覧)に混入してしまうため、
+        # stderrへ流す
+        result = subprocess.run([sys.executable, str(script)], cwd=REPO_ROOT, stdout=sys.stderr)
         if result.returncode != 0:
             print(f"{page} の生成に失敗しました。", file=sys.stderr)
             return result.returncode
