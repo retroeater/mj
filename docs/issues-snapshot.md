@@ -18,7 +18,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 ## #89 html_handlingの既定により全ページで余計なリダイレクトが発生している
 
-- 状態: OPEN / 作成: 2026-09-09
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: SEO, 対象: 全ページ
 
 ### 本文
@@ -57,6 +57,69 @@ B. 拡張子なしに統一する
 判断の前に Google Search Console を確認すること:
 - インデックスされているのが .html と拡張子なしのどちらか
 - 両方の形が重複して登録されていないか
+
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+A案(wrangler.jsonc に html_handling: "none")で対応した。
+
+## 判断根拠
+
+Google Search Console の実データで、インデックスされているのは
+.html形式のみだった。拡張子なしURLは1件もインデックスされておらず、
+重複登録も発生していなかった。そのため .html を正としてそのまま
+200で返す設定に変更した(拡張子なしに統一するB案は不採用)。
+
+## 「/」の扱い
+
+html_handling: "none" はディレクトリインデックスの解決も無効化するため、
+対策前は「/」が404になった(ローカル検証で確認)。
+_redirects の先頭に以下の1行を追加して解決した。
+
+```
+/  /index.html  200
+```
+
+ステータス200は内部的な書き換えとして扱われるため、ブラウザのURLは
+/ のまま index.html の内容が返る。canonical・og:url・sitemap.xmlは
+いずれも変更不要。
+
+## 確認結果
+
+ローカル(wrangler dev, html_handling適用前後)・本番(https://ryoei.pro)
+のいずれも、想定した結果と一致した。
+
+| URL | 結果 |
+| --- | --- |
+| / | 200 |
+| /index.html | 200 |
+| /jpml_pros.html | 200、Locationヘッダなし |
+| /houou_ranking.html?sheet=鳳凰 | 200、Locationヘッダなし |
+| /jpml_pros(拡張子なし) | 404 |
+| /style.css, /assets/vendor/.../bootstrap.min.css | 200 |
+| /tanilog.html | 301 → /resource_logs.html?name=谷岡育夫(301のみ、307の連鎖なし) |
+| /sonzai_shinai_page.html | 404 |
+
+コミット: 385fa0a
+
+## 残作業（未対応・別途判断）
+
+拡張子なしURL（/houou_results 等）は本変更により404になる。
+これらは2026年9月9日の移行以降に発生した一時的なURLで、
+Googleのインデックスには含まれていない。
+
+対応の要否は、Cloudflare の HTTP Traffic 分析で
+Edge status code = 404 を数日観測してから判断する。
+実数が無視できない場合のみ、_redirects に個別の301を追加する。
+
+なお _redirects でワイルドカード（例: /:page /:page.html 301）を
+使うのは避けること。CSSやJSなど拡張子付きの静的ファイルまで
+巻き込む恐れがある。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ---
 
