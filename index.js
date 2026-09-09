@@ -9,6 +9,12 @@
   "use strict";
 
   /**
+   * OSの「視差効果を減らす」設定を見る。動きで体調を崩す利用者への配慮。
+   */
+  const prefersReducedMotion = () =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /**
    * Easy selector helper function
    */
   const select = (el, all = false) => {
@@ -133,13 +139,18 @@
   if (typed) {
     let typed_strings = typed.getAttribute('data-typed-items')
     typed_strings = typed_strings.split(',')
-    new Typed('.typed', {
-      strings: typed_strings,
-      loop: true,
-      typeSpeed: 100,
-      backSpeed: 50,
-      backDelay: 2000
-    });
+    if (prefersReducedMotion()) {
+      // 動きを減らす設定の利用者には、打ち込む演出をせず最初の語を静的に表示する
+      typed.textContent = typed_strings[0]
+    } else {
+      new Typed('.typed', {
+        strings: typed_strings,
+        loop: true,
+        typeSpeed: 100,
+        backSpeed: 50,
+        backDelay: 2000
+      });
+    }
   }
 
   /**
@@ -196,51 +207,7 @@
     selector: '.portfolio-lightbox'
   });
 
-  /**
-   * Portfolio details slider
-   */
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
 
-  /**
-   * Testimonials slider
-   */
-  new Swiper('.testimonials-slider', {
-    speed: 600,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    },
-    breakpoints: {
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 20
-      },
-
-      1200: {
-        slidesPerView: 3,
-        spaceBetween: 20
-      }
-    }
-  });
 
   /**
    * Animation on scroll
@@ -250,7 +217,10 @@
       duration: 1000,
       easing: 'ease-in-out',
       once: true,
-      mirror: false
+      mirror: false,
+      // AOSは要素を透明な状態から表示させるため、CSSでアニメーションだけ
+      // 止めると要素が見えなくなる。動きを減らす設定のときはAOS自体を無効にする
+      disable: prefersReducedMotion
     })
   });
 

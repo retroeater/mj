@@ -69,6 +69,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 \t<div class="mj-filter"><label class="visually-hidden" for="ouka_filter">女流桜花21期の所属リーグで検索</label><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
 </div>
 
+<p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
+
 <table id="pros_table">
 \t<caption class="visually-hidden">日本プロ麻雀連盟所属のプロ雀士一覧。所属・出身地、SNS、タイトル戦の成績等。</caption>
 \t<thead>
@@ -263,7 +265,23 @@ def main():
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
     row_html = "\n".join(build_row_html(row) for row in raw_rows)
-    header_cells = "".join(f'<th scope="col">{h}</th>' for h in HEADERS)
+    # ソートできない列(龍龍・X・note・YouTube)は見出しのまま。
+    # ソートできる列は button にして、キーボードでも操作できるようにする。
+    # aria-sort は jpml_pros.js がソート実行時に更新する。
+    NO_SORT = {2, 3, 4, 5}
+    cells = []
+    for i, h in enumerate(HEADERS):
+        if i in NO_SORT:
+            cells.append(f'<th scope="col">{h}</th>')
+        else:
+            label = h.replace("<br>", "")
+            cells.append(
+                f'<th scope="col" aria-sort="none">'
+                f'<button type="button" class="mj-sort">{h}'
+                f'<span class="visually-hidden">（{label}で並べ替え）</span>'
+                f"</button></th>"
+            )
+    header_cells = "".join(cells)
 
     output = PAGE_TEMPLATE.format(header_cells=header_cells, rows=row_html)
     OUTPUT_PATH.write_text(output, encoding="utf-8")

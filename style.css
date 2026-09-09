@@ -122,6 +122,21 @@ th {
 	padding: 4px 8px;
 }
 
+/* ソートできる列の見出しはbuttonにしている(キーボードでも操作できるように)。
+   見た目は元の見出しと変わらないよう、ボタンらしい装飾を消す */
+#pros_table thead th button.mj-sort {
+	all: unset;
+	display: block;
+	width: 100%;
+	cursor: pointer;
+	text-align: center;
+}
+
+#pros_table thead th button.mj-sort:focus-visible {
+	outline: 2px solid #1B3B6F;
+	outline-offset: -2px;
+}
+
 #pros_table thead th {
 	position: sticky;
 	top: var(--content-offset, 90px);

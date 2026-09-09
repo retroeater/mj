@@ -45,7 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	})
 
+	const countEl = document.getElementById('result_count')
+
 	function applyFilters() {
+		let shown = 0
 		const place = placeInput.value.toLowerCase()
 		const name = nameInput.value.toLowerCase()
 		const league = leagueInput.value.toLowerCase()
@@ -62,6 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (entry.row.hidden === matches) {
 				entry.row.hidden = !matches
 			}
+			if (matches) shown++
+		}
+
+		// 読み上げ利用者に絞り込み結果を伝える
+		if (countEl) {
+			countEl.textContent = shown + '件を表示しています'
 		}
 	}
 
@@ -121,6 +130,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		rows.forEach(function (row) { fragment.appendChild(row) })
 		tbody.appendChild(fragment)
 		sortDirections[colIndex] = !ascending
+
+		// 読み上げ利用者に、どの列がどの向きで並んでいるかを伝える
+		headerCells.forEach(function (cell, i) {
+			if (cell.hasAttribute('aria-sort')) {
+				cell.setAttribute('aria-sort',
+					i === colIndex ? (ascending ? 'ascending' : 'descending') : 'none')
+			}
+		})
 	})
 
 	// 横スクロール時、1・2列目(所属/出身地・名前)を固定表示にする。

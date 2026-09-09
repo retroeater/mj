@@ -1104,3 +1104,22 @@ section {
     padding-right: 20px 15px;
   }
 }
+/* --------------------------------------------------------------
+# 動きを減らす設定への配慮
+   OSで「視差効果を減らす」を有効にしている利用者のために、
+   アニメーションとスクロールの補間を止める。
+
+   AOS(スクロール連動アニメーション)とTyped.js(打ち込み演出)は
+   index.js 側で無効化している。AOSは要素を透明な状態から表示させるため、
+   ここで transition だけ止めると要素が見えなくなってしまうため。
+-------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
