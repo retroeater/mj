@@ -10,7 +10,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 {{end}}'
 ```
 
-生成日時: 2026-09-23
+生成日時: 2026-09-09
 
 | # | タイトル | 状態 | ラベル |
 | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 | #23 | スクロール中に検索ボックスを開くと背後にデータ行が見える | OPEN | 状況: 保留 分野: UI/UX 対象: jpml_pros |
 | #22 | 龍龍・X・note・YouTube列をかな順でソートできるようにする | OPEN | 状況: 保留 分野: UI/UX 対象: jpml_pros |
 | #21 | Astroへの移行を検討する | OPEN | 状況: 保留 分野: 整理・保守 対象: 全ページ |
-| #20 | jpml_titles.html をAstroで試作する | OPEN | 分野: 整理・保守 対象: jpml_titles |
+| #20 | jpml_titles.html をAstroで試作する | OPEN | 状況: 保留 分野: 整理・保守 対象: jpml_titles |
 | #19 | アクセス解析をサーバーサイド方式に変える | OPEN | 分野: インフラ 対象: 全ページ |
 | #18 | Cloudflare Registrarへドメインを移管する | CLOSED | 分野: インフラ |
 | #17 | Email Routingで独自ドメインのメールアドレスを作る | OPEN | 状況: 保留 分野: インフラ |
@@ -92,7 +92,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 | #9 | CSP(Content-Security-Policy)を設定する | OPEN | 分野: セキュリティ 対象: 全ページ |
 | #8 | 龍龍の所属・出身地等との照合 | OPEN | 分野: 自動化 対象: jpml_pros |
 | #7 | 他20ページのGoogle Charts依存を解消する | OPEN | 分野: パフォーマンス 対象: 全ページ |
-| #6 | ワークフローのpushトリガーを汎用化する | OPEN | 分野: 自動化 |
+| #6 | ワークフローのpushトリガーを汎用化する | CLOSED | 分野: 自動化 |
 | #5 | 他ページへのSEO展開 | CLOSED | 分野: SEO 対象: 全ページ |
 | #4 | Sentryを導入してJSエラーを検知する | OPEN | 分野: 自動化 対象: jpml_pros |
 | #3 | YouTubeチャンネルアイコンの一致確認 | OPEN | 状況: 待ち 分野: 自動化 対象: jpml_pros |
