@@ -14,8 +14,11 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 | # | タイトル | 状態 | ラベル |
 | --- | --- | --- | --- |
+| #87 | ソート中だけ描画を止めて中間状態の再計算を省く | OPEN | 状況: 保留 分野: パフォーマンス 対象: jpml_pros |
+| #86 | ソート時に tbody ごと差し替えて再計算を1回にする | OPEN | 分野: パフォーマンス 対象: jpml_pros |
+| #85 | contain-intrinsic-size を固定値にしてソート時の描画を軽くする | OPEN | 分野: パフォーマンス 対象: jpml_pros |
 | #84 | GitHub Pagesを無効化する | OPEN | 状況: 保留 分野: インフラ |
-| #83 | INP(Interaction to Next Paint)を測定して改善余地を確認する | OPEN | 分野: パフォーマンス 対象: jpml_pros |
+| #83 | INP(Interaction to Next Paint)を測定して改善余地を確認する | CLOSED | 分野: パフォーマンス 対象: jpml_pros |
 | #82 | SNSシェア・URLコピーボタンを設置する | OPEN | 状況: 保留 分野: UI/UX |
 | #81 | index.htmlのコメントアウト済みセクションを整理する | CLOSED | 分野: 整理・保守 対象: index |
 | #80 | index.htmlのコメントアウト済みセクションを整理する | CLOSED | 分野: 整理・保守 対象: index |
@@ -84,7 +87,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 | #17 | Email Routingで独自ドメインのメールアドレスを作る | OPEN | 状況: 保留 分野: インフラ |
 | #16 | ドメインをCloudflareへ切り替える | CLOSED | 分野: インフラ |
 | #15 | index.htmlが別系統の構造になっている件 | OPEN | 状況: 保留 分野: 整理・保守 対象: index |
-| #14 | 優先度の低い画像を最適化する | OPEN | 分野: パフォーマンス 対象: index |
+| #14 | 優先度の低い画像を最適化する | CLOSED | 分野: パフォーマンス 対象: index |
 | #13 | 構造化データ(JSON-LD)を追加する | OPEN | 分野: SEO 対象: jpml_pros |
 | #12 | OGPタグを追加する | CLOSED | 分野: SEO 対象: 全ページ |
 | #11 | 旧URLのインデックス状況を確認しリダイレクトを判断する | CLOSED | 分野: SEO |
