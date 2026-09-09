@@ -38,8 +38,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>プロ</title>
-<meta name="description" content="日本プロ麻雀連盟所属の1000名超のプロ雀士のデータベース。所属・出身地、鳳凰戦・女流桜花の所属リーグ等で検索可能。各選手の龍龍・X・note・YouTubeへのリンクも掲載。">
+<title>プロ | 日本プロ麻雀連盟 | ryoei.pro</title>
+<meta name="description" content="日本プロ麻雀連盟の麻雀プロ（1000人超）について、所属・出身地・龍龍・X・note・YouTube・公式戦成績（鳳凰戦・女流桜花等）をまとめています。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ryoei.pro">
+<meta property="og:title" content="プロ | 日本プロ麻雀連盟 | ryoei.pro">
+<meta property="og:description" content="日本プロ麻雀連盟の麻雀プロ（1000人超）について、所属・出身地・龍龍・X・note・YouTube・公式戦成績（鳳凰戦・女流桜花等）をまとめています。">
+<meta property="og:url" content="https://ryoei.pro/jpml_pros.html">
+<meta name="twitter:card" content="summary">
 <link rel="icon" href="favicon.ico">
 <!-- Stylesheets -->
 <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
