@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 引き継ぎ
+
+作業の経緯や決定事項は docs/handover.md にまとめてある。
+新しいセッションで文脈が必要なときは、まずそちらを読むこと。
+
 # ryoei.pro
 
 日本プロ麻雀連盟の選手データベースを含む個人サイト。
