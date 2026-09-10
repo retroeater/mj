@@ -10,9 +10,39 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-生成日時: 2026-09-09
+生成日時: 2026-09-10
 
-件数: 97件（open/closed含む）。番号降順。
+件数: 98件（open/closed含む）。番号降順。
+
+---
+
+## #98 index.htmlだけが参照している未使用ライブラリを整理する
+
+- 状態: OPEN / 作成: 2026-09-09
+- ラベル: 状況: 保留, 分野: 整理・保守, 対象: index
+
+### 本文
+
+#94 の調査中に判明した。assets/vendor 配下に以下が残っており、
+いずれも index.html 1枚からしか参照されていない。
+
+- aos
+- glightbox
+- isotope-layout
+- php-email-form
+- purecounter
+- typed.js
+- waypoints
+
+#59(assets/vendorの未使用ファイルを整理する)で他ページの
+整理は完了したが、index.html は別系統の構造(#15)であるため
+手つかずになっていたとみられる。
+
+これらが index.html で実際に機能しているのか、
+テンプレート由来の残骸なのかを確認する必要がある。
+
+#15(index.htmlが別系統の構造になっている件)と併せて
+判断するのが妥当なため、保留とする。
 
 ---
 
@@ -214,6 +244,59 @@ navbar.js が動的に生成しているアイコンがあれば、
 #92(キャッシュヘッダ)より先にやること。
 vendor配下のファイル構成が変わるため、
 先にキャッシュ設定を入れると手戻りになる。
+
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+## 訂正: 12種類ではなく19種類
+
+当初の調査が class="..." の形に限定されており、
+拾い漏れがあった。正しい内訳は以下のとおり。
+
+### HTML(17種類)
+
+| アイコン | 出現数 |
+| --- | --- |
+| bi-chevron-right | 8 |
+| bx-plus | 7 |
+| bx-link | 7 |
+| bi-table | 2 |
+| bxl-twitter / bxl-facebook / bxl-linkedin / bxl-github / bxl-imdb | 各1 |
+| bx-user / bx-home / bx-file-blank | 各1 |
+| bi-list / bi-lightbulb / bi-emoji-smile / bi-briefcase / bi-arrow-up-short | 各1 |
+
+### JS(3種類)
+
+| アイコン | 出現数 |
+| --- | --- |
+| bi-x | 2 |
+| bi-list | 2 |
+| bi-search | 1 |
+
+bi-list はHTMLとJSの両方に存在する。
+**JS側を見落とすと置き換えが漏れる**ので注意すること。
+
+## bxl-* について(確認済み)
+
+index.html のソーシャルリンク群にある bxl-* の5種類
+(twitter / facebook / linkedin / github / imdb)は、
+いずれも本人が現在使用しているアカウントへのリンクであり、
+テンプレート由来の残骸ではない。削除せず、そのままSVGに
+置き換えること。
+
+したがって変換対象は19種類。
+
+なお boxicons のブランドアイコン(bxl-*)は、
+bootstrap-icons 側にも同名のアイコンが存在するものがある
+(twitter / facebook / linkedin / github)。
+どちらから取るかは見た目の統一を優先して決めてよいが、
+IMDbのアイコンは bootstrap-icons に存在しないため、
+boxicons 側から取得する必要がある。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ---
 
@@ -2249,8 +2332,8 @@ SDPデータベース(選手が自分の情報を編集する仕組み)向け。
 
 ## #27 Noto Sans JPの採用を検討する
 
-- 状態: OPEN / 作成: 2026-09-07
-- ラベル: 状況: 保留, 分野: UI/UX, 対象: 全ページ
+- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- ラベル: 分野: UI/UX, 対象: 全ページ
 
 ### 本文
 
@@ -2258,6 +2341,28 @@ SDPデータベース(選手が自分の情報を編集する仕組み)向け。
 
 ---
 <sub>移行前のタスク番号: 31</sub>
+
+### コメント (1件)
+
+**retroeater** (2026-09-09):
+
+廃案とする。#93(Google Fontsの読み込みをやめてシステムフォントに
+統一する)と方向が正反対のため。
+
+Noto Sans JP は Google Fonts から配信される書体であり、
+採用すると以下が #93 の判断と矛盾する。
+
+- fonts.googleapis.com / fonts.gstatic.com への依存が残る
+  (#9 のCSPで font-src / style-src に外部ホストが必要になる)
+- 日本語書体はサブセット化しても容量が大きく、
+  レンダリングブロックの解消という #93 の目的と相反する
+
+本文はシステムフォント(Hiragino Sans / Yu Gothic Medium / Meiryo)で
+統一する方針とする。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
 
 ---
 
