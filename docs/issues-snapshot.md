@@ -245,7 +245,7 @@ navbar.js が動的に生成しているアイコンがあれば、
 vendor配下のファイル構成が変わるため、
 先にキャッシュ設定を入れると手戻りになる。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-09):
 
@@ -293,6 +293,78 @@ bootstrap-icons 側にも同名のアイコンが存在するものがある
 どちらから取るかは見た目の統一を優先して決めてよいが、
 IMDbのアイコンは bootstrap-icons に存在しないため、
 boxicons 側から取得する必要がある。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-10):
+
+削除前の確認と、実際の操作による動作確認を行った。
+
+## 【1】置き換え漏れの確認 — 全て0件
+
+```
+grep -rn '\(bi\|bx\|bxl\|bxs\)-[a-z0-9-]*' *.html *.js --include=* | grep -v '\.svg'  → 0件
+grep -rn '\(bi\|bx\|bxl\|bxs\)-[a-z0-9-]*' scripts/                                    → 0件
+grep -rn 'class="[^"]*\b\(bi\|bx\)\b' *.html *.js scripts/                             → 0件
+```
+
+navbar.js・jpml_pros.js（検索ボックス開閉）を個別に全文検索したが、
+文字列連結等での組み立ても含めて残存なし。
+
+## 【3】動作確認 — Playwright(Chromium)でwrangler dev上を実操作
+
+目視ではなく、実際のクリック・スクロール・ホバーで確認した。
+
+| 対象 | 結果 |
+| --- | --- |
+| index.html 上部へ戻る | スクロールで出現→クリックで最上部へ戻ることを確認(scrollY: 2000→38) |
+| index.html ソーシャルリンク | 5アイコンとも18px角で統一。Xアイコンは新ロゴ(`M12.6.75h2.454...`)で旧の小鳥ロゴは残っていない |
+| index.html ハンバーガー | モバイル幅(390px)で可視・クリック可能、data-icon が list⇄x で正しくトグルし、bodyにmobile-nav-activeが付与されることを確認 |
+| index.html chevron(8箇所) | 全て検出。サイズは16px、隣接テキスト(24px)に対して比率も妥当 |
+| index.html Facts(絵文字/電球/表アイコン) | 44px・色#149ddd で正しく表示（スクリーンショットで目視確認済み） |
+| index.html Portfolio(+ / リンクアイコン) | ホバーで28pxのオーバーレイアイコンが正しく表示（スクリーンショットで目視確認済み） |
+| jpml_pros.html 検索ボックス | 開閉とも正常。開→閉まで実クリックで確認 |
+| jpml_pros.html 表 | 1,100行描画・スクロール後も行数維持・ソートクリックでエラーなし |
+
+**jpml_pros.html の「表内のリンクアイコン(bx-link)」について:** 該当ファイル・
+jpml_pros.js を全文検索したが bi-/bx-/bxl- は元から0件だった。
+このページの列アイコン(龍龍/X/note/YouTube)は最初からimg(プロフィール画像)
++フォールバックSVGで実装されており、bootstrap-icons/boxiconsには
+依存していなかった。したがってこの項目は「壊れていない」のではなく
+「そもそも対象外だった」が正しい。
+
+ローカルのwrangler dev環境で1件、Cloudflare Web Analyticsビーコンの
+CORSエラーがconsoleに出たが、これは`/cdn-cgi/rum`が本番ゾーン配下でしか
+機能しないための既知のローカル限定事象で、今回のアイコン変更とは無関係
+(本番では発生しない)。
+
+## 【4】削除について
+
+すでに前回のコミット(0b6c8cf)で実施済み。今回の【1】〜【3】は
+その削除が正しかったことの事後確認にあたる（結果的に【5】も兼ねる）。
+
+## 【6】削減量の記録
+
+| 項目 | サイズ |
+| --- | --- |
+| 削除: bootstrap-icons.min.css | 81,936 B |
+| 削除: bootstrap-icons.woff2 | 121,340 B |
+| 削除: boxicons.min.css | 68,028 B |
+| 削除: boxicons.woff2 | 115,680 B |
+| **削除合計** | **386,984 B (約378KB)** |
+| 増加: index.html (17,950→32,441B) | +14,491 B |
+| 増加: index.js (6,089→7,143B) | +1,054 B |
+| 減少: navbar.js (5,178→5,157B、不要クラス除去) | -21 B |
+| **HTML/JS増加合計** | **+15,524 B (約15.2KB)** |
+| **正味削減** | **約371,460 B (約363KB)** |
+
+ただし実際にこれらのフォントを読み込んでいたのは index.html のみ
+(他26ページは元から未使用)だったため、削減効果は index.html の
+初回読み込み時に限られる。Brotli圧縮後の実転送量は上記より小さくなるが
+(#92)、バイト数以上に効くのは「CSS取得→フォント取得」という
+2段階のレンダリングブロックがindex.htmlから消えたこと。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
