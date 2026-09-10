@@ -27,11 +27,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## データの流れ
 - 選手データ・成績データはすべてGoogleスプレッドシートが正本
-- `jpml_pros.html`（選手データベース、1000名超）だけはビルド時生成に移行済み:
-  - `scripts/generate_jpml_pros.py` が `scripts/lib/sheets.py` 経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query` と同じSELECT構文）を叩き、静的HTMLに焼き込む
-  - 生成後の絞り込み・並び替えは `jpml_pros.js` の軽量JSに委譲
-  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、対象ソース（`jpml_pros.js` / `scripts/generate_jpml_pros.py` / `scripts/lib/sheets.py`）の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate jpml_pros.html via GitHub Actions`）。手動実行（workflow_dispatch）も可能
-- 他20ページ（houou_*, ouka_*, saikyo_*, wrc_*, rh_*, resource_* など）はまだブラウザ側から `google.charts` (`google.visualization.Query`) で直接スプレッドシートを叩く旧方式（ページ生成の静的化はページごとに未着手）
+- `jpml_pros.html`（選手データベース、1000名超）と `jpml_titles.html`（タイトル戦一覧）はビルド時生成に移行済み:
+  - それぞれ `scripts/generate_jpml_pros.py` / `scripts/generate_jpml_titles.py` が `scripts/lib/sheets.py` 経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query` と同じSELECT構文）を叩き、静的HTMLに焼き込む
+  - 生成後の絞り込み・並び替え・ページ送りは、それぞれ `jpml_pros.js` / `jpml_titles.js` の軽量JSに委譲
+  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/sheets.py` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。手動実行（workflow_dispatch）も可能
+  - 型A（表とフィルターのみ）の他ページへ展開するための共通クラスを `style.css` に用意している: `.mj-table`（表の見た目）、`.mj-pager`（ページ送りUI）、`.mj-left`（列ごとの左寄せ）。列幅・列固定などページ固有の構造はIDセレクタ側に残す
+- 他19ページ（houou_*, ouka_*, saikyo_*, wrc_*, rh_*, resource_* など）はまだブラウザ側から `google.charts` (`google.visualization.Query`) で直接スプレッドシートを叩く旧方式（ページ生成の静的化はページごとに未着手）
 - 選手のプロフィール画像は龍龍(ron2.jp)など外部ドメインを含む複数サービスに依存しており、リンク切れやすい
 
 ## メンテナンス用スクリプト（scripts/）

@@ -37,15 +37,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	infoInput.value = getSearchParam('tag')
 
+	// 概要列(1列目)のインデックス。ソート対象はここだけ。
+	const SORT_COLUMN_INDEX = 1
+
 	// 検索対象は毎回変わらないので、行と小文字化済みの検索用文字列を
-	// 最初に1度だけ組み立てて使い回す
+	// 最初に1度だけ組み立てて使い回す。ソートキーもここで確定させ、
+	// ソート時に毎回textContentを読み直さずに済むようにする。
+	// 優先順位: セルにdata-sortがあればその値、無ければ行のdata-info。
+	// (jpml_prosは表示文字列と異なるソートキーを持つ列があるため
+	//  data-sortをセルごとに持つが、jpml_titlesは概要列のみなので
+	//  data-info をそのままソートキーに使い、data-sortの重複出力を
+	//  やめている。ソート処理の実装自体はjpml_pros.jsと分かれたまま
+	//  だが、型Aの共通化に着手するときはどちらかに寄せる)
 	let tbody = table.querySelector('tbody') // ソート時に差し替えるので let
 	const entryByRow = new Map()
 	Array.from(tbody.querySelectorAll('tr')).forEach(function (row) {
+		const sortCell = row.children[SORT_COLUMN_INDEX]
+		const sortKey = (sortCell && sortCell.dataset.sort !== undefined) ? sortCell.dataset.sort : row.dataset.info
 		const entry = {
 			row: row,
 			name: row.dataset.name,
 			info: row.dataset.info.toLowerCase(),
+			sortKey: sortKey,
 			matches: true
 		}
 		entryByRow.set(row, entry)
@@ -94,12 +107,23 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (!entry.matches && !entry.row.hidden) entry.row.hidden = true
 		}
 
+		// #pager_status はrole=status/aria-liveを持たない(読み上げの発生源は
+		// #result_countのみにする)。そのため複数ページあるときは、
+		// ページ移動が読み上げ利用者にも伝わるよう件数表示にページ情報も含める。
+		const singlePage = total <= PAGE_SIZE
 		if (countEl) {
-			countEl.textContent = total + '件を表示しています'
+			if (singlePage) {
+				countEl.textContent = total + '件を表示しています'
+			} else {
+				const shownStart = start + 1
+				const shownEnd = Math.min(end, total)
+				countEl.textContent = total + '件中 ' + shownStart + '〜' + shownEnd + '件目を表示しています（' +
+					(currentPage + 1) + ' / ' + pageCount + 'ページ）'
+			}
 		}
 
 		if (pagerEl) {
-			pagerEl.hidden = total <= PAGE_SIZE
+			pagerEl.hidden = singlePage
 			pagerPrev.disabled = currentPage === 0
 			pagerNext.disabled = currentPage >= pageCount - 1
 			if (pagerStatus) {
@@ -161,11 +185,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		const ascending = sortDirections[colIndex]
 		const rows = Array.from(tbody.querySelectorAll('tr'))
 
+		// ソートキーは初期化時にentryByRowへ計算済みのものを使う。
+		// 2,000行超あるため、比較のたびにDOMからtextContentを読み直さない。
 		rows.sort(function (a, b) {
-			const cellA = a.children[colIndex]
-			const cellB = b.children[colIndex]
-			const valA = (cellA && cellA.dataset.sort !== undefined) ? cellA.dataset.sort : (cellA ? cellA.textContent.trim() : '')
-			const valB = (cellB && cellB.dataset.sort !== undefined) ? cellB.dataset.sort : (cellB ? cellB.textContent.trim() : '')
+			const valA = entryByRow.get(a).sortKey
+			const valB = entryByRow.get(b).sortKey
 			if (valA < valB) return ascending ? -1 : 1
 			if (valA > valB) return ascending ? 1 : -1
 			return 0

@@ -53,7 +53,13 @@ img.rectangle {
 img.thumbnails {
 	width: 120px;
 	height: 120px;
-	object-fit: cover;	
+	object-fit: cover;
+}
+
+img.avatar {
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
 }
 
 img.twitter {
@@ -125,6 +131,17 @@ th {
 	outline-offset: -2px;
 }
 
+/* 列ごとに揃えを変えたいとき用の汎用クラス(型Aの他ページでも使う想定)。
+   見出しはbutton側にも効かせないと中央のままになる。 */
+.mj-table thead th.mj-left,
+.mj-table td.mj-left {
+	text-align: left;
+}
+
+.mj-table thead th.mj-left button.mj-sort {
+	text-align: left;
+}
+
 .mj-table thead th {
 	position: sticky;
 	top: var(--content-offset, 90px);
@@ -135,8 +152,9 @@ th {
 /* 画面外の行はレイアウト・描画を省く。1,000行超あっても実際に描くのは
    表示中の十数行だけになる。DOMには残るのでCtrl+Fや読み上げは従来どおり動く。
    contain-intrinsic-size で未描画時の高さを伝え、スクロールバーが暴れるのを防ぐ。
-   値はjpml_pros(行高56px)を基準にした概算。実際の行高と多少ずれても
-   ブラウザが描画後に補正するため、見た目には影響しない。 */
+   値はjpml_pros(行高56px)を基準にした既定値。行高が異なるページは
+   IDセレクタ(例: #titles_table)側で contain-intrinsic-size を
+   上書きすること。 */
 .mj-table tbody tr {
 	content-visibility: auto;
 	contain-intrinsic-size: auto 56px;
@@ -241,6 +259,12 @@ body:has(.mj-table) {
 	z-index: 2;
 }
 
+/* ==== #titles_table 固有(タイトル戦一覧) ====
+   行高: 写真80px + 上下padding 4px×2 = 88px。.mj-table既定の56pxを上書きする。 */
+#titles_table tbody tr {
+	contain-intrinsic-size: auto 88px;
+}
+
 /* ==== .mj-pager(ページ送り) ====
    型Aの残り14ページで使い回すため、ページ固有のIDに紐づけない。 */
 .mj-pager {
@@ -250,6 +274,12 @@ body:has(.mj-table) {
 	gap: 12px;
 	margin: 8px 0;
 	padding: 4px;
+}
+
+/* Bootstrap Rebootの[hidden]{display:none!important}に依存せず、
+   このクラス単体でも非表示になるようにする */
+.mj-pager[hidden] {
+	display: none;
 }
 
 .mj-pager-button {

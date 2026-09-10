@@ -93,16 +93,17 @@ HTMLは27ページ。大きく3系統に分かれる。
 | 系統 | ページ数 | 状態 |
 |---|---|---|
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
-| `jpml_pros.html` | 1 | **ビルド時にPythonで静的生成**。Google Charts依存を解消済み |
-| Google Charts依存 | **21** | ブラウザから直接スプレッドシートを読む。#7の対象 |
+| `jpml_pros.html` / `jpml_titles.html` | 2 | **ビルド時にPythonで静的生成**。Google Charts依存を解消済み |
+| Google Charts依存 | **20** | ブラウザから直接スプレッドシートを読む。#7の対象 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html` … `scripts/generate_jpml_pros.py` がビルド時に取得してHTMLに焼き込む
-- 残り21ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+- `jpml_pros.html` / `jpml_titles.html` … それぞれ `scripts/generate_jpml_pros.py` /
+  `scripts/generate_jpml_titles.py` がビルド時に取得してHTMLに焼き込む
+- 残り20ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 ### 自動化
 
@@ -188,7 +189,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（21ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（20ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -207,7 +208,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **#7** | 他21ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
+| **#7** | 他20ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
 | #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | 設定操作が中心。Pro移行後未着手 |
 | #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
@@ -217,11 +218,11 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-21ページは4つの型に分かれる。
+対象の21ページ(1ページ完了・残20)は4つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
-| A. 表とフィルターのみ | **15** | `jpml_pros` と同じ構造。移行しやすい | ランキング3、動画4、タイトル、プロテスト、ログ、牌譜、最強戦2、良栄の成績2 |
+| A. 表とフィルターのみ | 15(**完了1・残14**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、ランキング3、動画4、プロテスト、ログ、牌譜、最強戦2、良栄の成績2 |
 | B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
 | D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |
@@ -229,12 +230,17 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 ※ ランキング3ページは `league_ranking.js`（772行）を共用している。
 　 レーダーチャートの指標もこのファイルの集計ロジックを使う（新サイト）
 
-**まず `jpml_titles.html`（型Aの代表）を1ページ移行して型を作り、
-共通部分を括り出してから残りに展開する。**
-#6（ワークフローの汎用化）は完了済みなので、2ページ目を追加する準備は整っている。
+**`jpml_titles.html`（型Aの代表）の移行が完了し、型ができた。**
+共通部品として `.mj-table` / `.mj-pager` / `.mj-left`（style.css）ができたので、
+残り14ページはこれを踏襲して展開する。ページ送りは各ページの現行仕様
+（件数・表示条件）をそのまま引き継ぐ方針で、`jpml_titles` も
+Google Charts版の `pageSize:100` を踏襲した。
+Python側のライブラリ化・JSの共有ファイル化はまだしていない
+（3ページ目に着手する前に括り出す方針）。
+#6（ワークフローの汎用化）は完了済みなので、次ページを追加する準備は整っている。
 
 **テーブル描画ライブラリの選定（#95）は #7 の前提から外した。**
-#7 は現行方式（`jpml_pros.html` と同じ自前実装）で21ページを
+#7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り20ページを
 揃える。AG Grid 等の検討は新サイトのスタック決定（#21）と
 併せて行う。
 
@@ -266,6 +272,13 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 | #92 | 静的アセットのキャッシュヘッダ | 画像に1年、vendorに30日 |
 | #98 | php-email-form の削除 | PHPが動かない環境でPHP用フォーム検証を配信していた |
 | #100 | フッターの著作権表示を修正 | テンプレートのプレースホルダが残っていた |
+
+### #7（型Aの静的化）で用意した共通部品
+
+`jpml_titles.html` の移行(#7)で、型A(表とフィルターのみ)の残り14ページで
+使い回せる汎用クラスを style.css に用意した: `.mj-table`(表の見た目)、
+`.mj-pager`(ページ送りのUI)、`.mj-left`(列ごとの左寄せ)。
+ページ固有の列幅・列固定などはIDセレクタ側に残している。
 
 ### index.html の特殊性（#15）
 

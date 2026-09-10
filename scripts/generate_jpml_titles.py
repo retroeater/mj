@@ -72,7 +72,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <nav class="mj-pager" aria-label="ページ送り">
 \t<button type="button" id="pager_prev" class="mj-pager-button">前へ</button>
-\t<span id="pager_status" class="mj-pager-status" role="status" aria-live="polite"></span>
+\t<span id="pager_status" class="mj-pager-status"></span>
 \t<button type="button" id="pager_next" class="mj-pager-button">次へ</button>
 </nav>
 </body>
@@ -95,13 +95,16 @@ def get_image_cell(name, profile_url, image_url) -> str:
     画像URLが空の行が多いため(タイトル戦データの性質上)、その場合は
     src を空文字にせずフォールバック画像を直接指定する。src="" は
     現在のページ自身への画像リクエストとして解釈されてしまうため。
+    フォールバックは box-arrow-up-right.svg(jpml_prosのSNS列用の外部
+    リンクアイコン)ではなく、汎用のプロフィールアイコン(img/avatar.svg)
+    を使う。
 
     width/height を属性で明示するのは、読み込み前に高さ0で計算されて
     レイアウトがずれる(CLS)のを防ぐため。"""
-    fallback = "img/box-arrow-up-right.svg"
+    fallback = "img/avatar.svg"
     img = (
-        f'<img alt="{esc(name)}" class="rectangle" loading="lazy" '
-        f'width="160" height="90" '
+        f'<img alt="{esc(name)}" class="avatar" loading="lazy" '
+        f'width="80" height="80" '
         f'src="{esc(image_url or fallback)}" data-fallback="{esc(fallback)}" />'
     )
     if profile_url:
@@ -133,10 +136,15 @@ def build_row_html(row) -> str:
     )
     name_value = esc(name or "")
 
+    # 概要セルへの data-sort は付けない。値が data-info(行のtr属性)と
+    # 完全に同一で、そのまま出力すると全行分重複してHTMLが膨らむため。
+    # ソート時は jpml_titles.js 側で data-info を代わりに使う。
+    # data-sort の仕組み自体は残す(jpml_prosは表示文字列と異なる
+    # ソートキー(ゼロ埋め数値等)を持つ列があり、型Aの他ページでも必要になる)。
     return (
         f'<tr data-name="{name_value}" data-info="{info_value}">'
         f"<td>{image_cell}</td>"
-        f'<td data-sort="{info_value}">{info_cell}</td>'
+        f'<td class="mj-left">{info_cell}</td>'
         f"</tr>"
     )
 
@@ -156,7 +164,7 @@ def main():
             cells.append(f'<th scope="col">{h}</th>')
         else:
             cells.append(
-                f'<th scope="col" aria-sort="none">'
+                f'<th scope="col" class="mj-left" aria-sort="none">'
                 f'<button type="button" class="mj-sort">{h}'
                 f'<span class="visually-hidden">（{h}で並べ替え）</span>'
                 f"</button></th>"
