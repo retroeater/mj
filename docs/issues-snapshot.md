@@ -12,7 +12,69 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-10
 
-件数: 98件（open/closed含む）。番号降順。
+件数: 99件（open/closed含む）。番号降順。
+
+---
+
+## #99 bootstrap.bundle.min.jsのソースマップ参照で404が発生している
+
+- 状態: OPEN / 作成: 2026-09-10
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+/assets/vendor/bootstrap/js/bootstrap.bundle.min.js.map への
+リクエストが24時間で28件発生し、すべて404になっている。
+
+## 原因
+
+assets/vendor/bootstrap/js/bootstrap.bundle.min.js の末尾に
+以下のコメントが残っている。
+
+//# sourceMappingURL=bootstrap.bundle.min.js.map
+
+しかし .map ファイルはリポジトリに含まれていないため、
+開発者ツールを開いた閲覧者のブラウザが取得を試みて404になる。
+
+脆弱性スキャンによる404とは異なり、これは当方に起因するもの。
+実害はないが、404の集計に恒常的にノイズが混ざる。
+
+## 対応案
+
+A. bootstrap.bundle.min.js から sourceMappingURL の行を削除する
+   最小の変更。ただしライブラリのファイルに手を入れることになる
+   ため、Bootstrap更新時に再発する。更新手順に注記が必要
+
+B. .map ファイルを配置する
+   404は消えるが、閲覧者に不要なファイルを配信することになる
+   （サイズも大きい）
+
+A を推奨。
+
+## 作業
+
+1. 対象ファイルを確認する
+
+   grep -rn "sourceMappingURL" assets/
+
+   bootstrap.bundle.min.js 以外にも残っている可能性があるため、
+   assets 配下を一括で確認すること
+   （style.min.css 等にも同種の記述があることがある）
+
+2. 該当行を削除する
+
+3. ブラウザの開発者ツールを開いた状態で全ページを表示し、
+   .map への404が発生しないことを確認する
+
+4. CLAUDE.md か README にライブラリ更新時の注記を追加する
+   「vendor配下のライブラリを更新した際は
+   　sourceMappingURL の行を削除すること」
+
+## 確認（数日後）
+
+Cloudflare の HTTP Traffic 分析で
+Edge status code = 404 を絞り込み、
+.map へのリクエストが消えていること。
 
 ---
 
@@ -777,7 +839,7 @@ B. 拡張子なしに統一する
 - インデックスされているのが .html と拡張子なしのどちらか
 - 両方の形が重複して登録されていないか
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-09):
 
@@ -878,6 +940,45 @@ Cloudflareのエッジで完結している証拠でもある。
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
+
+**retroeater** (2026-09-10):
+
+## 効果測定の結果（2026-09-10）
+
+対応が効いていることを確認した。
+
+Edge status code = 307 で絞り込んで時系列を見たところ、
+371件のほぼ全量が2026-09-09の13時前後に発生した
+単一のスパイク（250件超）であり、それ以降はほぼゼロ。
+9月10日に入ってからは発生していない。
+
+24時間の合計値が前日の366件から減らなかったのは、
+集計の窓が修正前の時間帯を含んでいたため。
+グラフ上ではデプロイを境に明確に途切れている。
+
+## 404の内訳も再確認（残作業の判断は正しかった）
+
+Edge status code = 404 の Path 別上位:
+
+| パス | リクエスト |
+| --- | --- |
+| /preview/.env | 45 |
+| /cron/.env | 29 |
+| /assets/vendor/bootstrap/js/bootstrap.bundle.min.js.map | 28 |
+| /project/.env | 28 |
+| /docs/phpinfo.php | 24 |
+
+拡張子なしURL（/houou_results 等）は1件も現れていない。
+_redirects への個別301の追加は不要という判断を維持する。
+
+404が746件から1.49kへ倍増したのはスキャナーの増加によるもの。
+
+なお .js.map への404は当方に起因するもののため、
+別issueとして起票した。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ---
 
