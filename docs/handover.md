@@ -93,19 +93,20 @@ HTMLは27ページ。大きく3系統に分かれる。
 | 系統 | ページ数 | 状態 |
 |---|---|---|
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
-| `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` | 4 | **ビルド時にPythonで静的生成**。Google Charts依存を解消済み |
-| Google Charts依存 | **18** | ブラウザから直接スプレッドシートを読む。#7の対象 |
+| `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` | 5 | **ビルド時にPythonで静的生成**。Google Charts依存を解消済み |
+| Google Charts依存 | **17** | ブラウザから直接スプレッドシートを読む。#7の対象 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` / `resource_logs.html`
-  … それぞれ `scripts/generate_jpml_pros.py` / `scripts/generate_jpml_titles.py` /
-  `scripts/generate_jpml_test.py` / `scripts/generate_resource_logs.py` が
+- `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` /
+  `video_live.html` … それぞれ `scripts/generate_jpml_pros.py` /
+  `scripts/generate_jpml_titles.py` / `scripts/generate_jpml_test.py` /
+  `scripts/generate_resource_logs.py` / `scripts/generate_video_live.py` が
   ビルド時に取得してHTMLに焼き込む
-- 残り18ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+- 残り17ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 ### 自動化
 
@@ -191,7 +192,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（18ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（17ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -199,8 +200,13 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 **生成済みページの `<img src>` に含まれる外部ドメインは、選手のプロフィール
 画像7ドメインだけではない。** `jpml_test.html` は `img.youtube.com`（12件）と
-`ron2.jp`（22件）を使っている。#9でCSPの`img-src`を書くときは、生成済み
-HTMLから実際に使われているドメインを機械的に洗い出すこと。
+`ron2.jp`（22件）、`resource_logs.html` は `pbs.twimg.com`（全2,630件。
+Xの画像への直リンクで、再配信ではない）、`video_live.html` は
+`img.youtube.com`（2,332件）に加えて `hayabusa.io`（1件。OpenREC配信回の
+サムネイルCDN）を使っている。#9でCSPの`img-src`を書くときは、生成済み
+HTMLから実際に使われているドメインを機械的に洗い出すこと（すでに
+`img.youtube.com` / `ron2.jp` / `pbs.twimg.com` / `hayabusa.io` が
+判明している）。
 
 ### gh-pages ブランチは触らない
 
@@ -215,7 +221,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **#7** | 他18ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
+| **#7** | 他17ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
 | #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | 設定操作が中心。Pro移行後未着手 |
 | #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
@@ -225,11 +231,11 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(3ページ完了・残18)は4つの型に分かれる。
+対象の21ページ(4ページ完了・残17)は4つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
-| A. 表とフィルターのみ | 15(**完了3・残12**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、ランキング3、動画4、牌譜、最強戦2、良栄の成績2 |
+| A. 表とフィルターのみ | 15(**完了4・残11**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、ランキング3、動画3、牌譜、最強戦2、良栄の成績2 |
 | B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
 | D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |
@@ -238,52 +244,58 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 　 レーダーチャートの指標もこのファイルの集計ロジックを使う（新サイト）
 
 **`jpml_titles.html`（型Aの代表）・`jpml_test.html`（2ページ目）・
-`resource_logs.html`（3ページ目）の移行が完了し、型ができた。**
+`resource_logs.html`（3ページ目）・`video_live.html`（4ページ目）の
+移行が完了し、型ができた。**
 共通部品として `.mj-table` / `.mj-pager` / `.mj-left` / `.mj-plain`
-（style.css）ができたので、残り12ページはこれを踏襲して展開する。
+（style.css）ができたので、残り11ページはこれを踏襲して展開する。
 ページ送りは各ページの現行仕様（件数・表示条件）をそのまま引き継ぐ方針で、
 `jpml_titles` / `resource_logs` は Google Charts版の `pageSize:100`、
-`jpml_test` は `pageSize:50` を踏襲した。
+`jpml_test` / `video_live` は `pageSize:50` を踏襲した。
 `resource_logs.html` はページ内にハードコードされた内部リンク（名前の
 セレクトボックス3件、タグリンク16本）を持つ唯一の型Aページで、これらは
 `scripts/generate_resource_logs.py` 側の定数として引き継いだ。
+`video_live.js` は `jpml_test.js` とテーブルidが違うだけでほぼ同一
+（型Aの実装が収束してきた最初の例）。
 Python側のライブラリ化・JSの共有ファイル化はまだしていない
-（3ページ目〈`resource_logs`〉を終えた段階でも見送っており、4ページ目
+（4ページ目〈`video_live`〉を終えた段階でも見送っており、5ページ目
 着手前に判断する）。
 #6（ワークフローの汎用化）は完了済みなので、次ページを追加する準備は整っている。
 
 **テーブル描画ライブラリの選定（#95）は #7 の前提から外した。**
-#7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り18ページを
+#7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り17ページを
 揃える。AG Grid 等の検討は新サイトのスタック決定（#21）と
 併せて行う。
 
 **列ヘッダによるソートは `jpml_pros.html` 専用の機能とする。**
-型Aの他12ページには既定で載せず、必要と判断したページにだけ個別に
+型Aの他11ページには既定で載せず、必要と判断したページにだけ個別に
 追加する方針にした（基本なし、明示的に指定があったときだけ追加）。
 Google Charts版のTable chartは既定でソート可能だったため、これは
 意図的な機能削減にあたる。既定の並びがシート順（日付の新しい順）で、
 絞り込みと `?name=`（またはページ内の絞り込み欄）で目的の行に到達できる
 ため、影響は小さいと判断した。`jpml_titles.html` はこの方針の最初の
-適用例で、`jpml_test.html` / `resource_logs.html` も同様にソート機能を
-持たない。
+適用例で、`jpml_test.html` / `resource_logs.html` / `video_live.html` も
+同様にソート機能を持たない。
 
-**`jpml_titles` / `jpml_test` / `resource_logs` の比較で見えた、
-共通化前に揃えるべき差分。** 4ページ目に着手する前に、この点を
+**`jpml_titles` / `jpml_test` / `resource_logs` / `video_live` の比較で
+見えた、共通化前に揃えるべき差分。** 5ページ目に着手する前に、この点を
 どう扱うか判断する必要がある。
 
 - `?name=` の意味がページによって違う: `jpml_titles` / `resource_logs`
-  では入力欄を持たない完全一致フィルター（旧WHERE句相当）、`jpml_test`
-  では絞り込み入力欄の初期値（部分一致）
+  では入力欄を持たない完全一致フィルター（旧WHERE句相当）、`jpml_test` /
+  `video_live` では絞り込み入力欄の初期値（部分一致）
 - `PAGE_SIZE` がページごとに違う（`jpml_titles` / `resource_logs` は100、
-  `jpml_test` は50）。いずれも旧Google Charts版の `pageSize` をそのまま
-  踏襲した値
+  `jpml_test` / `video_live` は50）。いずれも旧Google Charts版の
+  `pageSize` をそのまま踏襲した値
 - 画像の縦横比とフォールバック先がページごとに違う: `jpml_titles` は
-  80×80正方形・`img/avatar.svg`、`jpml_test` / `resource_logs` は
-  160×90(16:9)・`img/125_arr_hoso.png`
+  80×80正方形・`img/avatar.svg`、`jpml_test` / `resource_logs` /
+  `video_live` は160×90(16:9)・`img/125_arr_hoso.png`
 - `resource_logs` だけ、ページ内にハードコードされた内部リンク
   （名前セレクトボックス3件・タグリンク16本）を持つ。生成スクリプト側の
   定数として引き継いだが、他ページにはない構造なので共通化の対象からは
   いったん外れる可能性がある
+- `video_live.js` は `?name=`・`PAGE_SIZE`・ソートなしのいずれも
+  `jpml_test.js` と一致しており、実質的にテーブルidの違いしかない
+  （手本ページとして次の共通化検討にそのまま使える）
 
 ---
 
@@ -323,8 +335,10 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 ページ固有の列幅・列固定・行高(`contain-intrinsic-size`)などはIDセレクタ
 側に残している。`.mj-sort`(ソート見出し用のbuttonスタイル)は
 `jpml_pros.html`専用の機能のため`#pros_table`側に置き、`.mj-table`側には
-汎用化していない。`jpml_test.html` / `resource_logs.html` の移行で
-2・3ページ目の適用例ができた。
+汎用化していない。`jpml_test.html` / `resource_logs.html` /
+`video_live.html` の移行で2〜4ページ目の適用例ができた。
+`video_live.js`は`jpml_test.js`とテーブルidが違うだけでほぼ同一で、
+型Aの実装が収束してきた最初の例。
 
 ### index.html の特殊性（#15）
 
@@ -380,7 +394,7 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 | `houou_leagues.html` | `name` | 716 | `jpml_pros` |
 | `houou_results.html` | `name` | 691 | `jpml_pros` |
 | `jpml_titles.html` | `name` | 419 | `jpml_pros` |
-| `video_live.html` | `name` | 319 | `jpml_pros` |
+| `video_live.html` | `name` | 319 | `jpml_pros`（**移行済み**） |
 | `ouka_results.html` | `name` | 178 | `jpml_pros` |
 | `ouka_leagues.html` | `name` | 178 | `jpml_pros` |
 | `saikyo_results.html` | `tag` | 156 | `jpml_pros` |

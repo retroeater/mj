@@ -283,8 +283,15 @@ body:has(.mj-table) {
 	contain-intrinsic-size: auto 98px;
 }
 
+/* ==== #live_table 固有(放送対局動画) ====
+   行高: 動画サムネイル90px(160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。 */
+#live_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
 /* ==== .mj-pager(ページ送り) ====
-   型Aの残り12ページで使い回すため、ページ固有のIDに紐づけない。 */
+   型Aの残り11ページで使い回すため、ページ固有のIDに紐づけない。 */
 .mj-pager {
 	display: flex;
 	align-items: center;
