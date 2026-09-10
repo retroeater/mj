@@ -123,6 +123,13 @@ th {
 	text-align: left;
 }
 
+/* リンクの下線を消す汎用クラス(型Aの他ページでも使う想定)。
+   インラインのstyle="text-decoration: none"は#9のCSPで弾かれるため、
+   resource_logsの店名リンクなどはこのクラスに置き換える。 */
+.mj-table a.mj-plain {
+	text-decoration: none;
+}
+
 .mj-table thead th {
 	position: sticky;
 	top: var(--content-offset, 90px);
@@ -269,8 +276,15 @@ body:has(.mj-table) {
 	contain-intrinsic-size: auto 98px;
 }
 
+/* ==== #logs_table 固有(飲食店ログ) ====
+   行高: 写真90px(160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。 */
+#logs_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
 /* ==== .mj-pager(ページ送り) ====
-   型Aの残り13ページで使い回すため、ページ固有のIDに紐づけない。 */
+   型Aの残り12ページで使い回すため、ページ固有のIDに紐づけない。 */
 .mj-pager {
 	display: flex;
 	align-items: center;
