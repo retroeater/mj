@@ -60,7 +60,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
 
-<table id="live_table" class="mj-table">
+<table id="live_table" class="mj-table mj-table-2col">
 \t<caption class="visually-hidden">日本プロ麻雀連盟の放送対局動画の一覧。</caption>
 \t<thead>
 \t\t<tr>{header_cells}</tr>

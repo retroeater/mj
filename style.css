@@ -182,6 +182,30 @@ body:has(.mj-table) {
 	padding-top: var(--content-offset, 90px);
 }
 
+/* ==== .mj-table-2col(2列テーブル: 画像 + 概要) ====
+   画像列を固定幅にし、概要列に残り幅をすべて割り当てる。
+   型Aの2列ページ(jpml_titles/jpml_test/video_live/resource_logs)で
+   共通に使う(#7)。#pros_table(15列)には影響させないため、
+   .mj-table本体は変えずに修飾クラスとして追加する。 */
+.mj-table-2col {
+	table-layout: fixed;
+	width: 100%;
+}
+
+/* 画像160px + 左右padding 4px×2 */
+.mj-table-2col thead th:nth-child(1),
+.mj-table-2col td:nth-child(1) {
+	width: 168px;
+}
+
+/* 概要列は折り返す。.mj-table全体のwhite-space: nowrapを打ち消す。
+   overflow-wrap: anywhere は、長いURLや英語タイトルがセル幅を
+   突き破るのを防ぐため。 */
+.mj-table-2col td:nth-child(2) {
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
 /* ==== #pros_table 固有(15列の選手データベース) ====
    列幅を固定するため table-layout: fixed を使う。
    幅の内訳: 「名前」150px + それ以外14列 × 56px = 934px
@@ -264,28 +288,36 @@ body:has(.mj-table) {
 }
 
 /* ==== #titles_table 固有(タイトル戦一覧) ====
-   行高: 写真80px + 上下padding 4px×2 = 88px。.mj-table既定の56pxを上書きする。 */
+   行高: 写真80px + 上下padding 4px×2 = 88px。.mj-table既定の56pxを上書きする。
+   概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
 #titles_table tbody tr {
 	contain-intrinsic-size: auto 88px;
 }
 
 /* ==== #test_table 固有(プロテスト関連記事) ====
    行高: 記事サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
-   .mj-table既定の56pxを上書きする。 */
+   .mj-table既定の56pxを上書きする。
+   概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
 #test_table tbody tr {
 	contain-intrinsic-size: auto 98px;
 }
 
 /* ==== #logs_table 固有(飲食店ログ) ====
    行高: 写真90px(160×90) + 上下padding 4px×2 = 98px。
-   .mj-table既定の56pxを上書きする。 */
+   .mj-table既定の56pxを上書きする。
+   概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
 #logs_table tbody tr {
 	contain-intrinsic-size: auto 98px;
 }
 
 /* ==== #live_table 固有(放送対局動画) ====
    行高: 動画サムネイル90px(160×90) + 上下padding 4px×2 = 98px。
-   .mj-table既定の56pxを上書きする。 */
+   .mj-table既定の56pxを上書きする。
+   概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
 #live_table tbody tr {
 	contain-intrinsic-size: auto 98px;
 }

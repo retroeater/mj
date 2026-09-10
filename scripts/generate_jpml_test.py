@@ -60,7 +60,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
 
-<table id="test_table" class="mj-table">
+<table id="test_table" class="mj-table mj-table-2col">
 \t<caption class="visually-hidden">日本プロ麻雀連盟のプロテストに関する記事・動画一覧。</caption>
 \t<thead>
 \t\t<tr>{header_cells}</tr>

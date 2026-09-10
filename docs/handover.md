@@ -306,6 +306,16 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
   `jpml_test.js` と一致しており、実質的にテーブルidの違いしかない
   （手本ページとして次の共通化検討にそのまま使える）
 
+**型Aの2列ページ（画像 + 概要）には `.mj-table-2col` を付ける。**
+画像列を168px固定、概要列を残り幅に伸縮させ、概要は折り返す
+（style.cssの`.mj-table-2col`）。`.mj-table`本体は変えず修飾クラスとして
+追加したため、15列の`jpml_pros`（`table-layout: fixed` / `width: 934px`
+のまま）には影響しない。
+移行済みの4ページ（`jpml_titles` / `jpml_test` / `video_live` /
+`resource_logs`）に適用済み。**未移行の対象ページ**（`saikyo_results` /
+`video_wayhome` / `video_mtsuku` / `video_en` / `rh_paifu`）も同じ
+2列構成なので、#7で移行するときに同じクラスを付けること。
+
 ---
 
 ## 6. これまでに分かったこと
