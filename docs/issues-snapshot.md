@@ -2143,7 +2143,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 無料プランでもマネージドルールの一部が使え、既知の攻撃パターンを遮断できる。ただし現時点では優先度が低い。静的配信でフォームもデータベースもなく、守るべき攻撃面がほとんどないため。
 着手すべきタイミングは、ドメイン切替の後(ゾーン設定はドメインをCloudflareに移してからでないと行えない)か、SDPデータベースで選手が自分の情報を編集する仕組みを作るとき(フォームと認証が入るため必須)。
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-09):
 
@@ -2209,6 +2209,60 @@ Pro で解禁された機能を一通り評価した結果、本issueの進め�
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
+
+**retroeater** (2026-09-10):
+
+## 設定内容（2026-09-10）
+
+Security → WAF → Managed rules
+
+| ルールセット | 状態 |
+| --- | --- |
+| Cloudflare Managed Ruleset | 有効・**Log モード** |
+| OWASP Core Ruleset | 無効 |
+
+Super Bot Fight Mode は #91 で NOT_PLANNED としたため
+有効化していない。
+
+## Log モードで開始した理由
+
+?name=元氏なづは のような日本語のクエリ文字列が
+誤検知されないかを実データで確認するため。
+遮断への切り替えは Events の確認後に判断する。
+
+## 期待値についての注記
+
+WAF は既知の攻撃パターンに反応する仕組みであり、
+「存在しないパスを叩く」行為自体は攻撃パターンではない。
+
+したがって /preview/.env や /docs/phpinfo.php を狙う
+スキャン（2026-09-10時点で24時間あたり1.49kの404）は、
+Block に切り替えても減らない。
+
+完全な静的サイトであり攻撃面が存在しないため、
+実際に遮断されるものはほとんどないと予想される。
+それを実データで確認することが本issueの成果となる。
+
+## 次のアクション（2026-09-13以降）
+
+Security → Events を確認する。
+
+チェック項目:
+1. 日本語クエリ（?name=）が誤検知されていないか
+2. 検知されているのがスキャン系のみか
+3. 検知の総数
+
+判断:
+- 誤検知ゼロ → Ruleset action を Block に切り替える
+- 誤検知あり → カスタムルールで除外してから Block に切り替える
+  （Pro でカスタムルールは20本まで使える。現在0本）
+
+結果を本issueにコメントし、Block 切り替え後に
+COMPLETED でクローズする。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ---
 
