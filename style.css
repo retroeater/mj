@@ -116,21 +116,6 @@ th {
 	padding: 4px;
 }
 
-/* ソートできる列の見出しはbuttonにしている(キーボードでも操作できるように)。
-   見た目は元の見出しと変わらないよう、ボタンらしい装飾を消す */
-.mj-table thead th button.mj-sort {
-	all: unset;
-	display: block;
-	width: 100%;
-	cursor: pointer;
-	text-align: center;
-}
-
-.mj-table thead th button.mj-sort:focus-visible {
-	outline: 2px solid #1B3B6F;
-	outline-offset: -2px;
-}
-
 /* データセルの揃えを列ごとに変えるための汎用クラス(型Aの他ページでも
    使う想定)。見出しは列を問わず中央に統一する方針のため、このクラスは
    データセル(td)にのみ適用する。 */
@@ -199,6 +184,22 @@ body:has(.mj-table) {
 	width: 934px;
 }
 
+/* 列ヘッダによるソートはjpml_pros.html専用の機能のため、
+   ソート見出し用のbuttonスタイルも.mj-table側ではなくここに置く。
+   見た目は元の見出しと変わらないよう、ボタンらしい装飾を消す */
+#pros_table thead th button.mj-sort {
+	all: unset;
+	display: block;
+	width: 100%;
+	cursor: pointer;
+	text-align: center;
+}
+
+#pros_table thead th button.mj-sort:focus-visible {
+	outline: 2px solid #1B3B6F;
+	outline-offset: -2px;
+}
+
 #pros_table thead th,
 #pros_table td {
 	width: 56px;
@@ -261,8 +262,15 @@ body:has(.mj-table) {
 	contain-intrinsic-size: auto 88px;
 }
 
+/* ==== #test_table 固有(プロテスト関連記事) ====
+   行高: 記事サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。 */
+#test_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
 /* ==== .mj-pager(ページ送り) ====
-   型Aの残り14ページで使い回すため、ページ固有のIDに紐づけない。 */
+   型Aの残り13ページで使い回すため、ページ固有のIDに紐づけない。 */
 .mj-pager {
 	display: flex;
 	align-items: center;

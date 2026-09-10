@@ -93,17 +93,18 @@ HTMLは27ページ。大きく3系統に分かれる。
 | 系統 | ページ数 | 状態 |
 |---|---|---|
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
-| `jpml_pros.html` / `jpml_titles.html` | 2 | **ビルド時にPythonで静的生成**。Google Charts依存を解消済み |
-| Google Charts依存 | **20** | ブラウザから直接スプレッドシートを読む。#7の対象 |
+| `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` | 3 | **ビルド時にPythonで静的生成**。Google Charts依存を解消済み |
+| Google Charts依存 | **19** | ブラウザから直接スプレッドシートを読む。#7の対象 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html` / `jpml_titles.html` … それぞれ `scripts/generate_jpml_pros.py` /
-  `scripts/generate_jpml_titles.py` がビルド時に取得してHTMLに焼き込む
-- 残り20ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+- `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` … それぞれ
+  `scripts/generate_jpml_pros.py` / `scripts/generate_jpml_titles.py` /
+  `scripts/generate_jpml_test.py` がビルド時に取得してHTMLに焼き込む
+- 残り19ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 ### 自動化
 
@@ -189,7 +190,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（20ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（19ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -208,7 +209,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **#7** | 他20ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
+| **#7** | 他19ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
 | #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | 設定操作が中心。Pro移行後未着手 |
 | #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
@@ -218,11 +219,11 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(1ページ完了・残20)は4つの型に分かれる。
+対象の21ページ(2ページ完了・残19)は4つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
-| A. 表とフィルターのみ | 15(**完了1・残14**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、ランキング3、動画4、プロテスト、ログ、牌譜、最強戦2、良栄の成績2 |
+| A. 表とフィルターのみ | 15(**完了2・残13**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、ランキング3、動画4、ログ、牌譜、最強戦2、良栄の成績2 |
 | B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
 | D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |
@@ -230,27 +231,42 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 ※ ランキング3ページは `league_ranking.js`（772行）を共用している。
 　 レーダーチャートの指標もこのファイルの集計ロジックを使う（新サイト）
 
-**`jpml_titles.html`（型Aの代表）の移行が完了し、型ができた。**
+**`jpml_titles.html`（型Aの代表）と `jpml_test.html`（型Aの2ページ目）の
+移行が完了し、型ができた。**
 共通部品として `.mj-table` / `.mj-pager` / `.mj-left`（style.css）ができたので、
-残り14ページはこれを踏襲して展開する。ページ送りは各ページの現行仕様
-（件数・表示条件）をそのまま引き継ぐ方針で、`jpml_titles` も
-Google Charts版の `pageSize:100` を踏襲した。
+残り13ページはこれを踏襲して展開する。ページ送りは各ページの現行仕様
+（件数・表示条件）をそのまま引き継ぐ方針で、`jpml_titles` は
+Google Charts版の `pageSize:100`、`jpml_test` は `pageSize:50` を踏襲した。
 Python側のライブラリ化・JSの共有ファイル化はまだしていない
-（3ページ目に着手する前に括り出す方針）。
+（3ページ目〈`jpml_test`〉を終えた段階でも見送っており、次ページ着手前に
+判断する）。
 #6（ワークフローの汎用化）は完了済みなので、次ページを追加する準備は整っている。
 
 **テーブル描画ライブラリの選定（#95）は #7 の前提から外した。**
-#7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り20ページを
+#7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り19ページを
 揃える。AG Grid 等の検討は新サイトのスタック決定（#21）と
 併せて行う。
 
 **列ヘッダによるソートは `jpml_pros.html` 専用の機能とする。**
-型Aの他14ページには既定で載せず、必要と判断したページにだけ個別に
+型Aの他13ページには既定で載せず、必要と判断したページにだけ個別に
 追加する方針にした（基本なし、明示的に指定があったときだけ追加）。
 Google Charts版のTable chartは既定でソート可能だったため、これは
 意図的な機能削減にあたる。既定の並びがシート順（日付の新しい順）で、
-絞り込みと `?name=` で目的の行に到達できるため、影響は小さいと判断した。
-`jpml_titles.html` はこの方針の最初の適用例で、ソート機能を持たない。
+絞り込みと `?name=`（またはページ内の絞り込み欄）で目的の行に到達できる
+ため、影響は小さいと判断した。`jpml_titles.html` はこの方針の最初の
+適用例で、`jpml_test.html` も同様にソート機能を持たない。
+
+**`jpml_titles` と `jpml_test` の比較で見えた、共通化前に揃えるべき差分。**
+3ページ目に着手する前に、この3点をどう扱うか判断する必要がある。
+
+- `?name=` の意味がページによって違う: `jpml_titles` では入力欄を持たない
+  完全一致フィルター（旧WHERE句相当）、`jpml_test` では絞り込み入力欄の
+  初期値（部分一致）
+- `PAGE_SIZE` がページごとに違う（`jpml_titles` は100、`jpml_test` は50）。
+  いずれも旧Google Charts版の `pageSize` をそのまま踏襲した値
+- 画像の縦横比とフォールバック先がページごとに違う: `jpml_titles` は
+  80×80正方形・`img/avatar.svg`、`jpml_test` は160×90(16:9)・
+  `img/125_arr_hoso.png`
 
 ---
 
@@ -283,10 +299,13 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 
 ### #7（型Aの静的化）で用意した共通部品
 
-`jpml_titles.html` の移行(#7)で、型A(表とフィルターのみ)の残り14ページで
+`jpml_titles.html` の移行(#7)で、型A(表とフィルターのみ)の残りページで
 使い回せる汎用クラスを style.css に用意した: `.mj-table`(表の見た目)、
 `.mj-pager`(ページ送りのUI)、`.mj-left`(列ごとの左寄せ)。
-ページ固有の列幅・列固定などはIDセレクタ側に残している。
+ページ固有の列幅・列固定・行高(`contain-intrinsic-size`)などはIDセレクタ
+側に残している。`.mj-sort`(ソート見出し用のbuttonスタイル)は
+`jpml_pros.html`専用の機能のため`#pros_table`側に置き、`.mj-table`側には
+汎用化していない。`jpml_test.html`の移行で2ページ目の適用例ができた。
 
 ### index.html の特殊性（#15）
 
