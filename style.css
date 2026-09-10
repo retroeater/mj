@@ -131,14 +131,10 @@ th {
 	outline-offset: -2px;
 }
 
-/* 列ごとに揃えを変えたいとき用の汎用クラス(型Aの他ページでも使う想定)。
-   見出しはbutton側にも効かせないと中央のままになる。 */
-.mj-table thead th.mj-left,
+/* データセルの揃えを列ごとに変えるための汎用クラス(型Aの他ページでも
+   使う想定)。見出しは列を問わず中央に統一する方針のため、このクラスは
+   データセル(td)にのみ適用する。 */
 .mj-table td.mj-left {
-	text-align: left;
-}
-
-.mj-table thead th.mj-left button.mj-sort {
 	text-align: left;
 }
 

@@ -164,7 +164,7 @@ def main():
             cells.append(f'<th scope="col">{h}</th>')
         else:
             cells.append(
-                f'<th scope="col" class="mj-left" aria-sort="none">'
+                f'<th scope="col" aria-sort="none">'
                 f'<button type="button" class="mj-sort">{h}'
                 f'<span class="visually-hidden">（{h}で並べ替え）</span>'
                 f"</button></th>"
