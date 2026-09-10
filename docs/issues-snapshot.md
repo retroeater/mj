@@ -180,6 +180,33 @@ Pro版を購入しない限りこのリンクは残す必要がある
 
 他26ページのフッター表記を確認し、揃えるかどうかを判断すること。
 
+### コメント (1件)
+
+**retroeater** (2026-09-10):
+
+## ライセンス上の確認: 変更して問題ない
+
+BootstrapMade の無料ライセンスで残す義務があるのは
+フッターのクレジット行「Designed by BootstrapMade」のみ。
+テンプレートファイルのカスタマイズ自体は自由とされている。
+
+「© Copyright iPortfolio」はクレジットではなく、
+サイト運営者名を入れるためのプレースホルダである。
+
+HTMLの構造上も、保護対象を示すコメント
+（All the links in the footer should remain intact）は
+credits の div 内にあり、copyright の div の外側にある。
+copyright 側にリンクは含まれていない。
+
+むしろ現状はサイトの著作権表示が「iPortfolio」名義に
+なっており、事実と異なる状態である。
+
+なお無料ライセンスは個人利用の範囲であることが前提。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
 ---
 
 ## #99 bootstrap.bundle.min.jsのソースマップ参照で404が発生している
@@ -563,7 +590,7 @@ Amazon PA-API はアソシエイト・プログラムへの参加が前提であ
 ## #95 #7のテーブル描画方式を比較検討する
 
 - 状態: OPEN / 作成: 2026-09-09
-- ラベル: 分野: パフォーマンス
+- ラベル: 状況: 保留, 分野: パフォーマンス
 
 ### 本文
 
@@ -616,6 +643,32 @@ jpml_titles.html 1枚で候補AとBを実装して比較する。
 ## 依存
 
 #7 の着手前に決着させること。
+
+### コメント (1件)
+
+**retroeater** (2026-09-10):
+
+## 位置づけを変更する
+
+本issueは #7 の前提ではなく、**#7 の完了後に新規構築の
+文脈で検討する**ものとする。
+
+### 理由
+
+#7 は現行方式（jpml_pros.html と同じ自前実装）で
+21ページを揃える。
+
+当初「#24 のような問題を21回抱えることになる」と
+懸念したが、#24 が生じたのは jpml_pros.html が1,100行を
+扱うためであり、21ページの成績表はより小規模である。
+同種の問題が同じ規模で発生するとは限らない。
+
+ライブラリ（AG Grid 等）の選定は、新サイトの
+スタック決定（#21）と併せて判断するほうが筋が通る。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ---
 
@@ -957,7 +1010,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #92 静的アセットのブラウザキャッシュを効かせる
 
-- 状態: OPEN / 作成: 2026-09-09
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-10
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -1043,7 +1096,7 @@ curl -sI https://ryoei.pro/assets/vendor/bootstrap/css/bootstrap.min.css \
 内容である(Proで解禁されたキャッシュルールの増枠を使うのではなく、
 _headers で対応する)。
 
-### コメント (1件)
+### コメント (3件)
 
 **retroeater** (2026-09-09):
 
@@ -1081,6 +1134,114 @@ Workers静的アセットにはオリジンサーバーが存在せず、
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
+
+**retroeater** (2026-09-10):
+
+## 訂正: 第1段・第2段の対象ファイルが変わった
+
+本issue作成後に #94 と #98 が完了し、対象が変化した。
+
+### 第1段（長期・1年）から削除
+
+以下2件は #94（アイコンフォント廃止）で削除済みのため
+対象から外す。
+
+- assets/vendor/boxicons/fonts/boxicons.woff2
+- assets/vendor/bootstrap-icons/fonts/bootstrap-icons.woff2
+
+第1段の対象は以下となる。
+
+- /img/* （11ファイル）
+- /favicon.ico
+- /apple-touch-icon.png
+
+### 第2段（中期・30日）の対象
+
+assets/vendor/ 配下の6ライブラリ。
+php-email-form は #98 で削除済み。
+
+- aos
+- bootstrap
+- glightbox
+- isotope-layout
+- purecounter
+- typed.js
+- waypoints
+
+（bootstrap は全27ページ、他6つは index.html のみが参照）
+
+### 第3段（現状維持）は変更なし
+
+- HTMLページ全27枚
+- ルート直下の .css / .js（style.css, index.css,
+  navbar.js, index.js, 各ページ用JS 計20本以上）
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-10):
+
+## 完了(コミット 016a303)
+
+### 事前実測(2026-09-10、本番)
+
+| パス | Cache-Control(変更前) |
+| --- | --- |
+| /assets/vendor/bootstrap/css/bootstrap.min.css | public, max-age=0, must-revalidate |
+| /img/hero-bg.webp | public, max-age=0, must-revalidate |
+| /style.css | public, max-age=0, must-revalidate |
+| / | public, max-age=0, must-revalidate |
+
+ETagは既に付与されていたため304は返っていたが、往復自体は
+毎回発生していた。
+
+### Brotli確認
+
+`curl -sI -H "Accept-Encoding: br" https://ryoei.pro/style.css` で
+`content-encoding: br` を確認。対応済みのため追加設定は不要だった。
+
+### 事後実測(デプロイ後、本番)
+
+| パス | Cache-Control |
+| --- | --- |
+| /img/hero-bg.webp | public, max-age=31536000, immutable |
+| /favicon.ico | public, max-age=31536000, immutable |
+| /assets/vendor/bootstrap/css/bootstrap.min.css | public, max-age=2592000 |
+| /style.css | public, max-age=0, must-revalidate(変更なし) |
+| / | public, max-age=0, must-revalidate(変更なし) |
+| /jpml_pros.html | public, max-age=0, must-revalidate(変更なし) |
+
+### セキュリティヘッダの維持を確認
+
+`/img/hero-bg.webp` で5件すべて確認できた
+(X-Frame-Options / X-Content-Type-Options / Referrer-Policy /
+Permissions-Policy / Strict-Transport-Security)。
+
+`_headers` の各ブロックは、マッチする全ブロックのヘッダが
+マージされる（同名ヘッダのみ後勝ち）ため、`/*` を後ろに
+置いたままでも他ブロックのCache-Control指定は上書きされず、
+かつセキュリティヘッダは維持された。ローカル(wrangler dev)・
+本番の両方で同じ結果を確認済み。
+
+## stale-while-revalidate は見送り
+
+判断材料（データ更新から表示反映まで最大60秒の遅れを
+許容できるか）が未確定のため、第3段(HTML)は現状維持とした。
+必要になった時点で別issueとして起票する。
+
+## 数日後の確認（申し送り）
+
+Cloudflare の HTTP Traffic 分析で Cache status の内訳を確認し、
+リクエスト数が減っているかを見る。2026-09-13 以降。
+
+比較対象(2026-09-09実測、24時間):
+- /assets/vendor/bootstrap/css/bootstrap.min.css: 124
+- /assets/vendor/bootstrap/js/bootstrap.bundle.min.js: 105
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ---
 
