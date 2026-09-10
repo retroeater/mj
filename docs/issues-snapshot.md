@@ -147,7 +147,7 @@ docs/new-site-design.md の新サイト構想において、
 
 ## #100 フッターの「© Copyright iPortfolio」を修正する
 
-- 状態: OPEN / 作成: 2026-09-10
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-10 / クローズ: 2026-09-10
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -180,7 +180,7 @@ Pro版を購入しない限りこのリンクは残す必要がある
 
 他26ページのフッター表記を確認し、揃えるかどうかを判断すること。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-10):
 
@@ -198,10 +198,50 @@ HTMLの構造上も、保護対象を示すコメント
 credits の div 内にあり、copyright の div の外側にある。
 copyright 側にリンクは含まれていない。
 
-むしろ現状はサイトの著作権表示が「iPortfolio」名義に
-なっており、事実と異なる状態である。
+現状はサイトの著作権表示が「iPortfolio」名義になっており、
+事実と異なる状態である。
 
 なお無料ライセンスは個人利用の範囲であることが前提。
+
+## 変更後の表記（決定）
+
+(C) Ryoei Hirano
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-10):
+
+## 完了(コミット d7b7bad)
+
+### 他ページとの整合の判断
+
+`grep -n "copyright\|Copyright\|&copy;\|©" *.html | grep -v index.html`
+は0件。他26ページには著作権表示自体が存在しないため、
+index.html単独で対応した。統一の判断は不要だった。
+
+### 変更内容
+
+index.html 349行目を変更。
+
+- 変更前: `&copy; Copyright <strong><span>iPortfolio</span></strong>`
+- 変更後: `&copy; Ryoei Hirano`
+
+年号は入れていない(毎年の更新作業を避けるため)。
+「Copyright」の語は`&copy;`と重複するため省いた。
+
+「Designed by BootstrapMade」のクレジット行と、
+根拠を示すHTMLコメント4行はそのまま残した。
+
+### 確認結果
+
+index.css の `#footer .copyright` は `text-align: center` のみで、
+`strong`/`span` 固有の指定はなかったため、CSS調整は不要だった。
+
+wrangler dev上でPlaywright(Chromium)により実描画・スクリーンショット
+で確認。「© Ryoei Hirano」「Designed by BootstrapMade」の両方が
+表示され、見た目の崩れもない。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
