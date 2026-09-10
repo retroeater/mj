@@ -19,6 +19,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - assets/vendor 配下のライブラリを更新・追加した際は、末尾の
   `sourceMappingURL` コメントを削除すること。`.map` ファイルを
   同梱しない方針のため、残すと閲覧者のブラウザが404を起こす（#99）
+- assets/vendor 配下のライブラリを更新した際、ブラウザには
+  最大30日間キャッシュが残る（#92）。Cloudflareのキャッシュパージ
+  ではブラウザキャッシュは消えない。更新を即座に反映させたい
+  場合はファイルのパスを変えること
 - ページ本体（例: `houou_leagues.html`）とロジック（同名の `.js`）はファイルを分けている。ページ末尾で navbar.js を読み込んで共通ナビを描画する
 
 ## データの流れ
