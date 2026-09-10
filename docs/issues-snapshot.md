@@ -18,7 +18,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 ## #99 bootstrap.bundle.min.jsのソースマップ参照で404が発生している
 
-- 状態: OPEN / 作成: 2026-09-10
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-10 / クローズ: 2026-09-10
 - ラベル: 分野: 整理・保守, 対象: 全ページ
 
 ### 本文
@@ -75,6 +75,91 @@ A を推奨。
 Cloudflare の HTTP Traffic 分析で
 Edge status code = 404 を絞り込み、
 .map へのリクエストが消えていること。
+
+### コメント (2件)
+
+**retroeater** (2026-09-10):
+
+## 対象ファイルの調査結果
+
+sourceMappingURL が残っているのは Bootstrap の2ファイルだけ
+ではなかった。assets 配下を一括で確認した結果は以下のとおり。
+
+| ファイル | 今回の対象 |
+| --- | --- |
+| assets/vendor/bootstrap/js/bootstrap.bundle.min.js | ○ |
+| assets/vendor/bootstrap/css/bootstrap.min.css | ○ |
+| assets/vendor/purecounter/purecounter_vanilla.js | 対象外 |
+| assets/vendor/typed.js/typed.umd.js | 対象外 |
+
+## CSSも対象に含める理由
+
+404の実測に現れていたのは .js.map への28件のみだが、
+これはCSSのソースマップが「開発者ツールでCSSを操作したとき」
+にしか取得されないため。潜在的には同じ問題を抱えている。
+
+## purecounter と typed.js を対象外とする理由
+
+いずれも index.html からのみ参照されているライブラリであり、
+#98（index.htmlだけが参照している未使用ライブラリを整理する）
+で削除される可能性がある。
+
+先に手を入れると無駄になるため、#98 の判断を待つ。
+#98 でこれらを残すと決まった場合は、本issueと同じ対応を
+その時点で行うこと。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-10):
+
+## 完了
+
+対象2ファイルの sourceMappingURL コメントを削除した(コミット 37df205)。
+
+| ファイル | 削除前 | 削除後 | 差分 |
+| --- | --- | --- | --- |
+| bootstrap.bundle.min.js | 80,496 B | 80,447 B | -49 B |
+| bootstrap.min.css | 232,111 B | 232,065 B | -46 B |
+
+削除後、`grep -rn "sourceMappingURL" assets/vendor/bootstrap/` は0件。
+
+## 動作確認
+
+minifyされたファイルを直接編集したため、Playwright(Chromium)で
+wrangler dev上を実操作して確認した。
+
+- 全27ページ: 読み込み・CSS適用(font-family解決)を確認。
+  Networkに `.map` へのリクエストは0件
+- houou_leagues.html: ハンバーガー(navbar-toggler)クリックで
+  ナビが実際に開くことを確認(Bootstrap JS動作)
+- jpml_pros.html: 検索ボックスの開閉を実クリックで確認、
+  1,100行のテーブル描画も正常
+
+なお jpml_pros.html / jpml_test.html / jpml_titles.html は
+外部の選手画像・Google Chartsの読み込み待ちで`networkidle`が
+成立しにくく(今回の変更とは無関係、以前から)、`load`イベント基準に
+切り替えて確認した。
+
+ローカルのwrangler dev環境でCloudflare Web AnalyticsビーコンのCORS
+エラーが全ページで出たが、これは`/cdn-cgi/rum`が本番ゾーンでしか
+機能しないための既知のローカル限定事象で、本件とは無関係。
+
+## CLAUDE.mdへの追記
+
+vendor配下のライブラリを更新・追加した際は sourceMappingURL
+コメントを削除する旨を追記した。
+
+## 数日後の確認
+
+Cloudflare の HTTP Traffic 分析で Edge status code = 404 を
+絞り込み、bootstrap.bundle.min.js.map へのリクエストが
+消えていることを確認する。2026-09-13 以降。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ---
 
