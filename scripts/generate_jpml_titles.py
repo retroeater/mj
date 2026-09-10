@@ -156,20 +156,9 @@ def main():
 
     row_html = "\n".join(build_row_html(row) for row in raw_rows)
 
-    # 写真列はソート対象外(元のGoogle Charts版もソート機能自体がなかった)。
-    # 概要列のみボタン化してソートできるようにする。
-    cells = []
-    for i, h in enumerate(HEADERS):
-        if i == 0:
-            cells.append(f'<th scope="col">{h}</th>')
-        else:
-            cells.append(
-                f'<th scope="col" aria-sort="none">'
-                f'<button type="button" class="mj-sort">{h}'
-                f'<span class="visually-hidden">（{h}で並べ替え）</span>'
-                f"</button></th>"
-            )
-    header_cells = "".join(cells)
+    # 列ヘッダによるソートはjpml_pros.html専用の機能とする方針のため、
+    # 見出しはどちらも素の<th>にする(button化・aria-sortは付けない)。
+    header_cells = "".join(f'<th scope="col">{h}</th>' for h in HEADERS)
 
     output = PAGE_TEMPLATE.format(header_cells=header_cells, rows=row_html)
     OUTPUT_PATH.write_text(output, encoding="utf-8")

@@ -1,4 +1,4 @@
-// 静的テーブルの検索フィルター・ソート・ページ送り
+// 静的テーブルの検索フィルター・ページ送り
 // (以前のGoogle Charts + 毎回のスプレッドシート問い合わせ方式を置き換え)
 //
 // jpml_pros.js との違い:
@@ -7,6 +7,8 @@
 //     (旧 Google Charts 版の WHERE A = "名前" と同じ挙動)
 //   - 1・2列目のsticky固定は2列しかないため不要
 //   - ページ送りを自前実装(旧 Google Charts 版の page:'enable', pageSize:100 相当)
+//   - 列ヘッダによるソートは持たない(jpml_pros.html専用の機能とする方針。
+//     既定の並びはシート順(日付の新しい順)のまま変わらない)
 
 document.addEventListener('DOMContentLoaded', function () {
 	const params = new URL(document.location).searchParams
@@ -37,38 +39,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	infoInput.value = getSearchParam('tag')
 
-	// 概要列(1列目)のインデックス。ソート対象はここだけ。
-	const SORT_COLUMN_INDEX = 1
-
+	// ソートを持たないため、行の並びは初期化時から変わらない。
 	// 検索対象は毎回変わらないので、行と小文字化済みの検索用文字列を
-	// 最初に1度だけ組み立てて使い回す。ソートキーもここで確定させ、
-	// ソート時に毎回textContentを読み直さずに済むようにする。
-	// 優先順位: セルにdata-sortがあればその値、無ければ行のdata-info。
-	// (jpml_prosは表示文字列と異なるソートキーを持つ列があるため
-	//  data-sortをセルごとに持つが、jpml_titlesは概要列のみなので
-	//  data-info をそのままソートキーに使い、data-sortの重複出力を
-	//  やめている。ソート処理の実装自体はjpml_pros.jsと分かれたまま
-	//  だが、型Aの共通化に着手するときはどちらかに寄せる)
-	let tbody = table.querySelector('tbody') // ソート時に差し替えるので let
-	const entryByRow = new Map()
-	Array.from(tbody.querySelectorAll('tr')).forEach(function (row) {
-		const sortCell = row.children[SORT_COLUMN_INDEX]
-		const sortKey = (sortCell && sortCell.dataset.sort !== undefined) ? sortCell.dataset.sort : row.dataset.info
-		const entry = {
-			row: row,
-			name: row.dataset.name,
-			info: row.dataset.info.toLowerCase(),
-			sortKey: sortKey,
-			matches: true
-		}
-		entryByRow.set(row, entry)
+	// 最初に1度だけ組み立てて使い回す。
+	const tbody = table.querySelector('tbody')
+	const rowIndex = Array.from(tbody.querySelectorAll('tr')).map(function (row) {
+		return { row: row, name: row.dataset.name, info: row.dataset.info.toLowerCase(), matches: true }
 	})
-
-	function getOrderedEntries() {
-		return Array.from(tbody.querySelectorAll('tr')).map(function (row) {
-			return entryByRow.get(row)
-		})
-	}
 
 	const countEl = document.getElementById('result_count')
 	const pagerEl = document.querySelector('.mj-pager')
@@ -80,10 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	function render() {
 		const infoQuery = infoInput.value.toLowerCase()
-		const ordered = getOrderedEntries()
 
 		const matched = []
-		for (const entry of ordered) {
+		for (const entry of rowIndex) {
 			const isMatch = (!searchName || entry.name === searchName) && entry.info.includes(infoQuery)
 			entry.matches = isMatch
 			if (isMatch) matched.push(entry)
@@ -103,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			const shouldShow = i >= start && i < end
 			if (entry.row.hidden === shouldShow) entry.row.hidden = !shouldShow
 		})
-		for (const entry of ordered) {
+		for (const entry of rowIndex) {
 			if (!entry.matches && !entry.row.hidden) entry.row.hidden = true
 		}
 
@@ -160,61 +136,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	render()
-
-	// 列ヘッダークリックでソート。写真列(0列目)はソート対象外。
-	const NO_SORT_COLUMNS = [0]
-
-	const thead = table.querySelector('thead')
-	const headerCells = Array.from(table.querySelectorAll('thead th'))
-	const sortDirections = new Array(headerCells.length).fill(true) // true=昇順
-
-	headerCells.forEach(function (th, index) {
-		if (!NO_SORT_COLUMNS.includes(index)) {
-			th.style.cursor = 'pointer'
-		}
-	})
-
-	thead.addEventListener('click', function (event) {
-		const th = event.target.closest('th')
-		if (!th || !thead.contains(th)) return
-
-		const colIndex = headerCells.indexOf(th)
-		if (colIndex === -1) return
-		if (NO_SORT_COLUMNS.includes(colIndex)) return
-
-		const ascending = sortDirections[colIndex]
-		const rows = Array.from(tbody.querySelectorAll('tr'))
-
-		// ソートキーは初期化時にentryByRowへ計算済みのものを使う。
-		// 2,000行超あるため、比較のたびにDOMからtextContentを読み直さない。
-		rows.sort(function (a, b) {
-			const valA = entryByRow.get(a).sortKey
-			const valB = entryByRow.get(b).sortKey
-			if (valA < valB) return ascending ? -1 : 1
-			if (valA > valB) return ascending ? 1 : -1
-			return 0
-		})
-
-		// 既存のtbodyに2,000行超を移動させるとレイアウト計算が繰り返される。
-		// 新しいtbodyを組み立ててから丸ごと入れ替えると、
-		// 文書に反映されるのが1回で済む(#86)。
-		const newBody = document.createElement('tbody')
-		rows.forEach(function (row) { newBody.appendChild(row) })
-		table.replaceChild(newBody, tbody)
-		tbody = newBody // 以降の処理が新しいtbodyを見るように差し替える
-		sortDirections[colIndex] = !ascending
-
-		// 読み上げ利用者に、どの列がどの向きで並んでいるかを伝える
-		headerCells.forEach(function (cell, i) {
-			if (cell.hasAttribute('aria-sort')) {
-				cell.setAttribute('aria-sort',
-					i === colIndex ? (ascending ? 'ascending' : 'descending') : 'none')
-			}
-		})
-
-		// ソートしたときは現在のページ番号を保つ(1ページ目に戻さない)
-		render()
-	})
 
 	// 上部のBootstrapメニューと検索ボックスは画面に固定表示するため、
 	// その実測高さをCSS変数に渡す。フォントや折り返し、検索ボックスの
