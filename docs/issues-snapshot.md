@@ -521,7 +521,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #93 Google Fontsの読み込みをやめてシステムフォントに統一する
 
-- 状態: OPEN / 作成: 2026-09-09
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-10
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -577,6 +577,97 @@ font-family: "Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif
 - curl -s https://ryoei.pro/ | grep -c "fonts.googleapis" が 0
 - ブラウザの開発者ツールで fonts.gstatic.com への
   リクエストが発生しないこと
+
+### コメント (2件)
+
+**retroeater** (2026-09-10):
+
+## 訂正: 影響範囲は全27ページではなく index.html のみ
+
+本文に「全ページのheadで読み込んでいる」と書いたが誤り。
+実際の調査結果は以下のとおり。
+
+### Google Fonts の読み込み
+
+index.html の21〜23行目のみ。他26ページには存在しない。
+
+- 21行目: preconnect fonts.googleapis.com
+- 22行目: preconnect fonts.gstatic.com
+- 23行目: stylesheet（Open Sans / Poppins / Raleway）
+
+### font-family の指定
+
+すべて index.css 内。全7箇所（本文の「全8箇所」は誤り）。
+style.css には存在しない。
+
+| 行 | セレクタ | 書体 |
+| --- | --- | --- |
+| 13 | body | Open Sans |
+| 33 | h1〜h6 | Raleway |
+| 100 | ナビゲーション | Poppins |
+| 277 | #hero p | Poppins |
+| 413 | .facts .count-box p | Raleway |
+| 424 | （リンク） | Poppins |
+| 455 | （見出し） | Poppins |
+
+したがって本issueは #15（index.htmlが別系統の構造になっている件）
+の領域に完全に含まれる。変更対象は index.html と index.css の
+2ファイルのみ。
+
+なお影響が小さいわけではない。トップページ（/）は
+パス別リクエストで最多（24時間で197件）である。
+
+## 副次的な発見
+
+index.css の13行目で body に "Open Sans" が指定されており、
+style.css の日本語向け指定
+（"Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif）と
+食い違っている。
+
+トップページだけ本文の書体が他26ページと異なる状態になっている。
+本対応でこれを揃える。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-10):
+
+## 完了(コミット b5d027c)
+
+- index.html の21〜23行目(preconnect 2行 + stylesheet 1行)を削除
+- index.css の7箇所の font-family を `--font-base` というCSS変数に
+  統一し、値をstyle.cssと同じ
+  `"Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif` に変更
+  (変数はindex.css側のみ。style.cssとは別ファイルで実害なし)
+
+## 削除した外部ドメイン(#9のCSP設計に効く)
+
+- fonts.googleapis.com
+- fonts.gstatic.com
+
+## 表示確認
+
+wrangler dev上でPlaywright(Chromium)により実際に描画・スクリーンショットで確認した。
+
+- #hero p・h1〜h6・ナビゲーション・.facts .count-box とも
+  違和感なく表示。ナビの折り返しも発生していない
+  (各リンクの高さは均一の60px)
+- リロード後、fonts.g* へのリクエストは0件
+- jpml_pros.html の body フォントスタックと完全一致することを確認
+  (「"Hiragino Sans", "Yu Gothic Medium", Meiryo, sans-serif」)
+
+**見た目の調整は不要だった。** font-weight/letter-spacing等の
+追加調整は行っていない。
+
+## body の書体統一
+
+トップページ(index.html)だけ "Open Sans" になっていた問題も
+解消し、全27ページで本文の書体が統一された。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ---
 
