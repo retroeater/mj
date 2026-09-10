@@ -213,11 +213,18 @@ def main():
     print(f"\n{'確認' if args.dry else '書き換え'}: {changed}件"
           + (f" / スキップ {skipped}件" if skipped else ""))
 
-    # 生成スクリプト側のテンプレートは手で直す必要があるため注意を促す
-    gen = REPO_ROOT / "scripts" / "generate_jpml_pros.py"
-    if gen.exists() and not args.dry:
-        print("\n注意: jpml_pros.html は scripts/generate_jpml_pros.py から生成されます。")
-        print("      同じ内容を PAGE_TEMPLATE にも反映しないと、次の再生成で戻ります。")
+    # 生成スクリプトのテンプレートは手で直す必要があるため注意を促す。
+    # 対象は scripts/generate_*.py の存在から自動判別する(#6)。
+    if not args.dry:
+        generated_pages = sorted(
+            page_name
+            for p in (REPO_ROOT / "scripts").glob("generate_*.py")
+            if (page_name := f"{p.stem.removeprefix('generate_')}.html") in PAGES
+        )
+        if generated_pages:
+            print(f"\n注意: 次のページは scripts/generate_*.py から生成されます: "
+                  f"{', '.join(generated_pages)}")
+            print("      同じ内容を各スクリプトの PAGE_TEMPLATE にも反映しないと、次の再生成で戻ります。")
     return 0
 
 

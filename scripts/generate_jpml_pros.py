@@ -71,7 +71,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
 
-<table id="pros_table">
+<table id="pros_table" class="mj-table">
 \t<caption class="visually-hidden">日本プロ麻雀連盟所属のプロ雀士一覧。所属・出身地、SNS、タイトル戦の成績等。</caption>
 \t<thead>
 \t\t<tr>{header_cells}</tr>

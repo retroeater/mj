@@ -1,138 +1,236 @@
-const spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0/edit?sheet=タイトル&headers=1'
+// 静的テーブルの検索フィルター・ソート・ページ送り
+// (以前のGoogle Charts + 毎回のスプレッドシート問い合わせ方式を置き換え)
+//
+// jpml_pros.js との違い:
+//   - フィルターは概要列1つのみ(所属/名前/リーグ/桜花の4つは不要)
+//   - ?name= は入力欄を持たず、data-name との完全一致で内部的に絞り込む
+//     (旧 Google Charts 版の WHERE A = "名前" と同じ挙動)
+//   - 1・2列目のsticky固定は2列しかないため不要
+//   - ページ送りを自前実装(旧 Google Charts 版の page:'enable', pageSize:100 相当)
 
-const params = (new URL(document.location)).searchParams
-let search_name = params.get('name')
-let search_tag = params.get('tag')
+document.addEventListener('DOMContentLoaded', function () {
+	const params = new URL(document.location).searchParams
+	const table = document.getElementById('titles_table')
+	if (!table) return
 
-let queryStatement = 'SELECT A,B,C,D,E,F WHERE G = "Y"'
+	// 1ページの件数。他ページへ展開するときはこの値を変える
+	const PAGE_SIZE = 100
 
-if(search_name) {
-	queryStatement += ' AND A = "' + search_name + '"'
-}
+	const infoInput = document.getElementById('info_filter')
+	const searchName = params.get('name') // ?name= は完全一致用。値そのまま(nullなら未指定)
 
-if(!search_tag) {
-	search_tag = ''
-}
+	function getSearchParam(name) {
+		const value = params.get(name)
+		return value && value !== 'null' ? value : ''
+	}
 
-google.charts.load('current', {'packages':['table','controls']})
-google.charts.setOnLoadCallback(drawDashboard)
+	// 画像の読み込み失敗を1箇所でまとめて処理する(旧: imgごとのonerror属性)。
+	// error イベントはバブリングしないため、キャプチャフェーズで受ける。
+	document.addEventListener('error', function (event) {
+		const img = event.target
+		if (!(img instanceof HTMLImageElement)) return
+		const fallback = img.dataset.fallback
+		if (!fallback) return
+		delete img.dataset.fallback // 代替画像も失敗した場合の無限ループを防ぐ
+		img.src = fallback
+	}, true)
 
-function drawDashboard() {
+	infoInput.value = getSearchParam('tag')
 
-	const query = new google.visualization.Query(spreadsheet_url)
-	query.setQuery(queryStatement)
-	query.send(handleQueryResponse)
+	// 検索対象は毎回変わらないので、行と小文字化済みの検索用文字列を
+	// 最初に1度だけ組み立てて使い回す
+	let tbody = table.querySelector('tbody') // ソート時に差し替えるので let
+	const entryByRow = new Map()
+	Array.from(tbody.querySelectorAll('tr')).forEach(function (row) {
+		const entry = {
+			row: row,
+			name: row.dataset.name,
+			info: row.dataset.info.toLowerCase(),
+			matches: true
+		}
+		entryByRow.set(row, entry)
+	})
 
-	let name			// A 名前
-	let profileUrl		// B プロフィールURL
-	let imageUrl		// C 画像URL
-	let rank			// D 順位
-	let title			// E タイトル
-	let publishedDate	// F 日付
-//	let isVisible		// G 表示
+	function getOrderedEntries() {
+		return Array.from(tbody.querySelectorAll('tr')).map(function (row) {
+			return entryByRow.get(row)
+		})
+	}
 
-	function handleQueryResponse(response) {
+	const countEl = document.getElementById('result_count')
+	const pagerEl = document.querySelector('.mj-pager')
+	const pagerPrev = document.getElementById('pager_prev')
+	const pagerNext = document.getElementById('pager_next')
+	const pagerStatus = document.getElementById('pager_status')
 
-		if(response.isError()) {
-			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage())
-			return
+	let currentPage = 0 // 0-indexed
+
+	function render() {
+		const infoQuery = infoInput.value.toLowerCase()
+		const ordered = getOrderedEntries()
+
+		const matched = []
+		for (const entry of ordered) {
+			const isMatch = (!searchName || entry.name === searchName) && entry.info.includes(infoQuery)
+			entry.matches = isMatch
+			if (isMatch) matched.push(entry)
 		}
 
-		const chartData = new google.visualization.DataTable()
-		chartData.addColumn('string','写真')
-		chartData.addColumn('string','概要')
-		
-		const data = response.getDataTable()
+		const total = matched.length
+		const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE))
+		if (currentPage > pageCount - 1) currentPage = pageCount - 1
+		if (currentPage < 0) currentPage = 0
 
-		for(let i = 0; i < data.getNumberOfRows(); i++) {
+		const start = currentPage * PAGE_SIZE
+		const end = start + PAGE_SIZE
 
-			name = data.getValue(i,0)
-			profileUrl = data.getValue(i,1)
-			imageUrl = data.getValue(i,2)
-			rank = data.getValue(i,3)
-			title = data.getValue(i,4)
-			publishedDate = data.getValue(i,5)
-
-			let formattedImage = getFormattedImage(name,profileUrl,imageUrl)
-			let formattedTitle = getFormattedTitle(publishedDate,title,rank,name)
-
-			chartData.addRows([
-				[
-					formattedImage,
-					formattedTitle
-				]			
-			])
+		// 状態が変わる行だけ書き換える。毎回全行に代入すると
+		// そのたびにレイアウトが再計算されて重くなる
+		matched.forEach(function (entry, i) {
+			const shouldShow = i >= start && i < end
+			if (entry.row.hidden === shouldShow) entry.row.hidden = !shouldShow
+		})
+		for (const entry of ordered) {
+			if (!entry.matches && !entry.row.hidden) entry.row.hidden = true
 		}
 
-		const dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'))
+		if (countEl) {
+			countEl.textContent = total + '件を表示しています'
+		}
 
-		const infoFilter = new google.visualization.ControlWrapper({
-			controlType: 'StringFilter',
-			containerId: 'info_filter_div',
-			options: {
-				filterColumnIndex: 1,
-				matchType: 'any',
-				ui: {
-					label: '',
-					placeholder: '概要'
-				}
-			},
-			state: {
-				value: search_tag
+		if (pagerEl) {
+			pagerEl.hidden = total <= PAGE_SIZE
+			pagerPrev.disabled = currentPage === 0
+			pagerNext.disabled = currentPage >= pageCount - 1
+			if (pagerStatus) {
+				pagerStatus.textContent = (currentPage + 1) + ' / ' + pageCount + 'ページ'
+			}
+		}
+	}
+
+	// 打鍵ごとに走らせず、入力が落ち着いてから1度だけ実行する
+	let filterTimer = null
+	function scheduleFilters() {
+		clearTimeout(filterTimer)
+		filterTimer = setTimeout(function () {
+			currentPage = 0 // 絞り込み条件が変わったら1ページ目に戻す
+			render()
+		}, 120)
+	}
+
+	infoInput.addEventListener('input', scheduleFilters)
+
+	if (pagerPrev) {
+		pagerPrev.addEventListener('click', function () {
+			if (currentPage > 0) {
+				currentPage--
+				render()
+			}
+		})
+	}
+	if (pagerNext) {
+		pagerNext.addEventListener('click', function () {
+			currentPage++
+			render()
+		})
+	}
+
+	render()
+
+	// 列ヘッダークリックでソート。写真列(0列目)はソート対象外。
+	const NO_SORT_COLUMNS = [0]
+
+	const thead = table.querySelector('thead')
+	const headerCells = Array.from(table.querySelectorAll('thead th'))
+	const sortDirections = new Array(headerCells.length).fill(true) // true=昇順
+
+	headerCells.forEach(function (th, index) {
+		if (!NO_SORT_COLUMNS.includes(index)) {
+			th.style.cursor = 'pointer'
+		}
+	})
+
+	thead.addEventListener('click', function (event) {
+		const th = event.target.closest('th')
+		if (!th || !thead.contains(th)) return
+
+		const colIndex = headerCells.indexOf(th)
+		if (colIndex === -1) return
+		if (NO_SORT_COLUMNS.includes(colIndex)) return
+
+		const ascending = sortDirections[colIndex]
+		const rows = Array.from(tbody.querySelectorAll('tr'))
+
+		rows.sort(function (a, b) {
+			const cellA = a.children[colIndex]
+			const cellB = b.children[colIndex]
+			const valA = (cellA && cellA.dataset.sort !== undefined) ? cellA.dataset.sort : (cellA ? cellA.textContent.trim() : '')
+			const valB = (cellB && cellB.dataset.sort !== undefined) ? cellB.dataset.sort : (cellB ? cellB.textContent.trim() : '')
+			if (valA < valB) return ascending ? -1 : 1
+			if (valA > valB) return ascending ? 1 : -1
+			return 0
+		})
+
+		// 既存のtbodyに2,000行超を移動させるとレイアウト計算が繰り返される。
+		// 新しいtbodyを組み立ててから丸ごと入れ替えると、
+		// 文書に反映されるのが1回で済む(#86)。
+		const newBody = document.createElement('tbody')
+		rows.forEach(function (row) { newBody.appendChild(row) })
+		table.replaceChild(newBody, tbody)
+		tbody = newBody // 以降の処理が新しいtbodyを見るように差し替える
+		sortDirections[colIndex] = !ascending
+
+		// 読み上げ利用者に、どの列がどの向きで並んでいるかを伝える
+		headerCells.forEach(function (cell, i) {
+			if (cell.hasAttribute('aria-sort')) {
+				cell.setAttribute('aria-sort',
+					i === colIndex ? (ascending ? 'ascending' : 'descending') : 'none')
 			}
 		})
 
-		const table = new google.visualization.ChartWrapper({
-			chartType: 'Table',
-			containerId: 'table_div',
-			options : {
-				allowHtml: true,
-				width: '100%',
-				height: '100%',
-				page: 'enable',
-				pageSize: 100
-			}
-		})
+		// ソートしたときは現在のページ番号を保つ(1ページ目に戻さない)
+		render()
+	})
 
-		const view = new google.visualization.DataView(chartData)
+	// 上部のBootstrapメニューと検索ボックスは画面に固定表示するため、
+	// その実測高さをCSS変数に渡す。フォントや折り返し、検索ボックスの
+	// 開閉で高さが変わるので固定値にはしない。
+	//   --navbar-height : メニューの高さ(検索ボックスのtop位置に使う)
+	//   --content-offset: メニュー + 検索ボックスの高さ
+	//                     (本文のpadding-topとテーブルヘッダーのtop位置に使う)
+	function updateOffsets() {
+		const navbar = document.querySelector('nav.navbar')
+		const searchBoxes = document.getElementById('searchBoxes')
+		if (!navbar) return
 
-		dashboard.bind([infoFilter], table)
-		dashboard.draw(view)
-	}
-}
+		const navbarHeight = navbar.getBoundingClientRect().height
+		// 閉じているときはdisplay:noneなのでoffsetHeightは0になる
+		const searchHeight = searchBoxes ? searchBoxes.offsetHeight : 0
 
-function getFormattedImage(name,profileUrl,imageUrl) {
-
-	let formattedImage
-	const linkIcon = 'https://abs.twimg.com/sticky/default_profile_images/default_profile_200x200.png'
-
-	if(imageUrl) {
-		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + imageUrl + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
-	}
-	else {
-		formattedImage = '<img alt="' + name + '" class="rectangle" loading="lazy" src="' + linkIcon + '" onError="this.onerror=null;this.src=\'' + linkIcon + '\'" />'
+		const root = document.documentElement.style
+		root.setProperty('--navbar-height', navbarHeight + 'px')
+		root.setProperty('--content-offset', (navbarHeight + searchHeight) + 'px')
 	}
 
-		if(profileUrl) {
-			formattedImage = '<a href="' + profileUrl + '" target="_blank">' + formattedImage + '</a>'
-		}
+	updateOffsets()
+	window.addEventListener('resize', updateOffsets)
 
-	return formattedImage
-}
-
-function getFormattedTitle(publishedDate,title,rank,name) {
-
-	let formattedTitle = ""
-
-	if(publishedDate) {
-		formattedTitle = publishedDate + '<br>'
+	// スマホではハンバーガーメニューの開閉でナビバーの高さが変わるが、
+	// これはresizeイベントを発火しないため、--navbar-height が古いままになり
+	// 本文が潜り込む。ナビバー自体のサイズ変化を直接監視して追従させる。
+	if (typeof ResizeObserver !== 'undefined') {
+		const observer = new ResizeObserver(updateOffsets)
+		const navbar = document.querySelector('nav.navbar')
+		const searchBoxes = document.getElementById('searchBoxes')
+		if (navbar) observer.observe(navbar)
+		if (searchBoxes) observer.observe(searchBoxes)
 	}
 
-	formattedTitle = formattedTitle + title + '<br>' + name
-
-	if(rank) {
-		formattedTitle = formattedTitle + '<br>' + rank + '位'
+	// display:none の要素は ResizeObserver が反応しない環境もあるため、
+	// Bootstrapの開閉イベントでも明示的に更新する(アニメーション完了時)
+	const searchBoxesEl = document.getElementById('searchBoxes')
+	if (searchBoxesEl) {
+		searchBoxesEl.addEventListener('shown.bs.collapse', updateOffsets)
+		searchBoxesEl.addEventListener('hidden.bs.collapse', updateOffsets)
 	}
-
-	return formattedTitle
-}
+})

@@ -87,12 +87,11 @@ th {
 	max-width: 100%;
 }
 
-/* 列幅を固定するため table-layout: fixed を使う。
-   幅の内訳: 「名前」150px + それ以外14列 × 56px = 934px
-   列構成を変更したときは、この width の値も更新すること。 */
-#pros_table {
-	table-layout: fixed;
-	width: 934px;
+/* ==== .mj-table 系(型A: 表とフィルターのみのページ)共通スタイル ====
+   #7でjpml_pros.htmlの静的化に伴い作った専用CSSを、21ページ分複製しない
+   ために一般化したもの。列幅・列固定などページ固有の構造は、ページごとの
+   IDセレクタ(例: #pros_table)側に残す。 */
+.mj-table {
 	border-collapse: collapse;
 	font-size: 13px;
 	line-height: 1.25;
@@ -102,14 +101,93 @@ th {
 
 /* 全セル共通。旧サイトは .mj-pros で全列に
    text-align:center / white-space:nowrap を当てていたので、それを踏襲する */
-#pros_table thead th,
-#pros_table td {
-	width: 56px;
+.mj-table thead th,
+.mj-table td {
 	text-align: center;
 	vertical-align: middle;
 	white-space: nowrap;
 	box-sizing: border-box;
 	padding: 4px;
+}
+
+/* ソートできる列の見出しはbuttonにしている(キーボードでも操作できるように)。
+   見た目は元の見出しと変わらないよう、ボタンらしい装飾を消す */
+.mj-table thead th button.mj-sort {
+	all: unset;
+	display: block;
+	width: 100%;
+	cursor: pointer;
+	text-align: center;
+}
+
+.mj-table thead th button.mj-sort:focus-visible {
+	outline: 2px solid #1B3B6F;
+	outline-offset: -2px;
+}
+
+.mj-table thead th {
+	position: sticky;
+	top: var(--content-offset, 90px);
+	background-color: #fafafa;
+	z-index: 3; /* 横スクロール時に固定列(ページ固有)へ潜り込ませる */
+}
+
+/* 画面外の行はレイアウト・描画を省く。1,000行超あっても実際に描くのは
+   表示中の十数行だけになる。DOMには残るのでCtrl+Fや読み上げは従来どおり動く。
+   contain-intrinsic-size で未描画時の高さを伝え、スクロールバーが暴れるのを防ぐ。
+   値はjpml_pros(行高56px)を基準にした概算。実際の行高と多少ずれても
+   ブラウザが描画後に補正するため、見た目には影響しない。 */
+.mj-table tbody tr {
+	content-visibility: auto;
+	contain-intrinsic-size: auto 56px;
+}
+
+/* 縞模様。Bootstrapの.tableクラスは外したが、
+   td側に指定しておく方が他のスタイルと競合しにくい */
+.mj-table tbody tr:nth-child(odd) > td {
+	background-color: #ffffff;
+}
+
+.mj-table tbody tr:nth-child(even) > td {
+	background-color: #fafafa;
+}
+
+/* ホバー時のハイライト。縞模様より後に書くこと */
+.mj-table tbody tr:hover > td {
+	background-color: #d6e9f8 !important;
+}
+
+/* 上部メニューを画面幅いっぱいで固定する(旧サイトの挙動)。
+   旧サイトはGoogle Chartsのテーブル自体がスクロール領域を持っていたため
+   ページ全体はスクロールせず、結果的にメニューが留まって見えていた。
+   現在はページ全体がスクロールするので、明示的に position:fixed で固定する。
+   :has() でこの系統のページだけに限定し、他ページには影響させない。
+   --navbar-height は各ページのJSが実測値を設定する。 */
+body:has(.mj-table) nav.navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1030; /* Bootstrapのfixed-top相当。テーブルのsticky(最大4)より手前 */
+}
+
+/* 固定したメニューの分だけ本文を押し下げる */
+body:has(.mj-table) {
+	padding-top: var(--content-offset, 90px);
+}
+
+/* ==== #pros_table 固有(15列の選手データベース) ====
+   列幅を固定するため table-layout: fixed を使う。
+   幅の内訳: 「名前」150px + それ以外14列 × 56px = 934px
+   列構成を変更したときは、この width の値も更新すること。 */
+#pros_table {
+	table-layout: fixed;
+	width: 934px;
+}
+
+#pros_table thead th,
+#pros_table td {
+	width: 56px;
 	/* 横padding 4px×2 = 8px。56px - 8px = 48px となり画像がちょうど収まる */
 }
 
@@ -122,55 +200,11 @@ th {
 	padding: 4px 8px;
 }
 
-/* ソートできる列の見出しはbuttonにしている(キーボードでも操作できるように)。
-   見た目は元の見出しと変わらないよう、ボタンらしい装飾を消す */
-#pros_table thead th button.mj-sort {
-	all: unset;
-	display: block;
-	width: 100%;
-	cursor: pointer;
-	text-align: center;
-}
-
-#pros_table thead th button.mj-sort:focus-visible {
-	outline: 2px solid #1B3B6F;
-	outline-offset: -2px;
-}
-
-#pros_table thead th {
-	position: sticky;
-	top: var(--content-offset, 90px);
-	background-color: #fafafa;
-}
-
 /* 行の高さ。画像48px + 上下padding 4px×2 = 56px。
    注意: table-cellでは max-height と overflow が無効なため指定しない。
    height は最小値として働くので、中身が56pxに収まる前提で成立している。 */
 #pros_table td {
 	height: 56px;
-}
-
-/* 画面外の行はレイアウト・描画を省く。1,102行あっても実際に描くのは
-   表示中の十数行だけになる。DOMには残るのでCtrl+Fや読み上げは従来どおり動く。
-   contain-intrinsic-size で未描画時の高さを伝え、スクロールバーが暴れるのを防ぐ。 */
-#pros_table tbody tr {
-	content-visibility: auto;
-	contain-intrinsic-size: auto 56px;
-}
-
-/* 縞模様。Bootstrapの.tableクラスは外したが、
-   td側に指定しておく方が他のスタイルと競合しにくい */
-#pros_table tbody tr:nth-child(odd) > td {
-	background-color: #ffffff;
-}
-
-#pros_table tbody tr:nth-child(even) > td {
-	background-color: #fafafa;
-}
-
-/* ホバー時のハイライト。縞模様より後に書くこと */
-#pros_table tbody tr:hover > td {
-	background-color: #d6e9f8 !important;
 }
 
 /* imgはインライン要素だとベースライン下に余白が出て行が数px伸びるため、
@@ -181,7 +215,9 @@ th {
 }
 
 /* 横スクロール時に1・2列目(所属/出身地・名前)を固定表示する。
-   2列目のleft位置は1列目の実測幅で変わるため jpml_pros.js が動的に設定する */
+   2列目のleft位置は1列目の実測幅で変わるため jpml_pros.js が動的に設定する。
+   2列しかないページ(jpml_titlesなど)ではこの固定は不要なため、
+   .mj-table側には汎用化せずこのページ専用のまま残している。 */
 #pros_table thead th:nth-child(1),
 #pros_table thead th:nth-child(2),
 #pros_table td:nth-child(1),
@@ -192,13 +228,9 @@ th {
 
 /* 重なり順(手前ほど大きい値)。
    4: 固定列のヘッダー(縦固定と横固定が交差する2セル)
-   3: 通常のヘッダー … 横スクロール時に固定列ヘッダーへ潜り込ませる
+   3: 通常のヘッダー(.mj-table側) … 横スクロール時に固定列ヘッダーへ潜り込ませる
    2: 固定列のデータセル … 横スクロール時に通常セルより手前
    指定なし: 通常のデータセル */
-#pros_table thead th {
-	z-index: 3;
-}
-
 #pros_table thead th:nth-child(1),
 #pros_table thead th:nth-child(2) {
 	z-index: 4;
@@ -209,23 +241,33 @@ th {
 	z-index: 2;
 }
 
-/* 上部メニューを画面幅いっぱいで固定する(旧サイトの挙動)。
-   旧サイトはGoogle Chartsのテーブル自体がスクロール領域を持っていたため
-   ページ全体はスクロールせず、結果的にメニューが留まって見えていた。
-   現在はページ全体がスクロールするので、明示的に position:fixed で固定する。
-   :has() でこのページ(選手データベース)だけに限定し、他ページには影響させない。
-   --navbar-height は jpml_pros.js が実測値を設定する。 */
-body:has(#pros_table) nav.navbar {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 1030; /* Bootstrapのfixed-top相当。テーブルのsticky(最大4)より手前 */
+/* ==== .mj-pager(ページ送り) ====
+   型Aの残り14ページで使い回すため、ページ固有のIDに紐づけない。 */
+.mj-pager {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin: 8px 0;
+	padding: 4px;
 }
 
-/* 固定したメニューの分だけ本文を押し下げる */
-body:has(#pros_table) {
-	padding-top: var(--content-offset, 90px);
+.mj-pager-button {
+	padding: 2px 12px;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+	background-color: #ffffff;
+	cursor: pointer;
+}
+
+.mj-pager-button:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.mj-pager-status {
+	min-width: 7em;
+	text-align: center;
 }
 
 /* 虫眼鏡で開く検索ボックスも画面に固定する。
