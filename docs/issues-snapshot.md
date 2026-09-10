@@ -331,7 +331,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #98 index.html専用ライブラリのうちphp-email-formを削除する
 
-- 状態: OPEN / 作成: 2026-09-09
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-10
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -357,7 +357,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 #15(index.htmlが別系統の構造になっている件)と併せて
 判断するのが妥当なため、保留とする。
 
-### コメント (1件)
+### コメント (3件)
 
 **retroeater** (2026-09-10):
 
@@ -404,6 +404,72 @@ php-email-form は PHP 用のフォーム検証ライブラリであり、
    - トップページで Console にエラーが出ないこと
    - スクロールフェードイン・カウントアップ・ライトボックス・
      portfolio絞り込みが従来どおり動くこと
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-10):
+
+## 調査結果: 参照は script タグ1行のみ
+
+php-email-form の参照箇所を確認したところ、
+index.html の371行目にある script タグ1行だけだった。
+
+- <form> 要素は index.html に存在しない
+- class="php-email-form" を持つ要素も存在しない
+- お問い合わせフォームのセクションは既に削除済み
+
+つまり validate.js は読み込まれた後、対象要素を
+0件検出して何もせずに終わっている状態だった。
+
+#30（メール送信の手段を検討する）に踏み込む必要はない。
+スクリプトの削除とファイルの削除のみで完結する。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-10):
+
+## 完了(コミット 90eaff2, 5c29413)
+
+- assets/vendor/php-email-form/validate.js を削除
+- index.html のscriptタグを削除
+  （最初のコミットで削除漏れがあり、追加コミットで対応）
+
+| | サイズ |
+| --- | --- |
+| 削除前 assets/vendor/ | 564K |
+| 削除後 assets/vendor/ | 556K |
+| 削減 | 8K |
+
+削除後 `grep -rn "php-email-form" . --exclude-dir=.git --exclude=docs/issues-snapshot.md`
+は0件。
+
+## 動作確認
+
+wrangler dev上でPlaywright(Chromium)により実際に操作して確認した。
+残る6ライブラリすべて問題なし。
+
+- typed.js: heroのタイピング風アニメーションが動作
+- purecounter: factsの数字が0→4までカウントアップ
+- aos: スクロールでaos-animateクラスが付与されフェードイン
+- isotope-layout: portfolio7件が正しくレイアウトされる
+- glightbox: 画像クリックでライトボックスが開く（スクリーンショットで確認）
+- validate.js / php-email-form へのリクエストは0件
+- Console上の想定外エラーなし
+  （Cloudflare Web Analyticsビーコンのローカル限定CORSエラーのみ。既知の無関係事象）
+
+## 残り232KBについて
+
+glightbox / aos / isotope-layout / waypoints / typed.js /
+purecounter の6つは index.html で稼働中のため本issueでは
+削除しない。
+
+これらは「トップページをテンプレートから脱却して作り直す」
+（#101・新サイトで実施）の中で、演出を作り直す際に
+解消される。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
