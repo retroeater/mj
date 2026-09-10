@@ -9,6 +9,22 @@
   "use strict";
 
   /**
+   * モバイルナビ開閉ボタンのアイコン(list/x)。
+   * 以前はアイコンフォントのクラス切り替えで見た目を変えていたが、
+   * インラインSVGに置き換えたためクラスではなくSVG自体を差し替える(#94)
+   */
+  const mobileNavIcons = {
+    list: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/></svg>',
+    x: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>'
+  }
+
+  function toggleMobileNavIcon(el) {
+    const next = el.dataset.icon === 'list' ? 'x' : 'list'
+    el.dataset.icon = next
+    el.innerHTML = mobileNavIcons[next]
+  }
+
+  /**
    * OSの「視差効果を減らす」設定を見る。動きで体調を崩す利用者への配慮。
    */
   const prefersReducedMotion = () =>
@@ -99,8 +115,7 @@
    */
   on('click', '.mobile-nav-toggle', function(e) {
     select('body').classList.toggle('mobile-nav-active')
-    this.classList.toggle('bi-list')
-    this.classList.toggle('bi-x')
+    toggleMobileNavIcon(this)
   })
 
   /**
@@ -114,8 +129,7 @@
       if (body.classList.contains('mobile-nav-active')) {
         body.classList.remove('mobile-nav-active')
         let navbarToggle = select('.mobile-nav-toggle')
-        navbarToggle.classList.toggle('bi-list')
-        navbarToggle.classList.toggle('bi-x')
+        toggleMobileNavIcon(navbarToggle)
       }
       scrollto(this.hash)
     }
