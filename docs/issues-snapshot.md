@@ -4293,7 +4293,7 @@ ron2.jp の選手ページから取得できる所属・出身地・段位・か
 ---
 <sub>移行前のタスク番号: 39</sub>
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-11):
 
@@ -4329,6 +4329,22 @@ https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
 - `generate_rh_results.py`をformatted=Trueを使う形に書き換え、自前整形コードを削除
 
 `rh_results.html`はバイト単位で無変更、既存9ページも出力に差分がないことを確認済み。数値列を含む他のページ(`rh_results_detail`等)を移行する際は、URL・属性に使う列が含まれていないことを確認したうえで`formatted=True`を使う。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
+
+**retroeater** (2026-09-11):
+
+## rh_results_detail.html を移行し型A'を完了(2026-09-11)
+
+- QUERY側で表示列のみ(A,C,E,G,I,R,S,T,V)を取得(22列取得して後から間引く旧方式はやめた)
+- `formatted=True`が必須だった。A列(日付)はgvizのtype=dateで、生の値(v)が"Date(2026,0,24)"というJS Date形式の文字列になるため
+- 対局列にXアイコンを後置。`build_image_cell()`は画像セル単体を作る関数のため使わず、`build_row_html`内で直接組み立てた
+- **旧Google Charts版(gh-pages)を実レンダリングして比較したところ、全列が折り返されていた。** `.mj-table`既定のnowrapのままだと375px幅で横スクロールが発生したため、`#rh_results_detail_table td`全体に`white-space: normal`を適用して解消(団体列12文字の団体名、着順列9桁の値など、短そうに見えた列にも幅を圧迫する例外値があった)
+- Lighthouse(mobile): performance 89 / TBT 236ms / DOM 3,573要素(321行のわりに軽い)
+
+型A'(rh_results / rh_results_detail)完了。進捗: 21ページ中11ページ完了・残10ページ。詳細はdocs/handover.mdとdocs/lighthouse-baseline.mdを参照。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
