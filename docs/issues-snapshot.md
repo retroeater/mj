@@ -18,7 +18,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 ## #109 docs間で#7の型分類が食い違っている
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: 整理・保守, 対象: 全ページ
 
 ### 本文
@@ -28,6 +28,14 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   行数調査表では「多列テーブル(型B)」になっている
 - 実体は6列・8列で、型Aの共通部品（.mj-table-2col / .mj-table-3col）が
   そのままでは使えない。作業単位としては型Aと分けたほうが正確
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+docs/handover.mdに型A'(多列テーブル、表のみ)を新設し、rh_results/rh_results_detailを型Aから移した。あわせてdocs/lighthouse-baseline.mdの行数調査表の該当行、およびhouou_leagues/ouka_leaguesの型表記(型B→型C)も統一した。
+
+4230b41 で対応済み。
 
 ---
 
