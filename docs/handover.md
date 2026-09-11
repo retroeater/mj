@@ -11,12 +11,12 @@
 
 次のように伝えれば、必要な文脈が渡る。
 
-```
-ryoei.pro の改善を進めています。
+```ryoei.pro の改善を進めています。
 リポジトリは https://github.com/retroeater/mj の cloudflare ブランチです。
 docs/handover.md を読んでから、docs/issues-snapshot.md で
 現在のタスク状況を確認してください。
 今日は #◯◯ に取り組みます。
+
 ```
 
 会話が長くなると1回あたりのコストが上がるため、
@@ -234,7 +234,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 | # | 内容 | 備考 |
 |---|---|---|
 | **#7** | 他17ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
-| #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | 設定操作が中心。Pro移行後未着手 |
+| #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | Logモードで有効化済み(2026-09-10)。残件はSecurity Eventsの確認(2026-09-13以降)とBlockへの切り替え判断 |
 | #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
 | #9 | CSP設定 | #7の後にやると強いポリシーが書ける |
@@ -243,11 +243,12 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(9ページ完了・残12)は4つの型に分かれる。
+対象の21ページ(9ページ完了・残12)は5つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
-| A. 表とフィルターのみ | 15(**完了9・残6**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、ランキング3、`saikyo_results`、良栄の成績2(`rh_results`/`rh_results_detail`) |
+| A. 表とフィルターのみ | 13(**完了9・残4**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、ランキング3、`saikyo_results` |
+| A'. 多列テーブル（表のみ） | 2(**完了0・残2**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109） | `rh_results`(12行・6列) / `rh_results_detail`(321行・8列) |
 | B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
 | D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |

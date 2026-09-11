@@ -12,7 +12,54 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 107件（open/closed含む）。番号降順。
+件数: 109件（open/closed含む）。番号降順。
+
+---
+
+## #109 docs間で#7の型分類が食い違っている
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+- docs/handover.md「#7 の進め方」の表は rh_results / rh_results_detail を
+  型A（表とフィルターのみ）に入れているが、docs/lighthouse-baseline.md の
+  行数調査表では「多列テーブル(型B)」になっている
+- 実体は6列・8列で、型Aの共通部品（.mj-table-2col / .mj-table-3col）が
+  そのままでは使えない。作業単位としては型Aと分けたほうが正確
+
+---
+
+## #108 .mj-table内のテキストリンクが縞模様背景に対してコントラスト不足
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+- docs/lighthouse-baseline.md「予想外だった点」で mobile accessibility 89
+  の原因を「.mj-plainクラスのリンク」としているが、これは誤り。
+  .mj-plain は text-decoration: none のみで色を指定していない（style.css:148）
+- 実際の原因は、.mj-table 内のテキストリンクが Bootstrap 既定色 #0d6efd の
+  ままであること。偶数行の背景 #fafafa（style.css:177）との組み合わせで
+  コントラスト比 4.31 となり、WCAG AA の 4.5 を下回る
+- 影響範囲は .mj-plain の有無と一致しない。セル内のテキストリンク数と
+  .mj-plain の内訳:
+  - jpml_pros 3,388件 / うち .mj-plain 0件
+  - resource_logs 2,576件 / うち .mj-plain 2,576件
+  - rh_paifu 57件 / うち .mj-plain 0件
+  - video_wayhome 38件 / うち .mj-plain 38件
+- 画像リンクのみのページ（jpml_titles / jpml_test / video_live / video_en /
+  saikyo_mens / video_mtsuku）は該当しない。計測で a11y 94 だったのはこのため
+- 修正案: style.css に `.mj-table td a { color: #0a58ca; }` を追加する。
+  #0a58ca は Bootstrap の既定ホバー色で、#fafafa に対して約6.17:1。
+  ただし採用前に実際の比率を計算して確認すること
+- 注意: この変更は jpml_pros の 3,388件のリンクの見た目に及ぶ。
+  適用後に jpml_pros / resource_logs / rh_paifu / video_wayhome の
+  4ページを目視確認し、平野さんに見てもらってからコミットする
+
+このissueはまだ修正せず、起票のみ。色の最終決定は別途相談する。
 
 ---
 
