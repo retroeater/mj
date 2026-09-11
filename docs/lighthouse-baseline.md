@@ -346,3 +346,24 @@ DOM要素数は3回とも**20,830**で安定（行数の実測値と一致し、
 `www.gstatic.com`への外部JS依存が完全になくなったことがTBT・DOM要素数
 双方に効いている。型B/C(#111/#127)がGoogle Charts据え置きか静的化かを
 判断する際、この数字が「静的化した場合の下限」の目安になる。
+
+## houou_leagues.html / ouka_leagues.html の移行結果（2026-09-11）
+
+型C(積み上げ棒+選手1名の折れ線、静的SVG+折れ線だけクライアント描画の
+ハイブリッド)。本番反映後にmobileを計測。
+
+| ページ | performance | accessibility | best-practices | seo | LCP | CLS | TBT | DOM要素数 | 総転送量 |
+|---|---|---|---|---|---|---|---|---|---|
+| `houou_leagues` | **98** | 93 | 100 | 91 | 2.0s | 0.000 | **0ms** | 4,059 | 104KB |
+| `ouka_leagues` | 97 | 93 | 100 | 91 | 2.2s | 0.000 | 40ms | 693 | 88KB |
+
+`resource_efficiency`(型D、DOM 387・TBT 2ms)と比べるとDOM要素数が
+hououで一桁増えている。716名分の`<option>`(セレクトボックス)が主因で、
+グラフ本体(積み上げ棒+折れ線のSVG、デスクトップ/モバイル2枚)自体は
+軽量。折れ線データ(`houou_leagues_data.json`、gzip後36KB程度)は
+`?name=`未指定時はfetchされない(JSが`return`して終わる)ため、既定選手
+表示時の総転送量には含まれていない。
+
+accessibilityの93点は`link-name`/`landmark-one-main`の2件の指摘によるもので、
+`resource_efficiency.html`など他ページと共通の`navbar.js`側の既存問題
+（このページ固有ではない）。
