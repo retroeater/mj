@@ -296,8 +296,6 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 | # | 内容 | 期限・目安 |
 |---|---|---|
-| #110 | メソッド遮断の翌日確認 | 9/12 |
-| #76 | Block切替後24時間のEvents確認 | 9/12〜 |
 | #130 | AIボット制御の再設定 | 9/15 廃止後すみやかに |
 | #84 | GitHub Pages無効化の判断 | 9/23 |
 | #131 | 作業ブランチの削除 | 随時（平野さん） |
@@ -307,7 +305,6 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 | # | 内容 | 備考 |
 |---|---|---|
 | **#7** | 残り6ページ（型B 3 / ランキング 3）のGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
-| #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | Logモードで24時間運用し誤検知ゼロを確認、Managed RulesetをBlockへ切り替え済み(2026-09-11)。残件は切り替え後24時間のEvents確認のみ |
 | #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
 | #9 | CSP設定 | #7の後にやると強いポリシーが書ける |
@@ -960,6 +957,11 @@ for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done
 - **Web Analytics のビーコンは `/cdn-cgi/rum` への POST。**
   HTTPメソッドやパスで遮断するルールを書くときは `/cdn-cgi/` を
   除外すること（#110）
+- **Managed Ruleset の Block / Log は Security rules の一覧画面では
+  判別できない。** 一覧の Action 列に出る `Execute` はルールセットを
+  実行するというデプロイ段階のアクションで、ルールセット内部の
+  Block / Log とは別物。確認するにはルールセット名をクリックして
+  Deploy managed ruleset の画面まで入り、Ruleset action を見る（#76）
 
 #### Speed 設定の現状（2026-09-11 時点）
 

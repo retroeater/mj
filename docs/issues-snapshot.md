@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 03:31 JST
+生成日時: 2026-09-12 03:40 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -5835,15 +5835,15 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 
 ## #76 Cloudflare WAFを有効にする
 
-- 状態: OPEN / 作成: 2026-09-08
-- ラベル: 状況: 待ち, 分野: セキュリティ
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-08 / クローズ: 2026-09-11
+- ラベル: 分野: セキュリティ
 
 ### 本文
 
 無料プランでもマネージドルールの一部が使え、既知の攻撃パターンを遮断できる。ただし現時点では優先度が低い。静的配信でフォームもデータベースもなく、守るべき攻撃面がほとんどないため。
 着手すべきタイミングは、ドメイン切替の後(ゾーン設定はドメインをCloudflareに移してからでないと行えない)か、SDPデータベースで選手が自分の情報を編集する仕組みを作るとき(フォームと認証が入るため必須)。
 
-### コメント (6件)
+### コメント (7件)
 
 **retroeater** (2026-09-09):
 
@@ -6100,6 +6100,73 @@ Security → Analytics → Events、Last 24 hours（9/11 02:31 〜
   切替判断の材料としては前向きな数字
 
 切替を実施したら、その日時を別途このissueに追記すること。
+
+**retroeater** (2026-09-11):
+
+### Block切替の確認とクローズ（2026-09-12）— Claude下書き
+
+#### 切替状態の確認
+
+Security → Security rules → Cloudflare Managed Ruleset →
+Deploy managed ruleset を開いて確認した。
+
+| 項目 | 値 |
+| --- | --- |
+| Ruleset action | **Block** |
+| Ruleset status | Default |
+| Execution scope | All incoming requests to ryoei.pro |
+| OWASP Core Ruleset | 未デプロイ |
+
+切替日時: 2026-09-11（正確な時刻は不明）
+
+**確認画面についての注意。** Security rules の一覧画面では Managed rules
+の Action が `Execute` と表示されるが、これはルールセットを実行するという
+デプロイ段階のアクションで、ルールセット内部の Block / Log とは別物。
+切替状態を確認するときは Deploy managed ruleset の画面まで入ること。
+
+Ruleset status は `Default` のまま。`Enabled` にすると既定で無効な
+ルールまで有効化され、誤検知の管理コストが上がる。OWASP Core Ruleset
+を見送ったのと同じ理由で変更しない。
+
+#### 誤検知の確認
+
+Security → Analytics → Events、期間 Last 24 hours、Query String フィルタ。
+
+| フィルタ | 検知数 |
+| --- | --- |
+| `name=` を含む | **0** |
+| `tag=` を含む | **0** |
+
+いずれも "No firewall events found matching your filters"。
+2026-09-11 の事前調査（誤検知ゼロ）と一致し、日本語クエリ文字列の
+誤検知は発生していない。
+
+#### Managed rules に Log が残る件
+
+2026-09-12 の観測（9/11 02:31 〜 9/12 02:31）では、Managed rules の
+内訳が Log 545 / Block 157 で Log が大半を占めていた。これは切替漏れ
+ではなく仕様どおり。
+
+本issueの 2026-09-11 コメント「記録しておくべき注意点」2項のとおり、
+Cloudflare は新規・更新ルールを1週間ログ専用で配信する。9/10〜9/11 の
+調査で `Version Control - Information Disclosure - Beta` が
+421 + 168 = 589件だったので、規模も符合する。
+
+また Block 157件のうち 19件は #110 のカスタムルール
+（`Block non-GET/HEAD methods`）由来で、残り 138件が Managed rules 由来。
+Log モードのままならマネージドルールから Block は1件も出ないため、
+この点からも切替済みが裏付けられる。
+
+#### 判定
+
+切替済み・誤検知ゼロを確認した。本issueを COMPLETED でクローズする。
+
+WAF の実効性が限定的という結論（2026-09-11 コメント）は変わらない。
+`.env` スキャンへの応答が 404 から 403 に変わり、Workers のアセット
+参照が省かれるだけで、リクエスト自体はエッジに届く。
+
+GET によるスキャンの継続的な流入については、2026-09-12 の
+「Events観測メモ」に記録済み。
 
 ---
 
