@@ -13,6 +13,12 @@ on:
         default: 'all'
         type: string
 
+  schedule:
+    # 毎週月曜 05:37 JST（日曜 20:37 UTC）。
+    # スプレッドシートの更新はpushでは検知できないため、定期的に all を回す。
+    # 毎時00分はGitHub側の実行が集中して遅延しやすいので37分にずらしている。
+    - cron: '37 20 * * 0'
+
   push:
     branches:
       - cloudflare
@@ -48,16 +54,22 @@ jobs:
         id: regen
         run: |
           set -o pipefail
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            python3 scripts/regenerate.py ${{ github.event.inputs.target_page }} \
-              | tee /tmp/targets.txt
-          else
+          if [ "${{ github.event_name }}" = "push" ]; then
             # 直前のコミットとの差分から、作り直すべきページを判定する
             git diff --name-only HEAD^ HEAD > /tmp/changed.txt || true
             echo "変更されたファイル:"
             cat /tmp/changed.txt
             python3 scripts/regenerate.py --changed $(cat /tmp/changed.txt) \
               | tee /tmp/targets.txt
+          else
+            # workflow_dispatch と schedule。
+            # schedule では inputs が空になるので all にフォールバックする。
+            TARGET="${{ github.event.inputs.target_page }}"
+            if [ -z "$TARGET" ]; then
+              TARGET=all
+            fi
+            echo "対象: $TARGET"
+            python3 scripts/regenerate.py $TARGET | tee /tmp/targets.txt
           fi
           echo "files=$(cat /tmp/targets.txt)" >> "$GITHUB_OUTPUT"
 
