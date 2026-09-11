@@ -359,18 +359,19 @@ body:has(.mj-table) {
 
 /* ==== #mtsuku_table 固有(Mつく) ====
    3列目(選手)は「氏名（団体）」が最大4行。.mj-table-3col既定の
-   均等割りだと画面幅によって概要列の折り返し位置が動くため、2列目
-   (概要、日付・名前・チーム名の3行)に明示的な幅を与え、残りを選手列に
-   回す。#148では%で暫定実装したが、#150で現存データの最長行
-   (「純白のアトミックチャンピオン」14文字、13px換算で約182px)に
-   padding(4px×2)を足した190pxを基準にpx固定した(実装環境のIPAGothic
-   で計測。実フォント(Hiragino Sans / Yu Gothic Medium / Meiryo)との
-   差を見込んで10px程度の余裕を持たせている)。今後さらに長い値が
-   増えて崩れるようなら、スクリーンショットと画面幅をもらって
+   均等割りだと画面幅によって列の折り返し位置が動くため、3列目(選手)に
+   明示的な幅を与えて固定し、2列目(概要)は幅指定を持たせず
+   table-layout: fixedの既定(幅指定のない列に残り幅を回す)で
+   auto-fitさせる(#150で仕様変更、選手⇔概要の役割を入れ替えた)。
+   選手列の幅は現存データの最長行(「近藤誠一（最高位戦）」等10文字、
+   13px換算で130px)にpadding(4px×2)を足した138pxを基準に、実フォント
+   (Hiragino Sans / Yu Gothic Medium / Meiryo)との差を見込んで10px程度の
+   余裕を持たせ150pxとした(実装環境のIPAGothicで計測)。今後さらに
+   長い値が増えて崩れるようなら、スクリーンショットと画面幅をもらって
    調整すること。 */
-#mtsuku_table thead th:nth-child(2),
-#mtsuku_table td:nth-child(2) {
-	width: 200px;
+#mtsuku_table thead th:nth-child(3),
+#mtsuku_table td:nth-child(3) {
+	width: 150px;
 }
 
 /* ==== .mj-table-auto(画像列を持たない多列テキストテーブル) ====
