@@ -79,6 +79,9 @@ def main():
 
     # デスクトップ用: design_width=1200は実測したデスクトップ幅(1280px)で
     # ほぼ700px(746px)になるよう逆算した値(#128実装時に決定)。
+    # font_size=16は本文(計算方法の段落、Bootstrap既定16px)に合わせた値
+    # (#149)。style.css側で.mj-bar-chart-desktopにmax-width: 1200pxを
+    # 指定し、SVGが等倍以上に拡大されないようにして文字サイズを固定する。
     chart_svg_desktop = horizontal_bar_chart(
         data,
         design_width=1200,
@@ -86,7 +89,7 @@ def main():
         chart_left=100,
         chart_top=50,
         chart_right=40,
-        font_size=13,
+        font_size=16,
         css_class="mj-bar-chart-desktop",
         id_prefix="efficiency-chart-desktop",
         title=chart_title,
