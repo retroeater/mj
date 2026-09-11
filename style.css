@@ -246,6 +246,20 @@ body:has(.mj-table) {
 	overflow-wrap: anywhere;
 }
 
+/* ==== 概要列の上寄せ(#144) ====
+   画像列の高さ(88〜98px)に対して概要が可変行数のため、中央寄せだと
+   行数によって文章の開始位置が上下にずれる。画像の上端に揃える。
+   .mj-table-2col 全体には当てない(resource_logs / saikyo_mens /
+   rh_paifu は対象外のため)。 */
+#titles_table td:nth-child(2),
+#test_table td:nth-child(2),
+#saikyo_results_table td:nth-child(2),
+#live_table td:nth-child(2),
+#wayhome_table td:nth-child(2),
+#en_table td:nth-child(2) {
+	vertical-align: top;
+}
+
 /* ==== 画像が80×80のページの写真列(#147) ====
    .mj-table-2col の168pxは160×90サムネイル用の値。80×80の
    ページでは左右に40pxずつ余ってしまうため、88pxに詰める。
@@ -322,13 +336,28 @@ body:has(.mj-table) {
 	/* 横padding 4px×2 = 8px。56px - 8px = 48px となり画像がちょうど収まる */
 }
 
-/* 「名前」列のみ広くとる。
-   実データの最長は英字表記の19文字(例: Kambayashi Tsuyoshi)で約124px。
-   左右padding 8px×2 を足して余裕を見た値。 */
+/* 「名前」列(1列目)の指定をここにまとめる。
+   列順を変更するときはこのブロックの :nth-child(1) を直せば済むようにしている。
+   - 幅: 実データの最長は英字表記の19文字(例: Kambayashi Tsuyoshi)で約124px。
+         左右padding 8px×2 を足して余裕を見た値。
+   - 固定: 横スクロール時にこの列だけ固定する。2列しかないページ
+           (jpml_titlesなど)では不要なため .mj-table 側には汎用化しない。
+   - 重なり順(手前ほど大きい値): 4=固定列のヘッダー(縦固定と横固定が交差する
+     セル) / 3=通常のヘッダー(.mj-table側) / 2=固定列のデータセル */
 #pros_table thead th:nth-child(1),
 #pros_table td:nth-child(1) {
 	width: 150px;
 	padding: 4px 8px;
+	position: sticky;
+	left: 0;
+}
+
+#pros_table thead th:nth-child(1) {
+	z-index: 4;
+}
+
+#pros_table td:nth-child(1) {
+	z-index: 2;
 }
 
 /* 行の高さ。画像48px + 上下padding 4px×2 = 56px。
@@ -343,28 +372,6 @@ body:has(.mj-table) {
 #pros_table img.pros {
 	display: block;
 	margin: 0 auto;
-}
-
-/* 横スクロール時に1列目(名前)のみ固定表示する。
-   2列しかないページ(jpml_titlesなど)ではこの固定は不要なため、
-   .mj-table側には汎用化せずこのページ専用のまま残している。 */
-#pros_table thead th:nth-child(1),
-#pros_table td:nth-child(1) {
-	position: sticky;
-	left: 0;
-}
-
-/* 重なり順(手前ほど大きい値)。
-   4: 固定列のヘッダー(縦固定と横固定が交差するセル)
-   3: 通常のヘッダー(.mj-table側) … 横スクロール時に固定列ヘッダーへ潜り込ませる
-   2: 固定列のデータセル … 横スクロール時に通常セルより手前
-   指定なし: 通常のデータセル */
-#pros_table thead th:nth-child(1) {
-	z-index: 4;
-}
-
-#pros_table td:nth-child(1) {
-	z-index: 2;
 }
 
 /* ==== #titles_table 固有(タイトル戦一覧) ====
