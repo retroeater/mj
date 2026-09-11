@@ -358,7 +358,7 @@ DOM要素数は3回とも**20,830**で安定（行数の実測値と一致し、
 | `ouka_leagues` | 97 | 93 | 100 | 91 | 2.2s | 0.000 | 40ms | 693 | 88KB |
 
 `resource_efficiency`(型D、DOM 387・TBT 2ms)と比べるとDOM要素数が
-hououで一桁増えている。716名分の`<option>`(セレクトボックス)が主因で、
+hououで一桁増えている。691名分の`<option>`(セレクトボックス)が主因で、
 グラフ本体(積み上げ棒+折れ線のSVG、デスクトップ/モバイル2枚)自体は
 軽量。折れ線データ(`houou_leagues_data.json`、gzip後36KB程度)は
 `?name=`未指定時はfetchされない(JSが`return`して終わる)ため、既定選手

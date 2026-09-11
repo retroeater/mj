@@ -23,6 +23,14 @@ def select_periods(rows, period_of, rank_idx=5):
     あり(houou 43後・ouka 21期)、その期はF列が全行空になる。この規則で
     そうした「進行中で未確定の期」を積み上げ棒からも自動的に除外する
     (#127着手前の事前調査で判明)。
+
+    この除外の副作用として、その進行中の期が初参加の選手は
+    build_player_series()の戻り値が空になり、呼び出し側
+    (generate_houou_leagues.py/generate_ouka_leagues.py)の
+    `n in series`フィルタでoption(選手選択リスト)からスキップされる。
+    表記ゆれではなく、期が確定して次にこの関数が呼ばれれば自然に
+    解消する。ただし新しい期が始まるたびに同じ現象が毎期発生する
+    想定。詳細は#127のコメント参照。
     """
     ordered = []
     seen = set()
