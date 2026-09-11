@@ -17,8 +17,6 @@
 <link rel="stylesheet" media="screen" href="style.css">
 <!-- JavaScripts -->
 <script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script defer src="https://www.gstatic.com/charts/loader.js"></script>
-<script defer src="ouka_leagues.js"></script>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "573520ec707f4a59b7b5cb06ef67cad8"}'></script>
 </head>
@@ -27,9 +25,10 @@
 <script src="navbar.js"></script>
 
 <div id="searchBoxes" class="collapse">
-	<select id="selectbox" name="" onchange="javascript:location.href = this.value;">
+	<select id="selectbox" name="">
 		<option value="">名前を選択</option>
 		<option value="ouka_leagues.html?name=蒼井ゆりか">蒼井ゆりか</option>
+		<option value="ouka_leagues.html?name=青木いちな">青木いちな</option>
 		<option value="ouka_leagues.html?name=蒼木翔子">蒼木翔子</option>
 		<option value="ouka_leagues.html?name=青山めぐみ">青山めぐみ</option>
 		<option value="ouka_leagues.html?name=赤木クロ">赤木クロ</option>
@@ -38,42 +37,49 @@
 		<option value="ouka_leagues.html?name=朝比奈ゆり">朝比奈ゆり</option>
 		<option value="ouka_leagues.html?name=麻生知花">麻生知花</option>
 		<option value="ouka_leagues.html?name=吾妻さおり">吾妻さおり</option>
+		<option value="ouka_leagues.html?name=安部久美子">安部久美子</option>
+		<option value="ouka_leagues.html?name=天沢沙恵花">天沢沙恵花</option>
+		<option value="ouka_leagues.html?name=安城るい">安城るい</option>
 		<option value="ouka_leagues.html?name=安藤りな">安藤りな</option>
 		<option value="ouka_leagues.html?name=飯盛裕美子">飯盛裕美子</option>
-		<option value="ouka_leagues.html?name=石川詩万">石川詩万</option>
+		<option value="ouka_leagues.html?name=池沢麻奈美">池沢麻奈美</option>
 		<option value="ouka_leagues.html?name=石田亜沙己">石田亜沙己</option>
 		<option value="ouka_leagues.html?name=和泉由希子">和泉由希子</option>
 		<option value="ouka_leagues.html?name=一瀬由梨">一瀬由梨</option>
+		<option value="ouka_leagues.html?name=一宮さくら">一宮さくら</option>
 		<option value="ouka_leagues.html?name=一森かな">一森かな</option>
 		<option value="ouka_leagues.html?name=稲岡ミカ">稲岡ミカ</option>
 		<option value="ouka_leagues.html?name=犬飼あやの">犬飼あやの</option>
-		<option value="ouka_leagues.html?name=井野葵">井野葵</option>
 		<option value="ouka_leagues.html?name=井上絵美子">井上絵美子</option>
-		<option value="ouka_leagues.html?name=上垣愛子">上垣愛子</option>
 		<option value="ouka_leagues.html?name=上田まみ">上田まみ</option>
 		<option value="ouka_leagues.html?name=魚谷侑未">魚谷侑未</option>
 		<option value="ouka_leagues.html?name=内田みこ">内田みこ</option>
-		<option value="ouka_leagues.html?name=内田美乃里">内田美乃里</option>
 		<option value="ouka_leagues.html?name=内村翠">内村翠</option>
 		<option value="ouka_leagues.html?name=内山えみ">内山えみ</option>
 		<option value="ouka_leagues.html?name=襟川麻衣子">襟川麻衣子</option>
+		<option value="ouka_leagues.html?name=大川佳弥乃">大川佳弥乃</option>
 		<option value="ouka_leagues.html?name=大久保朋美">大久保朋美</option>
 		<option value="ouka_leagues.html?name=太田寛子">太田寛子</option>
 		<option value="ouka_leagues.html?name=大槻あいみ">大槻あいみ</option>
 		<option value="ouka_leagues.html?name=大月れみ">大月れみ</option>
 		<option value="ouka_leagues.html?name=大野彩乃">大野彩乃</option>
-		<option value="ouka_leagues.html?name=小笠原奈央">小笠原奈央</option>
 		<option value="ouka_leagues.html?name=岡田紗佳">岡田紗佳</option>
+		<option value="ouka_leagues.html?name=小笠原奈央">小笠原奈央</option>
+		<option value="ouka_leagues.html?name=長内真実">長内真実</option>
+		<option value="ouka_leagues.html?name=押手まり">押手まり</option>
 		<option value="ouka_leagues.html?name=音羽なお">音羽なお</option>
 		<option value="ouka_leagues.html?name=加賀谷春歌">加賀谷春歌</option>
 		<option value="ouka_leagues.html?name=樫野凪">樫野凪</option>
+		<option value="ouka_leagues.html?name=樫林愛子">樫林愛子</option>
 		<option value="ouka_leagues.html?name=片倉まち">片倉まち</option>
 		<option value="ouka_leagues.html?name=香月佑海">香月佑海</option>
 		<option value="ouka_leagues.html?name=叶璃々">叶璃々</option>
 		<option value="ouka_leagues.html?name=鴨舞">鴨舞</option>
 		<option value="ouka_leagues.html?name=川上レイ">川上レイ</option>
+		<option value="ouka_leagues.html?name=河野みのり">河野みのり</option>
 		<option value="ouka_leagues.html?name=川原舞子">川原舞子</option>
 		<option value="ouka_leagues.html?name=菊地美羽">菊地美羽</option>
+		<option value="ouka_leagues.html?name=如月明日香">如月明日香</option>
 		<option value="ouka_leagues.html?name=北野由実">北野由実</option>
 		<option value="ouka_leagues.html?name=木下遥">木下遥</option>
 		<option value="ouka_leagues.html?name=清末紫咲">清末紫咲</option>
@@ -86,38 +92,44 @@
 		<option value="ouka_leagues.html?name=香野蘭">香野蘭</option>
 		<option value="ouka_leagues.html?name=古小路亜美">古小路亜美</option>
 		<option value="ouka_leagues.html?name=小平螢">小平螢</option>
-		<option value="ouka_leagues.html?name=後藤咲">後藤咲</option>
+		<option value="ouka_leagues.html?name=小兎めい">小兎めい</option>
 		<option value="ouka_leagues.html?name=駒田真子">駒田真子</option>
+		<option value="ouka_leagues.html?name=小宮山一美">小宮山一美</option>
+		<option value="ouka_leagues.html?name=後藤咲">後藤咲</option>
+		<option value="ouka_leagues.html?name=後藤真帆">後藤真帆</option>
 		<option value="ouka_leagues.html?name=西城凛">西城凛</option>
 		<option value="ouka_leagues.html?name=齋藤麻衣子">齋藤麻衣子</option>
 		<option value="ouka_leagues.html?name=斉藤理絵">斉藤理絵</option>
 		<option value="ouka_leagues.html?name=桜川姫子">桜川姫子</option>
 		<option value="ouka_leagues.html?name=桜木里咲">桜木里咲</option>
 		<option value="ouka_leagues.html?name=さくら美緒">さくら美緒</option>
-		<option value="ouka_leagues.html?name=ジェン">ジェン</option>
-		<option value="ouka_leagues.html?name=渋谷菜瑠美">渋谷菜瑠美</option>
+		<option value="ouka_leagues.html?name=佐藤あいり">佐藤あいり</option>
+		<option value="ouka_leagues.html?name=篠原冴美">篠原冴美</option>
 		<option value="ouka_leagues.html?name=清水香織">清水香織</option>
 		<option value="ouka_leagues.html?name=白銀紗希">白銀紗希</option>
+		<option value="ouka_leagues.html?name=ジェン">ジェン</option>
 		<option value="ouka_leagues.html?name=菅原千瑛">菅原千瑛</option>
 		<option value="ouka_leagues.html?name=杉浦まゆ">杉浦まゆ</option>
+		<option value="ouka_leagues.html?name=杉浦幸">杉浦幸</option>
 		<option value="ouka_leagues.html?name=鈴木彩夏">鈴木彩夏</option>
-		<option value="ouka_leagues.html?name=関口智恵">関口智恵</option>
+		<option value="ouka_leagues.html?name=瀬戸麻衣">瀬戸麻衣</option>
 		<option value="ouka_leagues.html?name=曽根彩加">曽根彩加</option>
 		<option value="ouka_leagues.html?name=高田麻衣子">高田麻衣子</option>
 		<option value="ouka_leagues.html?name=高橋慧">高橋慧</option>
 		<option value="ouka_leagues.html?name=高橋侑希">高橋侑希</option>
 		<option value="ouka_leagues.html?name=高宮まり">高宮まり</option>
-		<option value="ouka_leagues.html?name=高柳節子">高柳節子</option>
 		<option value="ouka_leagues.html?name=武石絵里">武石絵里</option>
 		<option value="ouka_leagues.html?name=武田雛歩">武田雛歩</option>
+		<option value="ouka_leagues.html?name=橘来奈">橘来奈</option>
 		<option value="ouka_leagues.html?name=伊達朱里紗">伊達朱里紗</option>
-		<option value="ouka_leagues.html?name=土田小緒里">土田小緒里</option>
+		<option value="ouka_leagues.html?name=ダニーモレノ">ダニーモレノ</option>
+		<option value="ouka_leagues.html?name=知念りほ">知念りほ</option>
 		<option value="ouka_leagues.html?name=手塚紗掬">手塚紗掬</option>
 		<option value="ouka_leagues.html?name=天音まこと">天音まこと</option>
 		<option value="ouka_leagues.html?name=東城りお">東城りお</option>
 		<option value="ouka_leagues.html?name=藤根梨沙">藤根梨沙</option>
+		<option value="ouka_leagues.html?name=富村つぐみ">富村つぐみ</option>
 		<option value="ouka_leagues.html?name=童瞳">童瞳</option>
-		<option value="ouka_leagues.html?name=長井梨世">長井梨世</option>
 		<option value="ouka_leagues.html?name=中川由佳梨">中川由佳梨</option>
 		<option value="ouka_leagues.html?name=中嶋野乃">中嶋野乃</option>
 		<option value="ouka_leagues.html?name=仲田加南">仲田加南</option>
@@ -138,14 +150,14 @@
 		<option value="ouka_leagues.html?name=花宮海咲">花宮海咲</option>
 		<option value="ouka_leagues.html?name=早川林香">早川林香</option>
 		<option value="ouka_leagues.html?name=林美沙希">林美沙希</option>
-		<option value="ouka_leagues.html?name=柊木かえで">柊木かえで</option>
 		<option value="ouka_leagues.html?name=疋野加奈子">疋野加奈子</option>
-		<option value="ouka_leagues.html?name=日高志穂">日高志穂</option>
 		<option value="ouka_leagues.html?name=平岡理恵">平岡理恵</option>
 		<option value="ouka_leagues.html?name=廣岡璃奈">廣岡璃奈</option>
+		<option value="ouka_leagues.html?name=福島清子">福島清子</option>
 		<option value="ouka_leagues.html?name=藤居冴加">藤居冴加</option>
 		<option value="ouka_leagues.html?name=藤井すみれ">藤井すみれ</option>
 		<option value="ouka_leagues.html?name=藤田愛">藤田愛</option>
+		<option value="ouka_leagues.html?name=藤波美月">藤波美月</option>
 		<option value="ouka_leagues.html?name=文月愛美">文月愛美</option>
 		<option value="ouka_leagues.html?name=古川彩乃">古川彩乃</option>
 		<option value="ouka_leagues.html?name=古谷知美">古谷知美</option>
@@ -153,13 +165,12 @@
 		<option value="ouka_leagues.html?name=星乃あみ">星乃あみ</option>
 		<option value="ouka_leagues.html?name=町田志織">町田志織</option>
 		<option value="ouka_leagues.html?name=松岡千晶">松岡千晶</option>
-		<option value="ouka_leagues.html?name=松﨑さくら">松﨑さくら</option>
 		<option value="ouka_leagues.html?name=松島桃花">松島桃花</option>
 		<option value="ouka_leagues.html?name=松田彩花">松田彩花</option>
 		<option value="ouka_leagues.html?name=御子柴佑梨">御子柴佑梨</option>
 		<option value="ouka_leagues.html?name=美咲優菜">美咲優菜</option>
-		<option value="ouka_leagues.html?name=水越京子">水越京子</option>
 		<option value="ouka_leagues.html?name=光岡舞織">光岡舞織</option>
+		<option value="ouka_leagues.html?name=水都まりん">水都まりん</option>
 		<option value="ouka_leagues.html?name=南ていか">南ていか</option>
 		<option value="ouka_leagues.html?name=美波智子">美波智子</option>
 		<option value="ouka_leagues.html?name=宮内こずえ">宮内こずえ</option>
@@ -172,6 +183,8 @@
 		<option value="ouka_leagues.html?name=山口やよい">山口やよい</option>
 		<option value="ouka_leagues.html?name=山脇千文美">山脇千文美</option>
 		<option value="ouka_leagues.html?name=優月みか">優月みか</option>
+		<option value="ouka_leagues.html?name=吉沢彩月">吉沢彩月</option>
+		<option value="ouka_leagues.html?name=吉田彩乃">吉田彩乃</option>
 		<option value="ouka_leagues.html?name=吉田祥子">吉田祥子</option>
 		<option value="ouka_leagues.html?name=頼さくら">頼さくら</option>
 		<option value="ouka_leagues.html?name=李佳">李佳</option>
@@ -180,6 +193,181 @@
 		<option value="ouka_leagues.html?name=王政芳">王政芳</option>
 	</select>
 </div>
-<div id="myChart" class="googlechart"></div>
+<div class="mj-chart-legend"><span class="mj-chart-legend-item"><svg class="mj-chart-legend-swatch" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" fill="#FFCCCC" /></svg><span>A</span></span><span class="mj-chart-legend-item"><svg class="mj-chart-legend-swatch" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" fill="#FFEECC" /></svg><span>B</span></span><span class="mj-chart-legend-item"><svg class="mj-chart-legend-swatch" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" fill="#EEFFDD" /></svg><span>C1</span></span><span class="mj-chart-legend-item"><svg class="mj-chart-legend-swatch" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" fill="#CCEEFF" /></svg><span>C2</span></span><span class="mj-chart-legend-item"><svg class="mj-chart-legend-swatch" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" fill="#CCCCCC" /></svg><span>C3</span></span><span class="mj-chart-legend-item"><svg class="mj-chart-legend-swatch" viewBox="0 0 12 12" aria-hidden="true"><rect width="12" height="12" fill="#0000CC" /></svg><span data-chart-role="legend-line-label">清水香織</span></span></div>
+<div>
+<svg viewBox="0 0 1400 700" width="100%" class="mj-league-chart-desktop" role="img" aria-labelledby="ouka-chart-desktop-title ouka-chart-desktop-desc" font-family="Hiragino Sans, Yu Gothic Medium, Meiryo, sans-serif" font-size="12">
+	<title id="ouka-chart-desktop-title">女流桜花 リーグ推移</title>
+	<desc id="ouka-chart-desktop-desc">期ごとの各リーグの所属人数と、選手1名の全出場選手中での順位の推移</desc>
+	<g><title>1 A: 39</title><rect x="32.92" y="20.00" width="42.16" height="175.50" fill="#FFCCCC" /></g>
+	<g><title>2 A: 20</title><rect x="100.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>3 A: 20</title><rect x="168.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>4 A: 20</title><rect x="236.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>5 A: 20</title><rect x="304.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>6 A: 20</title><rect x="372.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>7 A: 20</title><rect x="440.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>8 A: 15</title><rect x="508.92" y="20.00" width="42.16" height="67.50" fill="#FFCCCC" /></g>
+	<g><title>9 A: 18</title><rect x="576.92" y="20.00" width="42.16" height="81.00" fill="#FFCCCC" /></g>
+	<g><title>10 A: 20</title><rect x="644.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>11 A: 20</title><rect x="712.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>12 A: 20</title><rect x="780.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>13 A: 20</title><rect x="848.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>14 A: 20</title><rect x="916.92" y="20.00" width="42.16" height="90.00" fill="#FFCCCC" /></g>
+	<g><title>15 A: 16</title><rect x="984.92" y="20.00" width="42.16" height="72.00" fill="#FFCCCC" /></g>
+	<g><title>16 A: 16</title><rect x="1052.92" y="20.00" width="42.16" height="72.00" fill="#FFCCCC" /></g>
+	<g><title>17 A: 16</title><rect x="1120.92" y="20.00" width="42.16" height="72.00" fill="#FFCCCC" /></g>
+	<g><title>18 A: 17</title><rect x="1188.92" y="20.00" width="42.16" height="76.50" fill="#FFCCCC" /></g>
+	<g><title>19 A: 16</title><rect x="1256.92" y="20.00" width="42.16" height="72.00" fill="#FFCCCC" /></g>
+	<g><title>20 A: 16</title><rect x="1324.92" y="20.00" width="42.16" height="72.00" fill="#FFCCCC" /></g>
+	<g><title>2 B: 23</title><rect x="100.92" y="110.00" width="42.16" height="103.50" fill="#FFEECC" /></g>
+	<g><title>3 B: 29</title><rect x="168.92" y="110.00" width="42.16" height="130.50" fill="#FFEECC" /></g>
+	<g><title>4 B: 30</title><rect x="236.92" y="110.00" width="42.16" height="135.00" fill="#FFEECC" /></g>
+	<g><title>5 B: 33</title><rect x="304.92" y="110.00" width="42.16" height="148.50" fill="#FFEECC" /></g>
+	<g><title>6 B: 42</title><rect x="372.92" y="110.00" width="42.16" height="189.00" fill="#FFEECC" /></g>
+	<g><title>7 B: 33</title><rect x="440.92" y="110.00" width="42.16" height="148.50" fill="#FFEECC" /></g>
+	<g><title>8 B: 28</title><rect x="508.92" y="87.50" width="42.16" height="126.00" fill="#FFEECC" /></g>
+	<g><title>9 B: 23</title><rect x="576.92" y="101.00" width="42.16" height="103.50" fill="#FFEECC" /></g>
+	<g><title>10 B: 24</title><rect x="644.92" y="110.00" width="42.16" height="108.00" fill="#FFEECC" /></g>
+	<g><title>11 B: 24</title><rect x="712.92" y="110.00" width="42.16" height="108.00" fill="#FFEECC" /></g>
+	<g><title>12 B: 25</title><rect x="780.92" y="110.00" width="42.16" height="112.50" fill="#FFEECC" /></g>
+	<g><title>13 B: 24</title><rect x="848.92" y="110.00" width="42.16" height="108.00" fill="#FFEECC" /></g>
+	<g><title>14 B: 25</title><rect x="916.92" y="110.00" width="42.16" height="112.50" fill="#FFEECC" /></g>
+	<g><title>15 B: 15</title><rect x="984.92" y="92.00" width="42.16" height="67.50" fill="#FFEECC" /></g>
+	<g><title>16 B: 17</title><rect x="1052.92" y="92.00" width="42.16" height="76.50" fill="#FFEECC" /></g>
+	<g><title>17 B: 20</title><rect x="1120.92" y="92.00" width="42.16" height="90.00" fill="#FFEECC" /></g>
+	<g><title>18 B: 24</title><rect x="1188.92" y="96.50" width="42.16" height="108.00" fill="#FFEECC" /></g>
+	<g><title>19 B: 31</title><rect x="1256.92" y="92.00" width="42.16" height="139.50" fill="#FFEECC" /></g>
+	<g><title>20 B: 25</title><rect x="1324.92" y="92.00" width="42.16" height="112.50" fill="#FFEECC" /></g>
+	<g><title>7 C1: 21</title><rect x="440.92" y="258.50" width="42.16" height="94.50" fill="#EEFFDD" /></g>
+	<g><title>8 C1: 32</title><rect x="508.92" y="213.50" width="42.16" height="144.00" fill="#EEFFDD" /></g>
+	<g><title>9 C1: 36</title><rect x="576.92" y="204.50" width="42.16" height="162.00" fill="#EEFFDD" /></g>
+	<g><title>10 C1: 36</title><rect x="644.92" y="218.00" width="42.16" height="162.00" fill="#EEFFDD" /></g>
+	<g><title>11 C1: 38</title><rect x="712.92" y="218.00" width="42.16" height="171.00" fill="#EEFFDD" /></g>
+	<g><title>12 C1: 40</title><rect x="780.92" y="222.50" width="42.16" height="180.00" fill="#EEFFDD" /></g>
+	<g><title>13 C1: 41</title><rect x="848.92" y="218.00" width="42.16" height="184.50" fill="#EEFFDD" /></g>
+	<g><title>14 C1: 54</title><rect x="916.92" y="222.50" width="42.16" height="243.00" fill="#EEFFDD" /></g>
+	<g><title>15 C1: 27</title><rect x="984.92" y="159.50" width="42.16" height="121.50" fill="#EEFFDD" /></g>
+	<g><title>16 C1: 25</title><rect x="1052.92" y="168.50" width="42.16" height="112.50" fill="#EEFFDD" /></g>
+	<g><title>17 C1: 25</title><rect x="1120.92" y="182.00" width="42.16" height="112.50" fill="#EEFFDD" /></g>
+	<g><title>18 C1: 26</title><rect x="1188.92" y="204.50" width="42.16" height="117.00" fill="#EEFFDD" /></g>
+	<g><title>19 C1: 24</title><rect x="1256.92" y="231.50" width="42.16" height="108.00" fill="#EEFFDD" /></g>
+	<g><title>20 C1: 26</title><rect x="1324.92" y="204.50" width="42.16" height="117.00" fill="#EEFFDD" /></g>
+	<g><title>15 C2: 15</title><rect x="984.92" y="281.00" width="42.16" height="67.50" fill="#CCEEFF" /></g>
+	<g><title>16 C2: 25</title><rect x="1052.92" y="281.00" width="42.16" height="112.50" fill="#CCEEFF" /></g>
+	<g><title>17 C2: 34</title><rect x="1120.92" y="294.50" width="42.16" height="153.00" fill="#CCEEFF" /></g>
+	<g><title>18 C2: 39</title><rect x="1188.92" y="321.50" width="42.16" height="175.50" fill="#CCEEFF" /></g>
+	<g><title>19 C2: 24</title><rect x="1256.92" y="339.50" width="42.16" height="108.00" fill="#CCEEFF" /></g>
+	<g><title>20 C2: 26</title><rect x="1324.92" y="321.50" width="42.16" height="117.00" fill="#CCEEFF" /></g>
+	<g><title>19 C3: 28</title><rect x="1256.92" y="447.50" width="42.16" height="126.00" fill="#CCCCCC" /></g>
+	<g><title>20 C3: 35</title><rect x="1324.92" y="438.50" width="42.16" height="157.50" fill="#CCCCCC" /></g>
+	<text x="54.00" y="664" text-anchor="middle">1</text>
+	<text x="122.00" y="664" text-anchor="middle">2</text>
+	<text x="190.00" y="664" text-anchor="middle">3</text>
+	<text x="258.00" y="664" text-anchor="middle">4</text>
+	<text x="326.00" y="664" text-anchor="middle">5</text>
+	<text x="394.00" y="664" text-anchor="middle">6</text>
+	<text x="462.00" y="664" text-anchor="middle">7</text>
+	<text x="530.00" y="664" text-anchor="middle">8</text>
+	<text x="598.00" y="664" text-anchor="middle">9</text>
+	<text x="666.00" y="664" text-anchor="middle">10</text>
+	<text x="734.00" y="664" text-anchor="middle">11</text>
+	<text x="802.00" y="664" text-anchor="middle">12</text>
+	<text x="870.00" y="664" text-anchor="middle">13</text>
+	<text x="938.00" y="664" text-anchor="middle">14</text>
+	<text x="1006.00" y="664" text-anchor="middle">15</text>
+	<text x="1074.00" y="664" text-anchor="middle">16</text>
+	<text x="1142.00" y="664" text-anchor="middle">17</text>
+	<text x="1210.00" y="664" text-anchor="middle">18</text>
+	<text x="1278.00" y="664" text-anchor="middle">19</text>
+	<text x="1346.00" y="664" text-anchor="middle">20</text>
+	<polyline data-chart-role="line" points="54.00,78.50 122.00,69.50 190.00,56.00 258.00,38.00 326.00,24.50 462.00,42.50 530.00,56.00 598.00,51.50 666.00,69.50 734.00,51.50 802.00,87.50 870.00,38.00 938.00,42.50 1006.00,92.00 1210.00,105.50 1278.00,24.50" fill="none" stroke="#0000CC" stroke-width="2" data-plot-left="20" data-plot-top="20" data-plot-width="1360.00" data-plot-height="630.00" data-y-max="140" data-period-count="20" />
+</svg>
+<svg viewBox="0 0 380 520" width="100%" class="mj-league-chart-mobile" role="img" aria-labelledby="ouka-chart-mobile-title ouka-chart-mobile-desc" font-family="Hiragino Sans, Yu Gothic Medium, Meiryo, sans-serif" font-size="9">
+	<title id="ouka-chart-mobile-title">女流桜花 リーグ推移(モバイル)</title>
+	<desc id="ouka-chart-mobile-desc">期ごとの各リーグの所属人数と、選手1名の全出場選手中での順位の推移</desc>
+	<g><title>1 A: 39</title><rect x="19.38" y="8.00" width="11.04" height="135.94" fill="#FFCCCC" /></g>
+	<g><title>2 A: 20</title><rect x="37.18" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>3 A: 20</title><rect x="54.98" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>4 A: 20</title><rect x="72.78" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>5 A: 20</title><rect x="90.58" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>6 A: 20</title><rect x="108.38" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>7 A: 20</title><rect x="126.18" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>8 A: 15</title><rect x="143.98" y="8.00" width="11.04" height="52.29" fill="#FFCCCC" /></g>
+	<g><title>9 A: 18</title><rect x="161.78" y="8.00" width="11.04" height="62.74" fill="#FFCCCC" /></g>
+	<g><title>10 A: 20</title><rect x="179.58" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>11 A: 20</title><rect x="197.38" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>12 A: 20</title><rect x="215.18" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>13 A: 20</title><rect x="232.98" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>14 A: 20</title><rect x="250.78" y="8.00" width="11.04" height="69.71" fill="#FFCCCC" /></g>
+	<g><title>15 A: 16</title><rect x="268.58" y="8.00" width="11.04" height="55.77" fill="#FFCCCC" /></g>
+	<g><title>16 A: 16</title><rect x="286.38" y="8.00" width="11.04" height="55.77" fill="#FFCCCC" /></g>
+	<g><title>17 A: 16</title><rect x="304.18" y="8.00" width="11.04" height="55.77" fill="#FFCCCC" /></g>
+	<g><title>18 A: 17</title><rect x="321.98" y="8.00" width="11.04" height="59.26" fill="#FFCCCC" /></g>
+	<g><title>19 A: 16</title><rect x="339.78" y="8.00" width="11.04" height="55.77" fill="#FFCCCC" /></g>
+	<g><title>20 A: 16</title><rect x="357.58" y="8.00" width="11.04" height="55.77" fill="#FFCCCC" /></g>
+	<g><title>2 B: 23</title><rect x="37.18" y="77.71" width="11.04" height="80.17" fill="#FFEECC" /></g>
+	<g><title>3 B: 29</title><rect x="54.98" y="77.71" width="11.04" height="101.09" fill="#FFEECC" /></g>
+	<g><title>4 B: 30</title><rect x="72.78" y="77.71" width="11.04" height="104.57" fill="#FFEECC" /></g>
+	<g><title>5 B: 33</title><rect x="90.58" y="77.71" width="11.04" height="115.03" fill="#FFEECC" /></g>
+	<g><title>6 B: 42</title><rect x="108.38" y="77.71" width="11.04" height="146.40" fill="#FFEECC" /></g>
+	<g><title>7 B: 33</title><rect x="126.18" y="77.71" width="11.04" height="115.03" fill="#FFEECC" /></g>
+	<g><title>8 B: 28</title><rect x="143.98" y="60.29" width="11.04" height="97.60" fill="#FFEECC" /></g>
+	<g><title>9 B: 23</title><rect x="161.78" y="70.74" width="11.04" height="80.17" fill="#FFEECC" /></g>
+	<g><title>10 B: 24</title><rect x="179.58" y="77.71" width="11.04" height="83.66" fill="#FFEECC" /></g>
+	<g><title>11 B: 24</title><rect x="197.38" y="77.71" width="11.04" height="83.66" fill="#FFEECC" /></g>
+	<g><title>12 B: 25</title><rect x="215.18" y="77.71" width="11.04" height="87.14" fill="#FFEECC" /></g>
+	<g><title>13 B: 24</title><rect x="232.98" y="77.71" width="11.04" height="83.66" fill="#FFEECC" /></g>
+	<g><title>14 B: 25</title><rect x="250.78" y="77.71" width="11.04" height="87.14" fill="#FFEECC" /></g>
+	<g><title>15 B: 15</title><rect x="268.58" y="63.77" width="11.04" height="52.29" fill="#FFEECC" /></g>
+	<g><title>16 B: 17</title><rect x="286.38" y="63.77" width="11.04" height="59.26" fill="#FFEECC" /></g>
+	<g><title>17 B: 20</title><rect x="304.18" y="63.77" width="11.04" height="69.71" fill="#FFEECC" /></g>
+	<g><title>18 B: 24</title><rect x="321.98" y="67.26" width="11.04" height="83.66" fill="#FFEECC" /></g>
+	<g><title>19 B: 31</title><rect x="339.78" y="63.77" width="11.04" height="108.06" fill="#FFEECC" /></g>
+	<g><title>20 B: 25</title><rect x="357.58" y="63.77" width="11.04" height="87.14" fill="#FFEECC" /></g>
+	<g><title>7 C1: 21</title><rect x="126.18" y="192.74" width="11.04" height="73.20" fill="#EEFFDD" /></g>
+	<g><title>8 C1: 32</title><rect x="143.98" y="157.89" width="11.04" height="111.54" fill="#EEFFDD" /></g>
+	<g><title>9 C1: 36</title><rect x="161.78" y="150.91" width="11.04" height="125.49" fill="#EEFFDD" /></g>
+	<g><title>10 C1: 36</title><rect x="179.58" y="161.37" width="11.04" height="125.49" fill="#EEFFDD" /></g>
+	<g><title>11 C1: 38</title><rect x="197.38" y="161.37" width="11.04" height="132.46" fill="#EEFFDD" /></g>
+	<g><title>12 C1: 40</title><rect x="215.18" y="164.86" width="11.04" height="139.43" fill="#EEFFDD" /></g>
+	<g><title>13 C1: 41</title><rect x="232.98" y="161.37" width="11.04" height="142.91" fill="#EEFFDD" /></g>
+	<g><title>14 C1: 54</title><rect x="250.78" y="164.86" width="11.04" height="188.23" fill="#EEFFDD" /></g>
+	<g><title>15 C1: 27</title><rect x="268.58" y="116.06" width="11.04" height="94.11" fill="#EEFFDD" /></g>
+	<g><title>16 C1: 25</title><rect x="286.38" y="123.03" width="11.04" height="87.14" fill="#EEFFDD" /></g>
+	<g><title>17 C1: 25</title><rect x="304.18" y="133.49" width="11.04" height="87.14" fill="#EEFFDD" /></g>
+	<g><title>18 C1: 26</title><rect x="321.98" y="150.91" width="11.04" height="90.63" fill="#EEFFDD" /></g>
+	<g><title>19 C1: 24</title><rect x="339.78" y="171.83" width="11.04" height="83.66" fill="#EEFFDD" /></g>
+	<g><title>20 C1: 26</title><rect x="357.58" y="150.91" width="11.04" height="90.63" fill="#EEFFDD" /></g>
+	<g><title>15 C2: 15</title><rect x="268.58" y="210.17" width="11.04" height="52.29" fill="#CCEEFF" /></g>
+	<g><title>16 C2: 25</title><rect x="286.38" y="210.17" width="11.04" height="87.14" fill="#CCEEFF" /></g>
+	<g><title>17 C2: 34</title><rect x="304.18" y="220.63" width="11.04" height="118.51" fill="#CCEEFF" /></g>
+	<g><title>18 C2: 39</title><rect x="321.98" y="241.54" width="11.04" height="135.94" fill="#CCEEFF" /></g>
+	<g><title>19 C2: 24</title><rect x="339.78" y="255.49" width="11.04" height="83.66" fill="#CCEEFF" /></g>
+	<g><title>20 C2: 26</title><rect x="357.58" y="241.54" width="11.04" height="90.63" fill="#CCEEFF" /></g>
+	<g><title>19 C3: 28</title><rect x="339.78" y="339.14" width="11.04" height="97.60" fill="#CCCCCC" /></g>
+	<g><title>20 C3: 35</title><rect x="357.58" y="332.17" width="11.04" height="122.00" fill="#CCCCCC" /></g>
+	<text x="24.90" y="510" text-anchor="middle">1</text>
+	<text x="42.70" y="524" text-anchor="middle">2</text>
+	<text x="60.50" y="510" text-anchor="middle">3</text>
+	<text x="78.30" y="524" text-anchor="middle">4</text>
+	<text x="96.10" y="510" text-anchor="middle">5</text>
+	<text x="113.90" y="524" text-anchor="middle">6</text>
+	<text x="131.70" y="510" text-anchor="middle">7</text>
+	<text x="149.50" y="524" text-anchor="middle">8</text>
+	<text x="167.30" y="510" text-anchor="middle">9</text>
+	<text x="185.10" y="524" text-anchor="middle">10</text>
+	<text x="202.90" y="510" text-anchor="middle">11</text>
+	<text x="220.70" y="524" text-anchor="middle">12</text>
+	<text x="238.50" y="510" text-anchor="middle">13</text>
+	<text x="256.30" y="524" text-anchor="middle">14</text>
+	<text x="274.10" y="510" text-anchor="middle">15</text>
+	<text x="291.90" y="524" text-anchor="middle">16</text>
+	<text x="309.70" y="510" text-anchor="middle">17</text>
+	<text x="327.50" y="524" text-anchor="middle">18</text>
+	<text x="345.30" y="510" text-anchor="middle">19</text>
+	<text x="363.10" y="524" text-anchor="middle">20</text>
+	<polyline data-chart-role="line" points="24.90,53.31 42.70,46.34 60.50,35.89 78.30,21.94 96.10,11.49 131.70,25.43 149.50,35.89 167.30,32.40 185.10,46.34 202.90,32.40 220.70,60.29 238.50,21.94 256.30,25.43 274.10,63.77 327.50,74.23 345.30,11.49" fill="none" stroke="#0000CC" stroke-width="2" data-plot-left="16" data-plot-top="8" data-plot-width="356.00" data-plot-height="488.00" data-y-max="140" data-period-count="20" />
+</svg>
+</div>
+<script defer src="leagues.js" data-json-url="ouka_leagues_data.json"></script>
 </body>
 </html>

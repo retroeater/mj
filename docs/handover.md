@@ -114,21 +114,23 @@ HTMLは27ページ。大きく3系統に分かれる。
 | ビルド時生成（型A・2列/3列） | 10 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列) / `saikyo_results.html`。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
 | ビルド時生成（型A'・多列テキスト） | 2 | `rh_results.html` / `rh_results_detail.html`。画像列を持たないため`.mj-table-auto`を使う（#7、完了） |
 | ビルド時生成（型D・静的SVG） | 1 | `resource_efficiency.html`。表を持たないため`render_content()`を使う。外部JS・外部ドメインへの依存が一切ない（#7/#128、完了） |
-| Google Charts依存 | **8** | ブラウザから直接スプレッドシートを読む。#7の対象。型B3・型C2・ランキング系A3 |
+| ビルド時生成（型C・積み上げ棒+折れ線） | 2 | `houou_leagues.html` / `ouka_leagues.html`。積み上げ棒と既定選手の折れ線は静的SVG、`?name=`時の折れ線差し替えのみ`leagues.js`が担う（#7/#127、完了） |
+| Google Charts依存 | **6** | ブラウザから直接スプレッドシートを読む。#7の対象。型B3・ランキング系A3 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html`と型A/A'/Dの13ページ(`jpml_titles` / `jpml_test` /
+- `jpml_pros.html`と型A/A'/C/Dの15ページ(`jpml_titles` / `jpml_test` /
   `resource_logs` / `video_live` / `video_wayhome` / `video_en` / `rh_paifu` /
   `saikyo_mens` / `video_mtsuku` / `saikyo_results` / `rh_results` /
-  `rh_results_detail` / `resource_efficiency`) … それぞれ
+  `rh_results_detail` / `resource_efficiency` / `houou_leagues` /
+  `ouka_leagues`) … それぞれ
   `scripts/generate_<ページ名>.py`が
   ビルド時に取得してHTMLに焼き込む。`jpml_pros`以外は`scripts/lib/page.py`
   の共通処理を使う（#7）
-- 残り8ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+- 残り6ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 **移行済みページは、スプレッドシートを直しただけでは反映されない。**
 `regenerate-page.yml` はスクリプトと対応する`.js`の変更をpushで検知する
@@ -240,7 +242,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（残り8ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（残り6ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -252,13 +254,15 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 `saikyo_results.html`に2件、計13件焼き込み済み（#135）。`resource_efficiency.html`
 の静的SVG化(2026-09-11)では、外部JS(`gstatic.com`)自体が丸ごと不要になった
 （グラフ系6ページで唯一、外部JSを一切読まないページになった）。
+`houou_leagues.html` / `ouka_leagues.html`の型C静的化(2026-09-11)で
+`gstatic.com` / `docs.google.com` への依存はさらに2ページ分解消した。
 
-**ただし `www.gstatic.com` が消えるかどうかは、残るグラフ系5ページ
-（型B/C）の方針次第。** Google Charts は利用規約上ローカルホストが
+**ただし `www.gstatic.com` が消えるかどうかは、残るグラフ系3ページ
+（型B）の方針次第。** Google Charts は利用規約上ローカルホストが
 認められておらず、`gstatic.com` からの読み込みが前提になっている。
-この5ページで Charts を使い続ける場合、表を静的化して
+この3ページで Charts を使い続ける場合、表を静的化して
 `docs.google.com` を消しても `script-src` から `gstatic.com` は
-外せない。方針は型Bを#111、型Cを#127で判断する。
+外せない。方針は#111で判断する。
 
 **生成済みページの `<img src>` に含まれる外部ドメインは、選手のプロフィール
 画像7ドメインだけではない。** `jpml_test.html` は `img.youtube.com`（12件）と
@@ -293,7 +297,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **#7** | 残り8ページ（型B 3 / 型C 2 / ランキング 3）のGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
+| **#7** | 残り6ページ（型B 3 / ランキング 3）のGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
 | #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | Logモードで24時間運用し誤検知ゼロを確認、Managed RulesetをBlockへ切り替え済み(2026-09-11)。残件は切り替え後24時間のEvents確認のみ |
 | #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
@@ -303,23 +307,23 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(13ページ完了・残8)は5つの型に分かれる。
+対象の21ページ(15ページ完了・残6)は5つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
 | A. 表とフィルターのみ | 13(**完了10・残3**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、`saikyo_results`(完了)、ランキング3(残り) |
 | A'. 多列テーブル（表のみ） | 2(**完了2・残0**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109）。**完了** | `rh_results`(完了、12行・6列) / `rh_results_detail`(完了、321行・8列) |
 | B. 表＋ローソク足 | 3 | `Dashboard`(名前/期/リーグの`ControlWrapper`。ページごとに構成が違う) + `Table`(`page:'enable'`) + `?name`時のみ`CandlestickChart`。型A/A'と同じ手順では表を静的化できない（#111） | `houou_results` / `ouka_results` / `wrc_results` |
-| C. 縦棒グラフ | 2 | `ColumnChart`(積み上げ棒は全員共通、`?name`時に選手の折れ線1本を追加。静的化とのハイブリッドが成立しうる。#127) | `houou_leagues` / `ouka_leagues` |
+| C. 縦棒グラフ | 2(**完了2・残0**) | `ColumnChart`(積み上げ棒は全員共通、`?name`時に選手の折れ線1本を追加。静的SVG+折れ線だけクライアント描画のハイブリッドで移行（#127、**完了**）) | `houou_leagues`(完了) / `ouka_leagues`(完了) |
 | D. 横棒グラフ | 1(**完了1・残0**) | `BarChart`。URLパラメータに依存せずデータも34行で固定。グラフ系で唯一、静的SVG化が成立する（#128、**完了**） | `resource_efficiency`(完了) |
 
 ※ ランキング3ページは `league_ranking.js`（772行）を共用している。
 　 レーダーチャートの指標もこのファイルの集計ロジックを使う（新サイト）
 
-**型B/C/D（グラフ系6ページ）は、グラフ本体をどうするかの移行方針が
-未決定。** 表の静的化だけなら型A/A'と同じ手順で進められるが、
-Google Charts据え置き・ライブラリ変更・静的SVG化のどれを取るかで
-外部ドメイン依存の扱いが変わる。判断は型Bが#111、型Cが#127、型Dが#128。
+**型Bが残る唯一の移行方針未決定。** 表の静的化だけなら型A/A'と同じ手順で
+進められるが、Google Charts据え置き・ライブラリ変更・静的SVG化のどれを
+取るかで外部ドメイン依存の扱いが変わる。判断は#111。型C(#127)・型D(#128)
+は静的SVGハイブリッドで完了済み。
 
 **#7の期待値の修正（2026-09-11、Lighthouse実測を受けて）**
 
@@ -685,6 +689,71 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
   失敗した。最終的にデスクトップ用・モバイル用で寸法設計を変えた2枚の
   SVGを両方埋め込み、`@media (max-width: 480px)`で表示を切り替える形に
   した。詳細な経緯は`scripts/lib/chart.py`のモジュールdocstring参照
+
+**2026-09-11、型C(積み上げ棒+選手1名の折れ線)として`houou_leagues` /
+`ouka_leagues`を移行した。** 方針は(c)静的SVG+折れ線だけクライアント描画の
+ハイブリッド（ECharts等の導入は見送り）。着手前の事前調査で
+egressポリシーに阻まれ実データを見られない状態が一度あり、そのときの
+コード精読の結果（E列の正体・A1/A2補完・鳳凰位の扱い等）をissue #127の
+コメントに残してから再開した。実データで検証し直したところ、いくつか
+コードの精読だけでは分からなかった論点が見つかった。
+
+- **選手選択リストの出典が不明だった。** 旧HTMLの`<option>`一覧
+  （houou 695名・ouka 149名）は、鳳凰・桜花シートの参加経験者
+  （1,296名・248名）の単純なサブセットではなく、出典を特定できな
+  かった。検証の結果、**「プロ」シートのY列="Y"（公開対象）かつ
+  鳳凰最高/桜花最高列に値がある選手**を採用した（houou 716名・
+  ouka 178名）。この基準は`jpml_pros.html`が同じ列を使って
+  `houou_leagues.html?name=`のリンクを生成しているのと同じ条件で、
+  「URLパラメータの棚卸し」の内部リンク件数表（716/178件）と一致する。
+  ただし**「プロ」シート側のデータ不備で、実際に鳳凰位を複数回獲得した
+  前原雄大ら3名が候補から漏れる**ことが判明した。これはシート側の
+  データ品質の問題と判断し、生成スクリプト側では対処せず#127に記録するに
+  留めた（現状維持）
+  - 選定した候補選手のうち、鳳凰/桜花シートの実データに1件もヒットしない
+    選手（表記ゆれ等、houou 25名・ouka 14名）は生成時にスキップする
+    （選んでも折れ線が出ない項目を作らないため）
+- **最新の進行中の期は積み上げ棒からも除外する。** houou 43後・ouka 21期は
+  リーグ配属は決まっているが対局はこれからで、順位(F列)が全行空になる。
+  「F値が1件もない期は除外する」規則（`lib/leagues.py`の
+  `select_periods()`）で旧版と同じ見た目（houou52期・ouka20期）になる
+- **y軸の最大値は独自にキリの良い値を設定する。** 旧版の実際の描画を
+  実測（選手の折れ線の座標とその値を回帰）したところ、Google Chartsの
+  自動スケーリングは単純な「最大値を丸める」ではなく、0にも実データ最大値
+  にも揃わない独自のpaddingが乗っていた。忠実な再現は狙わず、その期の
+  最大積み上げ合計を基準に自前で丸めた値を使う
+- **鳳凰位はvalue=0として明示的に扱う。** 旧JSは鳳凰位を除外しておらず、
+  `0(上位人数) + null(順位) = 0`というJSの暗黙変換でたまたま最上部に
+  来ていた。桜花側の同様のプレースホルダ行（「桜花」、前期優勝者）は
+  `WHERE F > 0`で最初から除外されるため特別扱い不要
+- **凡例はページ送りJSをやめてflex-wrapにした。** 旧版はモバイル幅で
+  13色/5色の凡例が`◀ 1/4 ▶`のようなページ送りUIになっていたが、
+  `lib/chart.py`の`render_legend()`で単純なflex-wrapの凡例に変更し、
+  ページ送りJS自体をなくした。色見本は`style`属性ではなく`<svg><rect
+  fill="...">`にしている（#9のCSP前提。style属性はインラインスタイルとして
+  弾かれうるが、SVGのfill属性はプレゼンテーション属性で対象外）
+- `scripts/lib/chart.py`に`stacked_column_chart()`（積み上げ棒+折れ線の
+  SVG生成）と`render_legend()`を追加。型D同様、デスクトップ用・モバイル用の
+  2枚のSVGを生成し`@media (max-width: 480px)`で切り替える
+- `scripts/lib/leagues.py`を新規作成。houou/ouka で異なるのは期の形
+  （年+前後 / 期のみ）とzero_leagues（鳳凰位相当）の有無だけなので、
+  集計処理（`select_periods` / `count_leagues` / `upper_counts` /
+  `build_player_series`）を共通化した
+- `leagues.js`（houou_leagues.html / ouka_leagues.html共通）を新規作成。
+  `?name=`が無ければ何もしない（焼き込み済みの既定選手のまま）。あれば
+  `houou_leagues_data.json` / `ouka_leagues_data.json`（選手ごとの
+  折れ線データ、{名前: [[期のindex, value], ...]}）をfetchし、
+  `<polyline>`のpoints属性と凡例ラベルを差し替える。SVG側は
+  `data-plot-left`等のdata属性でプロット領域の座標・y軸最大値・期数を
+  持っており、JSはそこから再計算する
+  - JSONは別ファイルに分離した（hououの実データがgzip後36KB程度あり、
+    `<script type="application/json">`でHTML本体に埋め込むには大きい
+    ため）
+  - 旧版の`onchange="javascript:location.href = this.value"`を廃止し、
+    `leagues.js`側で`addEventListener('change', ...)`にした（#9の
+    インラインハンドラ排除が2ページ分進んだ）
+- 旧版の`curveType: 'function'`（スプライン）は再現せず、`<polyline>`の
+  直線でつないでいる。実機比較で見た目の差は気にならない範囲だった
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
