@@ -208,6 +208,10 @@ issue71件（#1〜#100台の大半）は、2026-09-11に一括追加しDoneス�
   ワークフローではないため、`gh issue` 以外の経路（GitHub MCP、
   `gh api`、ブラウザ）で操作した場合も反映されない。作業の最後に
   `python3 scripts/build_issues_snapshot.py` を手動実行すること。
+  **再生成しただけではリモートに反映されない。**
+  生成物は `docs/` 配下のファイルなので、`git add docs/issues-snapshot.md
+  docs/issues-open.md` → コミット → `git push origin cloudflare` まで
+  行って初めて反映される。フックによる自動再生成の場合も同じ。
   念のため正確な状態は `gh issue list` で確認すること（#140、#143）
 
 ---
