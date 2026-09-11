@@ -10,6 +10,20 @@
 /assets/vendor/*
   Cache-Control: public, max-age=2592000
 
+# houou/ouka_leagues_data.jsonはGitHub Actionsが同じURLのまま再生成するため
+# ハッシュ付きファイル名前提のimmutableは使えない(#154)。「結果発表を見に
+# 来る→まだ更新されていない→後日更新される→再訪問時にキャッシュが残っていて
+# 見えない」を避けたいため、1日のmax-ageにして連続訪問のみ救う(選手を
+# 切り替えるたびの再取得を防ぐという当初の目的は同一訪問中のセッションで
+# 足りるため1日で十分)。期限切れ後もCloudflareが自動付与するETagで条件付き
+# GET(304)による再検証が働くため、内容が変わっていなければ104KB/12KBの
+# 再ダウンロードは発生しない
+/houou_leagues_data.json
+  Cache-Control: public, max-age=86400
+
+/ouka_leagues_data.json
+  Cache-Control: public, max-age=86400
+
 /*
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
