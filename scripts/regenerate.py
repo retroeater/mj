@@ -34,6 +34,12 @@ def pages_for_changes(changed, pages):
 
     - scripts/lib/ 配下(共通ライブラリ)が変わったら全ページ
     - scripts/generate_<page>.py または <page>.js が変わったらそのページ
+
+    table.js(型Aの共通JS、#7)は regenerate-page.yml の '*.js' パスフィルタに
+    引っかかりワークフロー自体は起動するが、ここではどの<page>.jsにも
+    一致しないため対象0件になる。table.jsはHTMLに焼き込まれない(ページ側が
+    <script src="table.js">で読み込むだけ)ため、これは意図した動作であり
+    再生成の対象に含める必要はない。
     """
     targets = set()
     for path in changed:

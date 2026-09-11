@@ -17,6 +17,7 @@
 <link rel="stylesheet" media="screen" href="style.css">
 <!-- JavaScripts -->
 <script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script defer src="table.js"></script>
 <script defer src="resource_logs.js"></script>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "573520ec707f4a59b7b5cb06ef67cad8"}'></script>
@@ -56,7 +57,7 @@
 
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
 
-<table id="logs_table" class="mj-table mj-table-2col">
+<table id="logs_table" class="mj-table mj-table-2col" data-page-size="100" data-name-mode="exact" data-filter-param="tag">
 	<caption class="visually-hidden">日本プロ麻雀連盟の麻雀プロが訪れた飲食店の一覧。Xポストに基づく。</caption>
 	<thead>
 		<tr><th scope="col">写真</th><th scope="col">概要</th></tr>

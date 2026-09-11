@@ -17,7 +17,7 @@
 <link rel="stylesheet" media="screen" href="style.css">
 <!-- JavaScripts -->
 <script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script defer src="jpml_test.js"></script>
+<script defer src="table.js"></script>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "573520ec707f4a59b7b5cb06ef67cad8"}'></script>
 </head>
@@ -33,7 +33,7 @@
 
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
 
-<table id="test_table" class="mj-table mj-table-2col">
+<table id="test_table" class="mj-table mj-table-2col" data-page-size="50" data-filter-param="name">
 	<caption class="visually-hidden">日本プロ麻雀連盟のプロテストに関する記事・動画一覧。</caption>
 	<thead>
 		<tr><th scope="col">記事</th><th scope="col">概要</th></tr>
