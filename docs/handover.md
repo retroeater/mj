@@ -610,6 +610,9 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
   `robots.txt` は `Sitemap:` の宣言のみにしている
 - AI学習用クローラー（GPTBot/ClaudeBot等）はブロック、検索エンジンとAIの検索・回答は許可
 - Tiered Cache は**効果がない**（Workersの静的アセットにはオリジンサーバーがないため）
+- **Web Analytics のビーコンは `/cdn-cgi/rum` への POST。**
+  HTTPメソッドやパスで遮断するルールを書くときは `/cdn-cgi/` を
+  除外すること（#110）
 
 ### Cloudflare Pro でできること・できないこと
 

@@ -40,6 +40,42 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   設定してよい
 - 設定はダッシュボード操作（Security → WAF → Custom rules）
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+## 訂正: 「POSTを受ける口が存在しない」は誤り
+
+起票時の本文で「このサイトは完全な静的配信で `<form>` が27ページ中0個。
+POST を受ける口が存在しないため、GET / HEAD 以外を遮断しても誤検知が
+起きる余地がない」と書いたが、これは誤り。
+
+**Cloudflare Web Analytics のビーコンが POST を使う。**
+`/cdn-cgi/rum` はデータ送信用に POST のみを受け付け、他のメソッドには
+405 を返す（OPTIONS は CORS 用に許可）。ryoei.pro はゾーン配下で
+自動注入しているため送信先は自ドメインの `/cdn-cgi/rum` で、
+カスタムルールの対象範囲に入る。
+
+これは #76 のコメント（2026-09-09）で既に警告していた内容だった。
+
+## 設定する式
+
+```
+(not http.request.method in {"GET" "HEAD"}) and (not starts_with(http.request.uri.path, "/cdn-cgi/"))
+```
+
+アクション: Block
+
+`/cdn-cgi/rum` だけでなく `/cdn-cgi/` 配下を丸ごと除外する。
+Cloudflare が使う内部パスが他にもあるため。
+
+## 設定後の確認
+
+ブラウザで ryoei.pro を開き、開発者ツールの Network で
+`/cdn-cgi/rum` への POST が 403 になっていないことを確認する。
+あわせて翌日に Web Analytics のページビューが前日比で落ちて
+いないかを見る。
+
 ---
 
 ## #109 docs間で#7の型分類が食い違っている
