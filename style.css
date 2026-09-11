@@ -18,6 +18,15 @@ table,
 	font-variant-numeric: tabular-nums; /* 数字を等幅にして桁を揃える */
 }
 
+/* navbar.js が描画する共通ナビのタップ領域確保(44x44px)。
+   index.html は navbar.js を使わず style.css も読み込まないため対象外。 */
+.navbar .nav-link,
+.navbar .dropdown-item {
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+}
+
 .mj-filter {
 	margin-left: 0px;
 }
@@ -91,6 +100,7 @@ th {
 .mj-filter-input {
 	width: 100px;
 	max-width: 100%;
+	min-height: 44px; /* タップ領域確保(44x44px) */
 }
 
 /* ==== .mj-table 系(型A: 表とフィルターのみのページ)共通スタイル ====
@@ -220,8 +230,11 @@ body:has(.mj-table) {
    見た目は元の見出しと変わらないよう、ボタンらしい装飾を消す */
 #pros_table thead th button.mj-sort {
 	all: unset;
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
+	min-height: 44px; /* タップ領域確保(44x44px)。列幅は56px固定のため高さのみで確保する */
 	cursor: pointer;
 	text-align: center;
 }
@@ -290,7 +303,9 @@ body:has(.mj-table) {
 /* ==== #titles_table 固有(タイトル戦一覧) ====
    行高: 写真80px + 上下padding 4px×2 = 88px。.mj-table既定の56pxを上書きする。
    概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
-   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。
+   タップ領域確保(44px化)後もこの値は変わらない。行内のリンクや
+   ボタンではなくpager/sort/filter/navbarが対象で、いずれもtbody外のため。 */
 #titles_table tbody tr {
 	contain-intrinsic-size: auto 88px;
 }
@@ -299,7 +314,9 @@ body:has(.mj-table) {
    行高: 記事サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
    .mj-table既定の56pxを上書きする。
    概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
-   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。
+   タップ領域確保(44px化)後もこの値は変わらない。行内のリンクや
+   ボタンではなくpager/sort/filter/navbarが対象で、いずれもtbody外のため。 */
 #test_table tbody tr {
 	contain-intrinsic-size: auto 98px;
 }
@@ -308,7 +325,9 @@ body:has(.mj-table) {
    行高: 写真90px(160×90) + 上下padding 4px×2 = 98px。
    .mj-table既定の56pxを上書きする。
    概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
-   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。
+   タップ領域確保(44px化)後もこの値は変わらない。行内のリンクや
+   ボタンではなくpager/sort/filter/navbarが対象で、いずれもtbody外のため。 */
 #logs_table tbody tr {
 	contain-intrinsic-size: auto 98px;
 }
@@ -317,7 +336,9 @@ body:has(.mj-table) {
    行高: 動画サムネイル90px(160×90) + 上下padding 4px×2 = 98px。
    .mj-table既定の56pxを上書きする。
    概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
-   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。
+   タップ領域確保(44px化)後もこの値は変わらない。行内のリンクや
+   ボタンではなくpager/sort/filter/navbarが対象で、いずれもtbody外のため。 */
 #live_table tbody tr {
 	contain-intrinsic-size: auto 98px;
 }
@@ -345,6 +366,8 @@ body:has(.mj-table) {
 	border-radius: 4px;
 	background-color: #ffffff;
 	cursor: pointer;
+	min-height: 44px; /* タップ領域確保(44x44px) */
+	min-width: 44px;
 }
 
 .mj-pager-button:disabled {

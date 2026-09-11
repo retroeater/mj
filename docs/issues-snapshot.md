@@ -10,9 +10,69 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-生成日時: 2026-09-10
+生成日時: 2026-09-11
 
-件数: 103件（open/closed含む）。番号降順。
+件数: 107件（open/closed含む）。番号降順。
+
+---
+
+## #107 新サイトのUI方針を決める（カードUI・段階的開示・ダークモード）
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 状況: 保留, 分野: UI/UX, 対象: index
+
+### 本文
+
+- #101（新サイトの第一弾＝トップページ）の設計時に決める項目
+- カードUIパターン: 現行の本質は表形式だが、選手個別ページの構想とは相性がよい
+- モバイルファースト設計: 上記の実測結果を見てから決める
+- 段階的開示: #24（五十音タブ）がまさにこれ。INP 458ms の根本解決策として既に方針決定済み。新サイトで実装する
+- ダークモード: 現行CSSは色がベタ書きのため変数化から必要。新サイトで最初から入れるほうが安い
+- CSS text-box（text-box-trim）: タイポグラフィの余白調整。デザインを詰める段階で検討する
+- @starting-style / transition-behavior: allow-discrete / linear() / Web Animations API: アニメーションを入れるなら、その時点で併せて検討する
+
+---
+
+## #106 訪問者のデバイス比率を実測する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+- モバイルファースト設計を採るかどうかの判断材料。現在は推測で話している
+- Cloudflare の HTTP Traffic 分析（Analytics → Traffic）で Source device type の内訳が見られる（Pro機能）。Freeでは出ない
+- あわせて Search Console 側のデバイス別データも確認する
+- 結果は #101（新サイトのトップページ）の設計方針に反映する
+
+---
+
+## #105 ページの先読み（Speculation Rules API）の要否を判断する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 状況: 保留, 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+- <link rel="prefetch"> は、この構成では有害な可能性がある。移行済みページは resource_logs 1.77MB / video_live 1.55MB / jpml_titles 782KB で、押されるとは限らないリンク先を先読みすると転送量だけが膨らむ。実測のページビューは1日114、訪問75（2026年9月9日、約10時間分）
+- <link rel="prerender"> はChrome独自かつ非推奨。Speculation Rules API に置き換わっている
+- Speculation Rules API は Baseline ではなく、広く使われているブラウザの一部で動かない。CSP を入れる場合は script-src での許可も必要（#9と関連）
+- やるなら eagerness を絞り、ホバー時のみ先読みする形になる
+- #7 の完了後、ページ構成が固まって Lighthouse の実測が出てから判断する
+
+---
+
+## #104 Bootstrap JSの依存を棚卸しし、Popover APIへの置換を検討する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 状況: 保留, 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+- ナビのドロップダウンが bootstrap.bundle.min.js に依存している。Popover API（ネイティブ）に置き換えられれば、JSを1本減らせる可能性がある
+- 前提として、bootstrap.bundle.min.js が他のどの機能で使われているかの棚卸しが必要。ドロップダウンだけなら外せる
+- #9（CSP）とは相乗効果がある（インラインJSと外部JSが減る）
+- ただし「現行サイトに作り込みすぎない」方針とは緊張関係にある。#7 が終わってから、投資に見合うかを判断する
 
 ---
 
