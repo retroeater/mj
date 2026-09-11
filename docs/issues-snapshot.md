@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 03:11 JST
+生成日時: 2026-09-12 03:18 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -127,7 +127,7 @@ CLAUDE.mdに補足を追記したため対応完了。
   `/assets/vendor/*` が30日、`/*` がセキュリティヘッダのみ
 - #123（HTMLのエッジキャッシュ検討）と方針を揃えられるか確認する
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -174,6 +174,50 @@ CLAUDE.mdに補足を追記したため対応完了。
 `/assets/vendor/*`（30日）が影響を受けていないことを確認した。
 
 コミット: 7005ea0
+
+**retroeater** (2026-09-11):
+
+## エッジキャッシュの実測ベースライン記録（2026-09-12）
+
+`_headers` の `max-age=86400` はブラウザ側の値で、Cloudflareのエッジ
+キャッシュとは別軸で効く。デプロイ（=GitHub Actionsによる再生成・push）が
+エッジのキャッシュエントリを無効化するかどうかは未確認だったため、
+まずは現時点のETag/cf-cache-statusを記録する。
+
+```
+$ curl -sI https://ryoei.pro/houou_leagues_data.json
+date: Fri, 11 Sep 2026 18:17:12 GMT
+cf-cache-status: HIT
+cache-control: public, max-age=86400
+etag: "0e3790548971b2728b8d050002a314bf"
+
+$ curl -sI https://ryoei.pro/ouka_leagues_data.json
+date: Fri, 11 Sep 2026 18:17:13 GMT
+cf-cache-status: MISS
+cache-control: public, max-age=86400
+etag: "6d98fd5a23a9072a8e7979f8d90d05bf"
+```
+
+### 次回確認手順（次回のデータ更新後に実施）
+
+鳳凰・女流桜花のどちらかでスプレッドシートが更新され、GitHub Actionsに
+よる再生成・デプロイが走った後、同じ `curl -sI` を再実行してETagを比較する。
+
+- **デプロイ直後にETagが変わっていれば** → デプロイがエッジキャッシュを
+  置き換えている。陳腐化は`_headers`の1日（ブラウザ側）のみで、追加対応は
+  不要。
+- **ETagが古いまま最大1日残るようであれば** → エッジ側のTTLが独立して
+  効いている。この場合、max-ageを下げるか、デプロイ時にキャッシュ
+  パージ（Cloudflare API経由）を入れるかを検討する必要がある。その場では
+  対処せず、あらためて報告する。
+
+### 注意
+
+鳳凰戦は半年に2回、女流桜花は年2回の更新頻度のため、次回更新まで
+このissueは待ち状態。次回の`houou_leagues_data.json`または
+`ouka_leagues_data.json`の再生成コミット（`chore: regenerate
+houou_leagues.html via GitHub Actions`等）を見かけたら、このissueに
+戻って上記手順を実施すること。
 
 ---
 
