@@ -57,6 +57,12 @@ Cloudflare への移行を進める中で改善点を洗い出し、50件以上�
 `wrangler.jsonc` の `assets.directory` がリポジトリ全体（`./`）を指すため、
 公開したくないファイルは `.assetsignore` に列挙している。
 
+**リポジトリ直下に新しいディレクトリやファイルを追加したときは、
+公開してよいものか確認し、公開しないものは `.assetsignore` に
+追加すること。** `docs/` は2026-09-12まで除外されておらず、
+`docs/*.md`（WAFカスタムルールの式やDNS設定値等を含む）が本番URLから
+直接200で取得できる状態だった（#133）。
+
 `html_handling` は `"none"` を明示している（#89）。
 既定の `auto-trailing-slash` だと `/file.html` が `/file` へ
 307リダイレクトされ、og:url・sitemap がすべてリダイレクト先を
@@ -230,8 +236,11 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 | 画像7ドメイン | 選手のプロフィール画像 |
 
 **#7（Charts依存の解消）が終わると2つ減る。** `saikyo_mens.html`の移行(2026-09-11)で
-`abs.twimg.com`（Xアカウントなし選手の既定アイコン）への依存はすでに解消済み
-（フォールバックを`img/avatar.svg`に差し替えた）。`resource_efficiency.html`
+`abs.twimg.com`（Xアカウントなし選手の既定アイコン）への**フォールバックの**
+依存は解消済み（フォールバックを`img/avatar.svg`に差し替えた）。**ただし
+データ側には残っている。** スプレッドシートの画像URLとして
+`abs.twimg.com/sticky/default_profile_images/...`が`jpml_pros.html`に11件、
+`saikyo_results.html`に2件、計13件焼き込み済み（#135）。`resource_efficiency.html`
 の静的SVG化(2026-09-11)では、外部JS(`gstatic.com`)自体が丸ごと不要になった
 （グラフ系6ページで唯一、外部JSを一切読まないページになった）。
 
