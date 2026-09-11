@@ -485,6 +485,19 @@ body:has(.mj-table) {
 	contain-intrinsic-size: auto 95px;
 }
 
+/* ==== #saikyo_results_table 固有(麻雀最強戦 成績) ====
+   行高: 動画サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。#wayhome_table等と同じ値(画像
+   サイズが同じ160×90のため)。概要列は最大5行(対局日・年度・大会名/
+   ステージ/卓・選手名・順位結果)まで折り返すが、375px幅で実測した
+   ところ画像列の90pxが支配的で行高は変わらなかった(中央値・90
+   パーセンタイル・最大値がいずれも98pxで一致)。この値は初回描画前の
+   概算で、contain-intrinsic-sizeのautoにより描画後は実測値に
+   置き換わる。 */
+#saikyo_results_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
 /* ==== .mj-pager(ページ送り) ====
    型Aの残り11ページで使い回すため、ページ固有のIDに紐づけない。 */
 .mj-pager {

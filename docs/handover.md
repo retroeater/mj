@@ -99,23 +99,24 @@ HTMLは27ページ。大きく3系統に分かれる。
 |---|---|---|
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
 | ビルド時生成（型A・15列） | 1 | `jpml_pros.html`。独自の`generate_jpml_pros.py`のまま |
-| ビルド時生成（型A・2列/3列） | 9 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列)。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
+| ビルド時生成（型A・2列/3列） | 10 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列) / `saikyo_results.html`。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
 | ビルド時生成（型A'・多列テキスト） | 2 | `rh_results.html` / `rh_results_detail.html`。画像列を持たないため`.mj-table-auto`を使う（#7、完了） |
 | ビルド時生成（型D・静的SVG） | 1 | `resource_efficiency.html`。表を持たないため`render_content()`を使う。外部JS・外部ドメインへの依存が一切ない（#7/#128、完了） |
-| Google Charts依存 | **9** | ブラウザから直接スプレッドシートを読む。#7の対象。型B3・型C2・型A4 |
+| Google Charts依存 | **8** | ブラウザから直接スプレッドシートを読む。#7の対象。型B3・型C2・ランキング系A3 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html`と型A/A'/Dの12ページ(`jpml_titles` / `jpml_test` /
+- `jpml_pros.html`と型A/A'/Dの13ページ(`jpml_titles` / `jpml_test` /
   `resource_logs` / `video_live` / `video_wayhome` / `video_en` / `rh_paifu` /
-  `saikyo_mens` / `video_mtsuku` / `rh_results` / `rh_results_detail` /
-  `resource_efficiency`) … それぞれ`scripts/generate_<ページ名>.py`が
+  `saikyo_mens` / `video_mtsuku` / `saikyo_results` / `rh_results` /
+  `rh_results_detail` / `resource_efficiency`) … それぞれ
+  `scripts/generate_<ページ名>.py`が
   ビルド時に取得してHTMLに焼き込む。`jpml_pros`以外は`scripts/lib/page.py`
   の共通処理を使う（#7）
-- 残り9ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+- 残り8ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 **移行済みページは、スプレッドシートを直しただけでは反映されない。**
 `regenerate-page.yml` はスクリプトと対応する`.js`の変更をpushで検知する
@@ -210,7 +211,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（残り9ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（残り8ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -260,11 +261,11 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(12ページ完了・残9)は5つの型に分かれる。
+対象の21ページ(13ページ完了・残8)は5つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
-| A. 表とフィルターのみ | 13(**完了9・残4**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、ランキング3、`saikyo_results` |
+| A. 表とフィルターのみ | 13(**完了10・残3**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、`saikyo_results`(完了)、ランキング3(残り) |
 | A'. 多列テーブル（表のみ） | 2(**完了2・残0**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109）。**完了** | `rh_results`(完了、12行・6列) / `rh_results_detail`(完了、321行・8列) |
 | B. 表＋ローソク足 | 3 | `Dashboard`(名前/期/リーグの`ControlWrapper`。ページごとに構成が違う) + `Table`(`page:'enable'`) + `?name`時のみ`CandlestickChart`。型A/A'と同じ手順では表を静的化できない（#111） | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart`(積み上げ棒は全員共通、`?name`時に選手の折れ線1本を追加。静的化とのハイブリッドが成立しうる。#127) | `houou_leagues` / `ouka_leagues` |
@@ -314,6 +315,9 @@ Google Charts据え置き・ライブラリ変更・静的SVG化のどれを取�
   `ColumnChart`への集計後は数十行、ランキング系3ページは
   `DEFAULT_RANK_LIMIT`により実際のDOM規模リスクは低い。詳細は
   `docs/lighthouse-baseline.md` の行数調査表を参照
+  （**`saikyo_results`は2026-09-11に移行済み。`page_size=100`の
+  `.mj-pager`を使うため、危惧していた「2,560行を無条件で全件描画」には
+  なっていない。実測値は`docs/lighthouse-baseline.md`の移行結果を参照**）
 
 未移行ページ側の参考値も記録しておく。
 
@@ -388,12 +392,10 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 （style.cssの`.mj-table-2col`）。`.mj-table`本体は変えず修飾クラスとして
 追加したため、15列の`jpml_pros`（`table-layout: fixed` / `width: 934px`
 のまま）には影響しない。
-移行済みの8ページ（`jpml_titles` / `jpml_test` / `video_live` /
+移行済みの9ページ（`jpml_titles` / `jpml_test` / `video_live` /
 `resource_logs` / `video_wayhome` / `video_en` / `rh_paifu` /
-`saikyo_mens`）に適用済み。`video_mtsuku`のみ3列のため、新設した
-`.mj-table-3col`（画像列168px固定＋残り2列を折り返し）を使う。
-**未移行の`saikyo_results`**も2列構成なので、#7で移行するときに
-`.mj-table-2col`を付けること。
+`saikyo_mens` / `saikyo_results`）に適用済み。`video_mtsuku`のみ3列のため、
+新設した`.mj-table-3col`（画像列168px固定＋残り2列を折り返し）を使う。
 
 ---
 
@@ -644,7 +646,7 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
-型Aの残り4ページのうち、このランキング3ページは他と性質が違うため#7での
+型Aの残り3ページ（すべてランキング系）は他と性質が違うため#7での
 移行難度が高い。
 
 - 共用している`league_ranking.js`（772行）は表示ロジックではなく
@@ -741,7 +743,7 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
 | `video_live.html` | `name` | 319 | `jpml_pros`（**移行済み**） |
 | `ouka_results.html` | `name` | 178 | `jpml_pros` |
 | `ouka_leagues.html` | `name` | 178 | `jpml_pros` |
-| `saikyo_results.html` | `tag` | 156 | `jpml_pros` |
+| `saikyo_results.html` | `tag` | 156 | `jpml_pros`（**移行済み**） |
 | `resource_logs.html` | `name` / `tag` | 1 + 16 | ページ内にハードコード |
 
 **内部リンクが見つからないもの**
@@ -753,7 +755,7 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
 | `jpml_test` | `name` |
 | `houou_results` / `ouka_results` | `class` |
 | `league_ranking`（ランキング3ページ） | `division` / `name` |
-| `saikyo_results` | `name` |
+| `saikyo_results` | `name`（**移行済み**。バグ修正あり、下記参照） |
 | `saikyo_mens` | `name` / `tag`（**移行済み**） |
 | `rh_paifu` | `name`（**移行済み**） |
 | `video_en` / `video_mtsuku` / `video_wayhome` | `name`（**移行済み**） |
@@ -762,6 +764,17 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
 内部リンクがないことは「不要」を意味しない。Search Consoleのデータで
 「検索結果に出た22URLのうち14件が`?name=`付き」と分かっているが（SEO節）、
 どのページのものかは未確認。消すと検索流入が全件表示に落ちる恐れがある。
+
+**`saikyo_results.html`の`?name=`にはバグがあった（2026-09-11、実機確認・移行時に修正）。**
+旧JS（`saikyo_results.js`）はコメントで「A 対局日 / H 名前」と列の意味を
+書きながら、実際のクエリは `AND A = "..."` で対局日（A列）に対する完全一致に
+なっており、名前（H列）は一度も参照されていなかった。gh-pages版で実機確認
+（実在の選手名を指定すると0件、実在の対局日を指定するとヒット）して再現も
+取った。**削除すると検索流入がどうなるか判断できない**ため、パラメータ自体は
+残しつつ、コメントが示す「本来意図されていたはずの挙動」（H列＝名前の完全
+一致）に修正して移行した（`scripts/generate_saikyo_results.py`）。バグの
+再現はしていない。#122（Search Consoleの`?name=`付きURL調査）に関連する
+可能性があるため、#7にコメントで記録した。
 
 削除の判断は、Search Consoleで`?name=`付きURLの内訳を確認してから行う。
 それまでは、各ページを#7で移行するタイミングで個別に決める。
