@@ -78,7 +78,16 @@ img.twitter {
 img.x {
 	width: 80px;
 	height: 80px;
-	object-fit: cover;	
+	object-fit: cover;
+}
+
+/* rh_paifu.html(良栄の牌譜)の動画サムネイル用。#7で移行するまで
+   定義漏れで、寸法未指定のまま(自然サイズ)表示されていた。他の動画
+   サムネイル(img.rectangle)と同じ16:9・160×90にそろえる。 */
+img.videos {
+	width: 160px;
+	height: 90px;
+	object-fit: cover;
 }
 
 input {
@@ -216,6 +225,27 @@ body:has(.mj-table) {
 	overflow-wrap: anywhere;
 }
 
+/* ==== .mj-table-3col(3列テーブル: 画像 + 概要 + 選手) ====
+   画像列を168px固定にし、残り2列(概要・選手)に折り返しを許可する。
+   幅の配分自体は table-layout: fixed の既定(残り幅を均等割り)に任せる。
+   型Aの3列ページ(video_mtsuku)で使う(#7)。.mj-table-2colとは排他
+   (同じテーブルに両方は付けない)。 */
+.mj-table-3col {
+	table-layout: fixed;
+	width: 100%;
+}
+
+.mj-table-3col thead th:nth-child(1),
+.mj-table-3col td:nth-child(1) {
+	width: 168px;
+}
+
+.mj-table-3col td:nth-child(2),
+.mj-table-3col td:nth-child(3) {
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
 /* ==== #pros_table 固有(15列の選手データベース) ====
    列幅を固定するため table-layout: fixed を使う。
    幅の内訳: 「名前」150px + それ以外14列 × 56px = 934px
@@ -340,6 +370,52 @@ body:has(.mj-table) {
    タップ領域確保(44px化)後もこの値は変わらない。行内のリンクや
    ボタンではなくpager/sort/filter/navbarが対象で、いずれもtbody外のため。 */
 #live_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
+/* ==== #wayhome_table 固有(帰り道) ====
+   行高: 動画サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。
+   概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+#wayhome_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
+/* ==== #en_table 固有(English動画) ====
+   行高: 動画サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。
+   概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+#en_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
+/* ==== #paifu_table 固有(良栄の牌譜) ====
+   行高: 動画サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。
+   概要列が折り返すため実際の行高は可変。この値は初回描画前の概算で、
+   contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+#paifu_table tbody tr {
+	contain-intrinsic-size: auto 98px;
+}
+
+/* ==== #mens_table 固有(麻雀最強戦 読者アンケート) ====
+   行高: X画像80px(img.x) + 上下padding 4px×2 = 88px。
+   .mj-table既定の56pxを上書きする。#titles_tableと同じ値(画像サイズが
+   同じ80×80のため)。概要列が折り返すため実際の行高は可変。この値は
+   初回描画前の概算で、contain-intrinsic-sizeのautoにより描画後は
+   実測値に置き換わる。 */
+#mens_table tbody tr {
+	contain-intrinsic-size: auto 88px;
+}
+
+/* ==== #mtsuku_table 固有(Mつく) ====
+   行高: 動画サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
+   .mj-table既定の56pxを上書きする。3列(動画/概要/選手)のうち
+   概要・選手列が折り返すため実際の行高は可変。この値は初回描画前の
+   概算で、contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+#mtsuku_table tbody tr {
 	contain-intrinsic-size: auto 98px;
 }
 

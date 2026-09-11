@@ -93,20 +93,21 @@ HTMLは27ページ。大きく3系統に分かれる。
 | 系統 | ページ数 | 状態 |
 |---|---|---|
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
-| `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` | 5 | **ビルド時にPythonで静的生成**。Google Charts依存を解消済み |
-| Google Charts依存 | **17** | ブラウザから直接スプレッドシートを読む。#7の対象 |
+| ビルド時生成（型A・15列） | 1 | `jpml_pros.html`。独自の`generate_jpml_pros.py`のまま |
+| ビルド時生成（型A・2列/3列） | 9 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列)。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
+| Google Charts依存 | **12** | ブラウザから直接スプレッドシートを読む。#7の対象 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html` / `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` /
-  `video_live.html` … それぞれ `scripts/generate_jpml_pros.py` /
-  `scripts/generate_jpml_titles.py` / `scripts/generate_jpml_test.py` /
-  `scripts/generate_resource_logs.py` / `scripts/generate_video_live.py` が
-  ビルド時に取得してHTMLに焼き込む
-- 残り17ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+- `jpml_pros.html`と型A・2列/3列の9ページ(`jpml_titles` / `jpml_test` /
+  `resource_logs` / `video_live` / `video_wayhome` / `video_en` / `rh_paifu` /
+  `saikyo_mens` / `video_mtsuku`) … それぞれ`scripts/generate_<ページ名>.py`
+  がビルド時に取得してHTMLに焼き込む。`jpml_pros`以外は`scripts/lib/page.py`
+  の共通処理を使う（#7）
+- 残り12ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 **移行済みページは、スプレッドシートを直しただけでは反映されない。**
 `regenerate-page.yml` はスクリプトと対応する`.js`の変更をpushで検知する
@@ -201,11 +202,13 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（17ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（残り12ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
-**#7（Charts依存の解消）が終わると2つ減る。**
+**#7（Charts依存の解消）が終わると2つ減る。** `saikyo_mens.html`の移行(2026-09-11)で
+`abs.twimg.com`（Xアカウントなし選手の既定アイコン）への依存はすでに解消済み
+（フォールバックを`img/avatar.svg`に差し替えた）。
 
 **生成済みページの `<img src>` に含まれる外部ドメインは、選手のプロフィール
 画像7ドメインだけではない。** `jpml_test.html` は `img.youtube.com`（12件）と
@@ -240,11 +243,11 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(4ページ完了・残17)は4つの型に分かれる。
+対象の21ページ(9ページ完了・残12)は4つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
-| A. 表とフィルターのみ | 15(**完了4・残11**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、ランキング3、動画3、牌譜、最強戦2、良栄の成績2 |
+| A. 表とフィルターのみ | 15(**完了9・残6**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、ランキング3、`saikyo_results`、良栄の成績2(`rh_results`/`rh_results_detail`) |
 | B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
 | D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |
@@ -309,13 +312,17 @@ Python側のライブラリ化・JSの共有ファイル化はまだしていな
 着手前に判断する）。
 #6（ワークフローの汎用化）は完了済みなので、次ページを追加する準備は整っている。
 
+**→ 2026-09-11、この判断を実行した。** `scripts/lib/page.py` + `table.js`
+に共通化したうえで5〜9ページ目を移行した。詳細は「#7（型Aの静的化）で
+用意した共通部品」の節を参照。
+
 **テーブル描画ライブラリの選定（#95）は #7 の前提から外した。**
-#7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り17ページを
+#7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り12ページを
 揃える。AG Grid 等の検討は新サイトのスタック決定（#21）と
 併せて行う。
 
 **列ヘッダによるソートは `jpml_pros.html` 専用の機能とする。**
-型Aの他11ページには既定で載せず、必要と判断したページにだけ個別に
+型Aの他ページには既定で載せず、必要と判断したページにだけ個別に
 追加する方針にした（基本なし、明示的に指定があったときだけ追加）。
 Google Charts版のTable chartは既定でソート可能だったため、これは
 意図的な機能削減にあたる。既定の並びがシート順（日付の新しい順）で、
@@ -325,8 +332,10 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 同様にソート機能を持たない。
 
 **`jpml_titles` / `jpml_test` / `resource_logs` / `video_live` の比較で
-見えた、共通化前に揃えるべき差分。** 5ページ目に着手する前に、この点を
-どう扱うか判断する必要がある。
+見えた、共通化前に揃えるべき差分。** 2026-09-11に`scripts/lib/page.py` /
+`table.js`へ共通化する際、以下はすべて`TableConfig`の設定項目
+（`name_mode` / `filter_param` / 画像サイズ・フォールバックの引数）として
+吸収した。詳細は「#7（型Aの静的化）で用意した共通部品」の節を参照。
 
 - `?name=` の意味がページによって違う: `jpml_titles` / `resource_logs`
   では入力欄を持たない完全一致フィルター（旧WHERE句相当）、`jpml_test` /
@@ -350,10 +359,12 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 （style.cssの`.mj-table-2col`）。`.mj-table`本体は変えず修飾クラスとして
 追加したため、15列の`jpml_pros`（`table-layout: fixed` / `width: 934px`
 のまま）には影響しない。
-移行済みの4ページ（`jpml_titles` / `jpml_test` / `video_live` /
-`resource_logs`）に適用済み。**未移行の対象ページ**（`saikyo_results` /
-`video_wayhome` / `video_mtsuku` / `video_en` / `rh_paifu`）も同じ
-2列構成なので、#7で移行するときに同じクラスを付けること。
+移行済みの8ページ（`jpml_titles` / `jpml_test` / `video_live` /
+`resource_logs` / `video_wayhome` / `video_en` / `rh_paifu` /
+`saikyo_mens`）に適用済み。`video_mtsuku`のみ3列のため、新設した
+`.mj-table-3col`（画像列168px固定＋残り2列を折り返し）を使う。
+**未移行の`saikyo_results`**も2列構成なので、#7で移行するときに
+`.mj-table-2col`を付けること。
 
 ---
 
@@ -398,6 +409,62 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 `video_live.js`は`jpml_test.js`とテーブルidが違うだけでほぼ同一で、
 型Aの実装が収束してきた最初の例。
 
+**2026-09-11、上記4ページを`scripts/lib/page.py` + `table.js`に共通化し、
+続けて5ページ（`video_wayhome` / `video_en` / `rh_paifu` / `saikyo_mens` /
+`video_mtsuku`）を移行した。** 残りページを移行する人向けに仕組みを記録する。
+
+**`scripts/lib/page.py`**（Python側の共通処理）
+
+- `PageMeta`: head用の設定(title/description/og_url/h1/caption)
+- `TableConfig`: テーブル・検索欄・ページ送りの設定。主な項目:
+  - `table_id` / `headers`(リスト。2列とは限らない。`video_mtsuku`は3列)
+  - `extra_table_class`(既定`"mj-table-2col"`。3列ページは`""`にして
+    代わりに`.mj-table-3col`を`headers`の列数に応じて明示的に指定する)
+  - `page_size`(既定100。`None`にするとページ送りなし。`video_mtsuku`が該当)
+  - `name_mode`(`"exact"`で`?name=`をdata-nameの完全一致に使う。
+    `jpml_titles`/`resource_logs`/`saikyo_mens`が該当)
+  - `filter_param`(絞り込み欄の初期値に使うURLパラメータ。`"name"`か`"tag"`)
+  - `filter_label` / `filter_placeholder`
+  - `search_boxes_before` / `search_boxes_after`(ページ固有UIの差し込み。
+    `resource_logs`の名前セレクトボックス・タグリンクで使用)
+  - `extra_script`(ページ固有の小さなJSをheadにもう1本追加する)
+- `build_image_cell(alt, url, image_url, css_class, width, height, fallback)`:
+  画像セル共通処理。`url`が空なら`<a>`で包まず`<img>`のみを返す
+  (`saikyo_mens`のXアカウントなし行で使う分岐)
+- `generate(spreadsheet_id, sheet_name, query, output_path, meta, table_config,
+  build_row_html)`: 取得〜書き出しまでの`main()`相当
+- 各`generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て
+  関数(`build_row_html`)」だけを持てばよい
+
+**`table.js`**（JS側の共通処理。リポジトリ直下に配置）
+
+- `<table>`要素の`data-page-size` / `data-name-mode` / `data-filter-param`
+  属性を読んで動く。属性はテーブルに付けるため、table.js自体はページごとの
+  設定を一切ハードコードしていない
+- `data-page-size`を省略するとページ送りなし(`video_mtsuku`)。`.mj-pager`の
+  `<nav>`自体をHTML側で出力しなければ、table.js側は`pagerEl`がnullになり
+  何もしない
+- 絞り込み対象の列を1列だけに絞りたい場合(`video_mtsuku`の3列目「選手」)は、
+  table.js側に新しい属性は不要。`data-info`に検索対象にしたい文字列だけを
+  入れれば、他の列の文言は自動的に検索対象から外れる(`resource_logs`が
+  非表示の駅名・カテゴリを検索対象に含めているのと逆の応用)
+- ページ固有のUIは共通化せず、`window.mjTable.getSearchParam`を最小限の
+  フックとして公開している。`resource_logs.js`(26行に縮小)はこれを使って
+  名前セレクトボックスの初期値・遷移だけを担当する
+
+**移行時の個別事情**（`docs/lighthouse-baseline.md`の行数調査で判明した内容と合わせて）
+
+- `rh_paifu`: 画像クラス`videos`がstyle.css未定義だったため、
+  `img.rectangle`と同じ160×90を追加した。リンクは`videoUrl + '&t=' +
+  videoStartTime + 's'`の形式を維持
+- `saikyo_mens`: フォールバックを`abs.twimg.com`の既定アイコンから
+  `img/avatar.svg`に差し替え、外部ドメイン依存を1つ解消した。Xアカウント
+  なし行は`<img>`のみ(`<a>`で包まない)という分岐を維持。`?name=`(完全一致)
+  と`?tag=`(絞り込み欄の初期値)を両方持つ、`jpml_titles`と同型の構成
+- `video_mtsuku`: 3列(動画/概要/選手)。`.mj-table-2col`ではなく新設した
+  `.mj-table-3col`を使う。ページ送りなし。絞り込み対象は3列目(選手)のみで、
+  `data-info`には選手名・所属だけを入れ概要列の文言は含めない
+
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
 型Aの残り11ページのうち、この3ページは他と性質が違うため#7での
@@ -429,6 +496,11 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 | `jpml_test` | `img.youtube.com` / `ron2.jp` | 12 / 22 |
 | `resource_logs` | `pbs.twimg.com` | 2,630 |
 | `video_live` | `img.youtube.com` | 2,332 |
+| `video_wayhome` | `img.youtube.com` | 38 |
+| `video_en` | `img.youtube.com` | 76 |
+| `rh_paifu` | `img.youtube.com` | 57 |
+| `saikyo_mens` | `pbs.twimg.com` | 90 |
+| `video_mtsuku` | `img.youtube.com` | 61 |
 
 `video_live`には`hayabusa.io`が1件だけ混じっていた（スプレッドシートに
 手入力されたもので、2026年9月10日に削除済み）。このように少数の例外が
@@ -505,9 +577,9 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 | `houou_results` / `ouka_results` | `class` |
 | `league_ranking`（ランキング3ページ） | `division` / `name` |
 | `saikyo_results` | `name` |
-| `saikyo_mens` | `name` / `tag` |
-| `rh_paifu` | `name` |
-| `video_en` / `video_mtsuku` / `video_wayhome` | `name` |
+| `saikyo_mens` | `name` / `tag`（**移行済み**） |
+| `rh_paifu` | `name`（**移行済み**） |
+| `video_en` / `video_mtsuku` / `video_wayhome` | `name`（**移行済み**） |
 | `wrc_results` | `name` |
 
 内部リンクがないことは「不要」を意味しない。Search Consoleのデータで
@@ -517,7 +589,10 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 削除の判断は、Search Consoleで`?name=`付きURLの内訳を確認してから行う。
 それまでは、各ページを#7で移行するタイミングで個別に決める。
 `resource_logs`は移行済み・内部リンク（名前セレクトボックス3件・
-タグリンク16本）は静的HTMLへそのまま引き継いだ。
+タグリンク16本）は静的HTMLへそのまま引き継いだ。`video_wayhome` /
+`video_en` / `rh_paifu` / `saikyo_mens` / `video_mtsuku`
+（2026-09-11移行）はいずれも`?name=`パラメータをそのまま引き継いだ
+（`saikyo_mens`は`?tag=`も）。
 
 ### 外部サービス
 

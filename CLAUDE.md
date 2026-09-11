@@ -27,13 +27,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## データの流れ
 - 選手データ・成績データはすべてGoogleスプレッドシートが正本
-- `jpml_pros.html`（選手データベース、1000名超）・`jpml_titles.html`（タイトル戦一覧）・`jpml_test.html`（プロテスト関連記事）・`resource_logs.html`（飲食店ログ）・`video_live.html`（放送対局動画）はビルド時生成に移行済み:
-  - それぞれ `scripts/generate_jpml_pros.py` / `scripts/generate_jpml_titles.py` / `scripts/generate_jpml_test.py` / `scripts/generate_resource_logs.py` / `scripts/generate_video_live.py` が `scripts/lib/sheets.py` 経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query` と同じSELECT構文）を叩き、静的HTMLに焼き込む
-  - 生成後の絞り込み・並び替え・ページ送りはページ側の軽量JSに委譲するが、機能はページごとに異なる: `jpml_pros.js`は絞り込みと並び替え（ページ送りなし・全行表示）、`jpml_titles.js`/`jpml_test.js`/`resource_logs.js`/`video_live.js`は絞り込みとページ送り（並び替えなし）。列ヘッダによる並び替えは`jpml_pros.html`専用の機能とする方針で、型Aの他ページには既定で載せない
-  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/sheets.py` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。手動実行（workflow_dispatch）も可能
-  - 型A（表とフィルターのみ）の他ページへ展開するための共通クラスを `style.css` に用意している: `.mj-table`（表の見た目）、`.mj-pager`（ページ送りUI）、`.mj-left`（列ごとの左寄せ）、`.mj-plain`（リンクの下線を消す）。列幅・列固定・行高（`contain-intrinsic-size`）などページ固有の構造はIDセレクタ側に残す
-  - `jpml_titles` / `jpml_test` / `resource_logs` / `video_live` は `?name=`の意味（完全一致フィルター vs 絞り込み欄の初期値）・`PAGE_SIZE`（100 vs 50）・画像の縦横比とフォールバック先が異なる。`resource_logs.html`だけページ内にハードコードされた内部リンク（名前セレクトボックス3件・タグリンク16本）を持つ。`video_live.js`は`jpml_test.js`とテーブルidが違うだけでほぼ同一。共通化（Python側のライブラリ化・JSの共有ファイル化）は未着手で、5ページ目以降への展開前に判断する
-- 他17ページ（houou_*, ouka_*, saikyo_*, wrc_*, rh_*, resource_* など）はまだブラウザ側から `google.charts` (`google.visualization.Query`) で直接スプレッドシートを叩く旧方式（ページ生成の静的化はページごとに未着手）
+- 9ページがビルド時生成に移行済み: `jpml_pros.html`（選手データベース、1000名超・15列・列ヘッダソートあり）と、型A・2列(一部3列)の8ページ（`jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`。9個目はvideo_mtsukuで3列）
+  - `jpml_pros.html`は独自の`scripts/generate_jpml_pros.py`のまま。他8ページは`scripts/lib/page.py`（HTMLテンプレート・行組み立て・画像セル・エスケープの共通処理）を使い、各`scripts/generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て関数」だけを持つ（#7の共通化）。いずれも`scripts/lib/sheets.py`経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query`と同じSELECT構文）を叩く
+  - 生成後の絞り込み・並び替え・ページ送りはページ側の軽量JSに委譲する。`jpml_pros.js`は絞り込みと並び替え（ページ送りなし・全行表示）専用。型A・2列/3列の8ページは共通の`table.js`（絞り込み・ページ送り、並び替えなし）を使う。設定は`<table>`要素のdata属性（`data-page-size` / `data-name-mode` / `data-filter-param`）で渡し、属性省略時はページ送りなし・完全一致フィルターなしになる。ページ固有のUI（`resource_logs.html`の名前セレクトボックス等）はtable.jsとは別の小さなJSで補う
+  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/**` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。手動実行（workflow_dispatch）も可能。`table.js`はルート直下の`*.js`に該当するためpushでワークフロー自体は起動するが、どのページ名にも一致せず対象0件で終わる（HTMLに焼き込まれないため実害なし）
+  - 型A（表とフィルターのみ）の他ページへ展開するための共通クラスを `style.css` に用意している: `.mj-table`（表の見た目）、`.mj-table-2col`/`.mj-table-3col`（画像列固定幅＋残り列の折り返し）、`.mj-pager`（ページ送りUI）、`.mj-left`（列ごとの左寄せ）、`.mj-plain`（リンクの下線を消す）。列幅・列固定・行高（`contain-intrinsic-size`）などページ固有の構造はIDセレクタ側に残す
+- 残り12ページ（houou_*, ouka_*, saikyo_results, wrc_*, rh_results*, resource_efficiency）はまだブラウザ側から `google.charts` (`google.visualization.Query`) で直接スプレッドシートを叩く旧方式（ページ生成の静的化はページごとに未着手）
 - 選手のプロフィール画像は龍龍(ron2.jp)など外部ドメインを含む複数サービスに依存しており、リンク切れやすい
 
 ## メンテナンス用スクリプト（scripts/）
