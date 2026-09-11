@@ -11,12 +11,12 @@
 
 次のように伝えれば、必要な文脈が渡る。
 
-```ryoei.pro の改善を進めています。
+```
+ryoei.pro の改善を進めています。
 リポジトリは https://github.com/retroeater/mj の cloudflare ブランチです。
 docs/handover.md を読んでから、docs/issues-snapshot.md で
 現在のタスク状況を確認してください。
 今日は #◯◯ に取り組みます。
-
 ```
 
 会話が長くなると1回あたりのコストが上がるため、
@@ -234,7 +234,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 | # | 内容 | 備考 |
 |---|---|---|
 | **#7** | 他17ページのGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
-| #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | Logモードで有効化済み(2026-09-10)。残件はSecurity Eventsの確認(2026-09-13以降)とBlockへの切り替え判断 |
+| #76 | WAF（Cloudflare Managed Rulesetのみ、まずログモード） | Logモードで24時間運用し誤検知ゼロを確認済み(2026-09-11)。残件はManaged RulesetをBlockへ切り替えるダッシュボード操作のみ |
 | #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
 | #9 | CSP設定 | #7の後にやると強いポリシーが書ける |
