@@ -19,6 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   必ず `--persist-to` でリポジトリ外に状態を保存すること:
   `npx wrangler dev --port 8789 --ip 127.0.0.1 --persist-to /tmp/wrangler-state`
   （`.wrangler/` への書き込みをアセット変更と誤検知しリロードが無限に続くため。詳細は docs/issues-snapshot.md #153）
+  `--persist-to` で退避されるのはstate（KV/D1/R2/observability）のみで、`.wrangler/tmp`・`.wrangler/cache`は起動時にリポジトリ直下へ作られるが、これは正常で無限リロードの原因ではない（#155）
 - Bootstrap 5.3.8 をローカル配信（assets/vendor）。CDNは使わない
 - assets/vendor 配下のライブラリを更新・追加した際は、末尾の
   `sourceMappingURL` コメントを削除すること。`.map` ファイルを
