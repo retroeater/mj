@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 02:38 JST
+生成日時: 2026-09-12 02:42 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -24,7 +24,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 ## #155 wrangler dev起動コマンド(--persist-to)の無限リロード対策を検証した結果を記録する
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -76,6 +76,17 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 ---
 この下書きはClaude Codeが作成しました（2026-09-11）。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+CLAUDE.mdに補足を追記したため対応完了。
+
+`--persist-to`で退避されるのはstate（KV/D1/R2/observability）のみで、`.wrangler/tmp`・`.wrangler/cache`は起動時にリポジトリ直下へ作られるが正常であり無限リロードの原因ではない旨を1行追記した（コミット `e19abe2`）。
+
+---
+この下書きはClaude Codeが作成しました（2026-09-12）。
 
 ---
 
