@@ -36,6 +36,12 @@ table,
 	margin-top: 24px;
 }
 
+/* Bootstrap既定のh1サイズは本文比で大きすぎるため、可視のh1を
+   使うページ(resource_efficiency.html)で本文と同じサイズに揃える(#152)。 */
+.mj-page-heading {
+	font-size: 1rem;
+}
+
 img.dictionary {
 	width: 16px;
 	height: 16px;
@@ -130,6 +136,49 @@ th {
 	.mj-bar-chart-mobile {
 		display: block;
 	}
+}
+
+/* houou_leagues.html / ouka_leagues.html(型C)の積み上げ棒+選手の
+   折れ線グラフ用(#127)。デスクトップ用・モバイル用の2枚のSVGを
+   切り替える方針は上の.mj-bar-chart-*(型D)と同じ理由による。 */
+.mj-league-chart-mobile {
+	display: none;
+}
+
+.mj-league-chart-desktop {
+	max-width: 1400px;
+}
+
+@media (max-width: 480px) {
+	.mj-league-chart-desktop {
+		display: none;
+	}
+
+	.mj-league-chart-mobile {
+		display: block;
+	}
+}
+
+/* 旧Google Charts版はモバイル幅で凡例がページ送りUI(◀ 1/4 ▶等)に
+   なっていたが、静的化にあたりflex-wrapで折り返すだけの単純な凡例に
+   変更した(ページ送りJSが丸ごと不要になる、#127)。 */
+.mj-chart-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 12px;
+	margin: 8px 0;
+}
+
+.mj-chart-legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.mj-chart-legend-swatch {
+	width: 12px;
+	height: 12px;
+	flex: none;
 }
 
 

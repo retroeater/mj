@@ -48,7 +48,9 @@ META = PageMeta(
 # 日英併記の長い説明を描いていたが、SVG内のテキストは折り返せず画面幅
 # によって切れる。HTML側の見出し(可視のh1)として出せば折り返しも
 # 読み上げも効くため、意図的にこちらへ移した。
-BODY_TEMPLATE = """<h1>{h1}</h1>
+# クラスmj-page-headingで本文(計算方法の段落)と同じフォントサイズに
+# 揃える(#152)。Bootstrap既定のh1サイズは本文比で大きすぎるため。
+BODY_TEMPLATE = """<h1 class="mj-page-heading">{h1}</h1>
 <div>
 {chart_svg_desktop}
 {chart_svg_mobile}
