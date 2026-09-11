@@ -27,7 +27,7 @@ REPO_ROOT = pathlib.Path(__file__).parent.parent
 OUTPUT_PATH = REPO_ROOT / "jpml_pros.html"
 
 HEADERS = [
-    "所属<br>出身地", "名前", "龍龍", "X", "note", "You<br>Tube",
+    "名前", "所属<br>出身地", "龍龍", "X", "note", "You<br>Tube",
     "鳳凰<br>出場", "鳳凰<br>43後", "鳳凰<br>最高",
     "桜花<br>出場", "桜花<br>21期", "桜花<br>最高",
     "最強<br>出場", "決勝<br>進出", "放送<br>対局",
@@ -63,8 +63,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <h1 class="visually-hidden">日本プロ麻雀連盟 プロ雀士データベース</h1>
 
 <div id="searchBoxes" class="collapse">
-\t<div class="mj-filter"><label class="visually-hidden" for="place_filter">所属・出身地で検索</label><input type="text" id="place_filter" class="mj-filter-input" placeholder="所属/出身地"></div>
 \t<div class="mj-filter"><label class="visually-hidden" for="name_filter">名前で検索</label><input type="text" id="name_filter" class="mj-filter-input" placeholder="名前/Name"></div>
+\t<div class="mj-filter"><label class="visually-hidden" for="place_filter">所属・出身地で検索</label><input type="text" id="place_filter" class="mj-filter-input" placeholder="所属/出身地"></div>
 \t<div class="mj-filter"><label class="visually-hidden" for="league_filter">鳳凰戦43期後期の所属リーグで検索</label><input type="text" id="league_filter" class="mj-filter-input" placeholder="鳳凰43後"></div>
 \t<div class="mj-filter"><label class="visually-hidden" for="ouka_filter">女流桜花21期の所属リーグで検索</label><input type="text" id="ouka_filter" class="mj-filter-input" placeholder="桜花21期"></div>
 </div>
@@ -209,8 +209,8 @@ def build_row_html(row) -> str:
     ouka_highest_sort = "00" if ouka_highest_league == "桜花" else ouka_highest_league
 
     cells = [
-        (get_places(office, hometown), None),
         (get_name(name, last_name_en, first_name_en), sort_key),
+        (get_places(office, hometown), None),
         (get_ron2(name, ron2_id, ron2_image_url) if ron2_id else "", None),
         (get_x(name, x_id, x_image_url) if x_id else "", None),
         (get_note(name, note_id, note_image_url) if note_id else "", None),

@@ -142,13 +142,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		})
 	})
 
-	// 横スクロール時、1・2列目(所属/出身地・名前)を固定表示にする。
-	// 1列目の幅は内容に応じて変わる(nowrap指定で自動調整)ため、
-	// 2列目のsticky位置(left)は固定値では決め打ちできず、
-	// 実際にレンダリングされた1列目の幅を都度測ってJSで設定する。
 	// 上部のBootstrapメニューと検索ボックスは画面に固定表示するため、
 	// その実測高さをCSS変数に渡す。フォントや折り返し、検索ボックスの
 	// 開閉で高さが変わるので固定値にはしない。
+	// (横スクロール時の1列目(名前)の固定表示はCSSのposition: stickyのみで
+	// 完結しており、JSでの計算は不要)
 	//   --navbar-height : メニューの高さ(検索ボックスのtop位置に使う)
 	//   --content-offset: メニュー + 検索ボックスの高さ
 	//                     (本文のpadding-topとテーブルヘッダーのtop位置に使う)
@@ -166,23 +164,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		root.setProperty('--content-offset', (navbarHeight + searchHeight) + 'px')
 	}
 
-	function updateStickyOffsets() {
-		const firstColCells = table.querySelectorAll('thead th:nth-child(1), tbody td:nth-child(1)')
-		if (firstColCells.length === 0) return
-		const width = firstColCells[0].getBoundingClientRect().width
-
-		table.querySelectorAll('thead th:nth-child(2), tbody td:nth-child(2)').forEach(function (cell) {
-			cell.style.left = width + 'px'
-		})
-	}
-
-	function updateLayout() {
-		updateOffsets()
-		updateStickyOffsets()
-	}
-
-	updateLayout()
-	window.addEventListener('resize', updateLayout)
+	updateOffsets()
+	window.addEventListener('resize', updateOffsets)
 
 	// スマホではハンバーガーメニューの開閉でナビバーの高さが変わるが、
 	// これはresizeイベントを発火しないため、--navbar-height が古いままになり
@@ -190,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// メニューの開閉(ハンバーガー)や検索ボックスの開閉は resize を発火しないため、
 	// 要素自体のサイズ変化を監視して追従させる。
 	if (typeof ResizeObserver !== 'undefined') {
-		const observer = new ResizeObserver(updateLayout)
+		const observer = new ResizeObserver(updateOffsets)
 		const navbar = document.querySelector('nav.navbar')
 		const searchBoxes = document.getElementById('searchBoxes')
 		if (navbar) observer.observe(navbar)
@@ -201,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Bootstrapの開閉イベントでも明示的に更新する(アニメーション完了時)
 	const searchBoxesEl = document.getElementById('searchBoxes')
 	if (searchBoxesEl) {
-		searchBoxesEl.addEventListener('shown.bs.collapse', updateLayout)
-		searchBoxesEl.addEventListener('hidden.bs.collapse', updateLayout)
+		searchBoxesEl.addEventListener('shown.bs.collapse', updateOffsets)
+		searchBoxesEl.addEventListener('hidden.bs.collapse', updateOffsets)
 	}
 })

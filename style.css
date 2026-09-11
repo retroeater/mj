@@ -314,8 +314,8 @@ body:has(.mj-table) {
 /* 「名前」列のみ広くとる。
    実データの最長は英字表記の19文字(例: Kambayashi Tsuyoshi)で約124px。
    左右padding 8px×2 を足して余裕を見た値。 */
-#pros_table thead th:nth-child(2),
-#pros_table td:nth-child(2) {
+#pros_table thead th:nth-child(1),
+#pros_table td:nth-child(1) {
 	width: 150px;
 	padding: 4px 8px;
 }
@@ -334,30 +334,25 @@ body:has(.mj-table) {
 	margin: 0 auto;
 }
 
-/* 横スクロール時に1・2列目(所属/出身地・名前)を固定表示する。
-   2列目のleft位置は1列目の実測幅で変わるため jpml_pros.js が動的に設定する。
+/* 横スクロール時に1列目(名前)のみ固定表示する。
    2列しかないページ(jpml_titlesなど)ではこの固定は不要なため、
    .mj-table側には汎用化せずこのページ専用のまま残している。 */
 #pros_table thead th:nth-child(1),
-#pros_table thead th:nth-child(2),
-#pros_table td:nth-child(1),
-#pros_table td:nth-child(2) {
+#pros_table td:nth-child(1) {
 	position: sticky;
-	left: 0; /* 2列目は jpml_pros.js が実測値に置き換える */
+	left: 0;
 }
 
 /* 重なり順(手前ほど大きい値)。
-   4: 固定列のヘッダー(縦固定と横固定が交差する2セル)
+   4: 固定列のヘッダー(縦固定と横固定が交差するセル)
    3: 通常のヘッダー(.mj-table側) … 横スクロール時に固定列ヘッダーへ潜り込ませる
    2: 固定列のデータセル … 横スクロール時に通常セルより手前
    指定なし: 通常のデータセル */
-#pros_table thead th:nth-child(1),
-#pros_table thead th:nth-child(2) {
+#pros_table thead th:nth-child(1) {
 	z-index: 4;
 }
 
-#pros_table td:nth-child(1),
-#pros_table td:nth-child(2) {
+#pros_table td:nth-child(1) {
 	z-index: 2;
 }
 
