@@ -12,7 +12,33 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 109件（open/closed含む）。番号降順。
+件数: 110件（open/closed含む）。番号降順。
+
+---
+
+## #110 GET/HEAD以外のHTTPメソッドをカスタムルールで遮断する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: セキュリティ, 対象: 全ページ
+
+### 本文
+
+- #76 の Events 確認（2026-09-11）で、24時間に `POST` 由来の検知が
+  イベント数123件（`rayName` 重複を除くと63リクエスト）あった。
+  React RCE（CVE-2025-55182）、Code Injection（CVE-2022-29078 /
+  JavaScript）、SQLi - Equation の3系統で、いずれもスキャナ由来。
+  React RCE の36リクエストは Referer を `www.ryoei.pro` に偽装し、
+  SQLi - Equation の3リクエストは同一IPから UA を3種に
+  入れ替えて送られていた
+- このサイトは完全な静的配信で `<form>` が27ページ中0個。POST を
+  受ける口が存在しないため、GET / HEAD 以外を遮断しても誤検知が
+  起きる余地がない
+- マネージドルールより前段で効くため、上記の検知はそもそも
+  マネージドルールに到達しなくなる
+- Pro でカスタムルールは20本まで使えて現在0本のため、枠の消費も問題ない
+- #76 の Block 切り替えとは独立して効くので、#76 の完了を待たずに
+  設定してよい
+- 設定はダッシュボード操作（Security → WAF → Custom rules）
 
 ---
 
@@ -2284,7 +2310,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 無料プランでもマネージドルールの一部が使え、既知の攻撃パターンを遮断できる。ただし現時点では優先度が低い。静的配信でフォームもデータベースもなく、守るべき攻撃面がほとんどないため。
 着手すべきタイミングは、ドメイン切替の後(ゾーン設定はドメインをCloudflareに移してからでないと行えない)か、SDPデータベースで選手が自分の情報を編集する仕組みを作るとき(フォームと認証が入るため必須)。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-09):
 
@@ -2404,6 +2430,86 @@ COMPLETED でクローズする。
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-11):
+
+## Events 確認結果（2026-09-11）
+
+対象期間: 2026-09-10T04:47Z 〜 2026-09-11T04:47Z（24時間）
+Analytics → Events タブ、Managed rules で絞り込み。
+ルール別の Sampled logs を JSON エクスポートして中身を確認した。
+
+### 結論: 誤検知ゼロ。Block に切り替えてよい
+
+`?name=` / `?tag=` を持つリクエストの検知は1件もなかった。
+クエリ文字列を伴う検知は `?rest_route=/batch/v1`（WordPress の
+batch エンドポイント探索）のみ。検知されたものはすべてスキャン・
+探索系で、実訪問者由来のものは含まれていない。
+
+### ルール別内訳（イベント数、合計1,398）
+
+| ルール | 件数 | 中身 |
+| --- | --- | --- |
+| Version Control - Information Disclosure | 589 | `.env` 系のパス探索 |
+| Version Control - Information Disclosure - Beta | 421 | 同上 |
+| Version Control - Information Disclosure - Beta | 168 | 同上 |
+| Information Disclosure - Common Files | 48 | `/site/phpinfo.php`、`/webmail/phpinfo.php` 等 |
+| React - Remote Code Execution - CVE:CVE-2025-55182 - 2 | 36 | `POST /`。Referer を `www.ryoei.pro` に偽装 |
+| React - RCE - CVE:CVE-2025-55182 | 36 | 同一リクエストが上のルールにも同時マッチ |
+| Code Injection - CVE:CVE-2022-29078 | 24 | `POST /`。クエリ文字列は空 |
+| Code Injection - JavaScript | 24 | 同一リクエストが上のルールにも同時マッチ |
+| Wordpress - RCE - CVE:CVE-2026-63030 | 23 | `?rest_route=/batch/v1` |
+| Information Disclosure - File Extension | 10 | `/.env.old`、`/info.php.bak` |
+| Vulnerability scanner activity | 9 | 未確認 |
+| Wordpress - SQL Injection - CVE:CVE-2026-60137 | 6 | 未確認 |
+| SQLi - Equation | 3 | `POST /?rest_route=/batch/v1` と `POST /wp-json/batch/v1`。全件同一IP（FR・Bucklog SARL）で、UA を Linux / Windows / Mac の3種に入れ替えている |
+| Malware, Web Shell | 1 | 未確認 |
+
+送信元は Google LLC（AS396982）が大半で、残りは DigitalOcean、
+TECHOFF SRV LIMITED、Bucklog SARL。
+
+### 記録しておくべき注意点
+
+1. **イベント数はリクエスト数より多い。** 1リクエストが複数ルールに
+   マッチするため（`rayName` が同一で `matchIndex` だけ異なる）。
+   Code Injection の 24 + 24 は48リクエストではなく24リクエスト。
+   React の 36 + 36 も同様に36リクエスト
+2. **Beta ルール2本（421 / 168）は Block にしても当面 Log のまま。**
+   Cloudflare は新規・更新ルールを1週間ログ専用で配信し、翌週の
+   リリースで本来のアクションへ切り替える運用のため。切り替え直後に
+   遮断数が想定より少なく見えても設定ミスではない
+3. **`POST` 由来の検知がイベント数で123件**（React 72、
+   Code Injection 48、SQLi - Equation 3）。`rayName` の重複を
+   除くと63リクエスト。このサイトは `<form>` が27ページ中0個で
+   POST を受ける口がないため、GET/HEAD 以外を遮断する
+   カスタムルールを入れれば、これらはマネージドルールに届く前に
+   落ちる（別issueとして起票）
+4. Sampled logs のエクスポートは全期間から均等に取られるわけでは
+   ない。最初のエクスポートは24時間を指定したのに3時間分しか
+   含まれておらず、ルール単位で絞り込み直して初めて全ルールの
+   中身が取れた。次回同じ確認をするときはルールごとに絞ること
+
+### 本issueの「期待値についての注記」の訂正
+
+前コメントで「存在しないパスを叩く行為自体は攻撃パターンではないため、
+Block に切り替えても減らない」と書いたが、実データはそうなっていない。
+`.env` スキャンは Version Control - Information Disclosure に
+マッチしており、上位3ルールだけで1,178件（全体の85%）を占める。
+
+ただし Block にしてもリクエスト自体はエッジに届くため総数は減らない。
+変わるのは応答が404から403になることと、Workers のアセット参照が
+省かれることの2点で、実利は小さい。「実際に遮断されるものは
+ほとんどない」という当初の予想は外れたが、結論（このサイトでの
+WAF の実効性は限定的）は変わらない。
+
+### 次のアクション
+
+Security → WAF → Managed rules で Cloudflare Managed Ruleset の
+action を Log から Block に切り替える（ダッシュボード操作）。
+
+切り替え後24時間ほど Events を見て、`?name=` 付きのリクエストが
+遮断されていないことを確認する。問題がなければ本issueを
+COMPLETED でクローズする。
 
 ---
 
