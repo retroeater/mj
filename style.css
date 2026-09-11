@@ -440,6 +440,30 @@ body:has(.mj-table) {
 	contain-intrinsic-size: auto 25px;
 }
 
+/* ==== #rh_results_detail_table 固有(平野良栄の公式戦成績詳細) ====
+   型A'の2ページ目。旧Google Charts版のTable chartは全列を折り返して
+   いた(gh-pages版を実レンダリングして確認。日付列も"2026-\n01-24"の
+   ように折り返される)。.mj-table既定のwhite-space: nowrapのままだと
+   375px幅で表全体が横スクロールするため、旧版に合わせて全列の折り返しを
+   許す。最初はタイトル・対局・対局者の3列(文字数が明らかに可変)だけに
+   絞ったが、団体列の最長値(最高位戦日本プロ麻雀協会、12文字・空白なし)
+   だけでも164pxを要求して表を押し広げ、着順列も9桁の値(231324242)が
+   あるなど、実測すると短そうに見える列にも幅を圧迫する例外値があった
+   ため、列を選ばず全体を折り返し対象にした。.mj-table-autoは型A'の
+   他ページ(rh_results)と共有しており、rh_resultsは全列が短く折り返し
+   不要なため、.mj-table-auto自体は変えずこのテーブル固有の指定にする。 */
+#rh_results_detail_table td {
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
+/* 折り返しにより行高が可変(375px幅で実測: 最小73px・中央値90px・
+   90パーセンタイル122px・最大155px)。中央値よりやや高めの95pxを既定値
+   にし、contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
+#rh_results_detail_table tbody tr {
+	contain-intrinsic-size: auto 95px;
+}
+
 /* ==== .mj-pager(ページ送り) ====
    型Aの残り11ページで使い回すため、ページ固有のIDに紐づけない。 */
 .mj-pager {

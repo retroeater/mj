@@ -95,20 +95,20 @@ HTMLは27ページ。大きく3系統に分かれる。
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
 | ビルド時生成（型A・15列） | 1 | `jpml_pros.html`。独自の`generate_jpml_pros.py`のまま |
 | ビルド時生成（型A・2列/3列） | 9 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列)。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
-| ビルド時生成（型A'・多列テキスト） | 1 | `rh_results.html`。画像列を持たないため`.mj-table-auto`を使う（#7） |
-| Google Charts依存 | **11** | ブラウザから直接スプレッドシートを読む。#7の対象 |
+| ビルド時生成（型A'・多列テキスト） | 2 | `rh_results.html` / `rh_results_detail.html`。画像列を持たないため`.mj-table-auto`を使う（#7、完了） |
+| Google Charts依存 | **10** | ブラウザから直接スプレッドシートを読む。#7の対象 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html`と型A/A'の10ページ(`jpml_titles` / `jpml_test` /
+- `jpml_pros.html`と型A/A'の11ページ(`jpml_titles` / `jpml_test` /
   `resource_logs` / `video_live` / `video_wayhome` / `video_en` / `rh_paifu` /
-  `saikyo_mens` / `video_mtsuku` / `rh_results`) … それぞれ`scripts/generate_<ページ名>.py`
-  がビルド時に取得してHTMLに焼き込む。`jpml_pros`以外は`scripts/lib/page.py`
-  の共通処理を使う（#7）
-- 残り11ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+  `saikyo_mens` / `video_mtsuku` / `rh_results` / `rh_results_detail`) …
+  それぞれ`scripts/generate_<ページ名>.py`がビルド時に取得してHTMLに
+  焼き込む。`jpml_pros`以外は`scripts/lib/page.py`の共通処理を使う（#7）
+- 残り10ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 **移行済みページは、スプレッドシートを直しただけでは反映されない。**
 `regenerate-page.yml` はスクリプトと対応する`.js`の変更をpushで検知する
@@ -203,7 +203,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（残り11ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（残り10ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -251,12 +251,12 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(10ページ完了・残11)は5つの型に分かれる。
+対象の21ページ(11ページ完了・残10)は5つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
 | A. 表とフィルターのみ | 13(**完了9・残4**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、ランキング3、`saikyo_results` |
-| A'. 多列テーブル（表のみ） | 2(**完了1・残1**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109） | `rh_results`(完了、12行・6列) / `rh_results_detail`(321行・8列) |
+| A'. 多列テーブル（表のみ） | 2(**完了2・残0**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109）。**完了** | `rh_results`(完了、12行・6列) / `rh_results_detail`(完了、321行・8列) |
 | B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
 | D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |
@@ -479,9 +479,9 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
   `.mj-table-3col`を使う。ページ送りなし。絞り込み対象は3列目(選手)のみで、
   `data-info`には選手名・所属だけを入れ概要列の文言は含めない
 
-**2026-09-11、型A'(多列テキストテーブル、画像列なし)の1ページ目として
-`rh_results`を移行した。** 型A'の残り(`rh_results_detail`)と型Bの表部分が
-この共通部品を使う。
+**2026-09-11、型A'(多列テキストテーブル、画像列なし)を`rh_results`→
+`rh_results_detail`の順に移行し完了した。** 型Bの表部分もこの共通部品を
+使う想定。
 
 - `TableConfig.show_filter`(既定`True`)を追加した。`False`にすると
   `#searchBoxes`ごと出力せず(`search_boxes_before`/`after`があればそれだけは
@@ -509,9 +509,28 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
   同じ問題)。`generate()`(page.py)も`formatted`引数をそのまま
   `fetch_sheet()`へ渡す(表示の設定ではなくデータ取得の設定のため
   `TableConfig`ではなく`generate()`の引数にした)。`rh_results`が最初の
-  適用例。数値列を含む他のページ(`rh_results_detail`等)を移行する際は、
-  URL・属性に使う列が含まれていないことを確認したうえで`formatted=True`
-  を使う
+  適用例。数値列を含む他のページを移行する際は、URL・属性に使う列が
+  含まれていないことを確認したうえで`formatted=True`を使う
+- **必要な列はQUERY側で最初から絞り込む。** 旧Google Charts版は
+  `SELECT A,B,...V`のように全列を取得してから`view.setColumns([...])`で
+  表示列を間引くことが多いが、Python移行では22列取得して後から捨てるより
+  `SELECT A,C,E,G,I,R,S,T,V WHERE W = "Y"`のように必要な列だけを最初から
+  クエリする。gvizのWHERE句はSELECTに含めない列も参照できるため、絞り込み
+  専用の列(旧`W`列)をSELECTに含める必要はない(`rh_results_detail`で適用)
+- **テキストの後ろにアイコンを添えるセルは`build_image_cell()`を使わない。**
+  `build_image_cell()`は画像セル1つを丸ごと作る関数で、`rh_results_detail`の
+  対局名+Xアイコンのように「テキスト + 条件付きでアイコン付きリンクを後置」
+  という形には合わない。この場合はセルの組み立てをそのまま`build_row_html`
+  内に書く。アイコンのalt属性は`f"{name} X"`のように「名前 サービス名」の
+  形式にそろえる(`jpml_pros`の`get_x()`等と同じ慣習。旧版は`alt="Twitter"`
+  固定だった)
+- **セルの折り返しは列を選ばず全体に適用したほうが安全な場合がある。**
+  `rh_results_detail`は当初、明らかに長い3列だけ`white-space: normal`に
+  していたが、旧Google Charts版のTable chartを実レンダリングして比較した
+  ところ、**全列を折り返しており**、短そうに見える列(団体・着順)にも
+  実測すると幅を圧迫する例外的に長い値があった。列を選ばず
+  `#<table_id> td { white-space: normal; overflow-wrap: anywhere; }`と
+  指定するほうが、旧版との差分調査の手間も含めて安全
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
