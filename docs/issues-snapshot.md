@@ -12,7 +12,71 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 128件（open/closed含む）。番号降順。
+件数: 129件（open/closed含む）。番号降順。
+
+---
+
+## #129 Early Hints用のLinkヘッダを_headersに設計する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+### 背景
+
+2026-09-11 に Cloudflare の Early Hints を有効化した。ただし
+**トグルを入れただけでは何も起きない。**
+
+Cloudflare の Early Hints は、レスポンスに含まれる
+`Link: ...; rel=preload` / `rel=preconnect` ヘッダをキャッシュし、
+次回以降のリクエストに対して 103 で先出しする仕組み。HTML 内の
+`<link>` タグは読まない。
+
+（Cloudflare Pages には `<link>` 要素から `Link:` ヘッダを自動生成する機能があるが、
+Workers 静的アセットで同じ挙動をするかは未確認。まず実測で確かめること。）
+
+参照:
+- https://developers.cloudflare.com/cache/advanced-configuration/early-hints/
+- https://developers.cloudflare.com/pages/configuration/early-hints/
+
+### まず確認
+
+    curl -sI https://ryoei.pro/jpml_pros.html | grep -i "^link:"
+
+`Link:` が自動で付いているなら設計は不要。付いていなければ `_headers` に書く。
+
+### 設計上の論点
+
+`/*` 一括では書けない。CSSの構成がページによって違う。
+
+| 対象 | CSS |
+|---|---|
+| 全27ページ共通 | `assets/vendor/bootstrap/css/bootstrap.min.css` |
+| `index.html` のみ | `index.css` + `aos.css` + `glightbox.min.css` |
+| 他26ページ | `style.css` |
+
+`_headers` のパスパターンで出し分けるか、共通の Bootstrap CSS だけに絞るかを決める。
+preload したのに使わないリソースがあるとブラウザのコンソールに警告が出るため、
+ページごとに正確に書くこと。
+
+### 期待値は低めに見積もる
+
+Early Hints が稼ぐのは「リクエスト→レスポンス到着までの空き時間」だが、
+HTML は `cf-cache-status: HIT` でその空き時間自体が短い。
+
+また、Lighthouse の改善提案1位は Bootstrap CSS の未使用分
+（mobile 合計約1,090ms、docs/lighthouse-baseline.md）であり、
+これは preload では解決しない。Bootstrap をやめるかどうかは #101（新サイト）の判断。
+
+**効果が測れなければ Early Hints ごと Off に戻してよい。**
+「現行サイトに作り込みすぎない」方針に照らして、`_headers` が複雑になる対価に
+見合うかで判断する。
+
+### 前提
+
+Early Hints は HTTP/2 または HTTP/3 接続でのみ動作する。
+どちらも 2026-09-11 に有効化済み。
 
 ---
 
@@ -167,7 +231,7 @@ table.js はページ内で絞り込みを完結させるため、実ユーザ�
 
 ## #123 HTMLのエッジキャッシュ（Cache Rules）を検討する
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -202,6 +266,24 @@ Speed Brain の前提条件（キャッシュ適格）を満たす。
 
 #79 / canonical をエッジで解く案（Snippets での `<title>` 書き換え）とは、
 キャッシュキーにクエリ文字列を含めるかどうかで設計が競合する。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 確認結果（2026-09-11）
+
+    curl -sI https://ryoei.pro/jpml_pros.html | grep -i cf-cache-status
+    → cf-cache-status: HIT
+
+HTML はすでにエッジキャッシュから配信されている。「HTML がキャッシュ対象外だから
+400ms かかっている」という仮説は外れだった。Cache Rules を足しても伸びしろはない。
+
+デプロイ時のパージ運用を持ち込む必要もなくなったため、#103（定期再生成）との
+設計統合も不要。
+
+docs/handover.md の「Initial server response time の改善は対処不可」という記述が
+実測で裏付けられた形になる。結果は docs にも記録済み。
 
 ---
 
@@ -311,6 +393,35 @@ Speed Brain は strict-dynamic や nonce を使う CSP と併用できない。
 結果を受けて #105 を「Speed Brainで代替」「自前で記述」「見送り」のいずれかで
 クローズする。
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 経過（2026-09-11）
+
+Speed Brain は Disabled だったため、最初の curl で `Speculation-Rules` ヘッダが
+出なかったのは「無効だったから」であり、判定にはなっていなかった。
+
+Speed → Recommendations で有効化済み。あらためて確認する:
+
+    curl -sI https://ryoei.pro/jpml_pros.html | grep -i speculation-rules
+
+- ヘッダが出る → Speed Brain が機能している。#105 は「Speed Brainで代替」で
+  クローズできる
+- ヘッダが出ない → 動作条件「prefetch 対象のページが Worker を呼び出さないこと」に
+  引っかかっている。#71 / Polish / Mirage と同じ結論（Workers 静的アセット配信では
+  効かない）。Speed Brain は Off に戻し、#105 は「自前で記述」か「見送り」で判断する
+
+### 前提条件の確認状況
+
+もうひとつの動作条件「キャッシュ適格であること」は、
+`cf-cache-status: HIT` を確認済みのため満たしている。
+
+### 注意
+
+有効化直後は反映に時間がかかる場合がある。ヘッダが出ない場合は
+時間を置いて再確認してから結論を出すこと。
+
 ---
 
 ## #118 Cloudflareの通知（Notifications）を設定する
@@ -405,6 +516,27 @@ Redirect Rule を1本:
 
 `_redirects` ではなく Redirect Rule を使う理由: `_redirects` はパスでしか
 分岐できず、ホスト名で条件を書けないため。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 確認結果（2026-09-11）
+
+    curl -sI https://www.ryoei.pro/jpml_pros.html | head -3
+    → 200
+
+www と apex の両方が同じ内容を配信している。対応が必要で確定。
+
+### 寄せる方向
+
+apex（`https://ryoei.pro/`）に寄せる。理由:
+
+- sitemap.xml の全25件の `<loc>` が apex
+- 全27ページの `og:url` が apex
+- Search Console もこの形でインデックスされている
+
+`www` → apex の Redirect Rule（308）を設定する。
 
 ---
 
@@ -4754,6 +4886,26 @@ Bootstrapのローカル化(旧44番)で外部依存が減り、インラインo
 
 ---
 <sub>移行前のタスク番号: 12</sub>
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### Speed Brain との非互換（2026-09-11）
+
+Speed Brain を有効化した（#119）。Speed Brain は strict-dynamic や nonce を使う
+CSP とは併用できないと公式に明記されている。
+
+参照: https://developers.cloudflare.com/speed/optimization/content/speed-brain/
+
+#119 の判定で Speed Brain が機能すると分かった場合、CSP のポリシー設計で
+strict-dynamic / nonce を採用するかどうかは、Speed Brain を残すかどうかと
+セットの判断になる。
+
+### あわせて（#120のチェックリスト）
+
+Early Hints も 2026-09-11 に有効化した。こちらは `Link:` ヘッダを読むだけで
+HTML を書き換えないため、CSP との競合はない。
 
 ---
 

@@ -420,6 +420,21 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 | #98 | php-email-form の削除 | PHPが動かない環境でPHP用フォーム検証を配信していた |
 | #100 | フッターの著作権表示を修正 | テンプレートのプレースホルダが残っていた |
 
+#### 配信の実測（2026-09-11 に確認）
+
+| 確認項目 | 結果 | 意味 |
+|---|---|---|
+| `curl -sI https://www.ryoei.pro/jpml_pros.html` | **200** | www と apex の両方が同じ内容を配信していた。正規化が必要（#115） |
+| `curl -sI https://ryoei.pro/jpml_pros.html` の `cf-cache-status` | **HIT** | HTML はすでにエッジキャッシュから配信されている |
+
+**HTML はすでにキャッシュされているため、Cache Rules で HTML のエッジキャッシュを
+足す余地はない。** 「Initial server response time 400ms」の原因はキャッシュ不足では
+なく、Workers 静的アセット配信そのものの応答時間である、という当初の記録が
+実測で裏付けられた。同じ検討を繰り返さないこと。
+
+副次的に、Speed Brain の動作条件のひとつ「キャッシュ適格であること」は
+満たされていることも確認できた。
+
 ### #7（型Aの静的化）で用意した共通部品
 
 `jpml_titles.html` の移行(#7)で、型A(表とフィルターのみ)の残りページで
@@ -690,6 +705,38 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 - **Web Analytics のビーコンは `/cdn-cgi/rum` への POST。**
   HTTPメソッドやパスで遮断するルールを書くときは `/cdn-cgi/` を
   除外すること（#110）
+
+#### Speed 設定の現状（2026-09-11 時点）
+
+Speed → Recommendations（Site Recommendations）の一覧と、それぞれの判断。
+
+| 項目 | 状態 | 判断理由 |
+|---|---|---|
+| Web Analytics (RUM) | 有効 | #32 で GA4 から移行済み |
+| Speed Brain | **有効化(2026-09-11)** | #105（Speculation Rules）の代替候補。効くかどうかは判定中（#119参照） |
+| Polish | **無効のまま** | #71 の節のとおり。Workers 静的アセットにオリジンがなく効果がない。加えて `<img>` をエッジで書き換えるため #9 と競合する |
+| HTTP/2 | 有効 | 既定 |
+| HTTP/3 | **有効化(2026-09-11)** | モバイル回線で効く。リスクなし |
+| HTTP/2 to Origin | 有効 | オリジンが存在しないため実質無効。害もないので触らない |
+| Enhanced HTTP/2 Prioritization | 有効 | 同上 |
+| 0-RTT Connection Resumption | **有効化(2026-09-11)** | GET/HEAD にしか適用されない。状態を変えるエンドポイントが1つもない静的サイトのため、リプレイの実害がない |
+| Always use HTTPS | **有効化(2026-09-11)** | 下記参照 |
+| TLS 1.3 | 有効 | 既定 |
+| Early Hints | **有効化(2026-09-11)** | ただしトグルだけでは何も起きない。下記参照 |
+
+**「Enable all settings」ボタンは押さないこと。** Polish が一括で有効になり、
+#71 と #9 の判断が覆る。個別に切り替える。
+
+**Always use HTTPS が無効だったのは穴だった。** `_headers` に HSTS
+（`max-age=31536000; includeSubDomains`）は入っていたが、HSTS が効くのは
+一度 HTTPS で訪問済みのブラウザだけ。初回訪問者が `http://` で叩いた場合、
+リダイレクトされずに HTTP のまま配信される状態だった。2026-09-11 に解消。
+
+**Early Hints はトグルを入れただけでは動かない。** Cloudflare の実装は
+レスポンスの `Link: ...; rel=preload` / `rel=preconnect` ヘッダをキャッシュして
+103 で先出しする仕組みで、HTML 内の `<link>` タグは見ない（Pages には
+`<link>` からの自動生成があるが、Workers 静的アセットで同じ挙動をするかは未確認）。
+`_headers` に `Link:` 行を足す必要がある。設計は別issueで扱う。
 
 ### Cloudflare Pro でできること・できないこと
 
