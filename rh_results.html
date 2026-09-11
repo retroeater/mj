@@ -17,8 +17,7 @@
 <link rel="stylesheet" media="screen" href="style.css">
 <!-- JavaScripts -->
 <script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script defer src="https://www.gstatic.com/charts/loader.js"></script>
-<script defer src="rh_results.js"></script>
+<script defer src="table.js"></script>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "573520ec707f4a59b7b5cb06ef67cad8"}'></script>
 </head>
@@ -26,6 +25,30 @@
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
-<div id="myTable"></div>
+<h1 class="visually-hidden">平野良栄 公式戦成績</h1>
+
+<p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
+
+<table id="rh_results_table" class="mj-table mj-table-auto">
+	<caption class="visually-hidden">平野良栄の公式戦成績の一覧。</caption>
+	<thead>
+		<tr><th scope="col">年</th><th scope="col">得点</th><th scope="col">平均順位</th><th scope="col">トップ率</th><th scope="col">4位回避率</th><th scope="col">半荘数</th></tr>
+	</thead>
+	<tbody>
+<tr><td>通算</td><td>1,861.4</td><td>2.45</td><td>0.280</td><td>0.753</td><td>1,216</td></tr>
+<tr><td>2026年</td><td>14.3</td><td>2.48</td><td>0.222</td><td>0.815</td><td>27</td></tr>
+<tr><td>2025年</td><td>325.4</td><td>2.49</td><td>0.249</td><td>0.742</td><td>217</td></tr>
+<tr><td>2024年</td><td>-43.9</td><td>2.52</td><td>0.262</td><td>0.719</td><td>210</td></tr>
+<tr><td>2023年</td><td>278.8</td><td>2.42</td><td>0.302</td><td>0.756</td><td>86</td></tr>
+<tr><td>2022年</td><td>123.0</td><td>2.13</td><td>0.400</td><td>0.800</td><td>15</td></tr>
+<tr><td>2019年</td><td>413.4</td><td>2.32</td><td>0.330</td><td>0.795</td><td>88</td></tr>
+<tr><td>2018年</td><td>482.8</td><td>2.36</td><td>0.325</td><td>0.755</td><td>151</td></tr>
+<tr><td>2017年</td><td>-297.0</td><td>2.56</td><td>0.228</td><td>0.758</td><td>149</td></tr>
+<tr><td>2016年</td><td>77.4</td><td>2.50</td><td>0.237</td><td>0.763</td><td>114</td></tr>
+<tr><td>2015年</td><td>452.1</td><td>2.37</td><td>0.338</td><td>0.774</td><td>133</td></tr>
+<tr><td>2014年</td><td>35.1</td><td>2.42</td><td>0.346</td><td>0.692</td><td>26</td></tr>
+	</tbody>
+</table>
+
 </body>
 </html>

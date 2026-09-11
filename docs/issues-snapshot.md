@@ -4232,10 +4232,32 @@ ron2.jp の選手ページから取得できる所属・出身地・段位・か
 
 ### 本文
 
-27ページ中20ページが、いまもブラウザから直接Googleスプレッドシートにクエリを投げている。www.gstatic.com と docs.google.com への依存が消え、初期表示も速くなる。旧55番が前提。Astro移行(旧73番)の判断もこのタイミング。
+27ページ中11ページが、いまもブラウザから直接Googleスプレッドシートにクエリを投げている。www.gstatic.com と docs.google.com への依存が消え、初期表示も速くなる。旧55番が前提。Astro移行(旧73番)の判断もこのタイミング。
 
 ---
 <sub>移行前のタスク番号: 39</sub>
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+## rh_results.html を移行(2026-09-11)
+
+型A'(多列テキストテーブル、画像列なし)の1ページ目。共通部品として以下を追加した。
+
+- `TableConfig.show_filter`(#searchBoxes自体を持たないページ用)
+- `.mj-table-auto`(style.css。画像列固定を前提としない多列テーブル用)
+- `table.js`のテーブル検出セレクタを`.mj-table[data-filter-param]`→`.mj-table`に変更(絞り込み欄なしでもナビバー固定分のオフセット計算は必要なため)
+
+これらは`rh_results_detail`と型Bの表部分でも使う想定。
+
+また、スプレッドシートの表示形式(`#,##0.0`等)が`fetch_sheet()`では取得できないことが分かった。gvizは生の数値とは別に表示用文字列を持つが`fetch_sheet()`は生の値しか返さないため、`rh_results`側で書式を再現する整形関数を追加して対処した(`scripts/lib/sheets.py`は変更していない)。数値列を持つページを今後移行する際は同じ確認が必要。
+
+進捗: 21ページ中10ページ完了・残11ページ。詳細はdocs/handover.mdの「#7 の進め方」を参照。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
 
 ---
 

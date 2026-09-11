@@ -8,7 +8,9 @@
 //   - data-name-mode   : "exact"なら ?name= をdata-nameとの完全一致に使う
 //                        (旧 Google Charts 版の WHERE A = "名前" 相当)
 //   - data-filter-param: 概要の絞り込み欄の初期値に使うURLパラメータ
-//                        ("name" か "tag"。ページによって異なる)
+//                        ("name" か "tag"。ページによって異なる)。
+//                        絞り込み欄を持たないページ(rh_results、
+//                        TableConfig.show_filter=False)では省略される
 //
 // ページ固有のUI(resource_logsの名前セレクトボックス・タグリンク等)は
 // ここでは共通化せず、そのページ専用の小さなJSを別に持たせる。
@@ -23,7 +25,14 @@ window.mjTable.getSearchParam = function (name) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-	const table = document.querySelector('.mj-table[data-filter-param]')
+	// data-filter-param を持たないページ(rh_results)もあるため、
+	// セレクタは絞り込まず.mj-tableだけで探す。絞り込み欄がなくても
+	// updateOffsets()による--navbar-height/--content-offsetの設定は
+	// 必要で、これが走らないとstickyヘッダーとbodyのpadding-topが
+	// 既定値90pxのまま固定されてしまう。
+	// (jpml_pros.htmlはtable.jsを読み込まずjpml_pros.jsを使うため、
+	// この変更の影響を受けない)
+	const table = document.querySelector('.mj-table')
 	if (!table) return
 
 	const getSearchParam = window.mjTable.getSearchParam

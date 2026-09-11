@@ -95,19 +95,20 @@ HTMLは27ページ。大きく3系統に分かれる。
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
 | ビルド時生成（型A・15列） | 1 | `jpml_pros.html`。独自の`generate_jpml_pros.py`のまま |
 | ビルド時生成（型A・2列/3列） | 9 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列)。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
-| Google Charts依存 | **12** | ブラウザから直接スプレッドシートを読む。#7の対象 |
+| ビルド時生成（型A'・多列テキスト） | 1 | `rh_results.html`。画像列を持たないため`.mj-table-auto`を使う（#7） |
+| Google Charts依存 | **11** | ブラウザから直接スプレッドシートを読む。#7の対象 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html`と型A・2列/3列の9ページ(`jpml_titles` / `jpml_test` /
+- `jpml_pros.html`と型A/A'の10ページ(`jpml_titles` / `jpml_test` /
   `resource_logs` / `video_live` / `video_wayhome` / `video_en` / `rh_paifu` /
-  `saikyo_mens` / `video_mtsuku`) … それぞれ`scripts/generate_<ページ名>.py`
+  `saikyo_mens` / `video_mtsuku` / `rh_results`) … それぞれ`scripts/generate_<ページ名>.py`
   がビルド時に取得してHTMLに焼き込む。`jpml_pros`以外は`scripts/lib/page.py`
   の共通処理を使う（#7）
-- 残り12ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+- 残り11ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 **移行済みページは、スプレッドシートを直しただけでは反映されない。**
 `regenerate-page.yml` はスクリプトと対応する`.js`の変更をpushで検知する
@@ -202,7 +203,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（残り12ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（残り11ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
@@ -250,12 +251,12 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(9ページ完了・残12)は5つの型に分かれる。
+対象の21ページ(10ページ完了・残11)は5つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
 | A. 表とフィルターのみ | 13(**完了9・残4**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、ランキング3、`saikyo_results` |
-| A'. 多列テーブル（表のみ） | 2(**完了0・残2**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109） | `rh_results`(12行・6列) / `rh_results_detail`(321行・8列) |
+| A'. 多列テーブル（表のみ） | 2(**完了1・残1**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109） | `rh_results`(完了、12行・6列) / `rh_results_detail`(321行・8列) |
 | B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
 | D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |
@@ -478,9 +479,37 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
   `.mj-table-3col`を使う。ページ送りなし。絞り込み対象は3列目(選手)のみで、
   `data-info`には選手名・所属だけを入れ概要列の文言は含めない
 
+**2026-09-11、型A'(多列テキストテーブル、画像列なし)の1ページ目として
+`rh_results`を移行した。** 型A'の残り(`rh_results_detail`)と型Bの表部分が
+この共通部品を使う。
+
+- `TableConfig.show_filter`(既定`True`)を追加した。`False`にすると
+  `#searchBoxes`ごと出力せず(`search_boxes_before`/`after`があればそれだけは
+  出す)、`<table>`の`data-filter-param`属性も付けない。`rh_results`が
+  最初の適用例
+- `.mj-table-auto`(style.css)を新設した。`.mj-table-2col`/`.mj-table-3col`は
+  1列目を画像168px固定にする前提のため、画像列を持たないページでは使えない。
+  こちらは`width: 100%`のみを指定し、列幅は`table-layout: auto`の自動計算に
+  任せる(旧Google Charts版の`options.width: '100%'`と同じ見た目になる)
+- `table.js`のテーブル検出セレクタを`.mj-table[data-filter-param]`から
+  `.mj-table`に変更した。絞り込み欄を持たないページでも
+  `updateOffsets()`(`--navbar-height`/`--content-offset`の設定)は必要で、
+  これが走らないとstickyヘッダーとbodyの`padding-top`が既定値90pxのまま
+  固定されるため。`jpml_pros.html`は`table.js`を読み込まず`jpml_pros.js`を
+  使うため、この変更の影響を受けない
+- **スプレッドシートの表示形式(`#,##0.0`等)は`fetch_sheet()`では取得できない
+  ことが判明した。** gvizのレスポンスは生の数値(`v`)とは別に表示用文字列
+  (`f`)を持つが、`fetch_sheet()`は`v`しか返さない。旧Google Charts版の
+  `Table`は`f`をそのまま描画していたため、`rh_results`のような小数・
+  桁区切りを持つ数値列は生の浮動小数(`1861.4000000000012`等)がそのまま
+  出力されると見た目が変わってしまう。`scripts/lib/sheets.py`は変更せず、
+  `generate_rh_results.py`側でシートの書式(列ごとの小数桁数)を再現する
+  小さな整形関数を書いて対処した。`rh_results_detail`など今後の数値列を
+  持つページでも同じ確認が要る
+
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
-型Aの残り11ページのうち、この3ページは他と性質が違うため#7での
+型Aの残り4ページのうち、このランキング3ページは他と性質が違うため#7での
 移行難度が高い。
 
 - 共用している`league_ranking.js`（772行）は表示ロジックではなく

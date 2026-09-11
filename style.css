@@ -246,6 +246,16 @@ body:has(.mj-table) {
 	overflow-wrap: anywhere;
 }
 
+/* ==== .mj-table-auto(画像列を持たない多列テキストテーブル) ====
+   .mj-table-2col / 3col は1列目を画像168px固定にする前提なので、
+   画像列のないページでは使えない。こちらは width だけを指定し、
+   列幅は table-layout: auto の自動計算に任せる。旧Google Charts版の
+   options.width: '100%' と同じ見た目になる。
+   型A'(rh_results / rh_results_detail)で使う(#7)。 */
+.mj-table-auto {
+	width: 100%;
+}
+
 /* ==== #pros_table 固有(15列の選手データベース) ====
    列幅を固定するため table-layout: fixed を使う。
    幅の内訳: 「名前」150px + それ以外14列 × 56px = 934px
@@ -417,6 +427,17 @@ body:has(.mj-table) {
    概算で、contain-intrinsic-sizeのautoにより描画後は実測値に置き換わる。 */
 #mtsuku_table tbody tr {
 	contain-intrinsic-size: auto 98px;
+}
+
+/* ==== #rh_results_table 固有(平野良栄の公式戦成績) ====
+   画像列を持たない型A'の1ページ目。.mj-table既定の56pxは画像80pxの行を
+   基準にした値のため、テキストのみのこのテーブルには大きすぎる。
+   行高: font-size 13px × line-height 1.25 = 16.25px + 上下padding 4px×2
+   = 24.25px。ヘッドレスChromeでの実測値(getBoundingClientRect().height)
+   も24.25pxで一致した。折り返しがなく行高が変わらないテーブルのため、
+   端数を切り上げた25pxを既定値としている。 */
+#rh_results_table tbody tr {
+	contain-intrinsic-size: auto 25px;
 }
 
 /* ==== .mj-pager(ページ送り) ====

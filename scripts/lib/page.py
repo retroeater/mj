@@ -56,6 +56,9 @@ class TableConfig:
     filter_param: str = "name"  # 絞り込み欄の初期値に使うURLパラメータ("name" か "tag")
     filter_label: str = "概要で検索"
     filter_placeholder: str = "概要"
+    # 絞り込み欄を持たないページ(rh_results)はFalseにする。#searchBoxes
+    # ごと出力せず、data-filter-param も付けない。
+    show_filter: bool = True
     # ページ固有の検索欄UI(resource_logsの名前セレクトボックス・タグリンク等)。
     # 既定の絞り込みinputの前後に挿入する。ページ専用の小さなJSと組みで使う。
     search_boxes_before: str = ""
@@ -115,11 +118,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <script src="navbar.js"></script>
 
 <h1 class="visually-hidden">{h1}</h1>
-
-<div id="searchBoxes" class="collapse">
 {search_boxes}
-</div>
-
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
 
 <table id="{table_id}" class="{table_class}"{table_data_attrs}>
@@ -145,13 +144,25 @@ PAGER_TEMPLATE = """
 
 
 def _render_search_boxes(table_config: TableConfig) -> str:
-    default_input = (
-        f'\t<div class="mj-filter"><label class="visually-hidden" for="info_filter">'
-        f'{esc(table_config.filter_label)}</label><input type="text" id="info_filter" '
-        f'class="mj-filter-input" placeholder="{esc(table_config.filter_placeholder)}"></div>'
-    )
+    """#searchBoxes 全体(divごと)を組み立てる。
+
+    show_filter が False でも、ページ固有UI(search_boxes_before/after)が
+    あれば div は出す。何もなければ空文字を返し、テンプレート側は
+    プレースホルダの前後の改行だけが残る(h1の直後に1行の空行を挟んで
+    <p id="result_count">に続く。#searchBoxesを持たないページ(rh_results)
+    で使う)。"""
+    default_input = ""
+    if table_config.show_filter:
+        default_input = (
+            f'\t<div class="mj-filter"><label class="visually-hidden" for="info_filter">'
+            f'{esc(table_config.filter_label)}</label><input type="text" id="info_filter" '
+            f'class="mj-filter-input" placeholder="{esc(table_config.filter_placeholder)}"></div>'
+        )
     parts = [p for p in [table_config.search_boxes_before, default_input, table_config.search_boxes_after] if p]
-    return "\n".join(parts)
+    if not parts:
+        return ""
+    inner = "\n".join(parts)
+    return f'\n<div id="searchBoxes" class="collapse">\n{inner}\n</div>\n'
 
 
 def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
@@ -174,7 +185,8 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
         data_attrs.append(f'data-page-size="{table_config.page_size}"')
     if table_config.name_mode == "exact":
         data_attrs.append('data-name-mode="exact"')
-    data_attrs.append(f'data-filter-param="{esc(table_config.filter_param)}"')
+    if table_config.show_filter:
+        data_attrs.append(f'data-filter-param="{esc(table_config.filter_param)}"')
     table_data_attrs = "".join(f" {a}" for a in data_attrs)
 
     pager = PAGER_TEMPLATE if table_config.page_size is not None else "\n"
