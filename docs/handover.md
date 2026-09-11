@@ -59,8 +59,13 @@ Cloudflare への移行を進める中で改善点を洗い出し、50件以上�
 
 `html_handling` は `"none"` を明示している（#89）。
 既定の `auto-trailing-slash` だと `/file.html` が `/file` へ
-307リダイレクトされ、canonical・og:url・sitemap がすべて
-リダイレクト先を指す状態になるため。
+307リダイレクトされ、og:url・sitemap がすべてリダイレクト先を
+指す状態になるため。
+
+**canonicalは全27ページに未設定。** `<link rel="canonical">`が
+存在しないため、上記の影響は受けない。単純に付けるとSearch Console
+実測の`?name=`付き14URL（SEO節）が正規化で検索結果から消えるため、
+方針は#113で判断中。
 
 **この設定はディレクトリインデックスの解決も無効にする。**
 そのため `_redirects` の先頭にある次の1行が必須で、
@@ -757,6 +762,13 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 | スクロールバーを考慮したビューポート単位 | 見送り | .mj-table-2col を width: 100% にしたため当面出番がない |
 | Reduce unused CSS（Bootstrap CSSの削減） | 見送り | Lighthouseの改善提案1位（mobile合計約1,090ms）だが、ビルド工程を持たない構成を崩す対価に見合わない。minifyを却下したのと同じ理由。Bootstrapをやめるかどうかは新サイト（#101）で判断する |
 | Initial server response time の改善 | 対処不可 | 全6ページで指摘（最大 resource_logs 400ms）。Cloudflare Workers の静的アセット配信そのものの応答時間で、ページ側の対処手段がない |
+| Zaraz | 却下 | 第三者スクリプトが1本もない。タグマネージャの対象がない |
+| Turnstile | 却下 | `<form>` が27ページに0個。保護する送信経路がない |
+| Waiting Room | 却下 | 同時接続を制限する必要がある場面がない。別課金 |
+| Cache Reserve | 却下 | R2の課金が発生する。アセット総量が小さく見合わない |
+| Logpush | 対象外 | Enterprise限定 |
+| Hotlink Protection | 却下 | 自前画像は11枚178KB。守る対象が小さい。選手画像1,985枚は外部7ドメインにあり対象外 |
+| HSTS preload | 見送り | `_headers` の `max-age=31536000; includeSubDomains` で実用上は十分。preloadリストへの登録は実質不可逆で、将来サブドメインをHTTPで使う自由を失う |
 
 **すでに対応済みだったもの**
 

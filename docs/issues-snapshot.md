@@ -12,7 +12,398 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 112件（open/closed含む）。番号降順。
+件数: 126件（open/closed含む）。番号降順。
+
+---
+
+## #126 Bing Webmaster Toolsに登録しIndexNowを検討する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: SEO
+
+### 本文
+
+Search Console からインポートできるので登録は数分。麻雀という領域で Bing の
+比率は低いと思われるが、コストがほぼゼロで、GSC と独立した検証材料になる。
+
+### IndexNow
+
+Cloudflare の Crawler Hints を On にすると IndexNow に自動通知が飛ぶ。
+ただしキャッシュ連動のため、Cache Rules の判断（別issue）の後に効果を確認する。
+
+### 完了条件
+
+登録後、Bing 側のインデックス数と GSC の22URLを突き合わせる。
+
+---
+
+## #125 Cloudflare ObservatoryでLighthouseを定期実行する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス
+
+### 本文
+
+現在 docs/lighthouse-baseline.md を手作業で作っている。Speed → Observatory で
+指定ページの Lighthouse を定期実行し、回帰を通知させられる。
+
+#7 で残り12ページを移行していく最中なので、悪化の検知手段があると安心。
+
+### 決めること
+
+対象ページの選定（全27ページは不要）。候補:
+
+- index（唯一の別系統・ライブラリ232KB）
+- jpml_pros（最重量。mobile perf 37）
+- saikyo_results（未移行の最大懸念。2,560行）
+- jpml_titles（型Aの代表）
+
+---
+
+## #124 Rate Limiting rulesを設定する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: セキュリティ
+
+### 本文
+
+#91 で Super Bot Fight Mode は「Pro では Definitely automated しか遮断できず、
+実測で最大の塊である Likely automated 41% に手が出ない」として却下した。
+Rate Limiting rules は bot score を使わないため、同じ層に効かせられる。
+
+Pro は rate limiting rules を数本・IP単位・1分窓で使える
+（正確な本数はダッシュボードで確認）。
+
+### 当サイトは閾値を低くしやすい
+
+table.js はページ内で絞り込みを完結させるため、実ユーザーのHTMLリクエスト数が
+非常に少ない。一方、選手1,100名のデータベースはスクレイピング対象になりやすい。
+
+### 案
+
+同一IPが1分に N 回以上 `.html` を要求したら Managed Challenge。
+まず Log モードで運用して閾値を決める（#76 と同じ進め方）。
+
+### 除外
+
+`/cdn-cgi/` は Web Analytics のビーコン送信先なので必ず除外する（#110 と同じ注意点）。
+
+### あわせて検討
+
+`cf.client.bot`（Verified Bot 判定）を使ったカスタムルール。Pro でも利用できる。
+検索エンジンを素通しし、それ以外の非ブラウザ的アクセスに Managed Challenge を出す分岐。
+
+---
+
+## #123 HTMLのエッジキャッシュ（Cache Rules）を検討する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+docs/handover.md に「Initial server response time の改善は対処不可。ページ側の
+対処手段がない」と記録しているが、Cloudflare 側に手段が残っている可能性がある。
+
+Cloudflare は既定で HTML をキャッシュ対象にしない。Cache Rule で HTML を
+Eligible for cache にして Edge TTL を付けると、cf-cache-status が HIT になり
+応答が短縮されうる。
+
+### まず現状確認
+
+```
+curl -sI https://ryoei.pro/jpml_pros.html | grep -i cf-cache-status
+```
+
+- DYNAMIC → 伸びしろあり。先へ進む
+- HIT → すでに効いている。400ms は別要因。このissueはクローズ
+
+### 代償
+
+デプロイのたびにキャッシュパージが必要になる。GitHub Actions から API 1本で
+自動化できる。データ更新が `workflow_dispatch` の手動実行になっている現状（#103）と
+設計をセットにする。
+
+### 副次効果
+
+Speed Brain の前提条件（キャッシュ適格）を満たす。
+
+### 競合
+
+#79 / canonical をエッジで解く案（Snippets での `<title>` 書き換え）とは、
+キャッシュキーにクエリ文字列を含めるかどうかで設計が競合する。
+
+---
+
+## #122 Search Consoleで「?name=」付きURLの内訳をエクスポートする
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: SEO
+
+### 本文
+
+docs/handover.md に「検索結果に出た22URLのうち14件が `?name=` 付きだったが、
+どのページのものかは未確認」とある。この内訳は次の2つの判断の前提になっている。
+
+- #7 のURLパラメータ削除判断（ページを移行するたびに発生する）
+- canonical の方針判断（別issue）
+
+### 手順
+
+検索結果のパフォーマンス → ページ →「URLを含む: ?name=」でフィルタ → エクスポート。
+
+結果は docs に表として残す。ページを移行するたびに毎回悩まずに済むよう、
+先に1回取っておく。
+
+---
+
+## #121 sitemap.xmlのlastmodを自動更新する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: SEO
+
+### 本文
+
+現在 sitemap.xml は25件すべて `<lastmod>` が `2026-09-07` の固定値。
+Google は changefreq と priority を見ないが、lastmod は（正確である限り）見る。
+全件が同じ固定値では信号として無意味。
+
+### 対応
+
+`regenerate-page.yml` が対象ページを再生成したとき、そのページの `<lastmod>` だけを
+当日の日付に書き換える処理を足す。#103（定期再生成）と同じ場所に入るため、
+設計はセットで検討する。
+
+### あわせて判断
+
+changefreq / priority を残すか削るか。Google は無視するが、他の検索エンジン向けに
+残す選択もある。
+
+---
+
+## #120 #9の着手前にCloudflareのHTML書き換え系機能がOffか確認する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: セキュリティ, 対象: 全ページ
+
+### 本文
+
+Cloudflare にはエッジで inline script や属性を注入する機能があり、
+有効なままCSPを書くと自分でサイトを壊すことになる。#9 着手前のチェックリスト。
+
+| 機能 | 場所 | あるべき状態 |
+| --- | --- | --- |
+| Email Obfuscation | Scrape Shield | Off（inline script を注入する） |
+| Rocket Loader | Speed → Optimization | Off（scriptを書き換える） |
+| Mirage | Speed → Optimization | Off（`<img>` を書き換える。#71の節で不採用と判断済みだが実設定を確認） |
+
+あわせて Speed Brain（別issue）も strict-dynamic / nonce と非互換。
+
+確認結果は #9 のコメントに転記する。
+
+---
+
+## #119 Speed Brainが当サイトで機能するか判定する（#105の判断材料）
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+Speed Brain は Cloudflare 側の設定だけで Speculation Rules を配布する機能で、
+#105（自前で Speculation Rules を書くか）の代替になりうる。
+
+### 効かない可能性がある
+
+動作条件に「prefetch 対象のページが Worker を呼び出さないこと」「キャッシュ適格で
+あること」が含まれる。Workers 静的アセット配信の当サイトでは効かない可能性がある。
+#71（Tiered Cache）や Polish / Mirage を却下したのと同じ構造の落とし穴。
+
+参照: https://developers.cloudflare.com/speed/optimization/content/speed-brain/
+
+### 判定方法
+
+Speed Brain を有効にして:
+
+```
+curl -sI https://ryoei.pro/jpml_pros.html | grep -i speculation-rules
+```
+
+ヘッダが付かなければ効いていない。
+
+### CSPとの関係
+
+Speed Brain は strict-dynamic や nonce を使う CSP と併用できない。
+#9 の内容次第では選択肢から外れる。
+
+### 完了条件
+
+結果を受けて #105 を「Speed Brainで代替」「自前で記述」「見送り」のいずれかで
+クローズする。
+
+---
+
+## #118 Cloudflareの通知（Notifications）を設定する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: インフラ
+
+### 本文
+
+現在、異常が起きても気づく経路がない。最低限、以下を設定する。
+
+| 通知 | 理由 |
+| --- | --- |
+| ドメイン有効期限・自動更新 | Registrar。失効すると全停止する |
+| SSL証明書 | 同上 |
+| Security Events のスパイク | #76 で Managed Ruleset を Block に切り替えたため、誤検知の急増を検知したい |
+| Workers のエラー率 | 配信そのものの異常検知 |
+
+通知先は当面 平野さんのメール。#17 で独自ドメインメールを作る場合は宛先を見直す。
+
+---
+
+## #117 DNSSECを有効にする
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: インフラ
+
+### 本文
+
+#18 で Cloudflare Registrar へ移管済み、DNS も Cloudflare のため、
+DSレコードの登録まで自動で完結する。現状の有効/無効を確認し、無効なら有効化する。
+
+---
+
+## #116 送信しないドメインのなりすまし対策（SPF / DMARC）を入れる
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: セキュリティ
+
+### 本文
+
+#17（Email Routing）は保留だが、保留のままでも「このドメインはメールを送らない」
+という宣言は今すぐ出せる。ryoei.pro は個人ブランドのドメインなので、
+なりすまし送信のリスクは実在する。
+
+### 対応
+
+DNS → Records の Email Security wizard で入る。手動なら:
+
+```
+ryoei.pro               TXT  "v=spf1 -all"
+_dmarc.ryoei.pro        TXT  "v=DMARC1; p=reject; rua=mailto:<宛先>"
+*._domainkey.ryoei.pro  TXT  "v=DKIM1; p="
+```
+
+### 注意
+
+#17 で Email Routing を導入する場合、SPF の内容を差し替える必要がある。
+#17 に着手するときはこのissueを見直すこと。
+
+---
+
+## #115 wwwとapexの正規化を確認し、必要ならRedirect Ruleを設定する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: インフラ
+
+### 本文
+
+docs/handover.md には `ryoei.pro` / `www.ryoei.pro` の両方が記載されており、
+`_redirects` に正規化の行はない。両方が200を返すなら同一内容が2ホストで配信され、
+重複コンテンツになる。Search Console はドメインプロパティ（TXT認証）なので
+両ホストが同じプロパティに混ざり、レポートも汚れる。
+
+### 確認
+
+```
+curl -sI https://www.ryoei.pro/jpml_pros.html | head -3
+```
+
+200 が返るなら対応が必要。301/308 が返るならこのissueはクローズ。
+
+### 対応案
+
+Redirect Rule を1本:
+
+| 項目 | 値 |
+| --- | --- |
+| 式 | `http.host eq "www.ryoei.pro"` |
+| 遷移先 | `concat("https://ryoei.pro", http.request.uri.path)`（動的） |
+| ステータス | 308 |
+
+`_redirects` ではなく Redirect Rule を使う理由: `_redirects` はパスでしか
+分岐できず、ホスト名で条件を書けないため。
+
+---
+
+## #114 workers.devのプレビューURLをnoindexにする
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: SEO, 対象: 全ページ
+
+### 本文
+
+#38 でプレビュービルドを有効にしているため `*.workers.dev` のURLが公開状態にある。
+`_headers` に指定がないため、クロールされれば本番と同一内容の重複サイトになる。
+
+Cloudflare 公式が `_headers` の用例として挙げている書き方:
+
+```
+https://:version.:subdomain.workers.dev/*
+  X-Robots-Tag: noindex
+```
+
+参照: https://developers.cloudflare.com/workers/static-assets/headers/
+
+あわせて Search Console の「ページ」レポートで workers.dev のURLが
+登録されていないか確認する。
+
+---
+
+## #113 canonicalの方針を決める（#79と一体で判断する）
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: SEO, 対象: 全ページ
+
+### 本文
+
+### 事実確認
+
+全27ページに `<link rel="canonical">` が存在しない。`og:url` は全ページにあるが
+canonical はない（index / jpml_pros / jpml_titles / houou_results で確認）。
+
+docs/handover.md の #89 の節に「canonical・og:url・sitemap がすべてリダイレクト先を
+指す状態になる」と書かれているが、canonical は実在しない。docs の記述を修正すること
+（別途対応）。
+
+### 単純に付けてはいけない理由
+
+Search Console の実測で、検索結果に出た22URLのうち14件が `?name=` 付きだった。
+self-canonical を `?name=` なしのURLに向けると、この14件は正規化されて検索結果から消える。
+
+### 選択肢
+
+(a) `?name=` を独立したページとして生かす
+    #79（URLパラメータの選手名をタイトルに反映）を先に実施し、
+    title / description / canonical を `?name=` ごとに出し分ける
+
+(b) 全件表示ページに寄せる
+    全ページに `?name=` なしの self-canonical を付け、`?name=` 経由の流入は捨てる。
+    #7 のURLパラメータ削除判断とも整合する
+
+(c) 現状維持（canonical なし。Google の正規化任せ）
+
+### 判断材料
+
+- `?name=` 付きURLの内訳のエクスポート（別issue）
+- 新サイトで選手個別ページを作る構想（#101 / docs/new-site-design.md）。
+  そちらで解くなら現行サイトは (b) か (c) でよい
+
+### 依存
+
+#79 と実質同一の判断。片方だけ決めても着手できない。
 
 ---
 
@@ -2444,6 +2835,31 @@ JavaScriptで document.title を書き換えれば、
 根本的な解決は選手個別ページを作ることで、これは新サイトの仕事
 （docs/new-site-design.md 参照）。
 効果が限定的なため保留とする。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### エッジで解く案（Cloudflare Snippets / HTMLRewriter）
+
+Snippets または Worker の HTMLRewriter で `?name=` を読み、`<title>` /
+`<meta name="description">` / canonical をエッジで書き換える方法がある。
+
+- ビルド工程を持たない方針と両立する
+- クライアント側JSに頼らないので、確実にクローラーへ届く
+
+### 代償
+
+キャッシュキーにクエリ文字列を含める必要があり、選手1,100名分のバリエーションが
+キャッシュを持つことになる。HTMLのエッジキャッシュ（別issue）とは設計を
+統合する必要がある。
+
+### 位置づけ
+
+新サイトで選手個別ページを作る構想（#101）があるなら、そちらで解くほうが素直。
+「現行サイトに作り込みすぎない」方針との兼ね合いで判断する。
+
+canonical の方針（別issue）と同一の判断なので、どちらか一方では決められない。
 
 ---
 
