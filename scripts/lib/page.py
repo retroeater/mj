@@ -90,7 +90,7 @@ def build_image_cell(alt, url, image_url, css_class, width, height, fallback) ->
     return img
 
 
-PAGE_TEMPLATE = """<!DOCTYPE html>
+HEAD_TEMPLATE = """<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -109,11 +109,13 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <link rel="stylesheet" media="screen" href="style.css">
 <!-- JavaScripts -->
 <script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script defer src="table.js"></script>
-{script_extra}<!-- Cloudflare Web Analytics -->
+{extra_head}<!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "573520ec707f4a59b7b5cb06ef67cad8"}}'></script>
 </head>
-<body>
+"""
+
+# 表を持つページ(型A/A')用。HEAD_TEMPLATEに<body>以降を続ける。
+PAGE_TEMPLATE = HEAD_TEMPLATE + """<body>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
@@ -131,6 +133,16 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 \t</tbody>
 </table>
 {pager}</body>
+</html>
+"""
+
+# 表を持たないページ(型D等)用。本文は呼び出し側が丸ごと組み立てて渡す。
+CONTENT_TEMPLATE = HEAD_TEMPLATE + """<body>
+<!-- Bootstrap Navigation Bar -->
+<script src="navbar.js"></script>
+
+{body_html}
+</body>
 </html>
 """
 
@@ -191,10 +203,15 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
 
     pager = PAGER_TEMPLATE if table_config.page_size is not None else "\n"
 
+    # table.js は`.mj-table`を探して動くページ専用の共有JS。表を持たない
+    # ページ(render_content()側)は読み込まない。
+    extra_head = f'<script defer src="table.js"></script>\n{table_config.extra_script}'
+
     return PAGE_TEMPLATE.format(
         title=esc(meta.title),
         description=esc(meta.description),
         og_url=esc(meta.og_url),
+        extra_head=extra_head,
         h1=esc(meta.h1),
         caption=esc(meta.caption),
         table_id=esc(table_config.table_id),
@@ -204,7 +221,23 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
         search_boxes=_render_search_boxes(table_config),
         rows=rows_html,
         pager=pager,
-        script_extra=table_config.extra_script,
+    )
+
+
+def render_content(meta: PageMeta, body_html: str, extra_head: str = "") -> str:
+    """表を持たないページ(型D等)のHTML全体を組み立てる。
+
+    render()と違いtable.jsは読み込まない(.mj-tableを探すページ専用の
+    共有JSのため)。本文(body_html)は呼び出し側が丸ごと組み立てて渡す。
+    見出し(h1)の扱いもページごとに異なりうるため(resource_efficiencyは
+    可視のh1、型A/A'はvisually-hiddenのh1)、ここでは固定しない。
+    """
+    return CONTENT_TEMPLATE.format(
+        title=esc(meta.title),
+        description=esc(meta.description),
+        og_url=esc(meta.og_url),
+        extra_head=extra_head,
+        body_html=body_html,
     )
 
 

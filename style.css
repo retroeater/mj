@@ -103,6 +103,27 @@ th {
 	min-height: 700px;
 }
 
+/* resource_efficiency.html(型D)の静的SVG横棒グラフ用(#7/#128)。
+   デスクトップ用・モバイル用で行間・余白比率から設計し直した2枚のSVGを
+   両方HTMLに埋め込み、画面幅で表示を切り替える。1枚のSVGをviewBoxで
+   伸縮させ、モバイルだけfont-sizeをCSSで引き上げる案も試したが、
+   バー本体の高さ・行間はSVGのアスペクト比に連動して縮んだままなので
+   文字だけが行の高さを超えて重なってしまい失敗した経緯がある
+   (scripts/lib/chart.pyのモジュールdocstring参照)。 */
+.mj-bar-chart-mobile {
+	display: none;
+}
+
+@media (max-width: 480px) {
+	.mj-bar-chart-desktop {
+		display: none;
+	}
+
+	.mj-bar-chart-mobile {
+		display: block;
+	}
+}
+
 
 /* ==== jpml_pros.html 選手データベース用(最終版) ==== */
 

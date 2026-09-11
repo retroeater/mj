@@ -101,19 +101,21 @@ HTMLは27ページ。大きく3系統に分かれる。
 | ビルド時生成（型A・15列） | 1 | `jpml_pros.html`。独自の`generate_jpml_pros.py`のまま |
 | ビルド時生成（型A・2列/3列） | 9 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列)。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
 | ビルド時生成（型A'・多列テキスト） | 2 | `rh_results.html` / `rh_results_detail.html`。画像列を持たないため`.mj-table-auto`を使う（#7、完了） |
-| Google Charts依存 | **10** | ブラウザから直接スプレッドシートを読む。#7の対象 |
+| ビルド時生成（型D・静的SVG） | 1 | `resource_efficiency.html`。表を持たないため`render_content()`を使う。外部JS・外部ドメインへの依存が一切ない（#7/#128、完了） |
+| Google Charts依存 | **9** | ブラウザから直接スプレッドシートを読む。#7の対象。型B3・型C2・型A4 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
 ### データの流れ
 
 選手データや成績はすべて**Googleスプレッドシート**にある（5冊）。
 
-- `jpml_pros.html`と型A/A'の11ページ(`jpml_titles` / `jpml_test` /
+- `jpml_pros.html`と型A/A'/Dの12ページ(`jpml_titles` / `jpml_test` /
   `resource_logs` / `video_live` / `video_wayhome` / `video_en` / `rh_paifu` /
-  `saikyo_mens` / `video_mtsuku` / `rh_results` / `rh_results_detail`) …
-  それぞれ`scripts/generate_<ページ名>.py`がビルド時に取得してHTMLに
-  焼き込む。`jpml_pros`以外は`scripts/lib/page.py`の共通処理を使う（#7）
-- 残り10ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
+  `saikyo_mens` / `video_mtsuku` / `rh_results` / `rh_results_detail` /
+  `resource_efficiency`) … それぞれ`scripts/generate_<ページ名>.py`が
+  ビルド時に取得してHTMLに焼き込む。`jpml_pros`以外は`scripts/lib/page.py`
+  の共通処理を使う（#7）
+- 残り9ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 **移行済みページは、スプレッドシートを直しただけでは反映されない。**
 `regenerate-page.yml` はスクリプトと対応する`.js`の変更をpushで検知する
@@ -208,20 +210,22 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 
 | ドメイン | 用途 |
 |---|---|
-| `www.gstatic.com` / `docs.google.com` | Google Charts（残り10ページ） |
+| `www.gstatic.com` / `docs.google.com` | Google Charts（残り9ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
 | 画像7ドメイン | 選手のプロフィール画像 |
 
 **#7（Charts依存の解消）が終わると2つ減る。** `saikyo_mens.html`の移行(2026-09-11)で
 `abs.twimg.com`（Xアカウントなし選手の既定アイコン）への依存はすでに解消済み
-（フォールバックを`img/avatar.svg`に差し替えた）。
+（フォールバックを`img/avatar.svg`に差し替えた）。`resource_efficiency.html`
+の静的SVG化(2026-09-11)では、外部JS(`gstatic.com`)自体が丸ごと不要になった
+（グラフ系6ページで唯一、外部JSを一切読まないページになった）。
 
-**ただし `www.gstatic.com` が消えるかどうかは、グラフ系6ページ
-（型B/C/D）の方針次第。** Google Charts は利用規約上ローカルホストが
+**ただし `www.gstatic.com` が消えるかどうかは、残るグラフ系5ページ
+（型B/C）の方針次第。** Google Charts は利用規約上ローカルホストが
 認められておらず、`gstatic.com` からの読み込みが前提になっている。
-この6ページで Charts を使い続ける場合、表を静的化して
+この5ページで Charts を使い続ける場合、表を静的化して
 `docs.google.com` を消しても `script-src` から `gstatic.com` は
-外せない。方針は型Bを#111、型Cを#127、型Dを#128で判断する。
+外せない。方針は型Bを#111、型Cを#127で判断する。
 
 **生成済みページの `<img src>` に含まれる外部ドメインは、選手のプロフィール
 画像7ドメインだけではない。** `jpml_test.html` は `img.youtube.com`（12件）と
@@ -256,7 +260,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ### #7 の進め方（検討済み）
 
-対象の21ページ(11ページ完了・残10)は5つの型に分かれる。
+対象の21ページ(12ページ完了・残9)は5つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
@@ -264,7 +268,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 | A'. 多列テーブル（表のみ） | 2(**完了2・残0**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109）。**完了** | `rh_results`(完了、12行・6列) / `rh_results_detail`(完了、321行・8列) |
 | B. 表＋ローソク足 | 3 | `Dashboard`(名前/期/リーグの`ControlWrapper`。ページごとに構成が違う) + `Table`(`page:'enable'`) + `?name`時のみ`CandlestickChart`。型A/A'と同じ手順では表を静的化できない（#111） | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2 | `ColumnChart`(積み上げ棒は全員共通、`?name`時に選手の折れ線1本を追加。静的化とのハイブリッドが成立しうる。#127) | `houou_leagues` / `ouka_leagues` |
-| D. 横棒グラフ | 1 | `BarChart`。URLパラメータに依存せずデータも34行で固定。グラフ系で唯一、静的SVG化が成立する（#128） | `resource_efficiency` |
+| D. 横棒グラフ | 1(**完了1・残0**) | `BarChart`。URLパラメータに依存せずデータも34行で固定。グラフ系で唯一、静的SVG化が成立する（#128、**完了**） | `resource_efficiency`(完了) |
 
 ※ ランキング3ページは `league_ranking.js`（772行）を共用している。
 　 レーダーチャートの指標もこのファイルの集計ロジックを使う（新サイト）
@@ -575,6 +579,35 @@ Speed Brain の場合、有効化すると `Speculation-Rules` ヘッダは正�
   実測すると幅を圧迫する例外的に長い値があった。列を選ばず
   `#<table_id> td { white-space: normal; overflow-wrap: anywhere; }`と
   指定するほうが、旧版との差分調査の手間も含めて安全
+
+**2026-09-11、型D(静的SVG、表を持たない)として`resource_efficiency`を
+移行した。** グラフ系6ページの中で唯一、URLパラメータに依存せずデータ量も
+固定(34行)のため、完全に静的SVG化できた。
+
+- `scripts/lib/page.py`に`render_content(meta, body_html, extra_head="")`を
+  追加した。`render()`(表を持つページ用)と違い`table.js`は読み込まない。
+  これに伴い`PAGE_TEMPLATE`から`<head>`部分を`HEAD_TEMPLATE`として切り出し、
+  `PAGE_TEMPLATE`/`CONTENT_TEMPLATE`の両方がそれを取り込む形にした。
+  既存11ページの出力が1バイトも変わらないことを確認済み
+- `scripts/lib/chart.py`を新規作成し、横棒グラフのSVG生成
+  (`horizontal_bar_chart()`)をまとめた。外部の描画ライブラリ
+  (matplotlib等)は使わず、SVG文字列をPython側で直接組み立てる方式
+  (scripts/配下は現在すべて標準ライブラリのみで完結している)。
+  `#127`(型C)は積み上げ棒+選手の折れ線という別物のため、汎用化を
+  狙いすぎず横棒グラフに限定した
+- **ツールチップはJS/CSSなしで再現できる。** 各棒を`<g>`で包み内側に
+  `<title>`を置くと、ブラウザが標準のホバーツールチップを表示する。
+  この事実は#111/#127/#128の3issueすべてにコメントで追記した
+  (3issueとも「ツールチップは失われる」を静的化のデメリットとして
+  挙げていたが、これは誤りだったため)
+- **「幅100%・高さ700pxの両立」はviewBoxのアスペクト比固定だけでは
+  実現できなかった。** 幅に応じて高さも比例して変わるため、デスクトップ
+  幅(1280px)でほぼ700pxになるよう設計したSVGは、375px幅では高さも
+  文字サイズも同じ比率で縮み読めなくなった。CSSで文字サイズだけを
+  引き上げる案は、バーの太さ・行間が連動せず文字が行をまたいで重なり
+  失敗した。最終的にデスクトップ用・モバイル用で寸法設計を変えた2枚の
+  SVGを両方埋め込み、`@media (max-width: 480px)`で表示を切り替える形に
+  した。詳細な経緯は`scripts/lib/chart.py`のモジュールdocstring参照
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
