@@ -14,10 +14,14 @@
 ```
 ryoei.pro の改善を進めています。
 リポジトリは https://github.com/retroeater/mj の cloudflare ブランチです。
-docs/handover.md を読んでから、docs/issues-snapshot.md で
+docs/handover.md を読んでから、docs/issues-open.md で
 現在のタスク状況を確認してください。
 今日は #◯◯ に取り組みます。
 ```
+
+`docs/issues-open.md` はOpenのみの要約版。指示が正しく実施されたか
+（Closeされたか）を確認するときは、全件版の `docs/issues-snapshot.md`
+を参照する（Open版はCloseされると当該issueが消えるため追跡できない）。
 
 会話が長くなると1回あたりのコストが上がるため、
 **大きな作業の区切りごとに新しい会話を始める**とよい。
@@ -192,14 +196,17 @@ issue71件（#1〜#100台の大半）は、2026-09-11に一括追加しDoneス�
   `対象:`（jpml_pros/index/houou_results/全ページ）
 - 優先順位は Projects ボード（`ryoei.pro enhancements`）の並びで表す
 - 完了分もcloseした状態で残している（判断の経緯を後から追えるように）
-- **`docs/issues-snapshot.md` は本文込みのエクスポート。**
-  `docs/issues-snapshot.md` は Claude Code の PostToolUse フックで
-  `gh issue` 操作のたびに自動再生成される
-  (`scripts/build_issues_snapshot.py`)。
+- **`docs/issues-snapshot.md`（全件）と `docs/issues-open.md`（Openのみ）は
+  本文込みのエクスポート。** 用途を分けている:
+  セッション開始時は `issues-open.md`、指示が正しく実施されたか
+  （Closeされたか）の確認には `issues-snapshot.md`（全件）を使う
+  （Open版はCloseされると当該issueが消えるため追跡できない）。
+  両ファイルは Claude Code の PostToolUse フックで `gh issue` 操作の
+  たびに同じタイミングで自動再生成される (`scripts/build_issues_snapshot.py`)。
   ワークフローではないため、`gh issue` 以外の経路（GitHub MCP、
   `gh api`、ブラウザ）で操作した場合も反映されない。作業の最後に
   `python3 scripts/build_issues_snapshot.py` を手動実行すること。
-  念のため正確な状態は `gh issue list` で確認すること（#140）
+  念のため正確な状態は `gh issue list` で確認すること（#140、#143）
 
 ---
 
@@ -1042,5 +1049,6 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 | `CLAUDE.md` | Claude Code がセッション開始時に読む。プロジェクトの前提 |
 | `docs/new-site-design.md` | **新サイトの設計方針。**中断中で、再開手順まで書いてある |
 | `docs/astro-migration-study.md` | Astro移行の技術調査（Claude Codeによる） |
-| `docs/issues-snapshot.md` | issue一覧のエクスポート（本文込み） |
+| `docs/issues-snapshot.md` | issue一覧のエクスポート・全件（本文込み） |
+| `docs/issues-open.md` | issue一覧のエクスポート・Openのみ（本文込み） |
 | `docs/review-followup-instructions.md` | 2026-09-11の包括レビュー指摘への対応記録（完了済み） |
