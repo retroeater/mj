@@ -78,6 +78,16 @@ HTML は `cf-cache-status: HIT` でその空き時間自体が短い。
 Early Hints は HTTP/2 または HTTP/3 接続でのみ動作する。
 どちらも 2026-09-11 に有効化済み。
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 注意（2026-09-11）
+
+Speed Brain が Workers 静的アセットで拒否された件（#119）と同じく、
+「設定が有効になっている」ことと「実際に動いている」ことは別。
+判定は必ずレスポンスの実測で行うこと。
+
 ---
 
 ## #128 #7の型D resource_efficiency の移行方針を決める
@@ -267,7 +277,23 @@ Speed Brain の前提条件（キャッシュ適格）を満たす。
 #79 / canonical をエッジで解く案（Snippets での `<title>` 書き換え）とは、
 キャッシュキーにクエリ文字列を含めるかどうかで設計が競合する。
 
-### コメント (1件)
+### コメント (2件)
+
+**retroeater** (2026-09-11):
+
+### 確認結果（2026-09-11）
+
+    curl -sI https://ryoei.pro/jpml_pros.html | grep -i cf-cache-status
+    → cf-cache-status: HIT
+
+HTML はすでにエッジキャッシュから配信されている。「HTML がキャッシュ対象外だから
+400ms かかっている」という仮説は外れだった。Cache Rules を足しても伸びしろはない。
+
+デプロイ時のパージ運用を持ち込む必要もなくなったため、#103（定期再生成）との
+設計統合も不要。
+
+docs/handover.md の「Initial server response time の改善は対処不可」という記述が
+実測で裏付けられた形になる。結果は docs にも記録済み。
 
 **retroeater** (2026-09-11):
 
@@ -357,7 +383,7 @@ Cloudflare にはエッジで inline script や属性を注入する機能があ
 
 ## #119 Speed Brainが当サイトで機能するか判定する（#105の判断材料）
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -393,7 +419,7 @@ Speed Brain は strict-dynamic や nonce を使う CSP と併用できない。
 結果を受けて #105 を「Speed Brainで代替」「自前で記述」「見送り」のいずれかで
 クローズする。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -421,6 +447,42 @@ Speed → Recommendations で有効化済み。あらためて確認する:
 
 有効化直後は反映に時間がかかる場合がある。ヘッダが出ない場合は
 時間を置いて再確認してから結論を出すこと。
+
+**retroeater** (2026-09-11):
+
+### 判定結果（2026-09-11）: 効かない
+
+    curl -sI -H "sec-purpose: prefetch" https://ryoei.pro/jpml_titles.html | head -1
+
+    HTTP/2 503
+    cf-speculation-refused: prefetch refused: disabled for worker requests
+
+Cloudflare が拒否理由を明示している。Workers 静的アセット配信のこのサイトでは、
+Speed Brain の prefetch は最初から拒否される。#71（Tiered Cache）・Polish・Mirage と
+同じ「Workers 静的アセットには効かない」パターンがここでも再現した。
+
+Speed Brain は Off に戻した。
+
+### 判定方法についての注意（同じ誤解を繰り返さないため）
+
+`Speculation-Rules` ヘッダの有無で判定してはいけない。このヘッダは
+「ルールが配布されたか」しか示さない。Speed Brain 有効化後は
+`Speculation-Rules: "/cdn-cgi/speculation"` が正常に付いていたが、
+実際の prefetch は全件 503 だった。
+
+判定は必ず prefetch リクエストのステータスコードで行う:
+
+    curl -sI -H "sec-purpose: prefetch" <URL> | head -1
+
+    200 → 受理される
+    503 → 拒否される（cf-speculation-refused ヘッダに理由が入る）
+
+### 経過の記録
+
+有効化前の最初の確認で `Speculation-Rules` ヘッダが出なかったとき、
+「有効化直後で反映待ちの可能性」としたが、これは誤り。単に Speed Brain が
+Disabled だっただけで、有効化後はヘッダが出た。そのうえで prefetch が
+拒否される、という二段構えだった。
 
 ---
 
@@ -948,6 +1010,39 @@ docs/handover.mdに型A'(多列テーブル、表のみ)を新設し、rh_result
 - Speculation Rules API は Baseline ではなく、広く使われているブラウザの一部で動かない。CSP を入れる場合は script-src での許可も必要（#9と関連）
 - やるなら eagerness を絞り、ホバー時のみ先読みする形になる
 - #7 の完了後、ページ構成が固まって Lighthouse の実測が出てから判断する
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### Speed Brain では代替できないことが確定した（2026-09-11）
+
+#119 の判定により、Cloudflare の Speed Brain は Workers 静的アセット配信では
+prefetch が拒否される（`disabled for worker requests`）ことが分かった。
+「Cloudflare の設定だけで済ませる」選択肢は消えた。
+
+### 残る選択肢
+
+(a) 自前で Speculation Rules を HTML に書く
+    - 27ページすべての `<head>` に `<script type="speculationrules">` を追加する
+      作業になる（生成ページは scripts/lib/page.py 側で一括対応できる）
+    - Cloudflare のエッジ prefetch を介さないため、`disabled for worker requests`
+      の制約は受けない。ブラウザが直接取りに行く
+    - CSP（#9）で `script-src` に inline script の許可が必要になる。
+      「インラインハンドラの排除」を進めてきた方針と逆行する
+
+(b) 見送る
+
+### 判断材料
+
+- 平均的な訪問者が何ページ遷移するか。1ページで離脱するなら prefetch の
+  出番自体がない。#90（Bot Report）や Web Analytics の指標で確認できる
+- #24（五十音タブ）や #101（新サイト）で情報設計が変わる予定があり、
+  遷移パターンも変わる可能性がある
+
+### 依存
+
+#9 と併せて判断する。CSP のポリシーが固まる前に inline script を増やさないこと。
 
 ---
 

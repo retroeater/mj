@@ -435,6 +435,24 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 副次的に、Speed Brain の動作条件のひとつ「キャッシュ適格であること」は
 満たされていることも確認できた。
 
+#### Cloudflareの機能が「効くかどうか」の判定について
+
+Workers 静的アセット配信にはオリジンサーバーが存在しないため、
+オリジンを前提とする機能は効かない（#71 / Polish / Mirage / Argo）。
+2026-09-11 に Speed Brain も同じ理由で効かないことが確認された。
+
+**判定は「設定が有効か」ではなく「実際の動作」で見ること。**
+Speed Brain の場合、有効化すると `Speculation-Rules` ヘッダは正常に付与される。
+しかし実際の prefetch リクエストは全件拒否される。
+
+    curl -sI -H "sec-purpose: prefetch" https://ryoei.pro/jpml_titles.html | head -1
+
+    HTTP/2 503
+    cf-speculation-refused: prefetch refused: disabled for worker requests
+
+ヘッダの有無だけを見ると「機能している」と誤判定する。
+今後 Cloudflare の新機能を検討するときは、同じ落とし穴に注意すること。
+
 ### #7（型Aの静的化）で用意した共通部品
 
 `jpml_titles.html` の移行(#7)で、型A(表とフィルターのみ)の残りページで
@@ -713,8 +731,9 @@ Speed → Recommendations（Site Recommendations）の一覧と、それぞれ�
 | 項目 | 状態 | 判断理由 |
 |---|---|---|
 | Web Analytics (RUM) | 有効 | #32 で GA4 から移行済み |
-| Speed Brain | **有効化(2026-09-11)** | #105（Speculation Rules）の代替候補。効くかどうかは判定中（#119参照） |
-| Polish | **無効のまま** | #71 の節のとおり。Workers 静的アセットにオリジンがなく効果がない。加えて `<img>` をエッジで書き換えるため #9 と競合する |
+| Speed Brain | **無効** | 有効化して実測した結果、prefetch が拒否された（#119）。Off に戻した |
+| Polish / WebP | 無効 | #71 のとおり。Workers 静的アセットにオリジンがなく効果がない。加えて `<img>` をエッジで書き換えるため #9 と競合する |
+| Image Transformations | 未購入 | Cloudflare Images の別課金。自前画像は11枚178KB、選手画像1,985枚は外部7ドメインにあり対象外 |
 | HTTP/2 | 有効 | 既定 |
 | HTTP/3 | **有効化(2026-09-11)** | モバイル回線で効く。リスクなし |
 | HTTP/2 to Origin | 有効 | オリジンが存在しないため実質無効。害もないので触らない |
@@ -822,6 +841,9 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 | Logpush | 対象外 | Enterprise限定 |
 | Hotlink Protection | 却下 | 自前画像は11枚178KB。守る対象が小さい。選手画像1,985枚は外部7ドメインにあり対象外 |
 | HSTS preload | 見送り | `_headers` の `max-age=31536000; includeSubDomains` で実用上は十分。preloadリストへの登録は実質不可逆で、将来サブドメインをHTTPで使う自由を失う |
+| Speed Brain | 却下 | 有効化して実測したところ、prefetch が `HTTP 503` / `cf-speculation-refused: prefetch refused: disabled for worker requests` で拒否された。Workers 静的アセット配信では機能しない。#71・Polish・Mirage と同じ理由 |
+| Cache Rules による HTML のエッジキャッシュ | 却下 | `cf-cache-status: HIT` を実測。HTML はすでにキャッシュから配信されており伸びしろがない（#123） |
+| Image Transformations / Cloudflare Images | 却下 | 別課金。自前画像は11枚178KBで主要3枚はすでにWebP。選手画像1,985枚は外部7ドメインにあり対象外 |
 
 **すでに対応済みだったもの**
 
