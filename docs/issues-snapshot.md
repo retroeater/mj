@@ -417,7 +417,7 @@ HTTP/2・HTTP/3 も有効。
 
 ## #128 #7の型D resource_efficiency の移行方針を決める
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -676,7 +676,7 @@ table.js はページ内で絞り込みを完結させるため、実ユーザ�
 
 ## #123 HTMLのエッジキャッシュ（Cache Rules）を検討する
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -817,7 +817,7 @@ changefreq / priority を残すか削るか。Google は無視するが、他の
 
 ## #120 #9の着手前にCloudflareのHTML書き換え系機能がOffか確認する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: セキュリティ, 対象: 全ページ
 
 ### 本文
@@ -867,7 +867,7 @@ inline script や属性の注入は発生していない。
 
 ## #119 Speed Brainが当サイトで機能するか判定する（#105の判断材料）
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -972,7 +972,7 @@ Disabled だっただけで、有効化後はヘッダが出た。そのうえ�
 
 ## #118 Cloudflareの通知（Notifications）を設定する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -1036,7 +1036,7 @@ Domain Registration → ryoei.pro で以下を確認済み。
 
 ## #117 DNSSECを有効にする
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -1068,7 +1068,7 @@ DS レコードのレジストリ登録まで自動で完結する。手動作�
 
 ## #116 送信しないドメインのなりすまし対策（SPF / DMARC）を入れる
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: セキュリティ
 
 ### 本文
@@ -1134,7 +1134,7 @@ Reporting email addresses（rua）は空のまま。`@ryoei.pro` のアドレス
 
 ## #115 wwwとapexの正規化を確認し、必要ならRedirect Ruleを設定する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -1245,7 +1245,7 @@ https://:version.:subdomain.workers.dev/*
 
 ## #113 canonicalの方針を決める（#79と一体で判断する）
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: SEO, 対象: 全ページ
 
 ### 本文
@@ -1566,7 +1566,7 @@ Web Analytics の計測は生きている。
 
 ## #109 docs間で#7の型分類が食い違っている
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: 整理・保守, 対象: 全ページ
 
 ### 本文
@@ -1882,7 +1882,7 @@ docs/new-site-design.md の新サイト構想において、
 
 ## #100 フッターの「© Copyright iPortfolio」を修正する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-10 / クローズ: 2026-09-10
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-10 / クローズ: 2026-09-10
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -1986,7 +1986,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #99 bootstrap.bundle.min.jsのソースマップ参照で404が発生している
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-10 / クローズ: 2026-09-10
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-10 / クローズ: 2026-09-10
 - ラベル: 分野: 整理・保守, 対象: 全ページ
 
 ### 本文
@@ -2133,7 +2133,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #98 index.html専用ライブラリのうちphp-email-formを削除する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-10
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-10
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -2449,7 +2449,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #94 アイコンフォント2種を廃止してSVGに置き換える
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-10
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-10
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -2633,7 +2633,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #93 Google Fontsの読み込みをやめてシステムフォントに統一する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-10
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-10
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -2785,7 +2785,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #92 静的アセットのブラウザキャッシュを効かせる
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-10
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-10
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
@@ -3022,7 +3022,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #91 Super Bot Fight Modeの有効化を検討する
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: セキュリティ
 
 ### 本文
@@ -3097,7 +3097,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #90 Bot Reportでボットトラフィックの比率を把握する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -3195,7 +3195,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #89 html_handlingの既定により全ページで余計なリダイレクトが発生している
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: SEO, 対象: 全ページ
 
 ### 本文
@@ -3380,7 +3380,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #88 index.cssのServices・Breadcrumbsセクションを削除する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -3420,7 +3420,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #87 ソート中だけ描画を止めて中間状態の再計算を省く
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 状況: 保留, 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -3457,7 +3457,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #86 ソート時に tbody ごと差し替えて再計算を1回にする
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -3500,7 +3500,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #85 contain-intrinsic-size を固定値にしてソート時の描画を軽くする
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -3577,7 +3577,7 @@ Settings → Pages → Build and deployment → Source を None にする
 
 ## #83 INP(Interaction to Next Paint)を測定して改善余地を確認する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -3663,7 +3663,7 @@ SNSの公式ボタン(=外部スクリプト)も不要なので、CSP導入(#9)�
 
 ## #81 index.htmlのコメントアウト済みセクションを整理する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -3697,7 +3697,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 
 ## #80 index.htmlのコメントアウト済みセクションを整理する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-09 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-09 / クローズ: 2026-09-09
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -3782,7 +3782,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #79 URLパラメータの選手名をタブのタイトルに反映する
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-09 / クローズ: 2026-09-11
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-09 / クローズ: 2026-09-11
 - ラベル: 状況: 保留, 分野: SEO, 対象: 全ページ
 
 ### 本文
@@ -3881,7 +3881,7 @@ https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
 
 ## #77 index.htmlのtestimonialsセクション(コメントアウト)を整理する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-08 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-08 / クローズ: 2026-09-09
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -4122,7 +4122,7 @@ COMPLETED でクローズする。
 
 ## #75 選手データベースの表にaria属性を追加する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-08 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-08 / クローズ: 2026-09-09
 - ラベル: 分野: SEO, 対象: jpml_pros
 
 ### 本文
@@ -4149,7 +4149,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 
 ## #74 prefers-reduced-motionに対応する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-08 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-08 / クローズ: 2026-09-09
 - ラベル: 分野: UI/UX, 対象: index
 
 ### 本文
@@ -4175,7 +4175,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 
 ## #73 index.htmlのスクリプトにdeferを付ける
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-08 / クローズ: 2026-09-08
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-08 / クローズ: 2026-09-08
 - ラベル: 分野: パフォーマンス, 対象: index
 
 ### 本文
@@ -4188,7 +4188,7 @@ index.html だけ11個のvendorスクリプト(aos・swiper・glightbox・isotop
 
 ## #72 龍龍画像URLを150x150に統一する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -4208,7 +4208,7 @@ index.html だけ11個のvendorスクリプト(aos・swiper・glightbox・isotop
 
 ## #71 Tiered Cacheを有効にする
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -4232,7 +4232,7 @@ reasonをnot plannedに修正(対応不要と判断したもので、completed�
 
 ## #70 画像再配信の利用規約を確認する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: インフラ, 対象: jpml_pros
 
 ### 本文
@@ -4252,7 +4252,7 @@ X・note・YouTubeの規約を調査した。Xは明示的な許可も禁止も�
 
 ## #69 Google Fontsのウェイトを削減する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: index
 
 ### 本文
@@ -4272,7 +4272,7 @@ X・note・YouTubeの規約を調査した。Xは明示的な許可も禁止も�
 
 ## #68 index.htmlのプレースホルダを確認する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 整理・保守, 対象: index
 
 ### 本文
@@ -4292,7 +4292,7 @@ X・note・YouTubeの規約を調査した。Xは明示的な許可も禁止も�
 
 ## #67 sitemap.xmlに除外理由を明記する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO
 
 ### 本文
@@ -4312,7 +4312,7 @@ X・note・YouTubeの規約を調査した。Xは明示的な許可も禁止も�
 
 ## #66 フォント指定を全ページの表に広げる
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: UI/UX, 対象: 全ページ
 
 ### 本文
@@ -4332,7 +4332,7 @@ jpml_pros限定だった指定をstyle.cssの先頭に移し、body・table・Go
 
 ## #65 robots.txtを追加する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO
 
 ### 本文
@@ -4352,7 +4352,7 @@ sitemap.xmlを作ったものの、その場所を検索エンジンに知らせ
 
 ## #64 sitemap.xmlからリダイレクトURLを削除する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO
 
 ### 本文
@@ -4372,7 +4372,7 @@ resource_calendar.htmlとresource_books.htmlは_redirectsで301転送してお�
 
 ## #63 CNAMEを削除する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 整理・保守
 
 ### 本文
@@ -4392,7 +4392,7 @@ ryoei.proと書かれたGitHub Pages専用のファイル。cloudflareブラン�
 
 ## #62 開発用ファイルの公開を止める
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: セキュリティ
 
 ### 本文
@@ -4412,7 +4412,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #61 アイコンフォントをwoff2のみに絞る
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス
 
 ### 本文
@@ -4432,7 +4432,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #60 index.htmlをbootstrap-icons.min.cssに差し替える
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: index
 
 ### 本文
@@ -4452,7 +4452,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #59 assets/vendorの未使用ファイルを整理する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 整理・保守
 
 ### 本文
@@ -4472,7 +4472,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #58 Bootstrapの読み込み元を統一する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 整理・保守, 対象: 全ページ
 
 ### 本文
@@ -4492,7 +4492,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #57 空のラッパーdivを削除する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 整理・保守, 対象: jpml_pros
 
 ### 本文
@@ -4512,7 +4512,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #56 未使用のCSSクラスを削除する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 整理・保守
 
 ### 本文
@@ -4532,7 +4532,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #55 tableにcaptionとscopeを追加する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO, 対象: jpml_pros
 
 ### 本文
@@ -4552,7 +4552,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #54 検索欄にlabelを追加する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO, 対象: jpml_pros
 
 ### 本文
@@ -4572,7 +4572,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #53 h1を追加する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO, 対象: jpml_pros
 
 ### 本文
@@ -4592,7 +4592,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #52 meta descriptionを追加する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO, 対象: jpml_pros
 
 ### 本文
@@ -4612,7 +4612,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #51 titleを見直す
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO, 対象: jpml_pros
 
 ### 本文
@@ -4632,7 +4632,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #50 altに選手名を含める
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO, 対象: jpml_pros
 
 ### 本文
@@ -4652,7 +4652,7 @@ wrangler.jsoncのassets.directoryが"./"のため、scripts/・.github/・wrangl
 
 ## #49 フォントスタックを指定する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: UI/UX, 対象: 全ページ
 
 ### 本文
@@ -4672,7 +4672,7 @@ Windowsの游ゴシックUIは小さい文字だと線が細く読みにくい�
 
 ## #48 フィルターとソートを軽量化する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -4692,7 +4692,7 @@ Windowsの游ゴシックUIは小さい文字だと線が細く読みにくい�
 
 ## #47 imgにwidth/height属性を付ける
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -4712,7 +4712,7 @@ Windowsの游ゴシックUIは小さい文字だと線が細く読みにくい�
 
 ## #46 インラインのonerror属性を廃止する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -4732,7 +4732,7 @@ imgごとに同じonerror属性が約1900回繰り返され、HTMLの9%(110KB)�
 
 ## #45 画像のリンク切れを毎週検知する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 自動化, 対象: jpml_pros
 
 ### 本文
@@ -4752,7 +4752,7 @@ imgごとに同じonerror属性が約1900回繰り返され、HTMLの9%(110KB)�
 
 ## #44 content-visibilityで画面外の行の描画を省く
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -4772,7 +4772,7 @@ tbody trにcontent-visibility:autoとcontain-intrinsic-size:auto 56pxを指定�
 
 ## #43 テーブルヘッダーの色を決める
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: UI/UX, 対象: jpml_pros
 
 ### 本文
@@ -4792,7 +4792,7 @@ tbody trにcontent-visibility:autoとcontain-intrinsic-size:auto 56pxを指定�
 
 ## #42 404ページを整備する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -4812,7 +4812,7 @@ wrangler.jsoncのnot_found_handlingは設定済みだったため404.htmlを追�
 
 ## #41 Google Search Consoleに登録する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO
 
 ### 本文
@@ -4832,7 +4832,7 @@ TXTレコードで所有権を確認し登録した。
 
 ## #40 モバイル表示を確認する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: UI/UX, 対象: 全ページ
 
 ### 本文
@@ -4852,7 +4852,7 @@ TXTレコードで所有権を確認し登録した。
 
 ## #39 リダイレクトを整備する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -4872,7 +4872,7 @@ meta refreshで転送していたtanilog.html・resource_calendar.html・resourc
 
 ## #38 非本番ブランチのプレビュービルドを有効にする
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -4892,7 +4892,7 @@ cloudflareブランチ以外にpushした際もプレビューURLが発行され
 
 ## #37 画像を最適化する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: index
 
 ### 本文
@@ -4912,7 +4912,7 @@ hero-bg.jpg(978KB→37KB)とMind_Games_KEY_VIS(1.35MB→101KB)をWebP化。あ�
 
 ## #36 セキュリティヘッダーを設定する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: セキュリティ, 対象: 全ページ
 
 ### 本文
@@ -4932,7 +4932,7 @@ _headersファイルでX-Frame-Options・X-Content-Type-Options・Referrer-Polic
 
 ## #35 jpml_pros.htmlのGoogle Charts依存を解消する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス, 対象: jpml_pros
 
 ### 本文
@@ -4952,7 +4952,7 @@ _headersファイルでX-Frame-Options・X-Content-Type-Options・Referrer-Polic
 
 ## #34 sitemap.xmlを再生成する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: SEO
 
 ### 本文
@@ -4972,7 +4972,7 @@ _headersファイルでX-Frame-Options・X-Content-Type-Options・Referrer-Polic
 
 ## #33 Jekyllを廃止して静的ファイルを直接配信する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: パフォーマンス
 
 ### 本文
@@ -4992,7 +4992,7 @@ _headersファイルでX-Frame-Options・X-Content-Type-Options・Referrer-Polic
 
 ## #32 GA4からCloudflare Web Analyticsへ移行する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: インフラ, 対象: 全ページ
 
 ### 本文
@@ -5012,7 +5012,7 @@ _headersファイルでX-Frame-Options・X-Content-Type-Options・Referrer-Polic
 
 ## #31 不要なファイルを削除する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: 分野: 整理・保守
 
 ### 本文
@@ -5074,7 +5074,7 @@ SDPデータベース(選手が自分の情報を編集する仕組み)向け。
 
 ## #27 Noto Sans JPの採用を検討する
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: UI/UX, 対象: 全ページ
 
 ### 本文
@@ -5110,7 +5110,7 @@ https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
 
 ## #26 リンクの見た目をモダンにする
 
-- 状態: OPEN (REOPENED) / 作成: 2026-09-07
+- 状態: OPEN（REOPENED） / 作成: 2026-09-07
 - ラベル: 状況: 保留, 分野: UI/UX, 対象: jpml_pros
 
 ### 本文
@@ -5239,7 +5239,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #20 jpml_titles.html をAstroで試作する
 
-- 状態: CLOSED (NOT_PLANNED) / 作成: 2026-09-07 / クローズ: 2026-09-10
+- 状態: CLOSED（NOT_PLANNED） / 作成: 2026-09-07 / クローズ: 2026-09-10
 - ラベル: 分野: 整理・保守, 対象: jpml_titles
 
 ### 本文
@@ -5292,7 +5292,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #19 アクセス解析をサーバーサイド方式に変える
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: インフラ, 対象: 全ページ
 
 ### 本文
@@ -5369,7 +5369,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #18 Cloudflare Registrarへドメインを移管する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -5443,7 +5443,7 @@ MX レコードは未設定のため、受信するには MX の追加が必要�
 
 ## #16 ドメインをCloudflareへ切り替える
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -5521,7 +5521,7 @@ https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
 
 ## #14 優先度の低い画像を最適化する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: パフォーマンス, 対象: index
 
 ### 本文
@@ -5589,7 +5589,7 @@ https://claude.ai/code/session_01F9dijmUHdMUVBVPevDpXRw
 
 ## #12 OGPタグを追加する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: SEO, 対象: 全ページ
 
 ### 本文
@@ -5624,7 +5624,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 
 ## #11 旧URLのインデックス状況を確認しリダイレクトを判断する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: SEO
 
 ### 本文
@@ -5646,7 +5646,7 @@ jpml_articles.html・tokusho_ranking.html・houou_league_by_class.html 等、削
 
 ## #10 Search Consoleのインデックス状況を確認する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: SEO
 
 ### 本文
@@ -5904,7 +5904,7 @@ _Generated by [Claude Code](https://claude.ai/code)_
 
 ## #6 ワークフローのpushトリガーを汎用化する
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: 自動化
 
 ### 本文
@@ -5935,7 +5935,7 @@ https://claude.ai/code/session_01G4xEKGRnEDdr48pfKvQqqG
 
 ## #5 他ページへのSEO展開
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-09
 - ラベル: 分野: SEO, 対象: 全ページ
 
 ### 本文
@@ -6001,7 +6001,7 @@ YouTube Data API v3 の channels.list で82チャンネルのアイコンURLを�
 
 ## #2 龍龍画像の同期確認を運用に乗せる
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-08
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-08
 - ラベル: 分野: 自動化, 対象: jpml_pros
 
 ### 本文
@@ -6021,7 +6021,7 @@ YouTube Data API v3 の channels.list で82チャンネルのアイコンURLを�
 
 ## #1 画像リンク切れの検知結果
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
+- 状態: CLOSED（COMPLETED） / 作成: 2026-09-07 / クローズ: 2026-09-07
 - ラベル: (なし)
 
 ### 本文
