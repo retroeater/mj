@@ -252,6 +252,45 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 ※ ランキング3ページは `league_ranking.js`（772行）を共用している。
 　 レーダーチャートの指標もこのファイルの集計ロジックを使う（新サイト）
 
+**#7の期待値の修正（2026-09-11、Lighthouse実測を受けて）**
+
+これまで「Charts依存の解消＝パフォーマンス改善」として進めてきたが、
+実測で前提が変わった。
+
+- **「移行済みだから速い」は成り立たない。データ件数に依存する。**
+  Lighthouse実測（`docs/lighthouse-baseline.md`、2026-09-11）で判明
+- 件数が少ないページは移行でTBT・LCPともに改善する
+  （`jpml_test`: mobile perf 92 / TBT 0ms）
+- 件数が多いページは移行しても解決しない。むしろ悪化する
+  （`jpml_pros`: mobile perf 37 / TBT 1,902ms / LCP 5,642ms /
+  DOM 26,886要素 / メインスレッド専有10.4秒）
+- 原因はDOM要素数。現行のページ送り（`.mj-pager`）は非表示行を
+  `row.hidden = true` で隠すだけでDOMからは削除していないため、
+  全行のコストが常にかかる。**Google Chartsの Table chart は
+  `page: 'enable'` で本当にページ単位のDOM描画に留めており、
+  この点で現行の自前実装より優れている**（#7残りページの行数調査、
+  `docs/lighthouse-baseline.md`で確認）
+- **ただし #7 の目的はパフォーマンスだけではない。** 外部ドメイン依存の
+  解消（#9 の前提）とインラインハンドラの排除は、件数に関わらず達成される。
+  #7 は続ける
+- 件数の多いページの根本解決は表示件数を絞ること（#24の五十音タブ、
+  新サイトで対応）。既存のINP 458msの記録と同根の問題
+- **残り17ページの行数調査で `saikyo_results`（2,560行、`?name`指定なしで
+  全件描画）が `jpml_pros`（1,099行）を上回る最大の懸念ページと判明した。**
+  一方、`houou_leagues` / `houou_results` / `ouka_leagues` / `ouka_results` /
+  `wrc_results` はスプレッドシート自体は1,000〜16,000行超と大きいが、
+  ローソク足・縦棒グラフへの集計後、または `?name` 必須の個人別絞り込み後は
+  数行〜数十行しか描画しないため、実際のDOM規模リスクは低い。詳細は
+  `docs/lighthouse-baseline.md` の行数調査表を参照
+
+未移行ページ側の参考値も記録しておく。
+
+- 未移行ページは「Reduce unused JavaScript」の指摘を受けている
+  （`video_wayhome` 410ms / `saikyo_results` 570ms）。Google Charts
+  ライブラリの未使用分で、#7の移行で自動的に解消する
+- 未移行ページはLCPが悪い傾向。`saikyo_results` はdesktopでも2,038ms
+  （他ページは500〜950ms台）。`docs.google.com` への往復待ちが原因
+
 **`jpml_titles.html`（型Aの代表）・`jpml_test.html`（2ページ目）・
 `resource_logs.html`（3ページ目）・`video_live.html`（4ページ目）の
 移行が完了し、型ができた。**
@@ -571,6 +610,8 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 | CSS text-fit | 却下 | 提案段階で実装がない |
 | `<meta name="text-scale">` | 却下 | Chrome 146以降のみでFirefox・Safari未対応。使う場合は最大300%超の拡大に耐えるかのテストが必要で、対価に見合わない |
 | スクロールバーを考慮したビューポート単位 | 見送り | .mj-table-2col を width: 100% にしたため当面出番がない |
+| Reduce unused CSS（Bootstrap CSSの削減） | 見送り | Lighthouseの改善提案1位（mobile合計約1,090ms）だが、ビルド工程を持たない構成を崩す対価に見合わない。minifyを却下したのと同じ理由。Bootstrapをやめるかどうかは新サイト（#101）で判断する |
+| Initial server response time の改善 | 対処不可 | 全6ページで指摘（最大 resource_logs 400ms）。Cloudflare Workers の静的アセット配信そのものの応答時間で、ページ側の対処手段がない |
 
 **すでに対応済みだったもの**
 

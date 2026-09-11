@@ -94,9 +94,10 @@ mobile計測6件の`overallSavingsMs`を合算して機械的に順位付け。
   （今回は計測のみでコード修正はしていない）
 - **`jpml_test` / `resource_logs` / `video_wayhome` の desktop best-practices が96止まり。**
   原因は`errors-in-console`（ron2.jpの画像で`net::ERR_INSUFFICIENT_RESOURCES`が
-  複数発生）。**この環境（サンドボックス、同時接続数やファイルディスクリプタに
-  制約がある）固有の計測ノイズの可能性が高い。** 本番ブラウザでの実測ではなく、
-  PSI APIのクォータが回復した後に同じ監査が出るか再確認したい
+  複数発生）。**サンドボックス環境固有の計測ノイズだったと確定した
+  （2026-09-11、平野さんの実機ブラウザのDevToolsで確認し、エラーは出ていない）。**
+  同時接続数やファイルディスクリプタに制約があるこの環境特有の問題で、
+  ron2.jp側にもサイト側にも実際の不具合はない
 - **saikyo_results（未移行）が desktop でも perf 88と、他ページのdesktop（96〜100）より低い。**
   LCP 2,038msが原因で、上述のとおりGoogle Chartsのdocs.google.com待ちが
   desktopのスロットリングが軽い条件でもボトルネックとして残ることを示している
@@ -125,3 +126,59 @@ Puppeteer経由でDOM実測して個別に確認済み（`.mj-pager-button` 58×
 `.mj-sort` 48×44、`.mj-filter-input` 100×44、`.nav-link` 351×64、
 `.dropdown-item` 349×44。`.mj-table-2col`の画像列168px・横スクロールなしも
 5ページで確認し、レイアウト崩れはなかった）。
+
+**今後、タップ領域の改善をLighthouseスコアで測ろうとしないこと。**
+target-size監査はAA基準（24px）で頭打ちになっており、44px化のような
+AAA相当の改善はスコアに反映されない。効果を確認する場合はDOM実測
+（今回のようなPuppeteerでのgetBoundingClientRect等）を使うこと。
+
+## #7 残り17ページの行数調査（2026-09-11）
+
+上記の実測で「件数が多いと移行しても速くならない」ことが分かったため、
+#7の残り17ページ（`docs/handover.md`の型A11＋型B3＋型C2＋型D1）について、
+移行後のDOM規模を先に把握する。各ページのJSからスプレッドシートID・
+シート名・クエリを読み取り、`scripts/lib/sheets.py`で同じクエリの行数を
+取得した（ページを開かず、gvizエンドポイントに直接クエリした結果）。
+
+| ページ | 行数 | 列数 | 型 | 備考 |
+|---|---|---|---|---|
+| saikyo_results | ⚠️**2,560** | 2 | 2列テーブル(型A) | `?name`なしで全件描画。`jpml_pros`(1,099行)の2倍超で**最大の移行注意ページ** |
+| houou_leagues | ⚠️16,011(全体)/52(集計後) | 15 | 多列テーブル(型B)※縦棒グラフ | 常に全件をブラウザへ転送し、クライアント側で52期分の`ColumnChart`に集計。DOM自体は小さい見込み |
+| houou_results | ⚠️15,416(全体)/24(1名分,白鳥翔で実測) | 19(結果表)+5(ローソク足) | 多列テーブル(型B) | `?name`必須(未指定時は何も描画されない)。1名分は数十行程度で小さい |
+| ouka_leagues | ⚠️1,561(全体)/21(集計後) | 7 | 多列テーブル(型B)※縦棒グラフ | houou_leaguesと同構造。1,000超だが実描画は21行 |
+| ouka_results | ⚠️1,580(全体)/18(1名分,清水香織で実測) | 13(結果表)+5(ローソク足) | 多列テーブル(型B) | `?name`必須。1,000超だが1名分は小さい |
+| wrc_results | ⚠️1,507(全体)/5(1名分,香野蘭で実測) | 9(結果表)+5(ローソク足) | 多列テーブル(型B) | 同上 |
+| houou_ranking | ⚠️15,416(元データ、houou_resultsと同一シート) | 29 | ランキング系 | 集計エンジン(`league_ranking.js`)。行数の意味が違う |
+| ouka_ranking | ⚠️1,580(元データ) | 29 | ランキング系 | 同上 |
+| wrc_ranking | ⚠️1,507(元データ) | 29 | ランキング系 | 同上 |
+| rh_results_detail | 321 | 8 | 多列テーブル(型B) | `setColumns`で22列中8列のみ表示。絞り込みパラメータなし、常に全件描画 |
+| saikyo_mens | 90 | 2 | 2列テーブル(型A) | 「X」(画像)+「Profile」の2列 |
+| video_en | 76 | 2 | 2列テーブル(型A) | |
+| rh_paifu | 57 | 2 | 2列テーブル(型A) | 移行済み4ページと同型 |
+| video_mtsuku | 61 | 3 | 2列テーブル(型A、実質3列) | 動画+概要+選手 |
+| resource_efficiency | 30 | 2 | 横棒グラフ(型D) | 牌の種類数(34種)が上限。行数の心配なし |
+| video_wayhome | 38 | 2 | 2列テーブル(型A) | 今回のLighthouse計測対象そのもの |
+| rh_results | 12 | 6 | 多列テーブル(型B) | 絞り込みパラメータなし、常に全件描画。件数は少なく問題なし |
+
+**わかったこと**
+
+- **`saikyo_results`（2,560行）が単独で最大のDOM規模リスク。** `?name`を
+  指定せずに開くと全件が描画対象になり、`jpml_pros`より大きい。#7で
+  このページに着手する際は、`.mj-pager`方式（`row.hidden=true`）を
+  そのまま踏襲すると`jpml_pros`と同じTBT/LCP悪化が再発する見込み
+- **一方、`houou_leagues` / `houou_results` / `ouka_leagues` / `ouka_results` /
+  `wrc_results` はスプレッドシート自体は1,000〜16,000行超と大きいが、
+  実際にDOMへ描画される件数は小さい。** `houou_results` / `ouka_results` /
+  `wrc_results` は`?name`が必須で(未指定時は何も描画しない)、1名分は
+  数行〜24行程度。`houou_leagues` / `ouka_leagues` は`?name`なしでも
+  全行をブラウザへ転送するが、`ColumnChart`用に52行・21行へ集計する
+  だけなのでDOM自体は小さい。**ただし全行転送は帯域の無駄であり、
+  ビルド時にPython側で対象選手だけに絞り込めば転送量も削減できる**
+  （#7でこの5ページに着手する際の検討事項）
+- ランキング系3ページ（`houou_ranking` / `ouka_ranking` / `wrc_ranking`）は
+  `houou_results`等と同じ元シートを`division`ごとに集計するため、
+  「行数」は元データの規模を示すのみで、実際の表示行数はDEFAULT_RANK_LIMIT
+  （上位100件）に絞られる。`docs/handover.md`の既存の記録どおり
+- 1,000行を超えるページは9件あるが、そのうち実際に「全行をDOMへ
+  render-then-hideする」リスクがあるのは`saikyo_results`のみ。他は
+  集計または`?name`必須の絞り込みにより実描画は小さい
