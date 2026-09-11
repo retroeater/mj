@@ -113,7 +113,7 @@ def build_row_html(row) -> str:
     twitter_url = f"https://x.com/{twitter_id}" if twitter_id else ""
     photo_cell = build_image_cell(
         alt=player_name, url=twitter_url, image_url=image_url or "",
-        css_class="rectangle", width=160, height=90, fallback="img/avatar.svg",
+        css_class="avatar", width=80, height=80, fallback="img/avatar.svg",
     )
 
     info_cell = get_info_cell(

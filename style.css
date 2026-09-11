@@ -246,6 +246,17 @@ body:has(.mj-table) {
 	overflow-wrap: anywhere;
 }
 
+/* ==== 画像が80×80のページの写真列(#147) ====
+   .mj-table-2col の168pxは160×90サムネイル用の値。80×80の
+   ページでは左右に40pxずつ余ってしまうため、88pxに詰める。
+   #saikyo_results_table は#146で80×80(avatar)になった。 */
+#titles_table thead th:nth-child(1),
+#titles_table td:nth-child(1),
+#saikyo_results_table thead th:nth-child(1),
+#saikyo_results_table td:nth-child(1) {
+	width: 88px;
+}
+
 /* ==== .mj-table-3col(3列テーブル: 画像 + 概要 + 選手) ====
    画像列を168px固定にし、残り2列(概要・選手)に折り返しを許可する。
    幅の配分自体は table-layout: fixed の既定(残り幅を均等割り)に任せる。
@@ -481,16 +492,14 @@ body:has(.mj-table) {
 }
 
 /* ==== #saikyo_results_table 固有(麻雀最強戦 成績) ====
-   行高: 動画サムネイル90px(16:9、160×90) + 上下padding 4px×2 = 98px。
-   .mj-table既定の56pxを上書きする。#wayhome_table等と同じ値(画像
-   サイズが同じ160×90のため)。概要列は最大5行(対局日・年度・大会名/
-   ステージ/卓・選手名・順位結果)まで折り返すが、375px幅で実測した
-   ところ画像列の90pxが支配的で行高は変わらなかった(中央値・90
-   パーセンタイル・最大値がいずれも98pxで一致)。この値は初回描画前の
-   概算で、contain-intrinsic-sizeのautoにより描画後は実測値に
-   置き換わる。 */
+   行高: 写真80px + 上下padding 4px×2 = 88px。.mj-table既定の56pxを
+   上書きする。#titles_tableと同じ値(画像サイズが同じ80×80のため、
+   #146で160×90のrectangleから正方形avatarに変更した)。概要列は最大5行
+   (対局日・年度・大会名/ステージ/卓・選手名・順位結果)まで折り返すため
+   実際の行高は可変。この値は初回描画前の概算で、contain-intrinsic-size
+   のautoにより描画後は実測値に置き換わる。 */
 #saikyo_results_table tbody tr {
-	contain-intrinsic-size: auto 98px;
+	contain-intrinsic-size: auto 88px;
 }
 
 /* ==== .mj-pager(ページ送り) ====
