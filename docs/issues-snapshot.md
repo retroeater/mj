@@ -12,7 +12,256 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 143件（open/closed含む）。番号降順。
+件数: 149件（open/closed含む）。番号降順。
+
+---
+
+## #149 牌効率のグラフの文字サイズを、本文（計算方法）と同じにする
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: resource_efficiency
+
+### 本文
+
+## 状況
+
+`resource_efficiency.html` のグラフは静的SVGで、デスクトップ用が `viewBox="0 0 1200 700" width="100%" font-size="13"`。`width="100%"` なので**SVG全体が画面幅に合わせて拡大縮小され、文字サイズも一緒に変わる**。
+
+一方、下の「計算方法：」の段落は `<p class="mj-margin-text">` で、Bootstrap既定の16px固定。結果として両者が一致するのはビューポート幅がちょうど1200pxのときだけになっている。
+
+実際の見え方（デスクトップ用SVG）:
+
+| 画面幅 | SVGの文字の実寸 | 計算方法 |
+|---|---|---|
+| 1200px | 13.0px | 16px |
+| 1280px | 13.9px | 16px |
+| 1536px | 16.6px | 16px |
+| 1920px | 20.8px | 16px |
+
+## やること（案）
+
+SVGを等倍以上に拡大しないようにしたうえで、`font_size` を16にする。
+
+1. `style.css` に `.mj-bar-chart-desktop { max-width: 1200px; }` を追加
+   （1ユーザー単位 = 1CSSピクセルになり、文字が16px固定になる）
+2. `scripts/generate_resource_efficiency.py` の
+   `font_size=13` を `font_size=16` に変更
+3. ラベル用の左余白 `chart_left=100` が16pxで足りるか確認
+   （現状は13pxで「3456」4文字ぶん）。足りなければ `chart_left` を広げる
+
+## 確認事項
+
+モバイル用SVG（`viewBox="0 0 420 428" font-size="9"`、390px幅で実寸8.4px）も16pxにそろえるかどうか。そろえる場合は行の高さ（9.8px）を文字が超えて重なるため、`design_height` と行間の設計をやり直す必要がある（`scripts/lib/chart.py` のdocstringに同じ失敗の経緯あり）。デスクトップ用のみ先に対応するのを推奨。
+
+## 対象ファイル
+
+- `style.css`
+- `scripts/generate_resource_efficiency.py`
+- （自動再生成）`resource_efficiency.html`
+
+---
+この下書きはClaude Codeが作成しました（2026-09-12）。
+
+---
+
+## #148 Mつくの概要列に明示的な幅を与える
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: video_mtsuku
+
+### 本文
+
+## 状況
+
+`#mtsuku_table` は `.mj-table-3col`（動画／概要／選手）。写真列は `width: 168px` で固定済みだが、概要列と選手列は `table-layout: fixed` の既定どおり**残り幅の均等割り**になっている。そのため画面幅によって概要列の幅が変わり、折り返し位置が動く。
+
+## やること
+
+概要列に明示的な幅を与え、選手列に残りを割り当てる。選手列は「氏名（団体）」が最大4行、概要列は日付・名前・チーム名の3行。
+
+```css
+/* ==== #mtsuku_table 固有(Mつく) ====
+   3列目(選手)は「氏名（団体）」が最大4行。2列目(概要)に明示的な
+   幅を与え、残りを選手列に回す。 */
+#mtsuku_table thead th:nth-child(2),
+#mtsuku_table td:nth-child(2) {
+    width: 40%;
+}
+```
+
+## 確認事項
+
+- 概要列の幅は暫定で40%。% と px のどちらがよいか、値をいくつにするか
+- 写真列（168px固定・画像160×90）は、同じ構成の帰り道が問題なしと確認できたため対象外とした。Mつくだけ崩れて見えるようならスクリーンショットと画面幅をいただければ再調査する
+
+## 対象ファイル
+
+- `style.css`
+
+---
+この下書きはClaude Codeが作成しました（2026-09-12）。
+
+---
+
+## #147 画像が80×80のページで、写真列の幅を画像に合わせて詰める
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: jpml_titles
+
+### 本文
+
+## 状況
+
+`.mj-table-2col` の写真列 `width: 168px` は「画像160px + 左右padding 4px×2」という160×90サムネイル用の値。タイトルの画像は `img.avatar` の80×80なので、列の中に**左右あわせて80px分の余白**が残り、概要列が不必要に狭くなっている。
+
+160×90の画像を持つページ（プロテスト・放送対局・帰り道・English）は168pxがちょうど収まる値なので、対象外とする。
+
+## やること
+
+`style.css` に以下を追加する。
+
+```css
+/* ==== 画像が80×80のページの写真列 ====
+   .mj-table-2col の168pxは160×90サムネイル用の値。80×80の
+   ページでは左右に40pxずつ余ってしまうため、88pxに詰める。 */
+#titles_table thead th:nth-child(1),
+#titles_table td:nth-child(1),
+#saikyo_results_table thead th:nth-child(1),
+#saikyo_results_table td:nth-child(1) {
+    width: 88px;
+}
+```
+
+`#saikyo_results_table` は #146 で80×80になる前提。#146 と同時に入れること（順序が逆だと最強戦の画像がはみ出す）。
+
+## 対象ファイル
+
+- `style.css`
+
+---
+この下書きはClaude Codeが作成しました（2026-09-12）。
+
+---
+
+## #146 最強戦の写真を80×80の正方形にし、列幅と行高を合わせる
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: saikyo_results
+
+### 本文
+
+## 状況
+
+`saikyo_results.html` の写真は `img.rectangle`（160×90）だが、中身は人物のプロフィール写真（kinmaweb.jp / X のアイコン）で、16:9にトリミングすると顔が切れる。タイトル（`img.avatar` 80×80）や最強戦 読者アンケート（`img.x` 80×80）と同じ正方形にそろえたい。
+
+## やること
+
+1. `scripts/generate_saikyo_results.py` の `build_image_cell(...)` を
+   `css_class="rectangle", width=160, height=90` から
+   `css_class="avatar", width=80, height=80` に変更する
+2. `style.css` の `#saikyo_results_table tbody tr` の
+   `contain-intrinsic-size: auto 98px` を `auto 88px` に変更する
+   （写真80px + 上下padding 4px×2 = 88px。`#titles_table` と同値）
+3. 写真列の幅を88pxにする（Issue D のCSSに含める）
+
+## 対象ファイル
+
+- `scripts/generate_saikyo_results.py`
+- `style.css`
+- （自動再生成）`saikyo_results.html`
+
+## 備考
+
+写真が空の行が528件（全体の約20%）ある。フォールバックの `img/avatar.svg` は正方形なので、正方形化でむしろ自然になる。
+
+Issue D（写真列の幅調整）と同時に対応すること。順序が逆だと最強戦の画像が列からはみ出す。
+
+---
+この下書きはClaude Codeが作成しました（2026-09-12）。
+
+---
+
+## #145 プロテストの列見出しを「記事」→「動画・記事」にする
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: jpml_test
+
+### 本文
+
+## 状況
+
+`jpml_test.html` の1列目の見出しが「記事」だが、実際の中身はYouTube動画（連盟チャンネルのインタビュー等）と、連盟サイトのコラム記事が混在している。34件中、動画が過半。
+
+## やること
+
+`scripts/generate_jpml_test.py` の `TABLE = TableConfig(...)` にある
+
+```python
+headers=["記事", "概要"],
+```
+
+を
+
+```python
+headers=["動画・記事", "概要"],
+```
+
+に変更する。push すると `regenerate-page.yml` が `jpml_test.html` を自動で再生成する。
+
+## 対象ファイル
+
+- `scripts/generate_jpml_test.py`
+- （自動再生成）`jpml_test.html`
+
+---
+この下書きはClaude Codeが作成しました（2026-09-12）。
+
+---
+
+## #144 型Aの2列ページ6枚で、概要列を上寄せにする
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+## 状況
+
+`.mj-table thead th, .mj-table td` が `vertical-align: middle` を
+全セルに当てているため、概要列の文章が画像の高さの中央に置かれる。概要が2行のときと5行のときで文章の開始位置が上下にずれて読みにくい。
+
+## やること
+
+`style.css` に以下を追加し、6ページの概要列（2列目）だけ上寄せにする。
+
+```css
+/* ==== 概要列の上寄せ ====
+   画像列の高さ(88〜98px)に対して概要が可変行数のため、中央寄せだと
+   行数によって文章の開始位置が上下にずれる。画像の上端に揃える。
+   .mj-table-2col 全体には当てない(resource_logs / saikyo_mens /
+   rh_paifu は対象外のため)。 */
+#titles_table td:nth-child(2),
+#test_table td:nth-child(2),
+#saikyo_results_table td:nth-child(2),
+#live_table td:nth-child(2),
+#wayhome_table td:nth-child(2),
+#en_table td:nth-child(2) {
+    vertical-align: top;
+}
+```
+
+対象: タイトル / プロテスト / 最強戦 / 放送対局 / 帰り道 / English
+
+## 対象ファイル
+
+- `style.css`（HTMLの再生成は不要）
+
+## 備考
+
+`.mj-left` と同じ発想で汎用クラス `.mj-top` を作り、`scripts/lib/page.py` 側で概要セルに付ける案もあるが、その場合は6ページの再生成が必要になる。CSSだけで完結する上記を推奨。
+
+---
+この下書きはClaude Codeが作成しました（2026-09-12）。
 
 ---
 
