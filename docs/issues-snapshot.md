@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 02:27 JST
+生成日時: 2026-09-12 02:37 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -2952,7 +2952,7 @@ docs.google.comを含めて書け、#7のスコープが収束する。#127も�
 
 ## #110 GET/HEAD以外のHTTPメソッドをカスタムルールで遮断する
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 状況: 待ち, 分野: セキュリティ, 対象: 全ページ
 
 ### 本文
@@ -2974,7 +2974,7 @@ docs.google.comを含めて書け、#7のスコープが収束する。#127も�
   設定してよい
 - 設定はダッシュボード操作（Security → WAF → Custom rules）
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-11):
 
@@ -3065,6 +3065,47 @@ Web Analytics の計測は生きている。
 - Managed rules Events から、POST由来の検知が消えたか確認する
 
 結果をここに記入してクローズすること。
+
+**retroeater** (2026-09-11):
+
+残件としていた2項目を確認した。いずれも問題なし。本issueをクローズする。
+
+#### 1. Web Analytics のページビュー
+
+Last 7 days で総ページビュー 500。カスタムルールを設定した9/11も
+20〜22のピークが立っており、9/12は02:30時点で既に53。前日比での
+落ち込みはない。
+
+DevTools の Network でも `/cdn-cgi/rum` への POST が **204**
+（Initiator: `beacon.min.js`）で返っており、除外式
+`not starts_with(http.request.uri.path, "/cdn-cgi/")` は意図通り
+効いている。Web Analytics の計測は完全に生きている。
+
+#### 2. POST由来の検知
+
+Security → Analytics → Events、Last 24 hours（9/11 02:31 〜
+9/12 02:31 JST）、`HTTP Method equals POST` でフィルタ。
+
+| Service | 件数 | 内訳 |
+| --- | --- | --- |
+| Custom rules | 19 | すべて `Block non-GET/HEAD methods` |
+| Managed rules | 31 | すべて Log（Block 0件） |
+
+Managed rules の31件は発生時刻が9/11の04:00〜12:00頃に集中しており、
+**それ以降は0件**。内訳は Wordpress - Remote Code Execution 12、
+React - RCE - CVE 6、React - Remote Code Execution 6、
+Wordpress - SQL Injection 4、Vulnerability scanner 2 で、
+起票時に挙げた系統と同じもの。
+
+つまり31件はカスタムルール稼働前の残骸で、稼働後のPOSTは
+マネージドルールに到達していない。カスタムルールがマネージドルールの
+前段で評価されるという想定どおりの結果。
+
+#### 補足
+
+24時間フィルタなしの Events では、GETによる `.env` スキャンが
+上位を占めていた。本ルールの対象外であり、#76 の判断材料になるため
+そちらにコメントした。
 
 ---
 

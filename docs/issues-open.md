@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 02:27 JST
+生成日時: 2026-09-12 02:37 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 53件（openのみ）。番号降順。
+件数: 52件（openのみ）。番号降順。
 
 ---
 
@@ -983,124 +983,6 @@ rh_results_detail）。「#7完了後に判断」の条件は解消したので�
 §5）。据え置きなら#9はscript-srcにwww.gstatic.com、connect-srcに
 docs.google.comを含めて書け、#7のスコープが収束する。#127も同じ判断に
 従う。採否は平野さんの判断。
-
----
-
-## #110 GET/HEAD以外のHTTPメソッドをカスタムルールで遮断する
-
-- 作成: 2026-09-11
-- ラベル: 状況: 待ち, 分野: セキュリティ, 対象: 全ページ
-
-### 本文
-
-- #76 の Events 確認（2026-09-11）で、24時間に `POST` 由来の検知が
-  イベント数123件（`rayName` 重複を除くと63リクエスト）あった。
-  React RCE（CVE-2025-55182）、Code Injection（CVE-2022-29078 /
-  JavaScript）、SQLi - Equation の3系統で、いずれもスキャナ由来。
-  React RCE の36リクエストは Referer を `www.ryoei.pro` に偽装し、
-  SQLi - Equation の3リクエストは同一IPから UA を3種に
-  入れ替えて送られていた
-- このサイトは完全な静的配信で `<form>` が27ページ中0個。POST を
-  受ける口が存在しないため、GET / HEAD 以外を遮断しても誤検知が
-  起きる余地がない
-- マネージドルールより前段で効くため、上記の検知はそもそも
-  マネージドルールに到達しなくなる
-- Pro でカスタムルールは20本まで使えて現在0本のため、枠の消費も問題ない
-- #76 の Block 切り替えとは独立して効くので、#76 の完了を待たずに
-  設定してよい
-- 設定はダッシュボード操作（Security → WAF → Custom rules）
-
-### コメント (3件)
-
-**retroeater** (2026-09-11):
-
-## 訂正: 「POSTを受ける口が存在しない」は誤り
-
-起票時の本文で「このサイトは完全な静的配信で `<form>` が27ページ中0個。
-POST を受ける口が存在しないため、GET / HEAD 以外を遮断しても誤検知が
-起きる余地がない」と書いたが、これは誤り。
-
-**Cloudflare Web Analytics のビーコンが POST を使う。**
-`/cdn-cgi/rum` はデータ送信用に POST のみを受け付け、他のメソッドには
-405 を返す（OPTIONS は CORS 用に許可）。ryoei.pro はゾーン配下で
-自動注入しているため送信先は自ドメインの `/cdn-cgi/rum` で、
-カスタムルールの対象範囲に入る。
-
-これは #76 のコメント（2026-09-09）で既に警告していた内容だった。
-
-## 設定する式
-
-```
-(not http.request.method in {"GET" "HEAD"}) and (not starts_with(http.request.uri.path, "/cdn-cgi/"))
-```
-
-アクション: Block
-
-`/cdn-cgi/rum` だけでなく `/cdn-cgi/` 配下を丸ごと除外する。
-Cloudflare が使う内部パスが他にもあるため。
-
-## 設定後の確認
-
-ブラウザで ryoei.pro を開き、開発者ツールの Network で
-`/cdn-cgi/rum` への POST が 403 になっていないことを確認する。
-あわせて翌日に Web Analytics のページビューが前日比で落ちて
-いないかを見る。
-
-**retroeater** (2026-09-11):
-
-## 訂正: 「POSTを受ける口が存在しない」は誤り
-
-起票時の本文で「このサイトは完全な静的配信で `<form>` が27ページ中0個。
-POST を受ける口が存在しないため、GET / HEAD 以外を遮断しても誤検知が
-起きる余地がない」と書いたが、これは誤り。
-
-**Cloudflare Web Analytics のビーコンが POST を使う。**
-`/cdn-cgi/rum` はデータ送信用に POST のみを受け付け、他のメソッドには
-405 を返す（OPTIONS は CORS 用に許可）。ryoei.pro はゾーン配下で
-自動注入しているため送信先は自ドメインの `/cdn-cgi/rum` で、
-カスタムルールの対象範囲に入る。
-
-これは #76 のコメント（2026-09-09）で既に警告していた内容だった。
-
-## 設定内容（2026-09-11）
-
-Security → WAF → Custom rules
-
-| 項目 | 値 |
-| --- | --- |
-| Rule name | Block non-GET/HEAD methods |
-| 式 | `(not http.request.method in {"GET" "HEAD"}) and (not starts_with(http.request.uri.path, "/cdn-cgi/"))` |
-| アクション | Block（Default Cloudflare WAF block page / 403） |
-| Status | Active |
-
-`/cdn-cgi/rum` だけでなく `/cdn-cgi/` 配下を丸ごと除外している。
-Cloudflare が使う内部パスが他にもあるため。
-
-## 設定後の確認（2026-09-11）
-
-ブラウザで ryoei.pro を開き、開発者ツールの Network で
-`/cdn-cgi/rum` への POST が **204** で返ることを確認した
-（Initiator は beacon.min.js）。403 にはなっておらず、
-Web Analytics の計測は生きている。
-
-## 残件
-
-翌日（2026-09-12）に以下を確認してからクローズする。
-
-- Web Analytics のページビューが前日比で落ちていないか
-- Managed rules の Events から POST 由来の検知
-  （React RCE / Code Injection / SQLi - Equation）が消えているか
-
-**retroeater** (2026-09-11):
-
-### 追記（2026-09-12、レビュー反映）
-
-本日9/12が確認日。平野さんが行う確認項目を再掲する。
-
-- Web AnalyticsでPVの前日比を確認する
-- Managed rules Events から、POST由来の検知が消えたか確認する
-
-結果をここに記入してクローズすること。
 
 ---
 
