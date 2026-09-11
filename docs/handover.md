@@ -150,7 +150,19 @@ HTMLは27ページ。大きく3系統に分かれる。
 
 Claude Codeは Codespace のターミナルで動いている（`/workspaces/mj` で `claude`）。
 `gh` が認証済みのため、issueの開閉やラベル操作がそのまま通る。
-ただし **GitHub Projects の操作は権限不足で弾かれる**（ボードへの追加はブラウザで行う）。
+
+**GitHub Projects の操作（2026-09-11に解消済み）。**
+Codespace既定の`GITHUB_TOKEN`（`ghu_...`）にはProjects (V2) APIの`project`
+スコープがなく、`gh project`系コマンドは`Resource not accessible by
+integration`で弾かれていた。fine-grained PATもProjectsには対応していない
+（GitHub側の制限）。`project`・`read:org`・`repo`スコープ付きのclassic PAT
+を発行し`gh auth login --with-token`で設定済み。ただし`GITHUB_TOKEN`環境変数の
+方が優先されるため、`gh project`コマンドを打つときは毎回
+`env -u GITHUB_TOKEN -u GH_TOKEN gh project ...`のように環境変数を外して
+実行すること。
+この制約で権限不足だった期間にcloseされ、ボードに未登録のまま残っていた
+issue71件（#1〜#100台の大半）は、2026-09-11に一括追加しDoneステータスを
+設定して解消した。
 
 ### 重要な約束事
 
