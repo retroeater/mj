@@ -123,9 +123,17 @@ th {
 /* SVGはwidth: 100%で伸縮するため、1200px超のビューポートでは等倍以上に
    拡大され文字サイズ(font-size=16)も一緒に大きくなってしまう。design_width
    と同じ1200pxを上限にし、1ユーザー単位 = 1CSSピクセルに固定して、
-   本文(計算方法の段落、Bootstrap既定16px)と文字サイズを揃える(#149)。 */
+   本文(計算方法の段落、Bootstrap既定16px)と文字サイズを揃える(#149)。
+   モバイル用も同じ理由でdesign_widthと同じ360pxを上限にする(#151)。
+   文字サイズを本文と揃えるため行間を設計し直した結果、design_heightが
+   428→728に増えグラフの縦の長さが約1.7倍になるが、スマホでのスクロール
+   量が増えるのは許容する方針とした。 */
 .mj-bar-chart-desktop {
 	max-width: 1200px;
+}
+
+.mj-bar-chart-mobile {
+	max-width: 360px;
 }
 
 @media (max-width: 480px) {

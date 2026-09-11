@@ -100,14 +100,19 @@ def main():
     # モバイル用: デスクトップと同じ寸法比率だと375px幅でfont-sizeが
     # 約4pxまで縮み読めなくなるため、実際のモバイル幅に近い設計値で
     # 別に組み立てる(#128実装時に実測して決定)。
+    # design_width=360はデスクトップと同じ考え方(#149)で、想定する
+    # 最小のモバイル幅を上限にして等倍固定する値(#151)。font_size=16は
+    # 本文と揃えた値で、slot(design_height 728 - chart_top 8 = 720を
+    # 30行で割った24px)に収まるようdesign_heightを組み直した。
+    # chart_rightは値ラベル最大3桁(約24px)+隙間4pxが収まるよう30→36に。
     chart_svg_mobile = horizontal_bar_chart(
         data,
-        design_width=420,
-        design_height=428,
+        design_width=360,
+        design_height=728,
         chart_left=60,
         chart_top=8,
-        chart_right=30,
-        font_size=9,
+        chart_right=36,
+        font_size=16,
         css_class="mj-bar-chart-mobile",
         id_prefix="efficiency-chart-mobile",
         title=chart_title,
