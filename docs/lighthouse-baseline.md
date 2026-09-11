@@ -204,3 +204,53 @@ AAA相当の改善はスコアに反映されない。効果を確認する場�
 - 1,000行を超えるページは9件あるが、そのうち実際に「全行をDOMへ
   render-then-hideする」リスクがあるのは`saikyo_results`のみ。他は
   集計または`?name`必須の絞り込みにより実描画は小さい
+
+## 型Aの小さい5ページの移行結果（2026-09-11）
+
+`scripts/lib/page.py` + `table.js`で`video_wayhome` / `video_en` /
+`rh_paifu` / `saikyo_mens` / `video_mtsuku`（いずれも38〜90行）を
+ビルド時生成に移行した。本番反映後に計測。
+
+| ページ | mobile perf | mobile a11y | mobile bp | mobile seo | desktop perf | LCP(mobile) | TBT(mobile) | CLS(mobile) | DOM要素数 |
+|---|---|---|---|---|---|---|---|---|---|
+| video_wayhome | **96** | 89 | 100 | 92 | 100 | 2,230ms | 22ms | 0.000 | 428 |
+| video_en | 99 | 94 | 96 | 92 | 100 | 1,599ms | 0ms | 0.005 | 694 |
+| rh_paifu | 99 | 89 | 100 | 92 | 100 | 1,878ms | 0ms | 0.005 | 599 |
+| saikyo_mens | 99 | 94 | 96 | 92 | 100 | 1,666ms | 32ms | 0.000 | 716 |
+| video_mtsuku | 98 | 94 | 100 | 92 | 100 | 2,297ms | 40ms | 0.000 | 745 |
+
+### video_wayhome の移行前後比較
+
+移行前（未移行、2026-09-11計測分）と移行後（本番反映後）の同一ページの比較。
+
+| | 移行前 | 移行後 | 差分 |
+|---|---|---|---|
+| mobile performance | 78 | **96** | +18 |
+| mobile LCP | 5,226ms | **2,230ms** | -3,000ms弱 |
+| mobile TBT | 32ms | 22ms | ほぼ変わらず |
+| mobile CLS | 0.000 | 0.000 | 変わらず |
+| DOM要素数 | 437 | 428 | ほぼ変わらず |
+
+**件数の少ないページでは「移行済みだから速い」がそのまま成り立った。**
+DOM要素数はほぼ変わらない（Google ChartsのTable chartも小規模データでは
+DOMを大きく膨らませないため）が、LCPが半分以下に改善している。原因は
+`docs.google.com`への往復待ちがなくなったこと。`jpml_pros`
+（1,099行、mobile perf 37）のような大規模ページとは対照的に、
+小規模ページの移行はTBTを悪化させることなくLCPだけを改善する、
+という当初の想定どおりの結果になった。
+
+### 予想外だった点
+
+- 5ページとも`best-practices`が96〜100で、`errors-in-console`の
+  指摘（ron2.jp関連、サンドボックス固有のノイズと確認済み）は出なかった。
+  ron2.jpの画像を使わないページ群だったための差
+- **`mobile accessibility`が`video_wayhome`/`rh_paifu`のみ89、他3ページは94。**
+  原因は`color-contrast`監査の失敗。`.mj-plain`クラスのリンク（Xの
+  `@ハンドル`名、牌譜リンク）がBootstrapの既定リンク色`#0d6efd`のまま
+  で、偶数行の縞模様背景`#fafafa`との組み合わせでコントラスト比4.31
+  （基準4.5未満）になる。`video_en`/`saikyo_mens`/`video_mtsuku`は
+  `.mj-plain`リンクを使っていないため該当しない。**`resource_logs.html`
+  （2026-09-10移行）の店名リンクも同じ`.mj-plain`を使っており、同一の
+  原因でaccessibility 89だったと考えられる。** 今回は計測・原因特定のみで
+  修正はしていない。`.mj-plain`のリンク色を暗くするか、縞模様の背景色を
+  調整すれば解消できる見込み（別issueで判断）
