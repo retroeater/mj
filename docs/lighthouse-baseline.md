@@ -90,8 +90,9 @@ mobile計測6件の`overallSavingsMs`を合算して機械的に順位付け。
   原因は`is-on-https`監査の失敗（4件）。ポートフォリオ内のYouTubeサムネイルが
   `http://img.youtube.com/...`とハードコードされており、ブラウザが自動でHTTPSに
   昇格させているとはいえ、Chrome DevToolsのIssuesパネルには「Mixed content」として
-  記録される。#9（CSP）や外部ドメイン棚卸しの際に`https://`へ修正する価値がある
-  （今回は計測のみでコード修正はしていない）
+  記録される。**2026-09-11に修正・本番反映し、再計測でbest-practices
+  77→100（mobile/desktopとも）に改善したことを確認した**（下記「index.htmlの
+  Mixed content修正」参照）
 - **`jpml_test` / `resource_logs` / `video_wayhome` の desktop best-practices が96止まり。**
   原因は`errors-in-console`（ron2.jpの画像で`net::ERR_INSUFFICIENT_RESOURCES`が
   複数発生）。**サンドボックス環境固有の計測ノイズだったと確定した
@@ -105,6 +106,27 @@ mobile計測6件の`overallSavingsMs`を合算して機械的に順位付け。
   （ソート操作時の再描画コスト）とは別に、**初回描画そのものにもTBT 1,902ms・
   メインスレッド専有10.4秒のコストがある**ことが今回新たに分かった。1,099行を
   一度にDOMへ流し込む現行方式は、ソート時だけでなく初回表示にも効いている
+
+## index.html の Mixed content 修正（2026-09-11）
+
+上記の指摘を受け、index.htmlのYouTubeサムネイル8箇所（`<img src>` 4件・
+`<a href>`のlightbox用リンク4件）を`http://`から`https://`に修正した。
+27ページ全体を`grep`で確認し、他に埋め込みリソースとしての`http://`参照は
+なかった（`jpml_links.html`の2件は`<a href target="_blank">`の outbound
+リンクで、埋め込みリソースの取得ではないため mixed content の対象外。
+xmlns属性の`http://www.w3.org/2000/svg`もXML名前空間の識別子であり、
+ブラウザが実際に取得する資源ではないため対象外）。
+
+本番反映後に再計測した結果:
+
+| | mobile before | mobile after | desktop before | desktop after |
+|---|---|---|---|---|
+| best-practices | 77 | **100** | 77 | **100** |
+| is-on-https | 0(4件の insecure request) | 1(0件) | 0 | 1 |
+
+performance / accessibility / seo に変化はなし（意図どおり、この修正は
+best-practicesのみに影響する）。#9（CSP）で`upgrade-insecure-requests`を
+書くか、mixed contentが弾かれる設計にするかの判断が不要になった。
 
 ## B（タップ領域44px化）によるアクセシビリティスコアへの影響
 
