@@ -15,6 +15,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 静的HTML 27ページ。ビルド工程なし（Jekyllは廃止済み）
 - Cloudflare Workersの静的アセットとして配信（`wrangler.jsonc`、assets.directory は `./`）
 - 作業ブランチは cloudflare。gh-pages は旧GitHub Pages用で触らない
+- ローカル確認は `wrangler dev` を素のオプションで起動しないこと（無限リロードで作業不能になる）。
+  必ず `--persist-to` でリポジトリ外に状態を保存すること:
+  `npx wrangler dev --port 8789 --ip 127.0.0.1 --persist-to /tmp/wrangler-state`
+  （`.wrangler/` への書き込みをアセット変更と誤検知しリロードが無限に続くため。詳細は docs/issues-snapshot.md #153）
 - Bootstrap 5.3.8 をローカル配信（assets/vendor）。CDNは使わない
 - assets/vendor 配下のライブラリを更新・追加した際は、末尾の
   `sourceMappingURL` コメントを削除すること。`.map` ファイルを
