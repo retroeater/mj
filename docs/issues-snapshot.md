@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 01:43 JST
+生成日時: 2026-09-12 01:52 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -83,11 +83,79 @@ Playwright（Chromium・headless）で `jpml_pros.html` をローカル配信し
 ---
 この下書きはClaude Codeが作成しました（2026-09-11）。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
 検証完了。3画面幅とも想定通りの結果で、回帰なし。
+
+**retroeater** (2026-09-11):
+
+## 追加確認: コミットa849755（列入れ替え）とデプロイ反映
+
+本issueの検証はコミット時点でCSS統合（当時be4e0f5、以後の作業で列入れ替え本体と合わせてa849755としてpush済み）を対象にしていたが、別セッションでの実施と並行して、a849755時点のjpml_pros.htmlを対象に独立してPlaywright(Chromium)・wrangler dev上で再検証した。結果は一致（回帰なし）。加えて本issueには含まれていなかったデプロイ反映側も確認した。
+
+### 環境メモ: wrangler devの無限リロードへの対処
+
+このCodespace環境でwrangler dev（4.131.1）を素のオプションで起動すると、
+「Wrangler detected this dev session is running in an AI agent」のログ後、
+`⎔ Reloading local server...` が数百ms間隔で無限に続き、リクエストが
+一切通らない(`curl`がタイムアウトまたは接続拒否)状態になった。
+
+原因は `.wrangler/state/v3/observability/miniflare-wobs-trace-store/` の
+sqlite(WAL)への書き込みを、`assets.directory`(`./` = リポジトリ全体)を
+見ている資産監視が「アセット変更」と誤検知し、リロード→トレース書き込み
+→リロード…と自己増殖するため（`.wrangler` は `.assetsignore` の対象外）。
+
+`--persist-to` で状態の保存先をリポジトリ外に逃がすことで解消した。
+
+```
+npx wrangler dev --port 8789 --ip 127.0.0.1 \
+  --persist-to /tmp/.../wrangler-state
+```
+
+再現性が高そうなので別issueとして起票する。
+
+### 1. 実描画確認（375px / 768px / 1280px、Playwright/Chromium・wrangler dev）
+
+3幅とも下記いずれも合格。
+
+| 項目 | 結果 |
+|---|---|
+| 横スクロール後もtd:nth-child(1)のleftが不変 | 3幅とも0px→0px（不変） |
+| 同セルのbackground-colorが不透明 | rgb(255,255,255)（alpha=1） |
+| thead th:nth-child(1)の重なりが最前面 | z-index 4 > 通常th 3 > 固定td 2 > 通常td 0（elementFromPointでもth自身がヒット） |
+| 検索ボックス開閉で--content-offsetが実測に追従 | 375/768px: 94.765625px→278.765625px(94.765625+184)、1280px: 80px→264px(80+184) |
+| ハンバーガー開閉で--navbar-heightが更新 | 375px: 94.77→614.77→106.19px、768px: 94.77→608.58→94.77px（1280pxはデスクトップ表示のためハンバーガー非表示、対象外） |
+
+機能面（1280px基準、全ページ共通ロジックのため3幅で同一結果）:
+
+- 名前欄に「青木」→ 2件（藍いちな表記ゆれ含まず、青木いちな/青木惇のみ）、`#result_count`が「2件を表示しています」に更新
+- 名前「田」+所属/出身地「東京」同時入力 → 90件、全件がAND条件（名前に「田」・所属欄に「東京」）を満たす
+- `?name=青木&place=東京`で開く → 両欄に値が入り、表示2件に絞り込まれた状態で開く
+- 「名前」ヘッダークリック → 元々あいうえお順のため見た目上昇順は変化なし、`aria-sort`は`ascending`に。再クリックで「わ」行が先頭に来る降順に反転、`aria-sort`は`descending`
+- 「所属/出身地」ヘッダークリック → 所属列が五十音順に整列（名前列は非整列のまま = 名前列で並んでいないことを確認）
+- 龍龍/X/note/YouTube列ヘッダーにはボタン自体が存在せず（`NO_SORT_COLUMNS`によりJS側もクリックを無視）、クリックしてもソートされない
+- コンソールエラーは`cloudflareinsights.com`向けビーコンのCORSエラーのみ（本番ゾーン限定のRUM機能がローカルで動かないための既知のローカル限定事象、過去issueと同様）。ページのロジックに起因するエラー・警告は0件
+
+### 2. デプロイ反映の確認
+
+- デプロイ経路: **Cloudflare Workers Builds（Git連携によるpush時自動デプロイ）**。`.github/workflows/`配下にwrangler deployを実行するジョブは無く、GitHub上のcheck-runsに`Cloudflare Workers and Pages`アプリ（GitHub App）による`Workers Builds: mj`が記録されている。
+  ```
+  gh api repos/retroeater/mj/commits/a849755/check-runs
+  → "Workers Builds: mj", conclusion: success,
+     started_at/completed_at: 2026-09-11T15:37:18Z
+     詳細: https://dash.cloudflare.com/53052826dbd2f8e079ed9a34563c1725/workers/services/view/mj/production/builds/f52737f9-bf5b-4543-b951-3ae365216c21
+  ```
+  pushからビルド開始までのタイムラグはほぼ無し（同一分内）。
+- 反映確認: `curl -sI https://ryoei.pro/jpml_pros.html` → `200`。取得した本番HTML(1,244,503バイト)とローカルのコミット済み`jpml_pros.html`(同バイト数)を`diff`した結果、**差分0件（完全一致）**。`<thead>`最初の`<th>`が「名前」、`#searchBoxes`最初の入力欄が`name_filter`であることも確認済み。
+- 結論: **a849755は本番に完全反映済み。追加の手動デプロイ操作は不要。**
+- ダッシュボードでのみ確認できる事項（未操作）: Cloudflareダッシュボード → Workers & Pages → `mj` → **Deployments**タブで、各デプロイのトリガー種別（Git commit / Wrangler CLI）とタイムスタンプの一覧を確認できる。今回はcheck-runsのURLから該当ビルド詳細に直接遷移可能。
+
+スクリーンショット（3幅・横スクロール後の状態）は手元に保存済み（本コメントには添付していない）。
+
+---
+本コメントはClaude Codeが作成しました（2026-09-11）。
 
 ---
 
@@ -117,11 +185,52 @@ Bootstrap既定の16px）と比べて不釣り合いに大きい。
 - `resource_efficiency.html`
 - `style.css`（見出し用のスタイルを追加する場合）
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+## ⚠️ このissueのコミットに #127（型C）のCSSが混入しています
+
+**revert する場合は `houou_leagues.html` / `ouka_leagues.html` が壊れます。**
+
+### 何が起きているか
+
+コミット [`4738d8d`](``https://github.com/retroeater/mj/commit/4738d8dc28eeb7d9251cf2dba2ef394b93868c1e)（「牌効率ページの見出しフォントサイズを本文と揃える(#152)」）の`` `style.css` は **+49行**ですが、その内訳は次のとおりです。
+
+| 範囲 | 内容 | 本来の帰属 |
+|---|---|---|
+| 6行 | `.mj-page-heading` | **#152**（このissue） |
+| 約43行 | `.mj-league-chart-desktop` / `.mj-league-chart-mobile` + `@media (max-width: 480px)` の切替、`.mj-chart-legend` / `-item` / `-swatch` | **#127**（型C） |
+
+#127 に取り組んだセッションの作業が、このissueのコミットに紛れ込んだものです。
+
+### なぜ消せないか
+
+#127 の実装コミット [`03cb23b`](https://github.com/retroeater/mj/commit/03cb23b0224db3ad87e2b47960704851fd097f8b) は **`style.css` を1行も変更していません**。5クラスすべてが実際に使われており（`houou_leagues.html` / `ouka_leagues.html` / `scripts/generate_houou_leagues.py` / `scripts/generate_ouka_leagues.py` / `scripts/lib/chart.py`）、型Cの2ページはこのコミットのCSSに依存して動いています。
+
+つまり **#152 のコミットが #127 の前提になっている**という、履歴上は逆立ちした依存関係になっています。
+
+### 調査の範囲
+
+`4738d8d` の他4ファイルは混入なしを確認済みです。
+
+- `resource_efficiency.html` / `scripts/generate_resource_efficiency.py` … `.mj-page-heading` の付与のみ（純粋に #152）
+- `docs/issues-open.md` / `docs/issues-snapshot.md` … フックによる自動再生成。増分は #153 と #152 の本文のみで、`127` / `leagues` / `型C` の文字列は差分に1件もなし
+
+`git log --all -S` で `mj-league-chart` / `mj-chart-legend` を追跡した結果、`style.css` へこれらを持ち込んだコミットは `4738d8d` だけで、他コミットへの飛び火はありません。
+
+### 対応方針
+
+すでに両方 push 済みのため、CSSを #127 側へ付け替えるには履歴の書き換えが必要で、労力に見合いません。**このコメントを残すことで対応済み**とし、`style.css` はそのままにします。
+
+---
+_Generated by [Claude Code](https://claude.ai/code)_
+
 ---
 
 ## #151 牌効率のモバイル用グラフの文字サイズを本文に合わせる
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: UI/UX, 対象: resource_efficiency
 
 ### 本文
@@ -215,6 +324,21 @@ slotが14.0しかないので確実に重なる。`scripts/lib/chart.py` の
 
 - #149（デスクトップ用。対応済み）
 - #128（デスクトップ用・モバイル用の2枚構成にした経緯）
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+実装しました(4138ec2)。
+
+確認事項について、「スマホでのスクロール量が増えるのを許容する」方針
+（本文の代替案(a)(b)は採用しない）で対応。font_size=16、
+design_height 428→728（縦に約1.7倍）、design_width 420→360、
+chart_right 30→36 に変更し、style.cssに`.mj-bar-chart-mobile`の
+`max-width: 360px`を追加。`@media (max-width: 480px)`の切り替え幅は
+変更なし。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 ---
 
@@ -1088,7 +1212,7 @@ Claude Code のリモートセッションからは削除できなかった。
 同じ後始末が毎回発生する。`cloudflare` に直接コミットするか、
 まとめて消す運用を決めておくとよい。
 
-### コメント (4件)
+### コメント (5件)
 
 **retroeater** (2026-09-11):
 
@@ -1242,6 +1366,40 @@ _Generated by [Claude Code](https://claude.ai/code)_
 も見つかったが、本issueの対象外のためユーザー確認の上で残置とした。
 
 残る作業ブランチはなし(`cloudflare` / `gh-pages` / `master` のみ)。
+
+---
+_Generated by [Claude Code](https://claude.ai/code)_
+
+**retroeater** (2026-09-11):
+
+### 再トライの結果（2026-09-11）: 変わらず削除不可
+
+```
+git push origin --delete claude/canonical-policy-decision-dbk5dq
+→ error: RPC failed; HTTP 403
+  send-pack: unexpected disconnect while reading sideband packet
+```
+
+### 切り分け
+
+- **エグレスプロキシ側のエラーではない。** `$HTTPS_PROXY/__agentproxy/status` の
+  `recentRelayFailures` は空。`selective` / `toolScoped` とも false。
+  同じホストへの通常のpushは成功している（本issue起票の前後に `cloudflare` へ2回push済み）
+- つまり拒否しているのはgit側の認可で、**削除（zero-oidのpush）という操作だけが
+  許可されていない**。セッションのGitHub資格情報の権限設定によるものと思われる
+- `/root/.ccr/README.md` に「403/407のポリシー拒否はリトライせず報告すること」と
+  あるため、これ以上の回避策は試していない
+
+### 追加で見つかったもの
+
+`ls-remote` したところ、別セッション由来と思われる作業ブランチがもう1本残っていた。
+
+```
+3edffa8  refs/heads/claude/canonical-policy-decision-dbk5dq
+bd38d22  refs/heads/claude/mantis-security-followup-t9jqxj
+```
+
+まとめて消すとよい。
 
 ---
 _Generated by [Claude Code](https://claude.ai/code)_
