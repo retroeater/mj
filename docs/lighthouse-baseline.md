@@ -166,10 +166,10 @@ AAA相当の改善はスコアに反映されない。効果を確認する場�
 |---|---|---|---|---|
 | saikyo_results | ⚠️**2,560** | 2 | 2列テーブル(型A) | `?name`なしで全件描画。`jpml_pros`(1,099行)の2倍超で**最大の移行注意ページ** |
 | houou_leagues | ⚠️16,011(全体)/52(集計後) | 15 | 縦棒グラフ(型C) | 常に全件をブラウザへ転送し、クライアント側で52期分の`ColumnChart`に集計。DOM自体は小さい見込み |
-| houou_results | ⚠️15,416(全体)/24(1名分,白鳥翔で実測) | 19(結果表)+5(ローソク足) | 多列テーブル(型B) | `?name`必須(未指定時は何も描画されない)。1名分は数十行程度で小さい |
+| houou_results | ⚠️15,416(全体)/**500(実描画、`?name`なし)**/24(1名分,白鳥翔で実測) | 19(結果表)+5(ローソク足) | 多列テーブル(型B) | `?name`任意。ローソク足だけが`?name`必須で未指定時は空。**表(`myTable`)は無条件で描画され`page:'enable'`+`pageSize:500`により実際のDOM行数は500(31ページ)**。実機確認で判明(2026-09-11) |
 | ouka_leagues | ⚠️1,561(全体)/21(集計後) | 7 | 縦棒グラフ(型C) | houou_leaguesと同構造。1,000超だが実描画は21行 |
-| ouka_results | ⚠️1,580(全体)/18(1名分,清水香織で実測) | 13(結果表)+5(ローソク足) | 多列テーブル(型B) | `?name`必須。1,000超だが1名分は小さい |
-| wrc_results | ⚠️1,507(全体)/5(1名分,香野蘭で実測) | 9(結果表)+5(ローソク足) | 多列テーブル(型B) | 同上 |
+| ouka_results | ⚠️1,580(全体)/**100(実描画、`?name`なし)**/18(1名分,清水香織で実測) | 13(結果表)+5(ローソク足) | 多列テーブル(型B) | `?name`任意(houou_resultsと同型)。`page:'enable'`+`pageSize:100`で実際のDOM行数は100(16ページ)。ただしリーグ欄はhouou_resultsと違いCategoryFilterではなくStringFilter(実機確認で判明) |
+| wrc_results | ⚠️1,507(全体)/**100(実描画、`?name`なし)**/5(1名分,香野蘭で実測) | 9(結果表)+5(ローソク足) | 多列テーブル(型B) | `?name`任意。コントロールは名前のみ(期・リーグの欄が存在しない)。`pageSize:100`で実際のDOM行数は100(16ページ)。houou_results/ouka_resultsとは構成が異なる(実機確認で判明) |
 | houou_ranking | ⚠️15,416(元データ、houou_resultsと同一シート) | 29 | ランキング系 | 集計エンジン(`league_ranking.js`)。行数の意味が違う |
 | ouka_ranking | ⚠️1,580(元データ) | 29 | ランキング系 | 同上 |
 | wrc_ranking | ⚠️1,507(元データ) | 29 | ランキング系 | 同上 |
@@ -188,22 +188,38 @@ AAA相当の改善はスコアに反映されない。効果を確認する場�
   指定せずに開くと全件が描画対象になり、`jpml_pros`より大きい。#7で
   このページに着手する際は、`.mj-pager`方式（`row.hidden=true`）を
   そのまま踏襲すると`jpml_pros`と同じTBT/LCP悪化が再発する見込み
-- **一方、`houou_leagues` / `houou_results` / `ouka_leagues` / `ouka_results` /
-  `wrc_results` はスプレッドシート自体は1,000〜16,000行超と大きいが、
-  実際にDOMへ描画される件数は小さい。** `houou_results` / `ouka_results` /
-  `wrc_results` は`?name`が必須で(未指定時は何も描画しない)、1名分は
-  数行〜24行程度。`houou_leagues` / `ouka_leagues` は`?name`なしでも
-  全行をブラウザへ転送するが、`ColumnChart`用に52行・21行へ集計する
-  だけなのでDOM自体は小さい。**ただし全行転送は帯域の無駄であり、
-  ビルド時にPython側で対象選手だけに絞り込めば転送量も削減できる**
-  （#7でこの5ページに着手する際の検討事項）
+- **`houou_results`は`?name`なしでも表(`myTable`)が無条件で描画される
+  ことが実機確認で判明した。** 当初「`?name`必須で未指定時は何も描画
+  されない」と記録していたが誤りで、`if(search_name)`はローソク足
+  (`#myChart`)の読み込みにしか掛かっていない。現在DOM行数が500に
+  収まっているのは、Google Chartsの`page:'enable'`+`pageSize:500`が
+  実際にDOMをページ単位で分割しているため。**これを自前の`row.hidden`
+  方式(`.mj-pager`)に置き換えると、`houou_results`は15,416行が丸ごと
+  DOMに乗り、`saikyo_results`(2,560行)を超えて#7最大のDOM規模ページに
+  なる。** `ouka_results`(1,580行/pageSize:100)・`wrc_results`
+  (1,507行/pageSize:100)も同様に`?name`任意で無条件描画されるが、
+  行数が少なく実害は`houou_results`ほど大きくない
+- `houou_leagues` / `ouka_leagues`は`?name`なしでも全行をブラウザへ
+  転送するが、`ColumnChart`用に52行・21行へ集計するだけなのでDOM自体は
+  小さい。**土台の積み上げ棒は選手に関わらず全員共通で、`?name`に依存
+  するのは重ねた折れ線1本だけ**(実機確認で、積み上げ部分のSVG要素が
+  `?name`の値によらず一致することを確認)。**ただし全行転送は帯域の
+  無駄であり、ビルド時にPython側で対象選手だけに絞り込めば転送量も
+  削減できる**（#7でこのページに着手する際の検討事項）
 - ランキング系3ページ（`houou_ranking` / `ouka_ranking` / `wrc_ranking`）は
   `houou_results`等と同じ元シートを`division`ごとに集計するため、
   「行数」は元データの規模を示すのみで、実際の表示行数はDEFAULT_RANK_LIMIT
   （上位100件）に絞られる。`docs/handover.md`の既存の記録どおり
 - 1,000行を超えるページは9件あるが、そのうち実際に「全行をDOMへ
-  render-then-hideする」リスクがあるのは`saikyo_results`のみ。他は
-  集計または`?name`必須の絞り込みにより実描画は小さい
+  render-then-hideする」リスクがあるのは`saikyo_results`
+  (2,560行、`.mj-pager`方式への置き換えを想定)と、`houou_results`
+  (15,416行、現状はGoogle Chartsの`pageSize:500`がDOM分割を担っている
+  ため顕在化していない)の2件。**`houou_results`は移行方法次第で
+  `jpml_pros`(1,099行)や`saikyo_results`を上回る最大のDOM規模ページに
+  なりうる。** `ouka_results`/`wrc_results`は同様の構造だが行数が
+  1,500〜1,600台でリスクは小さい。`houou_leagues`/`ouka_leagues`は
+  集計により、ランキング系3ページは`DEFAULT_RANK_LIMIT`により、
+  それぞれ実描画は小さい
 
 ## 型Aの小さい5ページの移行結果（2026-09-11）
 

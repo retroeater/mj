@@ -12,7 +12,77 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 126件（open/closed含む）。番号降順。
+件数: 128件（open/closed含む）。番号降順。
+
+---
+
+## #128 #7の型D resource_efficiency の移行方針を決める
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+### 対象
+
+`resource_efficiency`（`BarChart`、牌の種類34種が上限・30行）
+
+### 性質
+
+**グラフ系6ページの中で唯一、完全に静的SVG化できる。**
+
+- URLパラメータに依存しない
+- データ量が小さく固定（34種が上限）
+- `legend: 'none'`。カスタムツールチップも `addListener` もない（実機確認済み）
+
+### 方針案
+
+(c) ビルド時に静的SVGを生成してHTMLに埋め込む。
+このページだけで `www.gstatic.com` への依存を1ページ分確実に減らせる。
+型B・型Cの判断を待たずに着手できる。
+
+---
+
+## #127 #7の型C 2ページ（積み上げ棒＋選手の折れ線）の移行方針を決める
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+### 対象
+
+`houou_leagues` / `ouka_leagues`
+
+### 構造（2026-09-11 のコード調査＋実機確認で判明）
+
+`ColumnChart`。`isStacked: true` で13色のリーグ帯（A1〜E3）を積み上げ、
+`series: {13: {type:'line'}}` で14系列目だけを折れ線にしている。
+
+**土台の積み上げ棒は全員共通で、`?name=` に依存するのは折れ線1本だけ。**
+（`getLeagueRanks()` 内の `if(search_name == name)` で該当選手の行だけを
+拾い、上位リーグの人数を足してリーグ横断の順位に変換している）。実機確認で、
+`?name=`の値によらず積み上げ部分のSVG要素（先頭5件のrect）が完全に
+一致することを確認した。
+
+集計後の描画は houou_leagues が52期分、ouka_leagues が21期分と小さい。
+
+### 方針案
+
+型Bと違い、**静的化とのハイブリッドが成立する**。
+土台の積み上げ棒をビルド時に焼き込み、選手依存の折れ線だけを軽量に描く。
+あるいは (a) Google Charts 据え置き。
+
+### 再現が必要なオプション
+
+`animation`(1000ms/easing:'out'/startup) / `interpolateNulls: true`
+(A1・A2リーグで必須というコメントあり) / `vAxis: {direction: -1,
+textPosition: 'none'}` / 13色の配色 / `legend: {position: 'bottom'}`
+
+### 依存
+
+型B（#111）で (b) ECharts を選ぶ場合は、型Cも揃えるのが自然。
+型Bの判断の後に決める。
 
 ---
 
@@ -463,77 +533,81 @@ resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り�
 
 ---
 
-## #111 #7のグラフ系6ページ（型B/C/D）の移行方針を決める
+## #111 #7の型B 3ページ（Dashboard＋ローソク足）の移行方針を決める
 
 - 状態: OPEN / 作成: 2026-09-11
 - ラベル: 分野: パフォーマンス, 対象: 全ページ
 
 ### 本文
 
-### 背景
+### 対象
 
-#7 の残り12ページのうち6ページは、表だけでなくグラフを描画している。
+`houou_results` / `ouka_results` / `wrc_results`
 
-| 型 | ページ | グラフ |
+### 構造（2026-09-11 のコード調査＋実機確認で判明）
+
+1ファイル内で `google.charts.load` を2回呼んでいる。
+
+- `packages:['table','controls']` … `Dashboard` に `ControlWrapper` をバインドし、
+  `Table`(`page:'enable'`) に接続する。**常時表示**（`?name`の有無に関わらず描画される）
+- `packages:['corechart']` … `if(search_name)` の内側。**`?name` があるときだけ**
+  別クエリでローソク足を描く。中身は選手個人の期別成績推移
+
+つまりこのページは「表＋グラフ」ではなく、常時表示のダッシュボードに、
+選手指定時だけグラフが足される構造になっている。
+
+**3ページとも同一構造ではない。** 実機確認で以下の差分が判明した。
+
+| ページ | コントロール | リーグ欄の型 | pageSize | 実描画行数(`?name`なし) |
+| --- | --- | --- | --- | --- |
+| `houou_results` | 名前・期・リーグ(3つ) | **CategoryFilter(ドロップダウン)** | 500 | 500(31ページ) |
+| `ouka_results` | 名前・期・リーグ(3つ) | StringFilter(テキスト入力) | 100 | 100(16ページ) |
+| `wrc_results` | **名前のみ(1つ)** | (欄自体が存在しない) | 100 | 100(16ページ) |
+
+### 論点1: グラフ本体
+
+**静的SVG化（旧選択肢c）は成立しない。** グラフが選手依存のため、
+選手ごとに1枚ずつ事前生成することになり現実的でない。
+
+残る選択肢は:
+- (a) Google Charts 据え置き。`www.gstatic.com` は残り、#9 のCSPは
+  `script-src` に gstatic を許可したまま確定できる。作業量は最小
+- (b) Apache ECharts に載せ替え。セルフホスト可能で外部依存は増えないが、
+  新サイトで作り直す予定のページに新しいライブラリを入れることになる
+
+### 論点2: `?name` なしの既定表示が全件になる
+
+| ページ | パラメータなしの行数(元データ) | 現在のDOM行数(Charts側のページング) |
 | --- | --- | --- |
-| B | `houou_results` / `ouka_results` / `wrc_results` | CandlestickChart |
-| C | `houou_leagues` / `ouka_leagues` | ColumnChart |
-| D | `resource_efficiency` | BarChart |
+| `houou_results` | 15,416 | 500 |
+| `ouka_results` | 1,580 | 100 |
+| `wrc_results` | 1,507 | 100 |
 
-表の静的化は型A・A'と同じ手順で進められるが、**グラフ本体をどうするかが
-未決定**。この判断が #7 の完了定義と #9（CSP）の内容を左右する。
+現在DOM行数が小さく収まっているのは Google Charts の `page:'enable'` が
+実際にDOMを分割しているため。**自前の `row.hidden` 方式（`.mj-pager`）に
+置き換えると `houou_results` は15,416行がDOMに乗り、`saikyo_results`
+(2,560行)を超えて #7 最大のDOM規模ページになる。**
 
-### 論点: Google Charts はローカルホストできない
+対応案:
+- `?name=` を必須にして、未指定時は表を出さない（挙動が変わる）
+- ページ送りをDOMから行を出し入れする方式に作り直す（#24と同根の作業）
+- 型Bだけ据え置く
 
-Google の利用規約により、`google.charts.load` / `google.visualization`
-のコードをダウンロードして保存・自己ホストすることは認められていない。
-`https://www.gstatic.com/charts/loader.js` から読み込むことが前提になっている。
+### 論点3: ControlWrapper の置き換え
 
-参照: https://developers.google.com/chart/interactive/faq
+`table.js` には CategoryFilter（値をデータから自動生成するドロップダウン。
+`houou_results`のリーグ欄のみが該当）に相当する部品がない。表を静的化
+するなら新規に作る必要がある。`ouka_results`のリーグ欄はStringFilter
+なので既存のtable.jsの絞り込みで代替できるが、`wrc_results`には
+期・リーグの欄自体がなく、3ページを同じ設定で一括処理できない。
 
-つまり、**グラフ6ページで Google Charts を使い続ける限り、
-`www.gstatic.com` への依存は消せない。** 表を静的化して
-`docs.google.com` を消しても、CSPの `script-src` から
-`https://www.gstatic.com` を外すことはできない。
+### 判断材料
 
-docs/handover.md に「#7（Charts依存の解消）が終わると2つ減る」と
-書いてあるが、これはこの6ページの方針次第で成り立たない。
-
-### 選択肢
-
-**(a) グラフ6ページは Google Charts 据え置き**
-- #7 の完了定義を「表の静的化まで」に狭める
-- CSPは `script-src` に `https://www.gstatic.com` を許可したまま書く
-- 作業量は最小。「現行サイトに作り込みすぎない」方針と整合する
-- ただし #9 で書けるポリシーが弱くなる
-
-**(b) Apache ECharts を現行サイトにも導入する**
-- 新サイトの技術選定（docs/new-site-design.md §5）で採用予定のため知見は活きる
-- セルフホスト可能なので外部ドメインは増えない
-- ただし「現行サイトに作り込みすぎない」方針に反する。
-  新サイトで作り直す予定のページに、新しいライブラリを入れることになる
-
-**(c) ビルド時に静的SVGを生成してHTMLに埋め込む**
-- ローソク足・縦棒・横棒はいずれもインタラクションが本質ではないため、
-  静的画像でも成立しうる
-- 外部依存ゼロ。#9 で最も強いCSPが書ける
-- 生成スクリプト側にグラフ描画の実装が必要になる（Python）
-- ツールチップとホバー時の値表示は失われる
-
-### 判断に必要な材料
-
-- 6ページのグラフで、ツールチップやホバーが実際に使われているか
-  （静的SVGで許容できるかの判断材料）
-- Search Console / Cloudflare の HTTP Traffic 分析で、
-  この6ページのアクセス実態
-- 新サイト（#101）でこの6ページを作り直すまでの想定期間
-
-### 進め方
-
-型A' の2ページ（`rh_results` / `rh_results_detail`、#109で分類）を
-先に移行して多列テーブルの共通部品を整えるのが、この判断とは独立して
-進められる。型B の表部分もその共通部品を使うため、着手順としては
-型A' → 本issueの判断 → 型B/C/D がよい。
+- **カスタムツールチップも `addListener` も6ページとも存在しない。**
+  使われているのは Google Charts 既定のホバーツールチップのみ
+  （静的化で失われるインタラクションの実態はこれだけ。実機確認済み）
+- アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
+- 型C（#127）・型D（#128）は本issueとは別に判断する
 
 ---
 
@@ -4709,7 +4783,7 @@ ron2.jp の選手ページから取得できる所属・出身地・段位・か
 ---
 <sub>移行前のタスク番号: 39</sub>
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-11):
 
@@ -4761,6 +4835,30 @@ https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
 - Lighthouse(mobile): performance 89 / TBT 236ms / DOM 3,573要素(321行のわりに軽い)
 
 型A'(rh_results / rh_results_detail)完了。進捗: 21ページ中11ページ完了・残10ページ。詳細はdocs/handover.mdとdocs/lighthouse-baseline.mdを参照。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
+
+**retroeater** (2026-09-11):
+
+## グラフ系6ページの構造調査、#111を型別に分割(2026-09-11)
+
+型A'(rh_results / rh_results_detail)の完了に続けて、残り12ページのうちグラフを描画する6ページ(型B/C/D)の構造をコードと実機の両方で確認した。
+
+### 訂正: houou_resultsが#7最大のDOM規模ページになりうる
+
+これまで「`houou_results`等は`?name`必須で未指定時は何も描画しない」と記録していたが誤り。実機確認の結果、`?name`が必須なのはローソク足(`#myChart`)だけで、**表(`myTable`)は`?name`の有無に関わらず無条件で描画される**。現在DOM行数が500に収まっているのはGoogle Chartsの`page:'enable'`+`pageSize:500`が実際にDOMを分割しているためで、自前の`.mj-pager`(`row.hidden`)方式に置き換えると15,416行が丸ごとDOMに乗り、`saikyo_results`(2,560行)を超えて**#7最大のDOM規模ページ**になる。詳細はdocs/lighthouse-baseline.md・docs/handover.mdを更新済み。
+
+### #111を型別に3分割
+
+グラフ系6ページは型B/C/Dで性質が大きく異なり、1つのissueでは判断できないため分割した。
+
+- **#111**(型B、houou_results/ouka_results/wrc_results): 常時表示のDashboard+Tableに`?name`時のみローソク足が乗る構造。3ページとも同一ではなく、houou_resultsのみリーグ欄がCategoryFilter(ドロップダウン)、ouka_resultsはStringFilter、wrc_resultsは名前欄のみ(実機確認で判明)
+- **#127**(型C、houou_leagues/ouka_leagues): 積み上げ棒は全員共通、`?name`依存は折れ線1本のみ。静的化とのハイブリッドが成立しうる
+- **#128**(型D、resource_efficiency): URLパラメータ非依存・データ固定(34行)。グラフ系で唯一、完全に静的SVG化できる
+
+6ページとも、カスタムツールチップ・`addListener`は存在しない(既定のGoogle Chartsツールチップのみ)ことも実機確認済み。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 

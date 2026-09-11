@@ -221,7 +221,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 認められておらず、`gstatic.com` からの読み込みが前提になっている。
 この6ページで Charts を使い続ける場合、表を静的化して
 `docs.google.com` を消しても `script-src` から `gstatic.com` は
-外せない。方針は #111 で判断する。
+外せない。方針は型Bを#111、型Cを#127、型Dを#128で判断する。
 
 **生成済みページの `<img src>` に含まれる外部ドメインは、選手のプロフィール
 画像7ドメインだけではない。** `jpml_test.html` は `img.youtube.com`（12件）と
@@ -262,9 +262,9 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 |---|---|---|---|
 | A. 表とフィルターのみ | 13(**完了9・残4**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、ランキング3、`saikyo_results` |
 | A'. 多列テーブル（表のみ） | 2(**完了2・残0**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109）。**完了** | `rh_results`(完了、12行・6列) / `rh_results_detail`(完了、321行・8列) |
-| B. 表＋ローソク足 | 3 | `CandlestickChart` が加わる | `houou_results` / `ouka_results` / `wrc_results` |
-| C. 縦棒グラフ | 2 | `ColumnChart` | `houou_leagues` / `ouka_leagues` |
-| D. 横棒グラフ | 1 | `BarChart` | `resource_efficiency` |
+| B. 表＋ローソク足 | 3 | `Dashboard`(名前/期/リーグの`ControlWrapper`。ページごとに構成が違う) + `Table`(`page:'enable'`) + `?name`時のみ`CandlestickChart`。型A/A'と同じ手順では表を静的化できない（#111） | `houou_results` / `ouka_results` / `wrc_results` |
+| C. 縦棒グラフ | 2 | `ColumnChart`(積み上げ棒は全員共通、`?name`時に選手の折れ線1本を追加。静的化とのハイブリッドが成立しうる。#127) | `houou_leagues` / `ouka_leagues` |
+| D. 横棒グラフ | 1 | `BarChart`。URLパラメータに依存せずデータも34行で固定。グラフ系で唯一、静的SVG化が成立する（#128） | `resource_efficiency` |
 
 ※ ランキング3ページは `league_ranking.js`（772行）を共用している。
 　 レーダーチャートの指標もこのファイルの集計ロジックを使う（新サイト）
@@ -272,7 +272,7 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 **型B/C/D（グラフ系6ページ）は、グラフ本体をどうするかの移行方針が
 未決定。** 表の静的化だけなら型A/A'と同じ手順で進められるが、
 Google Charts据え置き・ライブラリ変更・静的SVG化のどれを取るかで
-外部ドメイン依存の扱いが変わる。判断は#111で行う。
+外部ドメイン依存の扱いが変わる。判断は型Bが#111、型Cが#127、型Dが#128。
 
 **#7の期待値の修正（2026-09-11、Lighthouse実測を受けて）**
 
@@ -299,10 +299,16 @@ Google Charts据え置き・ライブラリ変更・静的SVG化のどれを取�
   新サイトで対応）。既存のINP 458msの記録と同根の問題
 - **残り17ページの行数調査で `saikyo_results`（2,560行、`?name`指定なしで
   全件描画）が `jpml_pros`（1,099行）を上回る最大の懸念ページと判明した。**
-  一方、`houou_leagues` / `houou_results` / `ouka_leagues` / `ouka_results` /
-  `wrc_results` はスプレッドシート自体は1,000〜16,000行超と大きいが、
-  ローソク足・縦棒グラフへの集計後、または `?name` 必須の個人別絞り込み後は
-  数行〜数十行しか描画しないため、実際のDOM規模リスクは低い。詳細は
+  ただしこれは訂正が必要（2026-09-11、実機確認）: `houou_results`
+  （15,416行）も`?name`は任意で、未指定時に表(`myTable`)は無条件で
+  描画される。現在DOM行数が500に収まっているのはGoogle Chartsの
+  `page:'enable'`+`pageSize:500`が実際にDOMをページ単位で分割している
+  ためで、自前の`row.hidden`方式に置き換えると`houou_results`が
+  `saikyo_results`を超えて**#7最大のDOM規模ページになる**。
+  `ouka_results`/`wrc_results`も同様に`?name`任意だが行数が少なく
+  （1,500〜1,600台）実害は小さい。`houou_leagues`/`ouka_leagues`は
+  `ColumnChart`への集計後は数十行、ランキング系3ページは
+  `DEFAULT_RANK_LIMIT`により実際のDOM規模リスクは低い。詳細は
   `docs/lighthouse-baseline.md` の行数調査表を参照
 
 未移行ページ側の参考値も記録しておく。
