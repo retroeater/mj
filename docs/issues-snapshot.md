@@ -135,7 +135,7 @@ HTML は `cf-cache-status: HIT` でその空き時間自体が短い。
 Early Hints は HTTP/2 または HTTP/3 接続でのみ動作する。
 どちらも 2026-09-11 に有効化済み。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -144,6 +144,35 @@ Early Hints は HTTP/2 または HTTP/3 接続でのみ動作する。
 Speed Brain が Workers 静的アセットで拒否された件（#119）と同じく、
 「設定が有効になっている」ことと「実際に動いている」ことは別。
 判定は必ずレスポンスの実測で行うこと。
+
+**retroeater** (2026-09-11):
+
+### Smart Hints（クローズドベータ）が代替になりうる（2026-09-11）
+
+Speed → Content Optimization に **Smart Hints** という項目がある。
+クローズドベータで、Sign up ボタンから申し込む形式。
+
+> By using Smart Hints, Cloudflare will automatically select
+> Early Hints and Fetch Priority for resources on your website
+> to improve the render time in browser
+
+**Cloudflare が自動で Early Hints の対象を選ぶ**ため、
+このissueの主題である「`_headers` に `Link:` を手書きする」作業が
+不要になる可能性がある。
+
+ページごとに CSS 構成が違う（index.html だけ別系統）という設計上の論点も、
+自動選択なら解消する。
+
+### 進め方
+
+着手前に Smart Hints へ申し込む。ベータに通れば手書きは不要になり、
+通らなければ当初の設計どおり `_headers` に書く。
+登録自体は無料で、通らなくても何も起きない。
+
+### 前提の確認（済）
+
+Early Hints のトグルは Speed → Content Optimization で有効（2026-09-11）。
+HTTP/2・HTTP/3 も有効。
 
 ---
 
@@ -455,7 +484,7 @@ changefreq / priority を残すか削るか。Google は無視するが、他の
 
 ## #120 #9の着手前にCloudflareのHTML書き換え系機能がOffか確認する
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: セキュリティ, 対象: 全ページ
 
 ### 本文
@@ -472,6 +501,34 @@ Cloudflare にはエッジで inline script や属性を注入する機能があ
 あわせて Speed Brain（別issue）も strict-dynamic / nonce と非互換。
 
 確認結果は #9 のコメントに転記する。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 確認結果（2026-09-11）
+
+CSP（#9）着手前のチェックとして、Cloudflare がエッジで HTML を書き換える
+機能の状態を確認した。**すべて Off で、対応は不要だった。**
+
+| 機能 | 場所 | 状態 |
+|---|---|---|
+| Rocket Loader | Speed → Content Optimization | Off |
+| Email Address Obfuscation | Security → Settings → Client side abuse | Off |
+| Hotlink Protection | 同上 | Off |
+| Mirage | Speed → Image Optimization | 項目なし（Business プラン以上のため Pro では対象外） |
+
+inline script や属性の注入は発生していない。
+#9 で CSP を書く際、Cloudflare 側の注入を考慮する必要はない。
+
+### #9 着手時に再確認すること
+
+- Speed Brain は 2026-09-11 に Off へ戻した（#119）。再度有効化する場合、
+  strict-dynamic / nonce を使う CSP とは併用できない
+- Security → Settings → Client side abuse の
+  **Continuous script monitoring（Page Shield）は現在 Off**。
+  On にするとサイト上で実行中のスクリプト一覧が取れるため、
+  `script-src` の棚卸しに使える。#9 着手時に有効化を検討する
 
 ---
 
@@ -582,7 +639,7 @@ Disabled だっただけで、有効化後はヘッダが出た。そのうえ�
 
 ## #118 Cloudflareの通知（Notifications）を設定する
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -598,11 +655,55 @@ Disabled だっただけで、有効化後はヘッダが出た。そのうえ�
 
 通知先は当面 平野さんのメール。#17 で独自ドメインメールを作る場合は宛先を見直す。
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 対応完了（2026-09-11）
+
+通知タイプは全53種類。Product ドロップダウンで絞り込んで確認した。
+
+### 設定したもの
+
+| Product | Alert Type | 通知先 |
+|---|---|---|
+| SSL/TLS | Universal SSL Alert | hirano@ryoei.net |
+
+通知先の `ryoei.net` は別事業者で運用しているドメインのため、
+ryoei.pro 側に障害が起きても受け取れる。
+
+### 設定しなかったもの（設定し忘れではない）
+
+| 想定していた通知 | 結果 |
+|---|---|
+| Registrar 系（ドメイン失効・移管） | **Product の一覧に Registrar が存在しない。** 通知タイプ自体が提供されていない |
+| Billing | 2種類（Billing Budget Alert / Usage Based Billing）のみで、どちらも「支出がしきい値を超えたら通知」。守りたかった「支払い失敗による失効」は検知できないため見送り |
+| セキュリティイベントの急増 | Product 一覧に該当なし。Business プラン以上と思われる |
+| Workers のエラー率 | Product 一覧に該当なし |
+
+SSL/TLS の他の6種類（Access mTLS / Advanced Certificate /
+Authenticated Origin Pulls / mTLS Certificate Store / SSL for SaaS）は
+いずれも未使用の機能のため対象外。Universal SSL のみが該当する。
+
+### ドメイン失効対策は通知ではなく直接確認で担保した
+
+Domain Registration → ryoei.pro で以下を確認済み。
+
+| 項目 | 値 |
+|---|---|
+| Status | Active |
+| Expiration date | 2028年3月20日 |
+| Auto renew | On |
+| 自動更新予定 | 2028年2月19日 |
+
+期限まで1年半あり自動更新も有効なため、当面の失効リスクはない。
+カードの有効期限は自動更新のタイミングで確認すれば足りる。
+
 ---
 
 ## #117 DNSSECを有効にする
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -610,11 +711,31 @@ Disabled だっただけで、有効化後はヘッダが出た。そのうえ�
 #18 で Cloudflare Registrar へ移管済み、DNS も Cloudflare のため、
 DSレコードの登録まで自動で完結する。現状の有効/無効を確認し、無効なら有効化する。
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 対応完了（2026-09-11）
+
+DNS → Settings で DNSSEC を有効化した。
+「DNSSEC is pending while we automatically add the DS record on your domain.」
+の表示に切り替わり、Cloudflare が DS レコードを自動登録している。
+
+#18 で Cloudflare Registrar へ移管済みかつ DNS も Cloudflare のため、
+DS レコードのレジストリ登録まで自動で完結する。手動作業は不要だった。
+
+### 記録
+
+- Multi-signer DNSSEC / Multi-provider DNS は Off のまま。どちらも
+  他社DNSと併用する場合の機能で、当サイトには該当しない。
+  DNSSEC 有効中はこの2つを使えない旨の警告が出るが、これは仕様
+- CNAME flattening は Off のまま。apex に CNAME を置いていないため不要
+
 ---
 
 ## #116 送信しないドメインのなりすまし対策（SPF / DMARC）を入れる
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: セキュリティ
 
 ### 本文
@@ -637,6 +758,44 @@ _dmarc.ryoei.pro        TXT  "v=DMARC1; p=reject; rua=mailto:<宛先>"
 
 #17 で Email Routing を導入する場合、SPF の内容を差し替える必要がある。
 #17 に着手するときはこのissueを見直すこと。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 前提の確認（2026-09-11）
+
+DNS レコードは3件のみで、**MX レコードが存在しない**ことを確認した。
+サイト側も `<form>` が27ページに0個、#98 で php-email-form も削除済みで、
+ryoei.pro からメールを送る経路はない。
+
+### 対応
+
+DNS → Settings → Email Security → Configure（Email Record Creator）の
+「Your domain is not used to send email」から一括作成した。
+
+| Type | Name | Content |
+|---|---|---|
+| TXT | @ | `v=spf1 -all` |
+| TXT | `_dmarc` | `v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;` |
+| TXT | `*._domainkey` | `v=DKIM1; p=` |
+
+DMARC は `sp=reject`（サブドメインも拒否）、`adkim=s` / `aspf=s`（厳密一致）
+まで含む厳しい内容。送信しないドメインとしては最適。
+
+Reporting email addresses（rua）は空のまま。`@ryoei.pro` のアドレスが
+まだなく、レポートを受け取る予定もないため。拒否の動作には影響しない。
+
+適用後、DNS レコードは6件になり、Cloudflare の Recommendations は
+「All set / No recommendations」になった。
+
+受信用の MX は追加していない。受信は #17 で別途判断する。
+
+### #17 着手時の注意
+
+`v=spf1 -all` は「このドメインはメールを送信しない」宣言。
+#17 で `@ryoei.pro` から**送信**する場合は SPF の書き換えが必須で、
+書き換えないと送信メールが拒否される。
 
 ---
 
@@ -1148,7 +1307,7 @@ docs/handover.mdに型A'(多列テーブル、表のみ)を新設し、rh_result
 - やるなら eagerness を絞り、ホバー時のみ先読みする形になる
 - #7 の完了後、ページ構成が固まって Lighthouse の実測が出てから判断する
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -1180,6 +1339,19 @@ prefetch が拒否される（`disabled for worker requests`）ことが分か�
 ### 依存
 
 #9 と併せて判断する。CSP のポリシーが固まる前に inline script を増やさないこと。
+
+**retroeater** (2026-09-11):
+
+### Cloudflare 側の prefetch 手段は完全に潰れた（2026-09-11）
+
+Speed → Content Optimization に **Prefetch URLs** という項目があるが、
+**Requires an Enterprise plan** と明記されている。
+
+Speed Brain が Workers 静的アセットで拒否される（#119）ことと合わせて、
+Cloudflare の設定だけで prefetch を実現する手段は残っていない。
+
+このissueは「自前で Speculation Rules を HTML に書く」か「見送り」の
+二択で確定。判断材料は既存コメントのとおり。
 
 ---
 
@@ -4877,6 +5049,22 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 ### 本文
 
 contact@ryoei.pro のようなアドレスを作り、既存のメールに転送する。無料で、メールボックスもサーバー設定も不要。送信はできない(受信・転送のみ)。企業からの問い合わせ窓口として。ドメイン切替(旧11番)の直後に実施。
+
+### 依存: #116 で SPF を「送信しない」に設定済み
+
+2026-09-11 に #116 でなりすまし対策として、以下を設定した。
+
+| Type | Name | Content |
+|---|---|---|
+| TXT | @ | `v=spf1 -all` |
+| TXT | `_dmarc` | `v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;` |
+| TXT | `*._domainkey` | `v=DKIM1; p=` |
+
+**受信だけなら影響しないが、`@ryoei.pro` からの送信を行う場合は
+SPF の書き換えが必須。** 書き換えないと送信メールが拒否される。
+DMARC も `adkim=s` / `aspf=s` と厳密なため、あわせて見直しが要る。
+
+MX レコードは未設定のため、受信するには MX の追加が必要。
 
 ---
 <sub>移行前のタスク番号: 68</sub>

@@ -798,13 +798,7 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
 - **AI Crawl Control が管理 robots.txt を自動で前置する。** そのため自作の
   `robots.txt` は `Sitemap:` の宣言のみにしている
 - AI学習用クローラー（GPTBot/ClaudeBot等）はブロック、検索エンジンとAIの検索・回答は許可
-- **「Block AI bots」一括トグルは2026-09-15に廃止され、挙動ベース
-  （Search / Agent / Training の3分類）の制御に移行する。** Googlebot等の
-  混在クローラーは複数の挙動で評価され最も厳しいルールが適用されるため、
-  学習ブロックの設定に検索クロールも巻き込まれるようになる。2026-09-11に
-  緊急対応として Security → Settings → Bot traffic → 「Block AI bots」で
-  `Mixed purpose crawlers will continue to be allowed.` を選択済み。
-  旧トグル廃止後の本対応（挙動ベースでの設定）は#130で管理する
+  （詳細・経緯は下記「AIクローラーの扱い」参照。本対応は#130で管理）
 - Tiered Cache は**効果がない**（Workersの静的アセットにはオリジンサーバーがないため）
 - **Web Analytics のビーコンは `/cdn-cgi/rum` への POST。**
   HTTPメソッドやパスで遮断するルールを書くときは `/cdn-cgi/` を
@@ -820,6 +814,7 @@ Speed → Recommendations（Site Recommendations）の一覧と、それぞれ�
 | Speed Brain | **無効** | 有効化して実測した結果、prefetch が拒否された（#119）。Off に戻した |
 | Polish / WebP | 無効 | #71 のとおり。Workers 静的アセットにオリジンがなく効果がない。加えて `<img>` をエッジで書き換えるため #9 と競合する |
 | Image Transformations | 未購入 | Cloudflare Images の別課金。自前画像は11枚178KB、選手画像1,985枚は外部7ドメインにあり対象外 |
+| Rocket Loader | 無効 | 全ページで `defer` を付けているため効果がない。CSP（#9）とも競合する |
 | HTTP/2 | 有効 | 既定 |
 | HTTP/3 | **有効化(2026-09-11)** | モバイル回線で効く。リスクなし |
 | HTTP/2 to Origin | 有効 | オリジンが存在しないため実質無効。害もないので触らない |
@@ -841,7 +836,57 @@ Speed → Recommendations（Site Recommendations）の一覧と、それぞれ�
 レスポンスの `Link: ...; rel=preload` / `rel=preconnect` ヘッダをキャッシュして
 103 で先出しする仕組みで、HTML 内の `<link>` タグは見ない（Pages には
 `<link>` からの自動生成があるが、Workers 静的アセットで同じ挙動をするかは未確認）。
-`_headers` に `Link:` 行を足す必要がある。設計は別issueで扱う。
+`_headers` に `Link:` 行を足す必要がある。設計は別issueで扱う（#129）。
+Speed → Content Optimization の **Smart Hints**（クローズドベータ）が
+Early Hints の対象を自動選択する機能で、#129 の代替になりうる。
+#129 着手前に申し込む方針。
+
+#### DNS・メール・通知の設定（2026-09-11）
+
+DNS レコードは元々3件だった（Search Console の所有権確認 TXT、
+apex と www の Worker レコード）。**MX は未設定。**
+
+| 項目 | 状態 |
+|---|---|
+| DNSSEC | 有効化済み（#117）。Registrar も DNS も Cloudflare のため DS 登録まで自動 |
+| SPF | `v=spf1 -all`（#116） |
+| DMARC | `v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;`（#116） |
+| DKIM | `*._domainkey` に空ポリシー（#116） |
+| 通知 | Universal SSL Alert のみ（#118）。宛先は別事業者のドメイン |
+
+**Cloudflare の通知には Registrar 用の Alert Type が存在しない。**
+Billing の2種類も「支出がしきい値を超えたら通知」で、
+支払い失敗による失効は検知できない。ドメイン失効対策は
+Domain Registration 画面で Auto renew と期限を直接確認する方法に切り替えた
+（2026-09-11 時点: Active / 期限 2028-03-20 / Auto renew On）。
+
+**#17（Email Routing）に着手するときは SPF の書き換えが必須。**
+`v=spf1 -all` のままだと `@ryoei.pro` からの送信が拒否される。
+
+**www.ryoei.pro の Worker レコードは削除しないこと。**
+削除すると www が名前解決できなくなり、#115 で設定した
+www → apex の Redirect Rule に到達する前に失敗する。
+Redirect Rules は Workers より前に評価されるため、
+レコードを残したままで正しく308が返る。
+
+#### AIクローラーの扱い（2026-09-11 時点）
+
+Cloudflare の「Block AI bots」一括トグルは **2026-09-15 に廃止**され、
+挙動ベースの制御（Search / Agent / Training）へ移行する。
+
+9月15日以降、複数の目的を持つクローラーは宣言されたすべての挙動で評価され、
+最も厳しいルールが適用される。Googlebot / Applebot / Bingbot は検索と
+AI機能を単一のユーザーエージェントでクロールするため、
+「AI学習をブロック」という設定に巻き込まれる。
+
+2026-09-11、期限前の対応として
+`Mixed purpose crawlers will continue to be allowed.` を選択した。
+
+**学習用クローラーをブロックしてもAI検索・回答での露出は減らない。**
+学習クロールは引用も参照トラフィックも生まないため。
+混在クローラーを許可しても、学習利用を拒否する目的は損なわれない。
+
+旧トグル廃止後の本対応は#130で管理する。
 
 ### Cloudflare Pro でできること・できないこと
 
@@ -930,6 +975,11 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 | Speed Brain | 却下 | 有効化して実測したところ、prefetch が `HTTP 503` / `cf-speculation-refused: prefetch refused: disabled for worker requests` で拒否された。Workers 静的アセット配信では機能しない。#71・Polish・Mirage と同じ理由 |
 | Cache Rules による HTML のエッジキャッシュ | 却下 | `cf-cache-status: HIT` を実測。HTML はすでにキャッシュから配信されており伸びしろがない（#123） |
 | Image Transformations / Cloudflare Images | 却下 | 別課金。自前画像は11枚178KBで主要3枚はすでにWebP。選手画像1,985枚は外部7ドメインにあり対象外 |
+| Prefetch URLs（Cloudflare） | 対象外 | Enterprise プラン限定。Speed Brain が拒否される件と合わせて、Cloudflare 側で prefetch を実現する手段は残っていない |
+| Cloudflare Fonts | 不採用 | #93 で Google Fonts を廃止しシステムフォントに統一済み。最適化する外部フォントが存在しない |
+| Automatic Platform Optimization for WordPress | 対象外 | WordPress サイトではない。ダッシュボードにも「The WordPress plugin was not detected on ryoei.pro」と表示される |
+| Shared Dictionary Compression | 見送り | Passthrough はオリジンが辞書圧縮を処理する前提。Workers 静的アセットは対応しないため Off のまま |
+| Smart Hints | 保留 | クローズドベータ。Early Hints の対象を Cloudflare が自動選択する機能で、#129 の代替になりうる。#129 着手前に申し込む |
 
 **すでに対応済みだったもの**
 
