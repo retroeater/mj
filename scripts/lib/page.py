@@ -208,14 +208,19 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
     )
 
 
-def generate(spreadsheet_id, sheet_name, query, output_path, meta, table_config, build_row_html):
+def generate(spreadsheet_id, sheet_name, query, output_path, meta, table_config, build_row_html, formatted=False):
     """スプレッドシートの取得からHTML書き出しまでを行う共通の main() 相当。
 
     generate_*.py 側は設定(PageMeta/TableConfig)と build_row_html(row) だけを
     持てばよい。
+
+    formatted は fetch_sheet() にそのまま渡す。表示の設定(TableConfig)では
+    なくデータ取得の設定のため、generate() の引数にしている。数値列に
+    シートの表示形式(桁区切り・固定小数点)をそのまま反映したいページ
+    (rh_results 等)で True にする。既定は False(生の値を使う)。
     """
     print(f"「{sheet_name}」シートを取得中...")
-    raw_rows = fetch_sheet(spreadsheet_id, sheet_name, query)
+    raw_rows = fetch_sheet(spreadsheet_id, sheet_name, query, formatted=formatted)
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
     rows_html = "\n".join(build_row_html(row) for row in raw_rows)

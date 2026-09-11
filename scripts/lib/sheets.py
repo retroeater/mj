@@ -10,11 +10,22 @@ import urllib.parse
 import urllib.request
 
 
-def fetch_sheet(spreadsheet_id: str, sheet_name: str, query: str) -> list:
+def fetch_sheet(spreadsheet_id: str, sheet_name: str, query: str, formatted: bool = False) -> list:
     """指定したスプレッドシート・シート名・Google Visualization APIクエリ言語
     (SELECT文)の実行結果を取得し、行のリスト(各行はセル値のリスト)として返す。
 
     ヘッダー行は含まない。値が空セルの場合は None が入る。
+
+    formatted=False(既定)では各セルの生の値(v)を_normalize()した結果を返す。
+    formatted=True にすると、セルに表示用文字列(f)があればそれを優先して使う
+    (シートに設定された表示形式("#,##0.0"等)をそのまま反映する。旧Google
+    Charts版のTable chartはこのfをそのまま描画していた)。
+
+    既定をFalseにしているのは、選手IDやYouTube動画IDなどURL・HTML属性に
+    埋め込む値では、fの桁区切り("6,010")がリンクを壊すため
+    (_normalize()がfloatの"6010.0"を防いでいるのと同じ問題)。
+    formatted=Trueを使うページでは、URLやHTML属性の組み立てに使う列が
+    含まれていないことを必ず確認すること。
     """
     encoded_query = urllib.parse.quote(query)
     encoded_sheet = urllib.parse.quote(sheet_name)
@@ -43,10 +54,18 @@ def fetch_sheet(spreadsheet_id: str, sheet_name: str, query: str) -> list:
     rows = []
     for row in data["table"]["rows"]:
         cells = row.get("c") or []
-        values = [_normalize(cell["v"]) if cell else None for cell in cells]
+        values = [_extract_cell(cell, formatted) for cell in cells]
         rows.append(values)
 
     return rows
+
+
+def _extract_cell(cell, formatted):
+    if not cell:
+        return None
+    if formatted and "f" in cell:
+        return cell["f"]
+    return _normalize(cell["v"])
 
 
 def _normalize(value):

@@ -497,15 +497,21 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
   これが走らないとstickyヘッダーとbodyの`padding-top`が既定値90pxのまま
   固定されるため。`jpml_pros.html`は`table.js`を読み込まず`jpml_pros.js`を
   使うため、この変更の影響を受けない
-- **スプレッドシートの表示形式(`#,##0.0`等)は`fetch_sheet()`では取得できない
-  ことが判明した。** gvizのレスポンスは生の数値(`v`)とは別に表示用文字列
-  (`f`)を持つが、`fetch_sheet()`は`v`しか返さない。旧Google Charts版の
-  `Table`は`f`をそのまま描画していたため、`rh_results`のような小数・
-  桁区切りを持つ数値列は生の浮動小数(`1861.4000000000012`等)がそのまま
-  出力されると見た目が変わってしまう。`scripts/lib/sheets.py`は変更せず、
-  `generate_rh_results.py`側でシートの書式(列ごとの小数桁数)を再現する
-  小さな整形関数を書いて対処した。`rh_results_detail`など今後の数値列を
-  持つページでも同じ確認が要る
+- **`fetch_sheet()`に`formatted: bool = False`を追加した。** gvizの
+  レスポンスは生の数値(`v`)とは別に表示用文字列(`f`)を持ち、シートの
+  表示形式(`#,##0.0`等)が反映されている。旧Google Charts版の`Table`は
+  `f`をそのまま描画していたため、`rh_results`のような小数・桁区切りを
+  持つ数値列は`v`だけでは見た目が変わってしまう(`1861.4000000000012`の
+  ような生の浮動小数になる)。`formatted=True`にすると、セルに`f`が
+  あればそれを優先して使う。**既定は`False`のまま。** 選手IDやYouTube
+  動画IDなどURL・HTML属性に埋め込む値では`f`の桁区切り("6,010")が
+  リンクを壊すため(`_normalize()`がfloatの"6010.0"を防いでいるのと
+  同じ問題)。`generate()`(page.py)も`formatted`引数をそのまま
+  `fetch_sheet()`へ渡す(表示の設定ではなくデータ取得の設定のため
+  `TableConfig`ではなく`generate()`の引数にした)。`rh_results`が最初の
+  適用例。数値列を含む他のページ(`rh_results_detail`等)を移行する際は、
+  URL・属性に使う列が含まれていないことを確認したうえで`formatted=True`
+  を使う
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 

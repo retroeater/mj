@@ -9,12 +9,18 @@
 提供する機能はナビバー固定分の高さ調整のみ。
 
 年別の集計値(得点・平均順位・トップ率・4位回避率)はスプレッドシート側で
-表示形式(#,##0.0 等)が設定されているが、gvizのgetJSONは生の数値しか
-返さない(fetch_sheetはこれをそのまま使う)。旧Google Charts版は
-DataTableのformatted value(f)をそのまま描画していたため、これと
-見た目を一致させるには生の数値をPython側で同じ書式に整形し直す必要がある
-(scripts/lib/sheets.pyは変更しない方針。列ごとの書式は
-docs.google.com/.../gviz/tq のレスポンスのtable.cols[].patternで確認した)。
+表示形式(#,##0.0 等)が設定されている。gvizのレスポンスは生の数値(v)とは
+別に表示用文字列(f)を持ち、旧Google Charts版のTable chartはこのfを
+そのまま描画していた。fetch_sheet(formatted=True)でfを取得できるため、
+Python側で書式を再現するコードは不要(#7で当初はCOLUMN_DECIMALS +
+format_number()で自前整形していたが、fの存在が判明したため置き換えた)。
+副次的に、空セルがNoneのままformat_number()に渡ってTypeErrorになる
+問題も解消している(formatted=Trueでは空セルはNoneのままesc()に渡り
+空文字になるだけで、数値整形自体が発生しない)。
+
+このページの列(年・得点・平均順位・トップ率・4位回避率・半荘数)は
+URLやHTML属性の組み立てには使わないため、formatted=Trueの桁区切りが
+リンクを壊す心配はない。
 
 使い方:
     python3 scripts/generate_rh_results.py
@@ -50,29 +56,11 @@ TABLE = TableConfig(
     show_filter=False,
 )
 
-# 列ごとの表示形式(スプレッドシート側のnumber format)。
-# B: #,##0.0 / C: #,##0.00 / D,E: #,##0.000 / F: #,##0
-COLUMN_DECIMALS = [1, 2, 3, 3, 0]
-
-
-def format_number(value, decimals) -> str:
-    """スプレッドシートの表示形式(桁区切り+固定小数点)を再現する。
-    例: 1861.4000000000012 → "1,861.4"、1216 → "1,216" """
-    return f"{value:,.{decimals}f}"
-
 
 def build_row_html(row) -> str:
-    year, score, avg_rank, top_rate, avoid_4th_rate, hanchan_count = row
-
-    cells = [esc(year)]
-    for value, decimals in zip(
-        [score, avg_rank, top_rate, avoid_4th_rate, hanchan_count], COLUMN_DECIMALS
-    ):
-        cells.append(esc(format_number(value, decimals)))
-
-    tds = "".join(f"<td>{c}</td>" for c in cells)
+    tds = "".join(f"<td>{esc(cell)}</td>" for cell in row)
     return f"<tr>{tds}</tr>"
 
 
 if __name__ == "__main__":
-    generate(SPREADSHEET_ID, SHEET_NAME, QUERY, OUTPUT_PATH, META, TABLE, build_row_html)
+    generate(SPREADSHEET_ID, SHEET_NAME, QUERY, OUTPUT_PATH, META, TABLE, build_row_html, formatted=True)

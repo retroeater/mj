@@ -12,7 +12,63 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 111件（open/closed含む）。番号降順。
+件数: 112件（open/closed含む）。番号降順。
+
+---
+
+## #112 ナビバーの検索ボタンが、検索欄を持たないページでは何も起きない
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+navbar.js は全ページに data-bs-toggle="collapse" href="#searchBoxes" の
+虫眼鏡ボタンを出しているが、#searchBoxes を持たないページでは押しても
+何も起きない。
+
+### 該当ページ（7件）
+
+- 404.html
+- jpml_links.html
+- resource_dictionary.html
+- resource_efficiency.html
+- rh_links.html
+- rh_results.html
+- rh_results_detail.html
+
+### 経緯
+
+静的ページ（404 / jpml_links / rh_links / resource_dictionary）では
+従来から発生していた既存挙動。rh_results は #7 の静的化で他のテーブル
+ページと同じ見た目になったため、「押せそうに見える」度合いが上がった。
+
+resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り込み欄を
+持たせるかどうかで該当・非該当が変わるため、**この issue の対応は #7 の
+完了後に判断する。**
+
+### 対応案
+
+- (a) navbar.js 側で #searchBoxes の有無を見て、無いページではボタンを
+  出さない
+- (b) 該当ページではボタンを disabled にする
+- (c) 現状維持
+
+### 優先度
+
+低い。実害はなく、備忘として登録するもの。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+## 動作確認結果
+
+該当7ページすべてで虫眼鏡ボタンをクリックし、ブラウザのコンソールを確認した。
+
+**Bootstrapの例外は出ない。** クリックしても何も起きないだけで、エラーも警告も発生しない。Bootstrapのcollapseプラグインは`data-bs-toggle="collapse"`のターゲット(`#searchBoxes`)が存在しない場合、静かに何もしない実装になっている。
+
+したがって#4(Sentry導入)のノイズにはならない。優先度を上げる材料はなし。
 
 ---
 
@@ -4237,7 +4293,7 @@ ron2.jp の選手ページから取得できる所属・出身地・段位・か
 ---
 <sub>移行前のタスク番号: 39</sub>
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -4254,6 +4310,25 @@ ron2.jp の選手ページから取得できる所属・出身地・段位・か
 また、スプレッドシートの表示形式(`#,##0.0`等)が`fetch_sheet()`では取得できないことが分かった。gvizは生の数値とは別に表示用文字列を持つが`fetch_sheet()`は生の値しか返さないため、`rh_results`側で書式を再現する整形関数を追加して対処した(`scripts/lib/sheets.py`は変更していない)。数値列を持つページを今後移行する際は同じ確認が必要。
 
 進捗: 21ページ中10ページ完了・残11ページ。詳細はdocs/handover.mdの「#7 の進め方」を参照。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
+
+**retroeater** (2026-09-11):
+
+## 訂正: gvizは表示形式付き文字列(f)を返す
+
+前回のコメントで「スプレッドシートの表示形式(#,##0.0等)はfetch_sheet()では取得できない」と書いたが、これは誤り。gvizのレスポンスはセルごとに生の値(v)とは別に表示用文字列(f)を持っており、シートの表示形式が反映されている。rh_results側で書いていたCOLUMN_DECIMALS + format_number()による自前整形は不要だった。
+
+## 対応
+
+- `fetch_sheet()`(scripts/lib/sheets.py)に`formatted: bool = False`を追加。`True`でセルの`f`を優先して使う
+- 既定は`False`のまま。選手IDやYouTube動画IDなどURL・HTML属性に埋め込む値では`f`の桁区切り("6,010")がリンクを壊すため
+- `generate()`(scripts/lib/page.py)にも`formatted`引数を追加し、そのまま渡す
+- `generate_rh_results.py`をformatted=Trueを使う形に書き換え、自前整形コードを削除
+
+`rh_results.html`はバイト単位で無変更、既存9ページも出力に差分がないことを確認済み。数値列を含む他のページ(`rh_results_detail`等)を移行する際は、URL・属性に使う列が含まれていないことを確認したうえで`formatted=True`を使う。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
