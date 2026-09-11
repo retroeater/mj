@@ -300,6 +300,17 @@ body:has(.mj-table) {
 	overflow-wrap: anywhere;
 }
 
+/* ==== #mtsuku_table 固有(Mつく) ====
+   3列目(選手)は「氏名（団体）」が最大4行。.mj-table-3col既定の
+   均等割りだと画面幅によって概要列の折り返し位置が動くため、2列目
+   (概要、日付・名前・チーム名の3行)に明示的な幅を与え、残りを選手列に
+   回す。値は暫定(#148)。崩れて見えるようならスクリーンショットと
+   画面幅をもらって調整すること。 */
+#mtsuku_table thead th:nth-child(2),
+#mtsuku_table td:nth-child(2) {
+	width: 40%;
+}
+
 /* ==== .mj-table-auto(画像列を持たない多列テキストテーブル) ====
    .mj-table-2col / 3col は1列目を画像168px固定にする前提なので、
    画像列のないページでは使えない。こちらは width だけを指定し、
