@@ -35,7 +35,7 @@ META = PageMeta(
 # data-nameの完全一致フィルターは持たない。
 TABLE = TableConfig(
     table_id="test_table",
-    headers=["記事", "概要"],
+    headers=["動画・記事", "概要"],
     page_size=50,
     filter_param="name",
 )
