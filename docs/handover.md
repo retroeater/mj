@@ -196,8 +196,10 @@ issue71件（#1〜#100台の大半）は、2026-09-11に一括追加しDoneス�
   `docs/issues-snapshot.md` は Claude Code の PostToolUse フックで
   `gh issue` 操作のたびに自動再生成される
   (`scripts/build_issues_snapshot.py`)。
-  ワークフローではないため、Codespace の外で issue を操作した場合は
-  反映されない。念のため正確な状態は `gh issue list` で確認すること
+  ワークフローではないため、`gh issue` 以外の経路（GitHub MCP、
+  `gh api`、ブラウザ）で操作した場合も反映されない。作業の最後に
+  `python3 scripts/build_issues_snapshot.py` を手動実行すること。
+  念のため正確な状態は `gh issue list` で確認すること（#140）
 
 ---
 
