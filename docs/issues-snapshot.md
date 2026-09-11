@@ -12,7 +12,161 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 138件（open/closed含む）。番号降順。
+件数: 143件（open/closed含む）。番号降順。
+
+---
+
+## #143 issues-snapshot.md にopenのみの要約版を追加する（提案）
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 状況: 保留, 分野: 整理・保守
+
+### 本文
+
+### 状況
+
+現在222KB・131件を毎回全量読む運用で、会話コストが大きい。
+
+### 案
+
+`build_issues_snapshot.py`に`--open-only`を足して
+`docs/issues-open.md`を併せて出力し、handover「0. 新しい会話の
+始め方」の案内を「まずopen版、必要なら全量」に変える。
+
+採否は平野さんの判断。
+
+起票のみ。
+
+2026-09-11のレビューで判明。
+
+---
+
+## #142 title整備（#5）の効果をSearch Consoleで測る
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: SEO
+
+### 本文
+
+### 状況
+
+#5で26ページの`<title>`を整備したが、効果測定は「これから」のまま
+（handover SEO節: 表示48回・クリック2回・CTR約4%）。
+
+### 対応
+
+変更前後で同じ期間長（例: 28日）の表示回数/クリック数/CTR/平均掲載
+順位を比較し、結果をhandoverのSEO節に追記する。GSCの計測期間が
+短いので、結論を急がず「初回計測」として記録する。
+
+**平野さんが実施**（Search Consoleの操作）。
+
+2026-09-11のレビューで判明。
+
+---
+
+## #141 ランキング3ページ（houou_ranking / ouka_ranking / wrc_ranking）の移行方針を決める（#7 から分割）
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+### 状況
+
+型B/C/Dは#111/#127/#128に分割済みだが、型Aの残り3ページ（ランキング系）
+だけ#7のコメント内にしか進め方がない。
+
+### ランキング系3ページの性質（handoverより転記）
+
+`league_ranking.js`（772行）は集計エンジンで、9部門・部門ごとの
+クエリ・リーグごとの閾値をブラウザで計算している。
+
+- 共用している`league_ranking.js`は表示ロジックではなく**集計エンジン**。
+  スプレッドシートから生データを取り、「通算得点」「期最高得点」
+  「期連続浮き回数」「節単位浮き率」など9部門の指標をブラウザ側で
+  計算している
+- 部門ごとにクエリが異なり、リーグごとに閾値も違う（期連続浮きの
+  最小回数は鳳凰6、桜花・JWRC・特昇3 など）
+- そのため移行は「行をHTMLにする」作業ではなく、**集計ロジックを
+  Pythonへ移植する**作業になる。他の型Aとは性質が違い、分量も大きい
+- 上位100件に絞る`DEFAULT_RANK_LIMIT`があるため、出力自体は小さい
+
+### 進め方の案（handoverより）
+
+- **進め方**: 8部門すべてを1つのHTMLに焼き込み、`?division=`を
+  ページ内の表示切替パラメータとして扱えば、現在のURL形式を維持できる
+- **検証の進め方**: 集計ロジックだけ先にPythonへ移植して結果を書き出し、
+  現行ページの表示と突合して一致を確認してから、HTML生成とページ側の
+  JSを作る。ロジックの誤りとマークアップの誤りを同時にデバッグしない
+  ため
+
+新サイトのレーダーチャート（docs/new-site-design.md §4）が同じ集計を
+使うため、Python移植は新サイトでも再利用できる。**現行サイト用に
+移植するか、新サイトまで据え置くか**が判断点。
+
+起票のみ。#7に本issueへのリンクをコメントする。
+
+2026-09-11のレビューで判明。
+
+---
+
+## #140 issues-snapshot.md の自動更新が効かない経路を明記する
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
+- ラベル: 分野: 整理・保守
+
+### 本文
+
+issues-snapshot.mdの自動再生成フックはCodespace以外では動かず、gh issue以外の経路(GitHub MCP・gh api・ブラウザ)での操作も反映されない。詳細はコメントに記載する。2026-09-11のレビューで判明。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 対応完了（2026-09-11）
+
+1. handover「3. 作業の進め方 → タスク管理」に「GitHub MCP / gh api /
+   ブラウザで操作した場合も反映されない。作業の最後に
+   python3 scripts/build_issues_snapshot.py を手動実行する」と追記
+2. .claude/settings.jsonのcd /workspaces/mj固定を
+   cd "$CLAUDE_PROJECT_DIR"に置き換えた。Claude Code公式ドキュメント
+   （hooks-guide.md / hooks.md）で、PostToolUseフックを含む全フックに
+   $CLAUDE_PROJECT_DIRが自動的にセットされることを確認済み。
+   JSON構文検証済み・変更後もフックは正常に動作している（このコメント
+   自体がフック経由でissues-snapshot.mdを再生成している）
+
+---
+
+## #139 check_image_links.py の対象を jpml_pros.html 以外の生成済みページへ広げるか決める
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: 自動化
+
+### 本文
+
+### 状況
+
+`check_image_links.py`は`TARGET_HTML = jpml_pros.html`のみを対象にして
+いる。焼き込み済みの他ページは監視外:
+
+- `saikyo_results.html`（kinmaweb.jp 1,324 ＋ pbs.twimg.com 705）
+- `resource_logs.html`（pbs.twimg.com 2,630）
+- `video_live.html`（img.youtube.com 2,332）
+- `jpml_titles` / `saikyo_mens` / `video_*` / `rh_paifu` など
+
+旧Google Charts方式では実行時取得だったので同条件だったが、焼き込みで
+古いURLが固定化されるため、リンク切れが放置されやすくなった。
+
+### 論点（判断待ち）
+
+- 対象を全生成ページに広げるか（HEADリクエスト数が約1万に増える）
+- jpml_prosだけでよいと判断するか
+- ページごとに頻度を変えるか
+
+#103（定期再生成）と併せて設計する。
+
+2026-09-11のレビューで判明。
 
 ---
 
@@ -615,6 +769,20 @@ docs/handover.md の方針「検索エンジンとAIの検索・回答は許可�
 
 2026-09-15 に旧トグルが廃止される。その後すみやかに着手する。
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+期限2026-09-15。旧トグル廃止後の設定変更は平野さんがダッシュボードで
+実施する。結果を以下の観点でここに記録すること。
+
+- Search / Agent の許可設定
+- Training のブロック設定
+- 検索とAI学習の両方を行う混在クローラーの扱い
+- robots.txtの配信内容（AI Crawl Controlの管理robots.txtとの整合）
+
 ---
 
 ## #129 Early Hints用のLinkヘッダを_headersに設計する
@@ -679,7 +847,7 @@ HTML は `cf-cache-status: HIT` でその空き時間自体が短い。
 Early Hints は HTTP/2 または HTTP/3 接続でのみ動作する。
 どちらも 2026-09-11 に有効化済み。
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-11):
 
@@ -717,6 +885,13 @@ Speed → Content Optimization に **Smart Hints** という項目がある。
 
 Early Hints のトグルは Speed → Content Optimization で有効（2026-09-11）。
 HTTP/2・HTTP/3 も有効。
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+Smart Hintsへの申込みが済んでいるか不明。申込み済みなら日付を、未なら
+申込み後に日付をここに記録すること（平野さん）。
 
 ---
 
@@ -941,6 +1116,16 @@ Cloudflare の Crawler Hints を On にすると IndexNow に自動通知が飛�
 - jpml_pros（最重量。mobile perf 37）
 - saikyo_results（未移行の最大懸念。2,560行）
 - jpml_titles（型Aの代表）
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+候補の saikyo_results は移行済み（mobile perfはdocs/lighthouse-baseline.md
+の移行結果を参照）。未移行の最大規模はhouou_results（15,416行、#111）に
+変わった。候補をindex / jpml_pros / houou_results / jpml_titlesに見直す。
 
 ---
 
@@ -1651,9 +1836,14 @@ navbar.js は全ページに data-bs-toggle="collapse" href="#searchBoxes" の
 従来から発生していた既存挙動。rh_results は #7 の静的化で他のテーブル
 ページと同じ見た目になったため、「押せそうに見える」度合いが上がった。
 
-resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り込み欄を
-持たせるかどうかで該当・非該当が変わるため、**この issue の対応は #7 の
-完了後に判断する。**
+~~resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り込み欄を
+持たせるかどうかで該当・非該当が変わるため、この issue の対応は #7 の
+完了後に判断する。~~
+
+**訂正（2026-09-12）**: resource_efficiency と rh_results_detail は #7 で
+絞り込み欄なしとして移行済み（前者は表自体を持たずrender_content()、
+後者はTableConfig.show_filter=False）。該当ページは上記7件で確定した。
+「#7完了後に判断」の条件は解消したため、下記(a)/(b)/(c)を決められる。
 
 ### 対応案
 
@@ -1666,7 +1856,7 @@ resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り�
 
 低い。実害はなく、備忘として登録するもの。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -1677,6 +1867,16 @@ resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り�
 **Bootstrapの例外は出ない。** クリックしても何も起きないだけで、エラーも警告も発生しない。Bootstrapのcollapseプラグインは`data-bs-toggle="collapse"`のターゲット(`#searchBoxes`)が存在しない場合、静かに何もしない実装になっている。
 
 したがって#4(Sentry導入)のノイズにはならない。優先度を上げる材料はなし。
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+resource_efficiency と rh_results_detail は #7 で絞り込み欄なしとして
+移行済み。該当はindexを除き7ページで確定（404 / jpml_links /
+resource_dictionary / resource_efficiency / rh_links / rh_results /
+rh_results_detail）。「#7完了後に判断」の条件は解消したので、
+(a)/(b)/(c) を決められる。
 
 ---
 
@@ -1756,7 +1956,7 @@ resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り�
 - アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
 - 型C（#127）・型D（#128）は本issueとは別に判断する
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -1767,6 +1967,16 @@ resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り�
 各棒(または該当要素)を`<g>`で包み、内側に`<title>`要素を置くと、ブラウザが標準のホバーツールチップを表示する。JSもCSSも不要。
 
 #128(型D、resource_efficiency)の実装でこの方式を使い、動作を確認済み。
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+据え置き（a）を早期に確定させる案: houou_resultsの15,416行は自前ページ
+送りでは解けず、EChartsは新サイトで採用予定（docs/new-site-design.md
+§5）。据え置きなら#9はscript-srcにwww.gstatic.com、connect-srcに
+docs.google.comを含めて書け、#7のスコープが収束する。#127も同じ判断に
+従う。採否は平野さんの判断。
 
 ---
 
@@ -1794,7 +2004,7 @@ resource_efficiency と rh_results_detail は #7 未移行。移行時に絞り�
   設定してよい
 - 設定はダッシュボード操作（Security → WAF → Custom rules）
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-11):
 
@@ -1874,6 +2084,17 @@ Web Analytics の計測は生きている。
 - Web Analytics のページビューが前日比で落ちていないか
 - Managed rules の Events から POST 由来の検知
   （React RCE / Code Injection / SQLi - Equation）が消えているか
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+本日9/12が確認日。平野さんが行う確認項目を再掲する。
+
+- Web AnalyticsでPVの前日比を確認する
+- Managed rules Events から、POST由来の検知が消えたか確認する
+
+結果をここに記入してクローズすること。
 
 ---
 
@@ -2061,6 +2282,20 @@ Cloudflare の設定だけで prefetch を実現する手段は残っていな�
 ## 進め方
 
 #7の完了後、生成対象が出そろってから判断するのがよい。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+移行済みは14ページになった（起票時は5ページ）。14ページ分のデータが
+手動実行に依存しており、運用リスクとして最大。#7の完了を待たず、
+週次cron（workflow_dispatchと同じallを回し、差分がなければコミットしない
+現行の判定をそのまま使う）で先に着手する案を提案する。採否は平野さんの
+判断。
+
+Projectsボードでの優先順位変更は平野さんが実施。
 
 ---
 
@@ -2357,7 +2592,7 @@ Cloudflare の HTTP Traffic 分析で
 Edge status code = 404 を絞り込み、
 .map へのリクエストが消えていること。
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-10):
 
@@ -2441,6 +2676,12 @@ Cloudflare の HTTP Traffic 分析で Edge status code = 404 を
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01786uUDe5x11WyMc5U1yLdw
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+積み残しの追跡用: #134
 
 ---
 
@@ -2628,6 +2869,14 @@ Amazon PA-API はアソシエイト・プログラムへの参加が前提であ
 
 上記1〜3を決める。決まるまでは着手しない。
 
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+「決まるまで着手しない」状態で、決める場が設定されていない。判断する日を決めるか、状況: 保留を付けて新サイト着手時に再検討する扱いにするかを平野さんが決める。
+
 ---
 
 ## #96 Google Workspace APIでカレンダーの参照・更新を自動化する
@@ -2672,6 +2921,14 @@ Amazon PA-API はアソシエイト・プログラムへの参加が前提であ
 ## 次のアクション
 
 上記1〜4を決める。決まるまでは着手しない。
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+「決まるまで着手しない」状態で、決める場が設定されていない。判断する日を決めるか、状況: 保留を付けて新サイト着手時に再検討する扱いにするかを平野さんが決める。
 
 ---
 
@@ -4230,7 +4487,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 無料プランでもマネージドルールの一部が使え、既知の攻撃パターンを遮断できる。ただし現時点では優先度が低い。静的配信でフォームもデータベースもなく、守るべき攻撃面がほとんどないため。
 着手すべきタイミングは、ドメイン切替の後(ゾーン設定はドメインをCloudflareに移してからでないと行えない)か、SDPデータベースで選手が自分の情報を編集する仕組みを作るとき(フォームと認証が入るため必須)。
 
-### コメント (4件)
+### コメント (5件)
 
 **retroeater** (2026-09-09):
 
@@ -4430,6 +4687,18 @@ action を Log から Block に切り替える（ダッシュボード操作）�
 切り替え後24時間ほど Events を見て、`?name=` 付きのリクエストが
 遮断されていないことを確認する。問題がなければ本issueを
 COMPLETED でクローズする。
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+handoverには「2026-09-11にBlockへ切替済み」とあるが、issue側に切替の
+記録がない。ダッシュボードでManaged RulesetのactionがBlockになって
+いることを確認し、切替日時をここに追記すること（平野さん）。
+
+切替済みが確認できたら、切替日時と「24時間後のEvents確認
+（`?name=`/`?tag=`が遮断されていないこと）を9/12以降に行いクローズする」
+とあわせて記録し、確認後にクローズすること。
 
 ---
 
@@ -5990,7 +6259,7 @@ Bootstrapのローカル化(旧44番)で外部依存が減り、インラインo
 ---
 <sub>移行前のタスク番号: 12</sub>
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -6009,6 +6278,38 @@ strict-dynamic / nonce を採用するかどうかは、Speed Brain を残すか
 
 Early Hints も 2026-09-11 に有効化した。こちらは `Link:` ヘッダを読むだけで
 HTML を書き換えないため、CSP との競合はない。
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+Speed Brainとの併用制約は#119で「機能しない・Off」に確定したため無効。
+
+生成済みHTMLの`<img src>`から機械的に洗い出した外部ドメイン一覧（gstatic
+を除き12件）:
+
+| ドメイン | 用途/発生ページ |
+|---|---|
+| `img.youtube.com` | jpml_test / rh_paifu / video_en / video_live / video_mtsuku / video_wayhome / index |
+| `pbs.twimg.com` | jpml_pros / jpml_titles / resource_logs / saikyo_mens / saikyo_results |
+| `ron2.jp` | jpml_pros / jpml_test / jpml_titles |
+| `abs.twimg.com` | jpml_pros（11件）/ saikyo_results（2件）データ側13件、正規化は#135 |
+| `yt3.googleusercontent.com` | jpml_pros |
+| `yt3.ggpht.com` | jpml_pros |
+| `assets.st-note.com` | jpml_pros |
+| `d2l930y2yx77uc.cloudfront.net` | jpml_pros |
+| `stat.profile.ameba.jp` | jpml_pros |
+| `kinmaweb.jp` | saikyo_results（1,324件） |
+| `i.ytimg.com` | index |
+| `www.icualumni.com` | index |
+
+次のコマンドで再現できる:
+
+```
+for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done | sort | uniq -c | sort -rn
+```
+
+handover「画像ドメインの実測結果（#9の材料）」の表にも同じ12件を反映した。
 
 ---
 
@@ -6038,7 +6339,7 @@ ron2.jp の選手ページから取得できる所属・出身地・段位・か
 ---
 <sub>移行前のタスク番号: 39</sub>
 
-### コメント (7件)
+### コメント (8件)
 
 **retroeater** (2026-09-11):
 
@@ -6213,6 +6514,12 @@ URLパラメータはブラウザ側の絞り込み（`table.js` の `data-name-
 ---
 _Generated by [Claude Code](https://claude.ai/code)_
 
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+ランキング3ページは #141 で扱う。残り8ページの内訳: 型B 3（#111）・型C 2（#127）・ランキング 3（#141）。
+
 ---
 
 ## #6 ワークフローのpushトリガーを汎用化する
@@ -6295,6 +6602,17 @@ jpml_pros.js の自作フィルター・ソート・固定列の処理が特定�
 
 ---
 <sub>移行前のタスク番号: 64</sub>
+
+### コメント (1件)
+
+**retroeater** (2026-09-11):
+
+### 追記（2026-09-12、レビュー反映）
+
+「現行サイトに作り込みすぎない」方針との整合を再確認したい。現行サイトに
+外部ドメインを1つ足してからCSP（#9）を書く順序になっているが、新サイト
+（#101）側で導入するほうが自然な可能性がある。状況: 保留にするか、現行で
+入れるかを平野さんが判断する。
 
 ---
 
