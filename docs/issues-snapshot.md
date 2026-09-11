@@ -12,14 +12,88 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 110件（open/closed含む）。番号降順。
+件数: 111件（open/closed含む）。番号降順。
+
+---
+
+## #111 #7のグラフ系6ページ（型B/C/D）の移行方針を決める
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: パフォーマンス, 対象: 全ページ
+
+### 本文
+
+### 背景
+
+#7 の残り12ページのうち6ページは、表だけでなくグラフを描画している。
+
+| 型 | ページ | グラフ |
+| --- | --- | --- |
+| B | `houou_results` / `ouka_results` / `wrc_results` | CandlestickChart |
+| C | `houou_leagues` / `ouka_leagues` | ColumnChart |
+| D | `resource_efficiency` | BarChart |
+
+表の静的化は型A・A'と同じ手順で進められるが、**グラフ本体をどうするかが
+未決定**。この判断が #7 の完了定義と #9（CSP）の内容を左右する。
+
+### 論点: Google Charts はローカルホストできない
+
+Google の利用規約により、`google.charts.load` / `google.visualization`
+のコードをダウンロードして保存・自己ホストすることは認められていない。
+`https://www.gstatic.com/charts/loader.js` から読み込むことが前提になっている。
+
+参照: https://developers.google.com/chart/interactive/faq
+
+つまり、**グラフ6ページで Google Charts を使い続ける限り、
+`www.gstatic.com` への依存は消せない。** 表を静的化して
+`docs.google.com` を消しても、CSPの `script-src` から
+`https://www.gstatic.com` を外すことはできない。
+
+docs/handover.md に「#7（Charts依存の解消）が終わると2つ減る」と
+書いてあるが、これはこの6ページの方針次第で成り立たない。
+
+### 選択肢
+
+**(a) グラフ6ページは Google Charts 据え置き**
+- #7 の完了定義を「表の静的化まで」に狭める
+- CSPは `script-src` に `https://www.gstatic.com` を許可したまま書く
+- 作業量は最小。「現行サイトに作り込みすぎない」方針と整合する
+- ただし #9 で書けるポリシーが弱くなる
+
+**(b) Apache ECharts を現行サイトにも導入する**
+- 新サイトの技術選定（docs/new-site-design.md §5）で採用予定のため知見は活きる
+- セルフホスト可能なので外部ドメインは増えない
+- ただし「現行サイトに作り込みすぎない」方針に反する。
+  新サイトで作り直す予定のページに、新しいライブラリを入れることになる
+
+**(c) ビルド時に静的SVGを生成してHTMLに埋め込む**
+- ローソク足・縦棒・横棒はいずれもインタラクションが本質ではないため、
+  静的画像でも成立しうる
+- 外部依存ゼロ。#9 で最も強いCSPが書ける
+- 生成スクリプト側にグラフ描画の実装が必要になる（Python）
+- ツールチップとホバー時の値表示は失われる
+
+### 判断に必要な材料
+
+- 6ページのグラフで、ツールチップやホバーが実際に使われているか
+  （静的SVGで許容できるかの判断材料）
+- Search Console / Cloudflare の HTTP Traffic 分析で、
+  この6ページのアクセス実態
+- 新サイト（#101）でこの6ページを作り直すまでの想定期間
+
+### 進め方
+
+型A' の2ページ（`rh_results` / `rh_results_detail`、#109で分類）を
+先に移行して多列テーブルの共通部品を整えるのが、この判断とは独立して
+進められる。型B の表部分もその共通部品を使うため、着手順としては
+型A' → 本issueの判断 → 型B/C/D がよい。
 
 ---
 
 ## #110 GET/HEAD以外のHTTPメソッドをカスタムルールで遮断する
 
 - 状態: OPEN / 作成: 2026-09-11
-- ラベル: 分野: セキュリティ, 対象: 全ページ
+- ラベル: 状況: 待ち, 分野: セキュリティ, 対象: 全ページ
 
 ### 本文
 
@@ -2384,7 +2458,7 @@ https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
 ## #76 Cloudflare WAFを有効にする
 
 - 状態: OPEN / 作成: 2026-09-08
-- ラベル: 分野: セキュリティ
+- ラベル: 状況: 待ち, 分野: セキュリティ
 
 ### 本文
 
