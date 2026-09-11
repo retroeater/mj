@@ -12,7 +12,64 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 生成日時: 2026-09-11
 
-件数: 129件（open/closed含む）。番号降順。
+件数: 130件（open/closed含む）。番号降順。
+
+---
+
+## #130 Block AI botsトグル廃止に伴い、挙動ベースのAIボット制御に移行する
+
+- 状態: OPEN / 作成: 2026-09-11
+- ラベル: 分野: セキュリティ
+
+### 本文
+
+### 背景
+
+Cloudflare の「Block AI bots」一括トグルは 2026-09-15 に廃止され、
+挙動ベースの制御（Search / Agent / Training の3分類）へ移行する。
+
+9月15日以降、複数の目的を持つクローラーは宣言されたすべての挙動で評価され、
+**最も厳しいルールが適用される**。Googlebot / Applebot / Bingbot はいずれも
+検索インデックスとAI機能を単一のユーザーエージェントでクロールするため、
+「AI学習をブロック」という設定に巻き込まれる。
+
+### 緊急対応（2026-09-11 実施済み）
+
+Security → Settings → Bot traffic → 「Block AI bots」で
+`Mixed purpose crawlers will continue to be allowed.` を選択した。
+
+docs/handover.md の方針「検索エンジンとAIの検索・回答は許可」に合わせるため。
+
+**学習用クローラーをブロックしてもAI検索・回答での露出は減らない**
+（学習クロールは引用も参照トラフィックも生まないため）。
+したがって混在クローラーを許可しても、学習利用を拒否するという
+当初の目的は損なわれない。
+
+逆に混在クローラーをブロックしたままだと、検索流入そのものを失うリスクを負う。
+#5（titleの整備）や #122（`?name=` の内訳確認）など SEO の作業を
+積み上げている最中に取るリスクではない。
+
+### 本対応（このissue）
+
+旧トグル廃止後、挙動ベースの制御で設定を組み直す。
+
+| 分類 | 方針 |
+|---|---|
+| Search | 許可 |
+| Agent（AIの検索・回答） | 許可 |
+| Training（学習） | ブロック |
+
+### 確認事項
+
+- 混在クローラー（Googlebot / Applebot / Bingbot）が Search として扱われ、
+  ブロックされないこと
+- AI Crawl Control の管理 robots.txt の内容が方針と一致しているか
+  （robots.txt は Cloudflare が自作分の前に前置している）
+- 設定後、Search Console でクロールエラーが増えていないこと
+
+### 期限
+
+2026-09-15 に旧トグルが廃止される。その後すみやかに着手する。
 
 ---
 
@@ -5110,7 +5167,7 @@ ron2.jp の選手ページから取得できる所属・出身地・段位・か
 ---
 <sub>移行前のタスク番号: 39</sub>
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-11):
 
@@ -5208,6 +5265,28 @@ https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
+
+**retroeater** (2026-09-11):
+
+## saikyo_results.html をビルド時生成に移行（2026-09-11）
+
+型Aの2列テーブル(2,560行)を `scripts/lib/page.py` の共通処理で静的HTML化した。型Aはランキング3ページを除いて完了（残8ページ）。
+
+### `?name=` の列取り違えバグを発見・修正（#122 関連）
+
+移行前の実機確認で、旧 `saikyo_results.js` の `?name=` に列の取り違えバグがあることが分かった。
+
+- コード上のコメントは「A列=対局日 / H列=名前」と書いているが、実際のクエリは `queryStatement += ' AND A = "' + search_name + '"'` で、**A列（対局日）に対して名前文字列を完全一致させていた**。H列（名前）は一度も参照されていない
+- gh-pages版（旧方式のまま）で実機確認: `?name=`に実在の選手名を指定すると0件、実在の対局日の文字列を指定するとヒットする。バグを再現できた
+- `?name=`は#122で調査中のSearch Console実測（`?name=`付きURLの内訳）に関わる可能性があるため、削除はせず、コメントが示す「本来意図されていたはずの挙動」（H列＝名前の完全一致）に修正して移行した。バグ自体（A列に対する完全一致）は再現していない
+- 挙動としては「ほぼ常に0件」から「名前で絞り込める」への意図的な変更になる。#122の`?name=`アクセス実績を見るときは、この変更が入る前後で挙動が違う点に注意
+
+### その他の実装メモ
+
+- 写真が空の行（528件、全体の約20%）は、旧`getFormattedImage()`がTwitter IDも画像URLもない場合に戻り値が未初期化(`undefined`)になるバグを持っていたが、実機確認の結果Google Chartsはこれを空セルとして描画しており「undefined」という文字列が出るわけではなかった。`build_image_cell()`に空文字を渡すだけで同じ見た目を再現できたため、個別分岐は不要だった
+- フォールバック画像は`img/avatar.svg`に統一（旧版はTwitter IDの有無で`img/twitter.svg`と`src=''`に分かれており、後者は自ページへの画像リクエストになるバグだった。`saikyo_mens`での対応を踏襲）
+- 行高(`contain-intrinsic-size`)は160×90画像基準の98pxを、mobile幅での実測（中央値・90パーセンタイル・最大値がいずれも98px一致）で確認して採用
+- 詳細は `scripts/generate_saikyo_results.py` のモジュールdocstringと `docs/handover.md` / `docs/lighthouse-baseline.md` を参照
 
 ---
 

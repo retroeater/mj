@@ -798,6 +798,13 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
 - **AI Crawl Control が管理 robots.txt を自動で前置する。** そのため自作の
   `robots.txt` は `Sitemap:` の宣言のみにしている
 - AI学習用クローラー（GPTBot/ClaudeBot等）はブロック、検索エンジンとAIの検索・回答は許可
+- **「Block AI bots」一括トグルは2026-09-15に廃止され、挙動ベース
+  （Search / Agent / Training の3分類）の制御に移行する。** Googlebot等の
+  混在クローラーは複数の挙動で評価され最も厳しいルールが適用されるため、
+  学習ブロックの設定に検索クロールも巻き込まれるようになる。2026-09-11に
+  緊急対応として Security → Settings → Bot traffic → 「Block AI bots」で
+  `Mixed purpose crawlers will continue to be allowed.` を選択済み。
+  旧トグル廃止後の本対応（挙動ベースでの設定）は#130で管理する
 - Tiered Cache は**効果がない**（Workersの静的アセットにはオリジンサーバーがないため）
 - **Web Analytics のビーコンは `/cdn-cgi/rum` への POST。**
   HTTPメソッドやパスで遮断するルールを書くときは `/cdn-cgi/` を
