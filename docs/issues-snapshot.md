@@ -585,7 +585,7 @@ _dmarc.ryoei.pro        TXT  "v=DMARC1; p=reject; rua=mailto:<宛先>"
 
 ## #115 wwwとapexの正規化を確認し、必要ならRedirect Ruleを設定する
 
-- 状態: OPEN / 作成: 2026-09-11
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-11
 - ラベル: 分野: インフラ
 
 ### 本文
@@ -616,7 +616,7 @@ Redirect Rule を1本:
 `_redirects` ではなく Redirect Rule を使う理由: `_redirects` はパスでしか
 分岐できず、ホスト名で条件を書けないため。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -636,6 +636,37 @@ apex（`https://ryoei.pro/`）に寄せる。理由:
 - Search Console もこの形でインデックスされている
 
 `www` → apex の Redirect Rule（308）を設定する。
+
+**retroeater** (2026-09-11):
+
+### 対応完了（2026-09-11）
+
+Redirect Rule「www to apex」を作成した。
+
+| 項目 | 値 |
+|---|---|
+| 一致条件 | Wildcard pattern |
+| Request URL | `https://www.ryoei.pro/*` |
+| Target URL | `https://ryoei.pro/${1}` |
+| Status code | 308 |
+| Preserve query string | 有効 |
+| Place at | First |
+
+`_redirects` ではなく Redirect Rule を使ったのは、`_redirects` がパスでしか
+分岐できずホスト名で条件を書けないため。
+
+### 確認結果
+
+    curl -sI "https://www.ryoei.pro/jpml_pros.html?name=%E5%B9%B3%E9%87%8E%E8%89%AF%E6%A0%84" | head -5
+    → HTTP/2 308
+    → location: https://ryoei.pro/jpml_pros.html?name=%E5%B9%B3%E9%87%8E%E8%89%AF%E6%A0%84
+
+`?name=` 付きでもクエリ文字列が保持されたまま apex へリダイレクトされている。
+apex 側は素通りで200。
+
+`?name=` 付きURLが検索流入の主力（検索結果に出た22URLのうち14件）のため、
+Preserve query string は必須。無効にすると www 経由の流入が全件表示ページに
+着地するところだった。
 
 ---
 

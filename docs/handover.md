@@ -428,7 +428,7 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 
 | 確認項目 | 結果 | 意味 |
 |---|---|---|
-| `curl -sI https://www.ryoei.pro/jpml_pros.html` | **200** | www と apex の両方が同じ内容を配信していた。正規化が必要（#115） |
+| `curl -sI https://www.ryoei.pro/jpml_pros.html` | **200** | www と apex の両方が同じ内容を配信していた。**Redirect Ruleで解消済み（下記）** |
 | `curl -sI https://ryoei.pro/jpml_pros.html` の `cf-cache-status` | **HIT** | HTML はすでにエッジキャッシュから配信されている |
 
 **HTML はすでにキャッシュされているため、Cache Rules で HTML のエッジキャッシュを
@@ -438,6 +438,24 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 
 副次的に、Speed Brain の動作条件のひとつ「キャッシュ適格であること」は
 満たされていることも確認できた。
+
+#### www→apexのRedirect Rule（#115、2026-09-11対応完了）
+
+| 項目 | 値 |
+|---|---|
+| 一致条件 | Wildcard pattern |
+| Request URL | `https://www.ryoei.pro/*` |
+| Target URL | `https://ryoei.pro/${1}` |
+| Status code | 308 |
+| Preserve query string | 有効 |
+| Place at | First |
+
+`_redirects` ではなく Redirect Rule を使ったのは、`_redirects` がパスでしか
+分岐できずホスト名で条件を書けないため。
+
+**Preserve query string は必須。** `?name=` 付きURLが検索流入の主力（検索結果に
+出た22URLのうち14件、SEO節）で、無効にすると www 経由の流入が全件表示ページに
+着地してしまう。エンコード済みURLで308とクエリ文字列保持済みの`location`を確認済み。
 
 #### Cloudflareの機能が「効くかどうか」の判定について
 
