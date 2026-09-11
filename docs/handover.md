@@ -692,19 +692,27 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
 
 ### 画像ドメインの実測結果（#9 の材料）
 
-生成済みページの`<img src>`に出てくる外部ドメインは以下。選手の
-プロフィール画像7ドメインだけではない。
+**2026-09-12、全27ページの`<img src>`を機械的に洗い出して確定した
+（gstatic除き12ドメイン）。**
 
-| ページ | ドメイン | 件数 |
-|---|---|---|
-| `jpml_test` | `img.youtube.com` / `ron2.jp` | 12 / 22 |
-| `resource_logs` | `pbs.twimg.com` | 2,630 |
-| `video_live` | `img.youtube.com` | 2,332 |
-| `video_wayhome` | `img.youtube.com` | 38 |
-| `video_en` | `img.youtube.com` | 76 |
-| `rh_paifu` | `img.youtube.com` | 57 |
-| `saikyo_mens` | `pbs.twimg.com` | 90 |
-| `video_mtsuku` | `img.youtube.com` | 61 |
+```
+for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done | sort | uniq -c | sort -rn
+```
+
+| ドメイン | 発生ページ |
+|---|---|
+| `img.youtube.com` | jpml_test / rh_paifu / video_en / video_live / video_mtsuku / video_wayhome / index |
+| `pbs.twimg.com` | jpml_pros / jpml_titles / resource_logs / saikyo_mens / saikyo_results |
+| `ron2.jp` | jpml_pros / jpml_test / jpml_titles |
+| `abs.twimg.com` | jpml_pros（11件）/ saikyo_results（2件）。データ側13件が残っている（#135） |
+| `yt3.googleusercontent.com` | jpml_pros |
+| `yt3.ggpht.com` | jpml_pros |
+| `assets.st-note.com` | jpml_pros |
+| `d2l930y2yx77uc.cloudfront.net` | jpml_pros |
+| `stat.profile.ameba.jp` | jpml_pros |
+| `kinmaweb.jp` | saikyo_results（1,324件） |
+| `i.ytimg.com` | index |
+| `www.icualumni.com` | index |
 
 `video_live`には`hayabusa.io`が1件だけ混じっていた（スプレッドシートに
 手入力されたもので、2026年9月10日に削除済み）。このように少数の例外が
