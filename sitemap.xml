@@ -1,143 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  検索エンジン向けのサイトマップ。以下は意図的に除外している:
-    404.html              エラーページ(noindex指定済み)
-    saikyo_mens.html      年1回の単発企画用。常設ページではない
-    tanilog.html / resource_calendar.html / resource_books.html
-                          _redirects で転送しており実体がない
-  ページを追加・削除したときは、このファイルの更新も忘れないこと。
-
-  lastmod は各ページの最終コミット日（#138）。生成対象ページ（regenerate.py
-  --list の一覧）は、再生成で実際に差分が出たときだけワークフローが
-  当日日付（JST）に更新する（#121）。生成対象外のページ（index.html、
-  未移行のGoogle Chartsページ、静的ページ）は今も手動更新。
-  changefreq / priority は Google が参照しないため削除した（#138）。
+  サイトマップインデックス(#162)。配下の2ファイルを束ねる:
+    sitemap-pages.xml     ルート直下の静的HTML27ページ(旧sitemap.xml)
+    sitemap-wayhome.xml   「帰り道」エピソード個別ページ38枚
+                          (scripts/generate_wayhome_episodes.pyが生成)
+  robots.txtのSitemap行はこのファイルを指したまま変更していない。
 -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-	<url>
-		<loc>https://ryoei.pro/</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
+	<sitemap>
+		<loc>https://ryoei.pro/sitemap-pages.xml</loc>
+	</sitemap>
 
-	<url>
-		<loc>https://ryoei.pro/jpml_pros.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
+	<sitemap>
+		<loc>https://ryoei.pro/sitemap-wayhome.xml</loc>
+	</sitemap>
 
-	<url>
-		<loc>https://ryoei.pro/jpml_titles.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/jpml_test.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/jpml_links.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/houou_ranking.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/houou_leagues.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/houou_results.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/ouka_ranking.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/ouka_leagues.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/ouka_results.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/wrc_ranking.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/wrc_results.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/saikyo_results.html</loc>
-		<lastmod>2026-09-12</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/video_live.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/video_wayhome.html</loc>
-		<lastmod>2026-09-12</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/video_mtsuku.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/video_en.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/resource_logs.html</loc>
-		<lastmod>2026-09-12</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/resource_dictionary.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/resource_efficiency.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/rh_results.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/rh_results_detail.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/rh_paifu.html</loc>
-		<lastmod>2026-09-11</lastmod>
-	</url>
-
-	<url>
-		<loc>https://ryoei.pro/rh_links.html</loc>
-		<lastmod>2026-09-09</lastmod>
-	</url>
-
-</urlset>
+</sitemapindex>
