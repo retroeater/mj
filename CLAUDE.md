@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 日本プロ麻雀連盟の選手データベースを含む個人サイト。
 
 ## 構成
-- 静的HTML 27ページ。ビルド工程なし（Jekyllは廃止済み）
+- 静的HTML 27ページ + 「帰り道」エピソード個別ページ38枚（`wayhome/<動画ID>.html`、#162）。ビルド工程なし（Jekyllは廃止済み）
 - Cloudflare Workersの静的アセットとして配信（`wrangler.jsonc`、assets.directory は `./`）
 - 作業ブランチは cloudflare。gh-pages は旧GitHub Pages用で触らない
 - **本番反映は Cloudflare Workers Builds（ダッシュボードのGit連携）が行う。**
@@ -53,6 +53,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   ではブラウザキャッシュは消えない。更新を即座に反映させたい
   場合はファイルのパスを変えること
 - ページ本体（例: `jpml_titles.html`）とロジック（同名の `.js`）はファイルを分けている。ページ末尾で navbar.js を読み込んで共通ナビを描画する
+- **navbar.jsの28本のページhrefはルート相対パス（先頭`/`）にしてある（#162）。** `wayhome/`配下などサブディレクトリのページからも同じnavbar.jsがそのまま使えるようにするため。`#`・`#searchBoxes`（検索欄開閉用）は対象外
 - **検索欄（`#searchBoxes`）を持たないページは `<body>` に `data-search="off"`
   を出すこと（#163）。** navbar.js はこの属性を見て、虫眼鏡アイコン（検索欄を
   開閉するリンク）をそもそも描画しない。属性が無いページは「検索欄あり」として
@@ -64,7 +65,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## データの流れ
 - 選手データ・成績データはすべてGoogleスプレッドシートが正本
-- 16ページがビルド時生成に移行済み（正は`python3 scripts/regenerate.py --list`）:
+- 16ページ+「帰り道」エピソード個別ページ38枚がビルド時生成に移行済み（生成スクリプトの正は`python3 scripts/regenerate.py --list`。17件のスクリプトのうち`wayhome_episodes`だけが単一ページではなく38枚を出力する、#162）:
   `jpml_pros.html`（選手データベース、1000名超・15列・列ヘッダソートあり）、
   型A・2列(一部3列)の9ページ（`jpml_titles.html` / `jpml_test.html` /
   `resource_logs.html` / `video_live.html` /
@@ -76,12 +77,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   `ouka_leagues.html`）、独自の全画面ヒーロー+横スクロールカード列の
   1ページ（`video_wayhome.html`。#102第2段で型Aから離脱、新サイトの
   先取りパイロット。詳細はdocs/new-site-design.md「12. パイロット:
-  video_wayhome」）
-  - `jpml_pros.html`は独自の`scripts/generate_jpml_pros.py`のまま。型A/A'の11ページは`scripts/lib/page.py`（HTMLテンプレート・行組み立て・画像セル・エスケープの共通処理）を使い、各`scripts/generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て関数」だけを持つ（#7の共通化）。型C・型D・`video_wayhome.html`は表を持たないため`lib/page.py`の`render_content()`を使う。いずれも`scripts/lib/sheets.py`経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query`と同じSELECT構文）を叩く
+  video_wayhome」）、同じくヒーロー構成のエピソード個別ページ38枚
+  （`wayhome/<動画ID>.html`、`scripts/generate_wayhome_episodes.py`。
+  #162で選手個別ページ〈#101〉のURL設計・canonical・サイトマップ分割の
+  パイロットとして追加。一覧のカードはこの個別ページへリンクする）
+  - `jpml_pros.html`は独自の`scripts/generate_jpml_pros.py`のまま。型A/A'の11ページは`scripts/lib/page.py`（HTMLテンプレート・行組み立て・画像セル・エスケープの共通処理）を使い、各`scripts/generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て関数」だけを持つ（#7の共通化）。型C・型D・`video_wayhome.html`・`wayhome/`のエピソード個別ページは表を持たないため`lib/page.py`の`render_content()`を使う。いずれも`scripts/lib/sheets.py`経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query`と同じSELECT構文）を叩く
+  - `lib/page.py`はサブディレクトリのページ（`wayhome/`配下）向けに`asset_prefix`引数を持つ（既定は空文字、#162）。head内のアセット参照（`style.css`・`assets/vendor/*`・`favicon.ico`・`navbar.js`・`table.js`）にこの接頭辞を付ける。`wayhome/`配下のページは`"../"`を渡す。あわせて`PageMeta`に`og_image`/`og_image_width`/`og_image_height`/`og_image_alt`/`canonical`を持たせ、ページごとに差し替えられるようにした（既定はそれぞれ`img/ogp.png`・1200×630・`"ryoei.pro"`・`None`=canonicalなし。#113の判断どおり）。サブディレクトリを増やす場合はこの仕組みを再利用できる
+  - `wayhome/`のエピソード個別ページは`?name=`等のURL変種を持たないため、#113（canonicalなしの判断）の理由が当てはまらない例外として`<link rel="canonical">`を持つ（38ページのみ）。他27ページはcanonical無しのまま
+  - サイトマップは`sitemap.xml`（インデックス）が`sitemap-pages.xml`（27ページ、旧sitemap.xml）と`sitemap-wayhome.xml`（wayhome/38ページ、`generate_wayhome_episodes.py`が生成）を束ねる方式（#162）。`robots.txt`のSitemap行は`sitemap.xml`のまま変更していない。`scripts/update_sitemap_lastmod.py`はページパスから対象サイトマップを判定する（`wayhome/`配下なら`sitemap-wayhome.xml`、それ以外は`sitemap-pages.xml`）
   - `lib/page.py`はh1直後・`#searchBoxes`手前にページ固有のHTMLを差し込む`content_before`スロット（#102第1段で追加）を持つが、現在使っているページは無い（`video_wayhome.html`は#102第2段で`TableConfig`/`render()`自体から離脱したため対象外になった）。`#158`のlead文がこのスロットを使う想定でlibにはそのまま残している
   - 生成後の絞り込み・並び替え・ページ送りはページ側の軽量JSに委譲する。`jpml_pros.js`は絞り込みと並び替え（ページ送りなし・全行表示）専用。型A・型A'の11ページは共通の`table.js`（絞り込み・ページ送り、並び替えなし）を使う。設定は`<table>`要素のdata属性（`data-page-size` / `data-name-mode` / `data-filter-param`）で渡し、属性省略時はページ送りなし・完全一致フィルターなしになる。ページ固有のUI（`resource_logs.html`の名前セレクトボックス等）はtable.jsとは別の小さなJSで補う。`video_wayhome.html`は`.mj-table`を持たないため`table.js`は読み込まず、専用の`video_wayhome.js`が絞り込み・画像フォールバック・共有ボタン等を担う（#102第2段）
   - 型Cの2ページは`leagues.js`（共通JS）を使う。積み上げ棒と既定選手の折れ線は静的SVGに焼き込み済みで、`leagues.js`は`?name=`に応じて選手1名分の`<polyline>`と凡例ラベルだけを差し替える（選手ごとの折れ線データは`houou_leagues_data.json`/`ouka_leagues_data.json`をfetchして取得）。選手選択リストは「プロ」シートのY列="Y"かつ鳳凰最高/桜花最高列に値がある選手が対象（#127/#133）。**退会済みの選手は鳳凰/桜花シートにリーグの実データが残っていても選択リストに出ない。これは正しい挙動**（Y列="Y"が在籍・公開対象を表す。#168で退会者689名・うち#127以前は選べた78名を洗い出し、全員退会済みと確認して対応不要と判断した）
-  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/**` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。検知はpushに含まれる全コミットの範囲（`github.event.before`〜`github.sha`）の差分で行う（#167。以前は最終コミット1つ分しか見ておらず、複数コミットをまとめてpushすると途中のコミットの変更を取りこぼした状態でsuccessになっていた）。手動実行（workflow_dispatch）も可能。`table.js`・`leagues.js`はルート直下の`*.js`に該当するためpushでワークフロー自体は起動するが、どのページ名にも一致せず対象0件で終わる（HTMLに焼き込まれないため実害なし）
+  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/**` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。検知はpushに含まれる全コミットの範囲（`github.event.before`〜`github.sha`）の差分で行う（#167。以前は最終コミット1つ分しか見ておらず、複数コミットをまとめてpushすると途中のコミットの変更を取りこぼした状態でsuccessになっていた）。手動実行（workflow_dispatch）も可能。`table.js`・`leagues.js`はルート直下の`*.js`に該当するためpushでワークフロー自体は起動するが、どのページ名にも一致せず対象0件で終わる（HTMLに焼き込まれないため実害なし）。`regenerate.py`は出力がディレクトリになるページ向けに`OUTPUT_OVERRIDES`（例: `wayhome_episodes` → `"wayhome/"`）を持ち、コミット・lastmod更新対象のパスとして返せる（#162）。ワークフローの`git add`は`-A --`で削除も拾い、`sitemap*.xml`をまとめて対象に含める
   - 型A（表とフィルターのみ）の他ページへ展開するための共通クラスを `style.css` に用意している: `.mj-table`（表の見た目）、`.mj-table-2col`/`.mj-table-3col`（画像列固定幅＋残り列の折り返し）、`.mj-table-auto`（画像列を持たない型A'向け、列幅は自動計算）、`.mj-pager`（ページ送りUI）、`.mj-left`（列ごとの左寄せ）、`.mj-plain`（リンクの下線を消す）。列幅・列固定・行高（`contain-intrinsic-size`）などページ固有の構造はIDセレクタ側に残す
 - 残り6ページ（`houou_ranking` / `houou_results` / `ouka_ranking` /
   `ouka_results` / `wrc_ranking` / `wrc_results`）はまだブラウザ側から

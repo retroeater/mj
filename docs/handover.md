@@ -105,7 +105,7 @@ title/descriptionの出し分けは新サイト（#101）で解く（#79も同�
 
 ### ページ構成
 
-HTMLは27ページ。大きく3系統に分かれる。
+HTMLは27ページ + 「帰り道」エピソード個別ページ38枚（`wayhome/`、#162）。大きく3系統に分かれる。
 
 | 系統 | ページ数 | 状態 |
 |---|---|---|
@@ -116,6 +116,7 @@ HTMLは27ページ。大きく3系統に分かれる。
 | ビルド時生成（型D・静的SVG） | 1 | `resource_efficiency.html`。表を持たないため`render_content()`を使う。外部JS・外部ドメインへの依存が一切ない（#7/#128、完了） |
 | ビルド時生成（型C・積み上げ棒+折れ線） | 2 | `houou_leagues.html` / `ouka_leagues.html`。積み上げ棒と既定選手の折れ線は静的SVG、`?name=`時の折れ線差し替えのみ`leagues.js`が担う（#7/#127、完了） |
 | ビルド時生成（独自: 全画面ヒーロー+横スクロールカード列） | 1 | `video_wayhome.html`。#102第2段で型Aから離脱し、新サイトの先取りパイロットとして全面リデザイン（表を廃止）。`render_content()`+専用JS`video_wayhome.js`（`table.js`は使わない）。詳細は下記「video_wayhome の全面リデザイン」節とdocs/new-site-design.md「12. パイロット: video_wayhome」 |
+| ビルド時生成（サブディレクトリ、ヒーロー構成のエピソード個別ページ） | 38 | `wayhome/<動画ID>.html`。#162で選手個別ページ（#101）のパイロットとして追加。`scripts/generate_wayhome_episodes.py`（`render_content()`+専用JS`wayhome_episodes.js`）。詳細は下記「#162 エピソード個別ページ38枚」節 |
 | Google Charts依存 | **6** | ブラウザから直接スプレッドシートを読む。#7の対象。型B3・ランキング系A3 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
@@ -127,10 +128,12 @@ HTMLは27ページ。大きく3系統に分かれる。
   `resource_logs` / `video_live` / `video_wayhome` / `video_en` / `rh_paifu` /
   `saikyo_mens` / `video_mtsuku` / `saikyo_results` / `rh_results` /
   `rh_results_detail` / `resource_efficiency` / `houou_leagues` /
-  `ouka_leagues`) … それぞれ
+  `ouka_leagues`) と、「帰り道」エピソード個別ページ38枚(`wayhome_episodes`、
+  #162) … それぞれ
   `scripts/generate_<ページ名>.py`が
   ビルド時に取得してHTMLに焼き込む。`jpml_pros`以外は`scripts/lib/page.py`
-  の共通処理を使う（#7）
+  の共通処理を使う（#7）。`wayhome_episodes`だけ出力が単一ページではなく
+  `wayhome/`配下38枚になる(`scripts/regenerate.py`の`OUTPUT_OVERRIDES`)
 - 残り6ページ … 訪問者がページを開くたびにブラウザが `docs.google.com` へクエリを投げる
 
 **移行済みページは、スプレッドシートを直しただけでは反映されない。**
@@ -1050,6 +1053,80 @@ video_wayhome」に集約した**（このファイルには実装の要点の�
   `docs/new-site-design.md`の §2「デザイン方針 > トーン」と
   §12「パイロット: video_wayhome」の両方に記載（片方だけ読んで矛盾しないため）
 
+### #162 エピソード個別ページ38枚（新サイトの選手個別ページのパイロット、2026-09-12）
+
+video_wayhomeパイロット（#102第2段）の延長として、「帰り道」のエピソード
+38本を個別ページ（`wayhome/<動画ID>.html`）として静的生成した。新サイトの
+選手個別ページ（#101、1,000名超）で必要になるURL設計・canonical・
+sitemap分割を、1/30程度の規模で先に検証する狙い。実装は
+`scripts/generate_wayhome_episodes.py`（`render_content()`を使用）。
+最新話判定・サムネイル解決（maxres→hqのHEAD確認）・`VideoObject`組み立ては
+`generate_video_wayhome.py`（一覧）と共有するため`scripts/lib/wayhome.py`に
+切り出した。
+
+**最初の発見: 相対パス前提は1,000ページ規模で確実に壊れる。** これまでの
+27ページはすべてリポジトリ直下にあり、`style.css`・`navbar.js`・
+`img/...`といった相対パスがどのページからも同じ深さで解決できていた。
+`wayhome/`のようにサブディレクトリへ1階層でも降りると、この前提は
+即座に崩れる。選手個別ページ（#101）は1,000名超をサブディレクトリで
+持つ可能性が高く、同じ問題が起きる規模がはるかに大きい。今回38枚の
+段階で気づけたことが最大の収穫。対応は以下の2点:
+
+- `lib/page.py`に`asset_prefix`引数を追加した（既定は空文字、既存27ページの
+  出力は1バイトも変わらないことを`regenerate.py all`のdiffで確認済み）。
+  head内のアセット参照（`style.css`・`assets/vendor/*`・`favicon.ico`・
+  `navbar.js`・`table.js`）にこの接頭辞を付ける。`wayhome/`配下は`"../"`
+- `navbar.js`の28本のページhrefをルート相対パス（先頭`/`）に変更した。
+  相対パスのままだと`wayhome/xxx.html`から見た`jpml_pros.html`は
+  `wayhome/jpml_pros.html`という存在しないパスに解決されてしまう
+  （`#`・`#searchBoxes`は対象外）
+
+新サイト（Astro等を想定）ではルーティングの機構自体がこの種の問題を
+吸収する可能性が高いが、**現行サイトの延長で選手個別ページを作る場合は
+この2点を再利用できる**。
+
+**カード・ItemListのリンク先も個別ページへ変更した。** 一覧
+（video_wayhome.html）のカードはYouTube直リンクから個別ページへ変更し
+（YouTube直リンクはヒーローの「再生」ボタンにのみ残す）、`ItemList`の
+`itemListElement.url`も自サイトURLに変更した。#13の本番検証で、
+`ItemList`がリッチリザルトの対象に現れなかったのは`url`が外部サイト
+（youtube.com）を指していたためと見ており、個別ページ（自サイトURL）が
+できたことで初めてカルーセルの候補になりうる（#162コメント参照）。
+
+**canonicalは#113の例外として38ページにだけ付けた。** #113は「現行
+サイトにはcanonicalを付けない（Googleの正規化任せ）」と判断したが、
+理由は`?name=`付きURLの検索流入14件を正規化で失うことだった。個別
+ページは`?name=`等のURL変種を持たないため、この懸念が当てはまらない。
+`lib/page.py`の`PageMeta`に`canonical`（既定`None`）・`og_image`/
+`og_image_width`/`og_image_height`/`og_image_alt`（既定は全ページ共通の
+`img/ogp.png`・1200×630）を追加し、ページごとに差し替えられるようにした。
+og:imageは各エピソードのサムネイル（一覧のヒーローと同じmaxres→hq
+フォールバック）。
+
+**sitemapはサイトマップインデックス方式にした。** `sitemap.xml`を
+インデックスに変え、既存25件は`sitemap-pages.xml`（旧sitemap.xml）へ
+そのまま移し、`sitemap-wayhome.xml`（38件）は生成スクリプトが書き出す。
+新規URLは当日日付、既存分は`lastmod`を保持し
+`scripts/update_sitemap_lastmod.py`が実際に差分の出たページだけ
+更新する規則を維持した（ページパスから`wayhome/`配下かどうかで
+対象サイトマップを判定するよう拡張）。`robots.txt`のSitemap行は
+`sitemap.xml`のまま変更不要。`regenerate.py`は出力がディレクトリに
+なるページ向けに`OUTPUT_OVERRIDES`（`wayhome_episodes` → `"wayhome/"`）を
+追加し、`regenerate-page.yml`の`git add`は`-A --`で削除も拾えるように
+した（シートから消えた動画IDのページを削除するため）。
+
+**thin content・重複コンテンツの懸念は残る。** 各ページの本文は
+`VideoObject`の`description`と`.mj-lead`が同一文言で、ページごとの
+独自テキストは実質的にタイトル戦名・選手名・公開日のみ。1,000ページ超の
+選手個別ページで同じ構成を使う場合、レーダーチャートや成績詳細など
+（docs/new-site-design.md「3. 画面構成」）でページ固有の情報量を
+増やす設計が要る。今回は検証目的の38ページのみのため対応していない。
+
+**シートに列を追加する運用は次のissueに送った。** 説明文・尺（`duration`）
+といった追加列は平野さんが後日シートに追加する前提で、個別issue
+「帰り道シートに個別ページ用の列を追加し、ページとVideoObjectに反映する」
+を#162に関連付けて起票した（本issueのスコープ外）。
+
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
 型Aの残り3ページ（すべてランキング系）は他と性質が違うため#7での
@@ -1183,8 +1260,12 @@ for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done
 | `saikyo_results` | `name`（**移行済み**。バグ修正あり、下記参照） |
 | `saikyo_mens` | `name` / `tag`（**移行済み**） |
 | `rh_paifu` | `name`（**移行済み**） |
-| `video_en` / `video_mtsuku` / `video_wayhome` | `name`（**移行済み**） |
+| `video_en` / `video_mtsuku` | `name`（**移行済み**） |
 | `wrc_results` | `name` |
+
+**`video_wayhome`だけは2026-09-12（#162）に`?name=`の受け入れを廃止した。**
+他ページと違い一覧・引き継ぎの対象から外れている。理由と経緯は本節末尾
+（「2026-09-11、#113の判断」の段落の後）参照。
 
 内部リンクがないことは「不要」を意味しない。Search Consoleのデータで
 「検索結果に出た22URLのうち14件が`?name=`付き」と分かっているが（SEO節）、
@@ -1210,6 +1291,16 @@ for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done
 `video_en` / `rh_paifu` / `saikyo_mens` / `video_mtsuku`
 （2026-09-11移行）はいずれも`?name=`パラメータをそのまま引き継いだ
 （`saikyo_mens`は`?tag=`も）。
+
+**2026-09-12（#162）、`video_wayhome`だけこの方針を覆し`?name=`の受け入れを
+廃止した。** GSCの検索結果に`video_wayhome.html?name=...`の形では出ておらず、
+平野さんが使う想定もないことを確認した上での判断（上記「一律そのまま
+引き継ぐ」から唯一の例外）。`video_wayhome.js`の`#info_filter`への初期値
+付けを削除し、URLの`?name=`は単に無視される（絞り込み欄自体は残る。
+入力しても検索結果には影響しない）。これにより#159（`?name=`付きURLから
+選手個別ページへの301マッピングを設計する）が検討していた「一覧ページの
+`?name=`→個別ページ」パターンのうち、少なくとも`video_wayhome`は対象外に
+なった旨を#159にコメントで残した。
 
 ### 外部サービス
 
