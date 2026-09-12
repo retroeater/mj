@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 10:52 JST
+生成日時: 2026-09-12 11:07 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -3250,8 +3250,8 @@ Preserve query string は必須。無効にすると www 経由の流入が全�
 
 ## #114 workers.devのプレビューURLをnoindexにする
 
-- 状態: OPEN / 作成: 2026-09-11
-- ラベル: 状況: 待ち, 分野: SEO/AIO, 対象: 全ページ
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-12
+- ラベル: 分野: SEO/AIO, 対象: 全ページ
 
 ### 本文
 
@@ -3270,7 +3270,7 @@ https://:version.:subdomain.workers.dev/*
 あわせて Search Console の「ページ」レポートで workers.dev のURLが
 登録されていないか確認する。
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-12):
 
@@ -3305,6 +3305,52 @@ workers.dev の前が2ラベルという形が本番ルートとプレビューU
 
 Search Console の「ページ」レポートで workers.dev のURLが登録されていないか
 確認する（平野さんが実施）。
+
+**retroeater** (2026-09-12):
+
+### 実測（2026-09-12、平野さんがダッシュボードで確認）
+
+| 項目 | 状態 |
+|---|---|
+| Production | `mj.hirano-530.workers.dev`（有効。Anyone with this URL can visit） |
+| Preview | `*-mj.hirano-530.workers.dev`（有効） |
+| カスタムドメイン | ryoei.pro / www.ryoei.pro |
+
+`wrangler.jsonc` に `workers_dev` / `preview_urls` の記載がないため、
+Cloudflareの既定（`preview_urls = workers_dev`、どちらも未指定なら有効）
+のとおり両方が公開状態だった。issue本文はプレビューURLのみを対象に
+していたが、本番ルートも同一内容を返していた。
+
+ホスト名が `mj` / `hirano-530` の2ラベル構成のため、追加した
+`https://:version.:subdomain.workers.dev/*` は本番・プレビューの
+両方に一致する。
+
+### インデックス状況
+
+Google・Bing とも `site:` 検索で **0件**（本番・プレビューの両方）。
+
+- `site:mj.hirano-530.workers.dev` → 該当なし
+- `site:*mj.hirano-530.workers.dev` → 該当なし
+
+現時点で実害は発生していない。noindex は、外部リンクができてクロールの
+入口が生まれた場合に備えた予防措置として入れる。
+
+### issue本文の手順の誤りについて
+
+本文の「Search Console の『ページ』レポートで workers.dev のURLが
+登録されていないか確認する」は成立しない。GSCのレポートは所有権を
+確認したプロパティ（ryoei.pro）の配下しか表示せず、別ドメインである
+workers.dev のURLは元々1件も出てこない。「0件＝インデックスされて
+いない」と誤読する危険があるため、`site:` 検索での確認に置き換えた。
+
+### デプロイ後の実測（Claude、2026-09-12）
+
+- `mj.hirano-530.workers.dev` → `x-robots-tag: noindex`
+- `ryoei.pro` → 出力なし（付与されていない）
+- `www.ryoei.pro` → 308経由で200、`x-robots-tag`なし
+- プレビュー `3964a071-mj.hirano-530.workers.dev` → `x-robots-tag: noindex`
+
+いずれも期待どおり。クローズする。
 
 ---
 

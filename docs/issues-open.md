@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 10:52 JST
+生成日時: 2026-09-12 11:07 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 54件（openのみ）。番号降順。
+件数: 53件（openのみ）。番号降順。
 
 ---
 
@@ -1050,66 +1050,6 @@ lastmodの暫定対応（9/7のまま更新されていない問題）を#138で
 ### 優先度（2026-09-12、Claudeとの検討）
 
 SEO/AIO施策10件の中で**4番目**（#138の暫定対応の後）。`regenerate-page.yml` が再生成したページだけ `<lastmod>` を当日日付に書き換える処理を足す。changefreq / priority は#138で削除する方針。
-
----
-
-## #114 workers.devのプレビューURLをnoindexにする
-
-- 作成: 2026-09-11
-- ラベル: 状況: 待ち, 分野: SEO/AIO, 対象: 全ページ
-
-### 本文
-
-#38 でプレビュービルドを有効にしているため `*.workers.dev` のURLが公開状態にある。
-`_headers` に指定がないため、クロールされれば本番と同一内容の重複サイトになる。
-
-Cloudflare 公式が `_headers` の用例として挙げている書き方:
-
-```
-https://:version.:subdomain.workers.dev/*
-  X-Robots-Tag: noindex
-```
-
-参照: https://developers.cloudflare.com/workers/static-assets/headers/
-
-あわせて Search Console の「ページ」レポートで workers.dev のURLが
-登録されていないか確認する。
-
-### コメント (2件)
-
-**retroeater** (2026-09-12):
-
-### 優先度（2026-09-12、Claudeとの検討）
-
-SEO/AIO施策10件の中で**3番目**。`_headers` に3行足すだけで、本番と同一内容の重複サイトが評価を分散させるリスクを消せる。Search Consoleで workers.dev のURLが登録されていないかの確認も同時に行う。
-
-**retroeater** (2026-09-12):
-
-### 対応（2026-09-12）
-
-`_headers` にホスト指定のルールを追加した。
-
-### 判明した追加事実
-
-issue本文はプレビューURLのみを対象にしていたが、`wrangler.jsonc` に
-`workers_dev` も `preview_urls` も未指定だった。Cloudflareの既定は
-`preview_urls = workers_dev` で、どちらも未指定なら両方が有効になる。
-つまり本番ルート `mj.<サブドメイン>.workers.dev` も同一内容を返していた。
-
-追加したパターン `https://:version.:subdomain.workers.dev/*` は、
-workers.dev の前が2ラベルという形が本番ルートとプレビューURLで共通のため、
-両方に一致する。
-
-### 採らなかった選択肢
-
-`workers_dev: false` にすればURL自体を消せるが、その場合プレビューURLの
-既定も false に連動するため、#38 で有効にしたプレビュービルドを維持するには
-`preview_urls: true` の明示が必要になる。今回はヘッダ対応にとどめた。
-
-### 残作業
-
-Search Console の「ページ」レポートで workers.dev のURLが登録されていないか
-確認する（平野さんが実施）。
 
 ---
 
