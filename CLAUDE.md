@@ -64,6 +64,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `collect_ron2_images.py` — 龍龍から全選手の150x150画像URLを収集しCSV出力（スプレッドシート更新用、手動実行）
 - `regenerate.py` — ページ再生成の共通入口。`scripts/generate_<ページ名>.py`が存在するページを「生成対象」とみなす。`--list`で対象ページ一覧、`all`で全ページ再生成、ページ名指定で単体再生成、`--changed`で変更ファイルから対象判定（`regenerate-page.yml`が使用）
 - `apply_page_meta.py` — 全ページの`<title>`・meta description・OGPタグを一括書き換え（#5）。`--dry`でプレビューのみ
+- `generate_ogp.py` — OGP画像 `img/ogp.png`（1200×630、背景#ffffff、「ryoei.pro」の文字のみ）を生成（#78、手動実行）。Pillowが必要。全ページ共通の1枚で、`lib/page.py` / `generate_jpml_pros.py` のテンプレートと静的ページに `og:image` として入っている。生成したPNGもコミットする（生成環境のフォント差で再生成のたびに差分が出るのを避けるため）。`--check`でコミット済みのPNGと一致するか確認できる
 - `build_issues_snapshot.py` — `docs/issues-snapshot.md`（全件）と`docs/issues-open.md`（Openのみ）を`gh issue`の現状から同時に再生成する。`.claude/settings.json`のPostToolUseフックから`gh issue`操作のたびに自動実行される
 - 実行例: `python3 scripts/check_image_links.py --json result.json`（依存は標準ライブラリのみ、追加インストール不要）
 
