@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 18:50 JST
+生成日時: 2026-09-12 19:05 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -13,6 +13,77 @@ issues-snapshot.md（全件）を参照します。
 issues-snapshot.md と同時に再生成されます。
 
 件数: 56件（openのみ）。番号降順。
+
+---
+
+## #167 複数コミットをまとめてcloudflareへpushすると再生成が漏れる
+
+- 作成: 2026-09-12
+- ラベル: 分野: 自動化
+
+### 本文
+
+### 現象
+
+`regenerate-page.yml` は push の**最終コミットの差分しか見ない**ため、
+複数コミットをまとめて cloudflare へ push すると、途中のコミットで
+`scripts/lib/**` や `scripts/generate_*.py` を変更していても再生成が
+走らない。ワークフローは「対象0件」として **success で終わる**ので、
+失敗としても気づけない。
+
+### 実例（#78 で発生、2026-09-12）
+
+3コミットを1回の push で cloudflare に入れた。
+
+| コミット | 内容 |
+|---|---|
+| `fceeb16` | OGP画像と生成スクリプトを追加 |
+| `5caba7e` | **`scripts/lib/page.py` の HEAD_TEMPLATE に og:image を追加** |
+| `020957f` | スクリプトをリネーム（最終コミット） |
+
+[run #55](https://github.com/retroeater/mj/actions/runs/34685971154) は
+success だが11秒で終了し、1ページも再生成していない。ワークフローが見た
+変更ファイルは最終コミット `020957f` の3件（`CLAUDE.md` /
+`scripts/apply_page_meta.py` / `scripts/build_ogp_image.py`）だけで、
+`scripts/lib/page.py` は差分に現れなかった。
+
+このときは16ページのHTMLを手で直接編集済みで、テンプレートとの完全一致も
+確認したため実害は出ていない。ただしテンプレートだけを変更して push して
+いたら、生成ページに反映されないまま放置されていた。
+
+### 原因
+
+```yaml
+- uses: actions/checkout@v4
+  with:
+    fetch-depth: 2   # 変更ファイルを調べるため直前のコミットも取得する
+...
+    git diff --name-only HEAD^ HEAD > /tmp/changed.txt || true
+```
+
+`HEAD^ HEAD` は最終コミット1つ分の差分。push に含まれるコミット全体の
+範囲ではない。
+
+### 対応案
+
+push イベントが持つ範囲（`github.event.before` 〜 `github.sha`）で差分を
+取る。あわせて `fetch-depth` を広げる必要がある（`0`、または範囲を賄える
+深さ）。
+
+考慮が要る点:
+
+- ブランチ新規作成時や force push 後は `github.event.before` が
+  `0000000...` になる。その場合は `all` へフォールバックするなどの
+  分岐が必要
+- 範囲が広がるぶん対象ページが増え、実行時間が延びるケースがある
+
+簡易案として「`scripts/lib/**` が push 範囲に含まれていたら無条件に `all`」
+でも今回のケースは防げる。
+
+### 補足
+
+毎週月曜 05:37 JST の定期実行（`all`）があるため、漏れても最大1週間で
+自動的に解消される。緊急度は高くない。
 
 ---
 
@@ -410,160 +481,6 @@ resource_efficiency.html（本文最後、グラフ・計算方法の段落の�
 
 実機・実ブラウザでの最終確認は平野さんにお願いしたい。問題なければ
 このissueをクローズしてください。
-
----
-
-## #157 型C(#127)のCSSが#152のコミットに混入している履歴を整理し、並行セッションの事故を防ぐ
-
-- 作成: 2026-09-11
-- ラベル: 分野: 整理・保守
-
-### 本文
-
-## 先に結論: **機能上の不具合はない。履歴と運用の問題**
-
-`style.css` の型C（`houou_leagues` / `ouka_leagues`）用CSS 49行が、**無関係な #152 のコミットに混ざってpushされていた。**
-
-現時点では利用側の実装（#127、`03cb23b`）が入っており、**表示は壊れていない。** 確認済み:
-
-- 定義されている5クラス（`.mj-league-chart-desktop` / `.mj-league-chart-mobile` / `.mj-chart-legend` / `.mj-chart-legend-item` / `.mj-chart-legend-swatch`）はすべて利用されている
-- 利用しているのは `houou_leagues.html` と `ouka_leagues.html` の2ページのみ
-- 未定義のまま参照されているクラスはない
-
-急いで直す必要はない。整理と再発防止が目的。
-
-## 何が起きたか
-
-### 1. CSSが先行して別issueのコミットで入った
-
-```
-4738d8d  牌効率ページの見出しフォントサイズを本文と揃える(#152)
-         Co-Authored-By: Claude Sonnet 5
-         Claude-Session: .../session_01CsCrw52JFcWbQWtcZ1aHo9
-```
-
-このコミットは `docs/issues-open.md` / `docs/issues-snapshot.md` / `resource_efficiency.html` / `scripts/generate_resource_efficiency.py` / `style.css` の5ファイルを変更している。`style.css` の49行の追加のうち、**#152 に関係するのは `.mj-page-heading` の6行だけ**で、残る43行は #127 用のCSSだった。コミットメッセージは #152 にしか言及していない。
-
-### 2. 実装が入るまでの間、未使用のCSSだった
-
-`4738d8d` の時点では `houou_leagues.html` / `ouka_leagues.html` はまだ旧Google Charts版で、これらのクラスを使うページが存在しなかった。実装 `03cb23b`（#127）が入るまで、dead CSS として残っていた。
-
-### 3. 実装コミットは style.css を触っていない
-
-`03cb23b` の変更ファイルに `style.css` は含まれない（CSSは既に入っていたため）。結果として:
-
-```
-$ git log --oneline -- style.css   # 型Cの行を辿ると
-4738d8d 牌効率ページの見出しフォントサイズを本文と揃える(#152)
-```
-
-**型Cのスタイルを直したい人が `git blame` / `git log` を引くと「牌効率ページの見出し」に行き着く。** 履歴が誤誘導する。
-
-## 背景: #127 が二重に着手されていた
-
-少なくとも3つのセッションが同じリポジトリで並行して動いていた。
-
-| セッション | 役割 |
-|---|---|
-| `session_01CsCrw52JFcWbQWtcZ1aHo9`（Sonnet 5） | `4738d8d` を作成。#152 のコミットに型CのCSSを混ぜた |
-| `session_01XfmFTF9tthr8Sn97h9xRTK`（Opus 5、本issueの起票元） | #127 に着手したが、egressポリシーで `docs.google.com` に到達できず手順1で停止。**コミット・pushは一切なし** |
-| `session_011bwcuPgK5vxbCV82cwaxRb`（mj-8c） | `03cb23b` で #127 を実装し、#127 をクローズ |
-
-mj-8c 側から「同じタスクに並行して取り組んでいた可能性がある」と照会があり、突き合わせて判明した。実装が重複しなかったのは、こちらがネットワーク制約で停止していたためで、偶然に近い。
-
-## やること
-
-### A. 履歴の誤読を防ぐ（低コスト・推奨）
-
-**pushされた履歴は書き換えない**（共有ブランチのため）。代わりに `style.css` の型Cブロックのコメントに1行足して、経緯を辿れるようにする。
-
-```css
-/* houou_leagues.html / ouka_leagues.html(型C)の積み上げ棒+選手の
-   折れ線グラフ用(#127)。デスクトップ用・モバイル用の2枚のSVGを
-   切り替える方針は上の.mj-bar-chart-*(型D)と同じ理由による。
-   このブロックは事故で#152のコミット(4738d8d)に混入して先行して
-   入ったため、git blameは#152を指す。実装本体は#127(03cb23b)。 */
-```
-
-### B. 再発防止: コミット範囲の確認を運用ルールにする
-
-`CLAUDE.md` または `docs/handover.md` に明記する。
-
-- コミット前に `git status` / `git diff --stat` を確認し、**着手中のissueと無関係なファイル・ハンクを含めない**
-- 複数の変更が混ざっていたら、issueごとに分けてコミットする
-
-### C. 並行セッションの事故防止（要相談）
-
-今回は実装の重複こそ免れたが、片方がネットワーク制約で止まっていなければ、2つの実装が衝突していた。運用として決めておきたい。
-
-- issueに着手したら、まず「着手中」のコメントを残す（他セッションから見える唯一の手段）
-- あるいは、同時に走らせるセッションは1つに絞る
-
-Cは運用の好みが出るところなので、方針を決めてから書く。
-
-## 補足: #127 の事前調査
-
-停止したセッション側で旧JSの精読だけは済ませており、結果を #127 にコメントとして残してある（https://github.com/retroeater/mj/issues/127#issuecomment-5635268667）。実装済みの内容と突き合わせる価値がありそうな点が4つある（前期A1/A2補完の非対称性、鳳凰位行の折れ線、E列の意味、折れ線JSONのサイズ）。実データを見て実装した `03cb23b` が優先だが、確認のために残しておく。
-
-### コメント (1件)
-
-**retroeater** (2026-09-12):
-
-## A と B を実施した（`a427c46`）
-
-ブランチ `claude/type-c-stacked-bar-hybrid-8g7t4m` にpush済み。cloudflareへのマージはまだ。
-
-### A. 履歴の誤読を防ぐ — 完了
-
-`style.css` の型Cブロックのコメントに出自を追記した。
-
-```css
-/* houou_leagues.html / ouka_leagues.html(型C)の積み上げ棒+選手の
-   折れ線グラフ用(#127)。デスクトップ用・モバイル用の2枚のSVGを
-   切り替える方針は上の.mj-bar-chart-*(型D)と同じ理由による。
-
-   このブロックと下の.mj-chart-legend*は、事故で#152(牌効率ページの
-   見出しフォントサイズ)のコミット4738d8dに混入して先行して入った。
-   そのため git blame / git log -- style.css は#152を指すが、型Cの
-   実装本体は#127の03cb23b(style.cssには触れていない)。
-   スタイルを直すときは#127と#157を見ること。 */
-```
-
-pushされた履歴は共有ブランチのため書き換えていない。
-
-### B. コミット範囲の確認をルール化 — 完了
-
-`CLAUDE.md` に「コミットのルール」節を追加した。
-
-> - コミット前に `git status` / `git diff --stat` を確認し、**着手中のissueと無関係なファイル・ハンクを含めないこと。** 複数の変更が混ざっていたら issueごとに分けてコミットする。型C（#127）のCSS 43行が無関係な#152（牌効率ページの見出しフォントサイズ）のコミット `4738d8d` に混入し、`git blame` / `git log -- style.css` が#152を指す状態になった例がある（#157）。表示は壊れなかったが、履歴が後から読む人を誤誘導する
-
-### C. 並行セッションの事故防止 — 未着手
-
-運用の好みが出るところなので、方針を決めてから。このissueはCが残っているためOpenのまま。
-
-## 検証
-
-静的化によって外部依存が消えたため、**両ページをローカル配信して実際に描画して確認できた**（型C移行の副産物）。
-
-| 確認項目 | 結果 |
-|---|---|
-| デスクトップ幅(1280px) | `.mj-league-chart-desktop` が `inline`、mobile側は `none` |
-| 375px幅 | `.mj-league-chart-desktop` が `none`、mobile側が `block`（メディアクエリの切り替えが機能） |
-| 凡例 | `display: flex` で描画。houou 14項目（13リーグ+名前）/ ouka 6項目（5+名前） |
-| 焼き込み済みの折れ線ラベル | houou「白鳥翔」/ ouka「清水香織」 |
-| 横スクロール | 両幅で発生せず |
-| コンソールエラー | `static.cloudflareinsights.com` のビーコンのみ（この検証環境のegress制限による。ページ自体の問題ではない） |
-
-`style.css` のブレース対応（コメント除去後 121/121）と未閉じコメントがないことも機械的に確認済み。
-
-## 残件: issuesスナップショットの再生成
-
-**この環境には `gh` CLI がないため `python3 scripts/build_issues_snapshot.py` を実行できなかった。**
-
-#157 の起票と本コメントはGitHub MCP経由なので、handover.md（#140/#143）の記述どおり `docs/issues-snapshot.md` / `docs/issues-open.md` には反映されていない。`gh` が使える環境で再生成・コミット・pushが必要。
-
----
-_Generated by [Claude Code](https://claude.ai/code)_
 
 ---
 
