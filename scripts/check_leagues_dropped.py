@@ -108,9 +108,24 @@ def analyze(mod, *, page_file, period_sort_key=None, fill_front_half=None, zero_
     # 既知の向き: 候補にいるがデータが無い選手(生成時のログに出るもの)
     no_data = sorted(n for n in candidate_names if n not in series)
 
-    # #127の退行分: 以前は選べて、データもあるのに、いま選べない選手
+    def entry(n):
+        return {
+            "name": n,
+            "points": len(series[n]),
+            "last_period": mod.period_label(periods[series[n][-1][0]]),
+            # 直近の期から何期前か。判断の重みづけに使う(直近まで出ていた
+            # 選手ほど、選べなくなった影響が大きい)
+            "periods_ago": len(periods) - 1 - series[n][-1][0],
+        }
+
+    # #127の退行分: 以前は選べて、データもあるのに、いま選べない選手。
+    # 直近の期に出ていた順に並べる(判断の優先度が高い順)。
     previous = previous_option_names(page_file)
-    regressed = None if previous is None else sorted(set(dropped) & previous)
+    regressed = (
+        None if previous is None
+        else sorted((entry(n) for n in dropped if n in previous),
+                    key=lambda e: (e["periods_ago"], -e["points"], e["name"]))
+    )
 
     return {
         "sheet": mod.SHEET_NAME,
@@ -120,14 +135,7 @@ def analyze(mod, *, page_file, period_sort_key=None, fill_front_half=None, zero_
         "candidates": len(candidate_names),
         "options": len(option_names),
         "series": len(series),
-        "dropped": [
-            {
-                "name": n,
-                "points": len(series[n]),
-                "last_period": mod.period_label(periods[series[n][-1][0]]),
-            }
-            for n in dropped
-        ],
+        "dropped": [entry(n) for n in dropped],
         "no_data": no_data,
     }
 
@@ -158,13 +166,15 @@ def report(result) -> str:
             "**判断が必要なのはこの人たち。** #127でセレクトボックスが手書きから"
             "自動生成に変わった際に選べなくなり、かつリーグの実データを持つ。"
             "`?name=`付きURLは検索流入の主力なので、インデックス済みのURLが"
-            "該当している可能性がある。",
+            "該当している可能性がある。**直近の期に出ていた順（＝優先度が"
+            "高い順）に並べた。**",
             "",
-            "```",
-            ", ".join(regressed),
-            "```",
-            "",
-        ]
+            "| 名前 | データ点数 | 最後の期 | 何期前 |",
+            "| --- | --- | --- | --- |",
+        ] + [
+            f"| {e['name']} | {e['points']} | {e['last_period']} | {e['periods_ago']} |"
+            for e in regressed
+        ] + [""]
     else:
         lines += [
             "### #127による退行分: **0名**",
