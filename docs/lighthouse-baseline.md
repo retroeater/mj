@@ -464,3 +464,53 @@ accessibility,performance`）。
   （既知。第1段の節を参照）。色の固定のみで構造は変えていない
 - **残る指摘は `link-name`（navbar.js の検索アイコン、全ページ共通）のみ。**
   → #163 で対応（次節）
+
+## navbar.js 検索アイコンへの aria-label 追加（#163、2026-09-12）
+
+`navbar.js` が描画する虫眼鏡リンクにアクセシブルネームが無く、Lighthouse
+accessibility の `link-name` 指摘が navbar.js を読み込む全26ページで出ていた
+（#102第2段の計測で判明）。`aria-label="検索"` を1か所足して解消した。
+`navbar.js` は生成物ではない静的ファイルなのでHTMLの再生成は不要
+（全27ページのHTMLに navbar のマークアップは焼き込まれていないことを
+`grep -l 'data-bs-toggle="collapse" href="#searchBoxes"' *.html` = 0件で確認）。
+
+計測はローカル静的サーバーに対する lighthouse CLI（mobile、
+`--only-categories=accessibility,performance`）。
+
+| ページ | a11y（前） | a11y（後） | perf（前→後） | 残る a11y 指摘 |
+|---|---|---|---|---|
+| video_wayhome.html（表なし） | 0.96 | **1.00** | 0.91 → 0.91 | **なし** |
+| jpml_test.html（表あり・検索欄あり） | 0.94 | **0.98** | 0.91 → 0.91 | `landmark-one-main` |
+| rh_results.html（表あり・検索欄なし） | 0.93 | **0.98** | 0.93 → 0.93 | `landmark-one-main` |
+
+- **3ページとも `link-name` が消えた。** video_wayhome は #102第2段で
+  `landmark-one-main` を既に潰してあるため、**失敗する a11y 監査が0件**に
+  なった（accessibility 1.00）
+- 残る `landmark-one-main` は `navbar.js` を読む他ページ共通の指摘で、
+  ページ本体を `<main>` で包めば解消する（video_wayhome で実証済み。
+  型A/A' 全体へ広げるかは別途判断）
+- perf は前後で変化なし（`aria-label` 1属性の追加のみ）
+
+### `aria-controls` が存在しない要素を指している件（#163 の調査）
+
+`show_filter=False` のページには `#searchBoxes` が無く、このリンクの
+`aria-controls="searchBoxes"` が存在しない要素を指している。該当は
+`404` / `index` / `jpml_links` / `resource_dictionary` / `resource_efficiency` /
+`rh_links` / `rh_results` / `rh_results_detail` の8ページ
+（`index.html` は navbar.js を読まないので実質7ページ）。
+
+**結論: 現状では a11y の指摘は出ない。** axe-core 4.13 / Lighthouse で確認:
+
+- `aria-valid-attr-value` は **pass**（violation でも incomplete でもない）。
+  axe は `aria-expanded="false"` のとき、参照先が存在しない `aria-controls` を
+  許容する（動的に生成される可能性があるため）
+- `aria-expanded="true"` に変えると **violation になる**ことは確認した。ただし
+  `navbar.js` は常に `"false"` で出力し、Bootstrap の collapse は対象要素が
+  無いと何もしないため `"true"` にならない（実際にクリックしても
+  `aria-expanded` は `"false"` のまま、JSエラーも無し、URLも変化なし）
+
+つまり機械的な指摘は出ないが、**該当7ページでは「押しても何も起きない
+リンク」が表示・フォーカス可能なまま残る**。`aria-label` を足したことで
+スクリーンリーダーからは「検索」という名前で読み上げられるようになるため、
+名前の付いた無反応なコントロールになる点はむしろ以前より目立つ。
+対応方針（該当ページでアイコン自体を出さない等）は #163 のコメント参照。
