@@ -893,6 +893,14 @@ video_wayhome」に集約した**（このファイルには実装の要点の�
   0.91〜0.94、LCP 3.0〜3.2s）だが、**accessibilityが0.89→0.94〜0.96に
   改善、CLSが0.005→0.000に改善**（上記landmark修正とページ送り撤廃が
   効いている）。詳細は`docs/lighthouse-baseline.md`
+- **【2026-09-12 決定】このページは濃色固定にした。** OSのカラーモード
+  設定に関係なく常にダークで表示する（`@media (prefers-color-scheme: dark)`
+  を廃し、ダーク側の値を既定に。`color-scheme: dark`を
+  `html:has(.mj-video-page)`に指定）。新サイト全体のトーン（静か・白基調）は
+  維持し、**動画セクションだけを濃色の例外とする**という整理。トークンの
+  構造（機能名の7つ）は両モード前提のまま残してある。決定と理由・確認結果は
+  `docs/new-site-design.md`の §2「デザイン方針 > トーン」と
+  §12「パイロット: video_wayhome」の両方に記載（片方だけ読んで矛盾しないため）
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 

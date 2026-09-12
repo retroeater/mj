@@ -665,31 +665,34 @@ body:has(.mj-table) {
 /* ---- カラートークン ----
    背景・面・前景・弱い前景・境界・強調(+強調の上に乗る文字色)の
    7トークンで開始する(新サイトへそのまま持ち越す前提の粒度・命名)。
-   ライトを既定、prefers-color-schemeでダークを上書きする。
-   Bootstrap 5.3のdata-bs-theme機構は採用しなかった(検証結果は
-   docs/new-site-design.md「パイロット: video_wayhome」参照)。 */
-body:has(.mj-video-page) {
-	--mj-v-bg: #ffffff;
-	--mj-v-surface: #f5f5f5;
-	--mj-v-fg: #1a1a1a;
-	--mj-v-fg-muted: #5f6368;
-	--mj-v-border: #dcdcdc;
-	--mj-v-accent: #2f5d78;
-	--mj-v-accent-fg: #ffffff;
-	background-color: var(--mj-v-bg);
-	color: var(--mj-v-fg);
+   このページはOSの設定に関係なく濃色で固定する(2026-09-12決定。新サイト
+   全体の「静か・白基調」というトーンは維持し、動画セクションだけを濃色の
+   例外とする)。そのためダーク側の値を既定として直接持たせている。
+   トークンの構造(機能名の7つ)は両モード前提のまま残してあり、値の組を
+   差し替えれば両モードに戻せる形を崩していない。ライト側の値と決定の経緯は
+   docs/new-site-design.md「2. デザイン方針 > トーン」「12. パイロット:
+   video_wayhome」に記録してある(二重管理になるためCSSには複製しない)。
+   Bootstrap 5.3のdata-bs-theme機構は採用しなかった(検証結果は同上)。 */
+
+/* color-schemeを指定しないと、OSがライト設定のユーザーで入力欄・
+   スクロールバー・フォーカスリングなどのUA既定スタイルが明色のまま浮く。
+   ビューポートのスクロールバーはルート要素のcolor-schemeで決まるため
+   html側に置くが、:has()で.mj-video-pageを持つページだけに閉じており
+   他26ページには及ばない(body:has()と同じ流儀)。 */
+html:has(.mj-video-page) {
+	color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-	body:has(.mj-video-page) {
-		--mj-v-bg: #121212;
-		--mj-v-surface: #1e1e1e;
-		--mj-v-fg: #f5f5f5;
-		--mj-v-fg-muted: #a8adb3;
-		--mj-v-border: #3a3a3a;
-		--mj-v-accent: #7fb3d5;
-		--mj-v-accent-fg: #0d1b24;
-	}
+body:has(.mj-video-page) {
+	--mj-v-bg: #121212;
+	--mj-v-surface: #1e1e1e;
+	--mj-v-fg: #f5f5f5;
+	--mj-v-fg-muted: #a8adb3;
+	--mj-v-border: #3a3a3a;
+	--mj-v-accent: #7fb3d5;
+	--mj-v-accent-fg: #0d1b24;
+	background-color: var(--mj-v-bg);
+	color: var(--mj-v-fg);
 }
 
 /* .mj-video-pageはbody:has()のスコープ用マーカーで、それ自体は幅を
@@ -700,7 +703,7 @@ body:has(.mj-video-page) {
 }
 
 /* #searchBoxes/.mj-filter-inputは全ページ共通ルールで白背景固定のため、
-   このページのダークモードでは文字色(bodyから継承)だけ明るくなり
+   濃色固定のこのページでは文字色(bodyから継承)だけ明るくなり
    白背景に白文字で読めなくなる。このページに限りオーバーライドする
    (他26ページの#searchBoxesは無変更)。 */
 body:has(.mj-video-page) #searchBoxes {
