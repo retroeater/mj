@@ -1528,6 +1528,54 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 - OWASP推奨対策: 静的サイトで該当するヘッダ系は `_headers` に導入済み（X-Frame-Options / X-Content-Type-Options / Referrer-Policy / Permissions-Policy / HSTS）。残るのはCSPのみで、それが #9
 - 入力値の検証とサニタイズ: `<form>` は27ページに0個。入力経路はURLパラメータのみで、移行済みページは生成時に esc() を通し、絞り込みは textContent 比較のためXSSの経路がない。innerHTML は index.js に1箇所（アイコン切替の定数）だけ
 
+### リンクの配色（#26/#108、2026-09-12）
+
+`.mj-table` 内のテキストリンクがBootstrap既定色 `#0d6efd` のままで、偶数行
+`#fafafa` に対して4.31:1・ホバー行 `#d6e9f8` に対して3.62:1しかなく、
+WCAG AA(4.5:1)を割っていた（#108で発見。白地単体では4.50:1でぎりぎり
+AAは満たしていたため見落とされていた）。#26（リンクの見た目をモダンにする、
+移行前タスク28）と合わせて紺寄りの `#14459b` に変更し、同時に下線位置の
+調整と画像専用リンクの下線除去も行った。style.cssのみの変更で、
+64ページとも読み込むため再生成は不要。
+
+**3背景での実測コントラスト比**
+
+| 背景 | 色 | コントラスト比 | 判定 |
+|---|---|---|---|
+| 白 `#ffffff` | `#14459b`（通常） | 8.5:1 | AAA |
+| 偶数行 `#fafafa` | `#14459b`（通常） | 8.4:1 | AAA |
+| ホバー行 `#d6e9f8` | `#0d2f6e`（ホバー） | 10.9:1 | AAA |
+
+`jpml_pros.html` をlighthouse CLIで再計測し、`color-contrast` 監査が
+fail→passになったことを確認済み。詳細は `docs/lighthouse-baseline.md`
+「リンクの配色（#26/#108）」を参照。
+
+**Bootstrap変数を上書きした理由**
+
+`a{ color: ... }` と直接書かず、`:root` で `--bs-link-color` /
+`--bs-link-color-rgb` / `--bs-link-hover-color` / `--bs-link-hover-color-rgb`
+を上書きした。Bootstrap自身の `a:hover { --bs-link-color-rgb: var(--bs-link-hover-color-rgb); }`
+という仕掛けと、`.mj-video-page a:not(.mj-video-btn)`（詳細度0,2,1）などの
+既存の上書きを、どちらも変更なしでそのまま活かせるため。`-rgb`と非-`rgb`の
+両方が必要なのは、`a{}` 自体は非-`rgb`版を、`.btn-link`や`.nav`系は
+`-rgb`版（`rgba(var(--bs-link-color-rgb), ...)`のような形）を参照していて
+片方だけでは食い違うため。ナビ（`.nav-link`/`.dropdown-item`/`.navbar-brand`）
+は`--bs-navbar-*`/`--bs-dropdown-*`を使うため影響を受けず、濃色固定の
+`video_wayhome.html`と`wayhome/`配下38枚も`--mj-v-accent`(`#7fb3d5`)を使う
+ため影響を受けない。CDPで実測し、両方とも変更前と同じ色のままであることを
+確認した。
+
+**`a:has(> img)` で下線を消した判断**
+
+画像だけを包むリンク（アイコン・サムネイル、全26ページ+wayhome/配下38枚で
+10,604本）は下線を消した。下線は「リンクである」ことを色以外の手段で示す
+ために文字リンクには必要だが、画像リンクは画像自体がその手掛かりになる
+ため不要（48pxの選手アイコンや16pxのリンクアイコンの真下に線が1本入って
+いるだけの状態だった）。`img`が`<a>`の直下にない例が0件であることを
+確認したうえで`>`で絞っている（画像と文字が混在するリンクの下線は残す
+ため）。`.mj-plain`（`resource_logs`の2,576本など）は元々
+`text-decoration: none`のみで下線を持たないため対象外・影響なし。
+
 ---
 
 ## 7. 関連文書

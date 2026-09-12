@@ -18,6 +18,50 @@ table,
 	font-variant-numeric: tabular-nums; /* 数字を等幅にして桁を揃える */
 }
 
+/* ==== リンクの見た目(#26) ====
+   Bootstrap既定の #0d6efd は白地で4.50:1と、AA(4.5:1)をちょうど満たすだけの
+   値しかない。.mj-table は偶数行が #fafafa・ホバー行が #d6e9f8 のため、
+   実際には表の半分の行で4.31:1、ホバー中は3.62:1まで落ちてAAを割っていた
+   (#108)。紺寄りの #14459b にすると、この3背景すべてで7:1以上になる。
+
+   色は a{} に直接書かず、Bootstrapの変数を上書きする形にする。
+   a:hover{--bs-link-color-rgb: var(--bs-link-hover-color-rgb)} という
+   Bootstrap側の仕掛けと、.mj-video-page a:not(.mj-video-btn)(詳細度0,2,1)
+   などの既存の上書きを、どちらもそのまま活かせるため。
+   -rgb と非-rgb の両方を書くのは、a{} が前者を、.btn-link/.nav が後者を
+   参照していて片方だけでは食い違うため。
+   ナビ(.nav-link/.dropdown-item/.navbar-brand)は --bs-navbar-* /
+   --bs-dropdown-* を使うので、この上書きの影響を受けない。
+   濃色固定の video_wayhome と wayhome/配下38枚は --mj-v-accent(#7fb3d5)を
+   持つため、ここも影響を受けない。 */
+:root {
+	--bs-link-color: #14459b;
+	--bs-link-color-rgb: 20, 69, 155;
+	--bs-link-hover-color: #0d2f6e;
+	--bs-link-hover-color-rgb: 13, 47, 110;
+}
+
+/* 下線は文字から離し、細くする。日本語は漢字の縦画が文字の下端まで届くため、
+   ベースライン直下という既定位置では下線と字画が接触して読みにくい。
+   issue本文の「3px離す」を em で書いているのは、.mj-table の本文が13pxで、
+   そこで3px固定にすると離れすぎるため(16px→3.2px / 13px→2.6px)。 */
+a {
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 1px;
+}
+
+/* 画像だけを包むリンク(アイコン・サムネイル)からは下線を消す。
+   下線は「リンクである」ことを色以外でも伝えるために文字には必要だが、
+   画像の場合は画像自体がその手掛かりになるので不要で、48pxの選手アイコンや
+   16pxのリンクアイコンの真下に線が1本入っているだけの状態だった。
+   全26ページ + wayhome/配下38枚で10,604本ある。
+   img が <a> の直下にない例が0件であることを確認したうえで > で絞っている
+   (画像と文字が混在するリンクの下線は残したいため)。
+   :has() は body:has(.mj-table) などで既に使っており、前例がある。 */
+a:has(> img) {
+	text-decoration: none;
+}
+
 /* navbar.js が描画する共通ナビのタップ領域確保(44x44px)。
    index.html は navbar.js を使わず style.css も読み込まないため対象外。 */
 .navbar .nav-link,

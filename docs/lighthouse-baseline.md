@@ -559,3 +559,65 @@ accessibility の `link-name` 指摘が navbar.js を読み込む全26ページ�
 初期は閉（0px）→ クリックで開（32〜52px、`aria-expanded="true"`、
 `aria-label="検索"` 維持）→ 再クリックで閉（0px）。濃色固定の
 `video_wayhome` でも同じ。
+
+## リンクの配色（#26/#108）
+
+`color-contrast` 監査が失敗していた原因（#108、上記「予想外だった点」参照）
+に対する修正の計測。style.css のみの変更（`--bs-link-color` 等の上書き +
+`a:has(> img)` の下線除去）で、HTML再生成は不要。
+
+計測は `wrangler dev`（ローカル、`--persist-to /tmp/wrangler-state`）に対する
+lighthouse CLI（mobile、`--only-categories=accessibility`）。
+`jpml_pros.html` を対象にした。
+
+| 状態 | accessibility | `color-contrast` |
+|---|---|---|
+| 修正前（baseline、本番計測） | 0.89 | fail（4.31:1、AA未達） |
+| 修正後（ローカル計測） | 0.98 | pass（1.0） |
+
+修正後に残る唯一の失敗監査は `landmark-one-main`（本件と無関係、既知）。
+
+### 3背景での実測コントラスト比
+
+新しいリンク色 `#14459b`（通常）/ `#0d2f6e`（ホバー、`--bs-link-color-rgb`
+を `--bs-link-hover-color-rgb` に差し替えて再現）を、`.mj-table` が使う
+3つの背景に対して確認:
+
+| 背景 | 色 | コントラスト比 | 判定 |
+|---|---|---|---|
+| 白 `#ffffff` | `#14459b`（通常） | 8.5:1 | AAA |
+| 偶数行 `#fafafa` | `#14459b`（通常） | 8.4:1 | AAA |
+| ホバー行 `#d6e9f8` | `#0d2f6e`（ホバー） | 10.9:1 | AAA |
+
+いずれもAA(4.5:1)はもちろんAAA(7:1)も上回る。修正前の`#0d6efd`は白地で
+4.50:1（AAをちょうど満たすのみ）、偶数行4.31:1・ホバー行3.62:1でAA未達
+だった（#108）。
+
+### Bootstrap変数を上書きした理由
+
+`a{ color: ... }` のような直接指定ではなく `:root` で `--bs-link-color` /
+`--bs-link-color-rgb` / `--bs-link-hover-color` / `--bs-link-hover-color-rgb`
+を上書きした。理由は2つ:
+
+- Bootstrapの `a:hover { --bs-link-color-rgb: var(--bs-link-hover-color-rgb); }`
+  という仕掛みと、`.mj-video-page a:not(.mj-video-btn)`（詳細度0,2,1）などの
+  既存の上書きを、どちらも変更なしでそのまま活かせる
+- `-rgb` と非-`rgb` の両方が必要なのは、`a{}` 自体は非-`rgb`版を、
+  `.btn-link` や `.nav` 系は `-rgb` 版（`rgba(var(--bs-link-color-rgb), ...)`
+  のような形）を参照しており、片方だけでは食い違うため
+
+ナビ（`.nav-link` / `.dropdown-item` / `.navbar-brand`）は `--bs-navbar-*` /
+`--bs-dropdown-*` を使うため影響を受けない。濃色固定の `video_wayhome.html`
+と `wayhome/` 配下38枚は `--mj-v-accent`（`#7fb3d5`）を使うため同様に影響を
+受けない。CDPで実測し、両方とも変更前と同じ色（ナビ `rgba(255, 255, 255,
+0.55)`、`video_wayhome` のアクセント `rgb(127, 179, 213)`）のままであることを
+確認した。
+
+### `a:has(> img)` で下線を消した判断
+
+画像だけを包むリンク（アイコン・サムネイル、全26ページ+wayhome/配下38枚で
+10,604本）は下線を消した。下線は「リンクである」ことを色以外の手段で示す
+ために文字リンクには必要だが、画像リンクは画像自体がその手掛かりになる。
+`img` が `<a>` の直下にない例が0件であることを確認したうえで `>` で絞って
+おり（画像と文字が混在するリンクの下線は残す）、`.mj-plain`（`resource_logs`
+の2,576本など）は元々下線なしのため対象外・影響なし。
