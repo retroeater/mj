@@ -100,11 +100,6 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
     )
 
 
-def episode_url(video_id: str) -> str:
-    """エピソード個別ページの絶対URL(#162)。"""
-    return f"https://ryoei.pro/wayhome/{video_id}.html"
-
-
 def episode_href(row) -> str:
     """一覧ページ(ルート直下)から見た個別ページへの相対href。動画IDが
     取れない行はデータ異常のため、握りつぶさず例外にする。"""
@@ -112,7 +107,7 @@ def episode_href(row) -> str:
     video_id = wayhome.video_id_from_watch_url(url)
     if not video_id:
         raise ValueError(f"視聴URLから動画IDを取り出せません: {url!r}")
-    return f"wayhome/{video_id}.html"
+    return wayhome.episode_path(video_id)
 
 
 def build_card_html(row) -> str:
@@ -151,7 +146,7 @@ def build_json_ld(sorted_rows, hero_thumb_url) -> str:
         items.append({
             "@type": "ListItem",
             "position": i,
-            "url": episode_url(video_id) if video_id else url,
+            "url": wayhome.episode_url(video_id) if video_id else url,
             "name": f"{title} {interviewee}".strip(),
         })
     item_list = {

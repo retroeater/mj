@@ -81,6 +81,16 @@ def to_upload_date(date_str):
     return dt.isoformat()
 
 
+def episode_url(video_id: str) -> str:
+    """エピソード個別ページの絶対URL(#162)。"""
+    return f"https://ryoei.pro/wayhome/{video_id}.html"
+
+
+def episode_path(video_id: str) -> str:
+    """リポジトリ内での相対パス(ルート直下から見た、#162)。"""
+    return f"wayhome/{video_id}.html"
+
+
 def episode_description(row) -> str:
     """VideoObject.description・ページ本文・meta descriptionで共通して使う文言。
     3箇所の文言を揃えるため一本化する(#162)。"""
