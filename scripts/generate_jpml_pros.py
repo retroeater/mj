@@ -50,7 +50,11 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta property="og:title" content="プロ | 日本プロ麻雀連盟 | ryoei.pro">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="https://ryoei.pro/jpml_pros.html">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://ryoei.pro/img/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ryoei.pro">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.ico">
 <!-- Stylesheets -->
 <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
