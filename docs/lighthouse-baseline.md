@@ -577,17 +577,18 @@ lighthouse CLI（mobile、`--only-categories=accessibility`）。
 
 修正後に残る唯一の失敗監査は `landmark-one-main`（本件と無関係、既知）。
 
-### 3背景での実測コントラスト比
+### 3背景でのコントラスト比
 
 新しいリンク色 `#14459b`（通常）/ `#0d2f6e`（ホバー、`--bs-link-color-rgb`
 を `--bs-link-hover-color-rgb` に差し替えて再現）を、`.mj-table` が使う
-3つの背景に対して確認:
+3つの背景に対して、WCAG 2.1のrelative luminance式（sRGBガンマ補正込み）で
+計算した:
 
 | 背景 | 色 | コントラスト比 | 判定 |
 |---|---|---|---|
-| 白 `#ffffff` | `#14459b`（通常） | 8.5:1 | AAA |
-| 偶数行 `#fafafa` | `#14459b`（通常） | 8.4:1 | AAA |
-| ホバー行 `#d6e9f8` | `#0d2f6e`（ホバー） | 10.9:1 | AAA |
+| 白 `#ffffff` | `#14459b`（通常） | 8.92:1 | AAA |
+| 偶数行 `#fafafa` | `#14459b`（通常） | 8.55:1 | AAA |
+| ホバー行 `#d6e9f8` | `#0d2f6e`（ホバー） | 10.23:1 | AAA |
 
 いずれもAA(4.5:1)はもちろんAAA(7:1)も上回る。修正前の`#0d6efd`は白地で
 4.50:1（AAをちょうど満たすのみ）、偶数行4.31:1・ホバー行3.62:1でAA未達
@@ -602,9 +603,9 @@ lighthouse CLI（mobile、`--only-categories=accessibility`）。
 - Bootstrapの `a:hover { --bs-link-color-rgb: var(--bs-link-hover-color-rgb); }`
   という仕掛みと、`.mj-video-page a:not(.mj-video-btn)`（詳細度0,2,1）などの
   既存の上書きを、どちらも変更なしでそのまま活かせる
-- `-rgb` と非-`rgb` の両方が必要なのは、`a{}` 自体は非-`rgb`版を、
-  `.btn-link` や `.nav` 系は `-rgb` 版（`rgba(var(--bs-link-color-rgb), ...)`
-  のような形）を参照しており、片方だけでは食い違うため
+- `-rgb` と非-`rgb` の両方が必要なのは、`a{}` 自体は `-rgb` 版
+  （`rgba(var(--bs-link-color-rgb), ...)` のような形）を、`.btn-link` や
+  `.nav` 系は非-`rgb` 版を参照しており、片方だけでは食い違うため
 
 ナビ（`.nav-link` / `.dropdown-item` / `.navbar-brand`）は `--bs-navbar-*` /
 `--bs-dropdown-*` を使うため影響を受けない。濃色固定の `video_wayhome.html`

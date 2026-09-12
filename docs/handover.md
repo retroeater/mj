@@ -1538,13 +1538,16 @@ AAは満たしていたため見落とされていた）。#26（リンクの見
 調整と画像専用リンクの下線除去も行った。style.cssのみの変更で、
 64ページとも読み込むため再生成は不要。
 
-**3背景での実測コントラスト比**
+**3背景でのコントラスト比**
 
 | 背景 | 色 | コントラスト比 | 判定 |
 |---|---|---|---|
-| 白 `#ffffff` | `#14459b`（通常） | 8.5:1 | AAA |
-| 偶数行 `#fafafa` | `#14459b`（通常） | 8.4:1 | AAA |
-| ホバー行 `#d6e9f8` | `#0d2f6e`（ホバー） | 10.9:1 | AAA |
+| 白 `#ffffff` | `#14459b`（通常） | 8.92:1 | AAA |
+| 偶数行 `#fafafa` | `#14459b`（通常） | 8.55:1 | AAA |
+| ホバー行 `#d6e9f8` | `#0d2f6e`（ホバー） | 10.23:1 | AAA |
+
+WCAG 2.1のrelative luminance式（sRGBガンマ補正込み）で計算した値。いずれも
+AA(4.5:1)はもちろんAAA(7:1)も上回る。
 
 `jpml_pros.html` をlighthouse CLIで再計測し、`color-contrast` 監査が
 fail→passになったことを確認済み。詳細は `docs/lighthouse-baseline.md`
@@ -1557,8 +1560,8 @@ fail→passになったことを確認済み。詳細は `docs/lighthouse-baseli
 を上書きした。Bootstrap自身の `a:hover { --bs-link-color-rgb: var(--bs-link-hover-color-rgb); }`
 という仕掛けと、`.mj-video-page a:not(.mj-video-btn)`（詳細度0,2,1）などの
 既存の上書きを、どちらも変更なしでそのまま活かせるため。`-rgb`と非-`rgb`の
-両方が必要なのは、`a{}` 自体は非-`rgb`版を、`.btn-link`や`.nav`系は
-`-rgb`版（`rgba(var(--bs-link-color-rgb), ...)`のような形）を参照していて
+両方が必要なのは、`a{}` 自体は`-rgb`版（`rgba(var(--bs-link-color-rgb),
+...)`のような形）を、`.btn-link`や`.nav`系は非-`rgb`版を参照していて
 片方だけでは食い違うため。ナビ（`.nav-link`/`.dropdown-item`/`.navbar-brand`）
 は`--bs-navbar-*`/`--bs-dropdown-*`を使うため影響を受けず、濃色固定の
 `video_wayhome.html`と`wayhome/`配下38枚も`--mj-v-accent`(`#7fb3d5`)を使う
