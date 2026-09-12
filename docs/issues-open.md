@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 23:07 JST
+生成日時: 2026-09-12 23:08 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -693,7 +693,7 @@ https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 SEO/AIO施策10件には**含めていない**。導入コストはほぼゼロだが、主要なAI検索が現時点で参照している証拠が弱いため。新サイトのビルド（#21）で自動生成できるなら「ついでに出す」程度でよい。判断の経緯を残すために起票。
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-12):
 
@@ -709,6 +709,18 @@ SEO/AIO施策10件には**含めていない**。導入コストはほぼゼロ�
 - docs/handover.mdの「SEO」節に設置経緯を追記、冒頭の最終更新行を更新
 
 本番反映はCloudflare Workers Builds経由。ビルド成功はcheck-runsで確認できるが、本番の見え方（`https://ryoei.pro/llms.txt`）はセッションから確認できないため、平野さんの確認後にクローズをお願いします。
+
+**retroeater** (2026-09-12):
+
+本番の https://ryoei.pro/llms.txt が文字化けしていた件、対処しました(1467cac)。
+
+**原因**: `.txt` には Cloudflare 側で charset が付与されず、Content-Type が `text/plain` のみになる。ファイルの中身は正しいUTF-8だが、日本語環境のブラウザがcharset無しのtext/plainをShift_JISとして解釈し文字化けしていた。
+
+**対処**: `_headers` に `/llms.txt` 向けのルールを追加し、`Content-Type: text/plain; charset=utf-8` を明示した。BOM追加は代替案として温存し、まず_headersの上書きを試す。
+
+robots.txtについても同じ原因で文字化けしている可能性があるが、Cloudflare AI Crawl Controlの管理robots.txtが前置される構成のため_headersの効き方が異なる可能性があり、今回は触らず別issueとして起票します。
+
+引き続き平野さんの本番確認待ちのため、このissueはまだクローズしません。
 
 ---
 
