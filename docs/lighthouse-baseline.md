@@ -367,3 +367,42 @@ hououで一桁増えている。691名分の`<option>`(セレクトボックス)
 accessibilityの93点は`link-name`/`landmark-one-main`の2件の指摘によるもので、
 `resource_efficiency.html`など他ページと共通の`navbar.js`側の既存問題
 （このページ固有ではない）。
+
+## video_wayhome.html ヒーロー画像追加（#102 第1段、2026-09-12）
+
+最新話のサムネイル(`maxresdefault.jpg`、1280×720、なければ`hqdefault.jpg`に
+フォールバック)をヒーローとして表に大きく配置した。**この計測のみ
+本番反映前で、ローカルの`wrangler dev`（`--persist-to`使用、CLAUDE.md参照）
+に対して行った。** 本番同様の静的アセット配信だが、Cloudflareのエッジや
+実ネットワーク経路を経由しないため絶対値はそのまま信用せず、
+変更前後の相対比較として読むこと。またこのサンドボックス環境は
+CPU負荷のノイズが大きく、同一ページで複数回計測しても
+performanceスコアが0.48〜0.96まで振れることを確認した（1回だけの
+計測は外れ値の可能性があるため、before/eachとも複数回計測し
+中央値付近の値を採用している）。
+
+**実装時の落とし穴**: `.mj-hero-image`に`aspect-ratio: 16/9`だけを指定し
+`height`を明示しなかったところ、`<img>`のCLS対策用`height`属性
+（maxres=720、hq=360）がaspect-ratioより優先され、幅100%のまま
+縦長に伸びる不具合が起きた（object-fit: coverで元画像の左側だけが
+縦に引き伸ばされて表示される状態）。`height: auto`を明示して解消した
+（style.cssの.mj-hero-imageにコメントを残してある）。CDP経由で
+`getBoundingClientRect()`と`getComputedStyle()`を直接確認して原因を
+特定した(ブラウザのスクリーンショットだけでは気づきにくい)。
+
+| 状態 | performance | accessibility | best-practices | seo | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|---|
+| 変更前(表のみ、旧video_wayhome.html) | 0.97 | 0.89 | 0.96 | 0.92 | 2.5s | 0.005 | 30ms |
+| 変更後(ヒーロー追加、3回計測) | 0.92〜0.95 | 0.89 | 0.96 | 0.92 | 2.8〜3.2s | 0.005 | 30〜90ms |
+
+- **LCPが表の1行目サムネイル(160×90のmqdefault)から、ヒーローの
+  maxresdefault(1280×720、数十〜百数十KB)に変わったことで、
+  ローカル計測でも0.5〜0.7秒程度悪化している。** `fetchpriority="high"`
+  と`loading="lazy"`を付けない対応はしているが、ファイルサイズ自体が
+  大きいぶんの遅れは残る。事前の想定どおりで、許容範囲
+- **accessibility/best-practices/seoは変更前後で完全に同点。** ヒーロー追加による
+  新規の指摘はない(alt属性・見出し階層とも問題なし)
+- **CLSは変更前後とも0.005で変化なし。** width/height属性を明示しているため
+  レイアウトシフトは発生していない
+- 本番反映後、production環境での再計測を推奨する(このセクションの数値は
+  ローカル限定であることに注意)

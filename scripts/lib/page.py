@@ -66,6 +66,11 @@ class TableConfig:
     # ページ固有の小さなJS(resource_logsの名前セレクトボックス用など)。
     # table.jsでは共通化せず、このscriptタグをheadにもう1本追加する。
     extra_script: str = ""
+    # h1直後、#searchBoxesの手前に差し込むページ固有のHTMLブロック
+    # (video_wayhomeのヒーロー画像など、#102)。空文字なら何も差し込まない。
+    # #158(冒頭に説明文の段落を置く)のlead文は、このスロットの手前に
+    # PageMeta側で足す想定(h1 → lead文 → content_before → #searchBoxes の順)。
+    content_before: str = ""
 
 
 def build_image_cell(alt, url, image_url, css_class, width, height, fallback) -> str:
@@ -119,7 +124,7 @@ PAGE_TEMPLATE = HEAD_TEMPLATE + """<body>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
-<h1 class="visually-hidden">{h1}</h1>
+<h1 class="visually-hidden">{h1}</h1>{content_before}
 {search_boxes}
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
 
@@ -177,7 +182,7 @@ def _render_search_boxes(table_config: TableConfig) -> str:
     return f'\n<div id="searchBoxes" class="collapse">\n{inner}\n</div>\n'
 
 
-def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
+def render(meta: PageMeta, table_config: TableConfig, rows_html: str, content_before: str | None = None) -> str:
     """組み立て済みの行HTMLから、ページ全体のHTMLを生成する。
 
     table.js を共有JSとして使う。設定は table 要素の data 属性で渡す方式
@@ -185,7 +190,13 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
     ページごとに違うのは table_id とこの属性だけでよい。ページ固有のUIを
     持つページ(resource_logsなど)は、table.js に加えて専用の小さなJSを
     extra_script で追加する。
+
+    content_before は省略(None)なら table_config.content_before を使う。
+    取得済みのスプレッドシート行に依存する内容(video_wayhomeのヒーロー等)は
+    generate() の build_content_before 経由でここに渡される(#102)。
     """
+    if content_before is None:
+        content_before = table_config.content_before
     table_class = "mj-table"
     if table_config.extra_table_class:
         table_class += f" {table_config.extra_table_class}"
@@ -213,6 +224,7 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str) -> str:
         og_url=esc(meta.og_url),
         extra_head=extra_head,
         h1=esc(meta.h1),
+        content_before=content_before,
         caption=esc(meta.caption),
         table_id=esc(table_config.table_id),
         table_class=table_class,
@@ -241,7 +253,10 @@ def render_content(meta: PageMeta, body_html: str, extra_head: str = "") -> str:
     )
 
 
-def generate(spreadsheet_id, sheet_name, query, output_path, meta, table_config, build_row_html, formatted=False):
+def generate(
+    spreadsheet_id, sheet_name, query, output_path, meta, table_config, build_row_html,
+    formatted=False, build_content_before=None,
+):
     """スプレッドシートの取得からHTML書き出しまでを行う共通の main() 相当。
 
     generate_*.py 側は設定(PageMeta/TableConfig)と build_row_html(row) だけを
@@ -251,13 +266,19 @@ def generate(spreadsheet_id, sheet_name, query, output_path, meta, table_config,
     なくデータ取得の設定のため、generate() の引数にしている。数値列に
     シートの表示形式(桁区切り・固定小数点)をそのまま反映したいページ
     (rh_results 等)で True にする。既定は False(生の値を使う)。
+
+    build_content_before(raw_rows) -> str を渡すと、取得済みの全行から
+    ページ固有のHTMLブロック(video_wayhomeのヒーロー等、#102)を組み立てて
+    render() の content_before に渡す。省略時は table_config.content_before
+    (既定は空文字)がそのまま使われる。
     """
     print(f"「{sheet_name}」シートを取得中...")
     raw_rows = fetch_sheet(spreadsheet_id, sheet_name, query, formatted=formatted)
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
     rows_html = "\n".join(build_row_html(row) for row in raw_rows)
-    output = render(meta, table_config, rows_html)
+    content_before = build_content_before(raw_rows) if build_content_before else None
+    output = render(meta, table_config, rows_html, content_before=content_before)
 
     output_path = pathlib.Path(output_path)
     output_path.write_text(output, encoding="utf-8")

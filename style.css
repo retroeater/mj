@@ -640,3 +640,49 @@ body:has(.mj-table) {
 	background-color: #ffffff;
 	padding: 4px;
 }
+
+/* ==== .mj-hero系(最新話を大きく見せるヒーロー。#102 第1段) ====
+   video_wayhome.htmlのみで使う。他ページへは展開しない(今回の追加は
+   .mj-hero系のみで、他issueのスタイルは混入させない)。
+   margin:0 auto等で中央寄せにはしない。左端を.mj-tableの左端
+   (マージンなしでviewport左端に揃う)と揃えるため。 */
+.mj-hero {
+	max-width: 720px;
+	margin: 0 0 8px;
+}
+
+/* Bootstrap既定のh2は本文比で大きすぎるため、.mj-page-headingと同様に
+   サイズを抑える */
+.mj-hero-heading {
+	font-size: 1rem;
+	margin: 0 0 4px;
+}
+
+.mj-hero-link {
+	display: block;
+}
+
+/* hqdefault(4:3)にフォールバックした場合、object-fit: coverで
+   上下を切って16:9の枠に収める(黒帯を見せない)。
+   heightをautoで明示しないと、img要素のheight属性(CLS対策で
+   maxres=720/hqdefault=360を指定している)がaspect-ratioより
+   優先されてしまい、幅100%のまま縦長に伸びてしまう(#102で確認)。 */
+.mj-hero-image {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+}
+
+/* ホバーは動きを伴わない変化のみ(prefers-reduced-motionの分岐を
+   不要にするため、transitionは付けない) */
+.mj-hero-link:hover .mj-hero-image {
+	opacity: 0.85;
+}
+
+.mj-hero-info {
+	font-size: 13px;
+	line-height: 1.4;
+	margin: 4px 0 0;
+}

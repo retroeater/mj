@@ -3,7 +3,7 @@
 新しい会話でこのプロジェクトを再開するときに、最初に読む文書。
 **このファイルを読めば、それまでの経緯を知らなくても作業を再開できる**ことを目的にしている。
 
-最終更新: 2026年9月12日（#110/#76クローズ、#142初回計測とGSCエクスポート保存、#103週次cron導入、スナップショットのpush手順とチャット側の確認方法を明記）
+最終更新: 2026年9月12日（#102第1段: video_wayhomeにヒーロー画像追加、lib/page.pyにcontent_beforeスロット新設。#110/#76クローズ、#142初回計測とGSCエクスポート保存、#103週次cron導入、スナップショットのpush手順とチャット側の確認方法を明記）
 
 ---
 
@@ -605,11 +605,19 @@ apex へ直接投げても同じ 400 になることを確認済みで、www リ
   - `search_boxes_before` / `search_boxes_after`(ページ固有UIの差し込み。
     `resource_logs`の名前セレクトボックス・タグリンクで使用)
   - `extra_script`(ページ固有の小さなJSをheadにもう1本追加する)
+  - `content_before`(h1直後・`#searchBoxes`手前に差し込むページ固有の
+    HTMLブロック。既定は空文字で、空文字のときはテンプレート出力が
+    バイト単位で無変化。`video_wayhome`のヒーロー画像で使用。#158の
+    lead文もこのスロットの手前にPageMeta側で足す想定、#102)
 - `build_image_cell(alt, url, image_url, css_class, width, height, fallback)`:
   画像セル共通処理。`url`が空なら`<a>`で包まず`<img>`のみを返す
   (`saikyo_mens`のXアカウントなし行で使う分岐)
 - `generate(spreadsheet_id, sheet_name, query, output_path, meta, table_config,
-  build_row_html)`: 取得〜書き出しまでの`main()`相当
+  build_row_html, formatted=False, build_content_before=None)`:
+  取得〜書き出しまでの`main()`相当。`build_content_before(raw_rows) -> str`を
+  渡すと、取得済みの全行から`content_before`用HTMLを組み立てて`render()`に渡す
+  (`video_wayhome`の最新話ヒーローが該当。取得済み行に依存しない静的な
+  `content_before`は`TableConfig`側にそのまま渡せばよく、この引数は不要)
 - 各`generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て
   関数(`build_row_html`)」だけを持てばよい
 
@@ -798,6 +806,43 @@ egressポリシーに阻まれ実データを見られない状態が一度あ�
     インラインハンドラ排除が2ページ分進んだ）
 - 旧版の`curveType: 'function'`（スプライン）は再現せず、`<polyline>`の
   直線でつないでいる。実機比較で見た目の差は気にならない範囲だった
+
+### video_wayhome.html のヒーロー画像追加（#102 第1段、2026-09-12）
+
+表形式一辺倒だった`video_wayhome.html`に、最新話のサムネイルを大きく
+見せるヒーローを追加した（第2段の背景動画自動再生は別途判断、本issueは
+第1段のみ対象）。実装は`lib/page.py`に新設した`content_before`スロット
+（上記参照）を使う。
+
+- **最新話の判定はC列（公開日）が最大の行。** シートの並び順（通常は
+  新しい順）に依存しない実装にした。同日が複数ある場合はシート順で
+  先に出てくる行を採用する（`max()`のタイブレーク仕様に依存せず、
+  明示的にループで比較している）
+- **サムネイルはビルド時に`maxresdefault.jpg`へHEADリクエストを送り、
+  存在すれば1280×720、なければ`hqdefault.jpg`(480×360)にフォールバックする**
+  （`scripts/check_image_links.py`のHEAD処理と同じ方針。標準ライブラリのみ、
+  タイムアウト・例外は握りつぶさずログに出す）。現データ(38件)はF列の
+  URLがすべて`img.youtube.com`のため、動画IDの抽出も含めこの経路のみで
+  完結する。issue本文にあった「外部依存はi.ytimg.com」は誤りで、
+  実際は既存表と同じ`img.youtube.com`のみ（#9のCSPは変更不要）
+- **`aspect-ratio`だけでは16:9に収まらない落とし穴があった。**
+  `.mj-hero-image`に`aspect-ratio: 16/9`のみ指定し`height`を明示しなかった
+  ところ、CLS対策で付けている`<img>`の`height`属性（maxres=720、hq=360）が
+  aspect-ratioより優先され、幅100%のまま縦長に伸びる不具合が起きた。
+  `height: auto`を明示して解消（style.cssにコメントを残してある）。
+  スクリーンショットだけでは気づきにくく、Chrome DevTools Protocol経由で
+  `getBoundingClientRect()`/`getComputedStyle()`を直接確認して原因を
+  特定した。同じ落とし穴を踏まないよう記録しておく
+- ヒーローのクラス名は`.mj-hero`系（`.mj-hero` / `.mj-hero-heading` /
+  `.mj-hero-link` / `.mj-hero-image` / `.mj-hero-info`）。左端は
+  `.mj-table`と同じくマージンなしで揃え、中央寄せ（`margin: 0 auto`）には
+  していない。アニメーションは入れず、ホバーは`opacity`の即時変化のみ
+  （`prefers-reduced-motion`の分岐が不要になる）
+- Lighthouseのローカル計測（`wrangler dev`、本番反映前）では、LCPが表の
+  1行目サムネイル(160×90)からヒーローのmaxresdefault(1280×720)に変わり
+  0.5〜0.7秒程度悪化したが、accessibility/best-practices/seoは変更前後で
+  同点、CLSも変化なし（想定どおりで許容範囲）。詳細は
+  `docs/lighthouse-baseline.md`の「video_wayhome.html ヒーロー画像追加」節
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
