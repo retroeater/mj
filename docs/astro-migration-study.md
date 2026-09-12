@@ -1,6 +1,19 @@
-# jpml_titles.html Astro試作 調査・設計メモ
+# jpml_titles.html Astro試作 調査・設計メモ（#20、クローズ済み）
 
-issue #20（jpml_titles.html をAstroで試作する）向けの事前調査。実装はまだ行っていない。
+> **前提が変わっている（2026-09-12 追記）。**
+> このメモは issue #20（`jpml_titles.html` をAstroで試作する）向けの事前調査として
+> 書いたが、**#20 は実装しないままクローズ済み**で、Astro 試作の対象は
+> `index.html`（トップページ）に変更された（理由は `docs/new-site-design.md`
+> §1「着手順序: 最初に作るのは index.html（トップページ）」、#101）。
+> **Astro 採用の判断を追っているのは #21。**
+>
+> 本文は `jpml_titles.html` を対象にした当時の調査のまま残してある。
+> 2章以降（Astroを入れた場合の負担・リスク・URL構造・`dist/`の扱い）は
+> 対象ページに依存しないため #21 の判断材料として引き続き有効。
+> 1章「jpml_titles.js の現状整理」だけがこのページ固有の内容で、
+> 試作対象を index.html に読み替える場合は当てはまらない。
+
+issue #20（jpml_titles.html をAstroで試作する）向けの事前調査。実装は行っていない。
 
 ## 1. jpml_titles.js の現状整理
 
