@@ -103,6 +103,25 @@ jobs:
             python3 scripts/update_sitemap_lastmod.py $CHANGED
           fi
 
+      - name: サイトマップのwell-formednessを確認
+        if: steps.regen.outputs.files != ''
+        # sitemap-pages.xmlのコメントに"--"(XMLコメントでは禁止)が混入し、
+        # GSCで「型: 不明」エラーになったことがある(#162本番検証)。
+        # generate_wayhome_episodes.pyが書き出すsitemap-wayhome.xmlも
+        # 同じ理由でここで確認する。
+        run: |
+          python3 -c "
+          import xml.etree.ElementTree as ET
+          import sys
+          for f in ['sitemap.xml', 'sitemap-pages.xml', 'sitemap-wayhome.xml']:
+              try:
+                  ET.parse(f)
+                  print(f + ': OK')
+              except ET.ParseError as e:
+                  print(f'::error::{f} が well-formed XML ではありません: {e}')
+                  sys.exit(1)
+          "
+
       - name: 変更をコミット・push
         if: steps.regen.outputs.files != ''
         run: |

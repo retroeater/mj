@@ -210,6 +210,11 @@ def write_sitemap(active_urls: dict) -> None:
         + "\n\n".join(entries)
         + "\n\n</urlset>\n"
     )
+    # sitemap-pages.xmlのコメントに"--"(XMLコメントでは禁止)が混入し、
+    # GSCで「型: 不明」エラーになったことがある(#162本番検証)。書き出す前に
+    # well-formednessを確認し、壊れたXMLをコミットしないようにする。
+    import xml.etree.ElementTree as ET
+    ET.fromstring(content)
     SITEMAP_PATH.write_text(content, encoding="utf-8")
     print(f"{SITEMAP_PATH} を更新しました。")
 
