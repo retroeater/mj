@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 22:25 JST
+生成日時: 2026-09-12 22:35 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -18,7 +18,42 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 172件（open/closed含む）。番号降順。
+件数: 173件（open/closed含む）。番号降順。
+
+---
+
+## #173 帰り道シートに個別ページ用の列を追加し、ページとVideoObjectに反映する
+
+- 状態: OPEN / 作成: 2026-09-12
+- ラベル: 分野: SEO/AIO, 対象: video_wayhome
+
+### 本文
+
+### 経緯
+
+#162（エピソード個別ページ38枚の静的生成）で追加した各ページ
+（`wayhome/<動画ID>.html`）は、本文が実質的にタイトル戦名・選手名・
+公開日のみで、JSON-LDの`VideoObject.description`とページ本文
+（`.mj-lead`含む）が同一文言になっている。thin content気味という
+懸念が#162のdocs/handover.md「#162 エピソード個別ページ38枚」節に
+記録されている。
+
+「帰り道」シート（スプレッドシート）に列を追加できれば、この懸念を
+解消できる可能性がある。
+
+### やること（提案。列の追加自体はスプレッドシート側の作業）
+
+- 説明文（各エピソード固有の紹介文。手動記入を想定）
+- 尺（動画の長さ。`VideoObject.duration`はGoogleの推奨プロパティだが
+  現状シートに秒数等の情報が無く未設定。#13にも記録あり）
+- 反映先: `scripts/generate_wayhome_episodes.py`（ページ本文・
+  meta description）、`scripts/lib/wayhome.py`の`build_video_object()`
+  （`VideoObject.description`/`duration`）
+
+### 依存・関連
+
+- #162（エピソード個別ページ38枚、この課題の発端）
+- #13（構造化データ）
 
 ---
 
@@ -3675,7 +3710,7 @@ sitemap・旧URL（`?name=`付き）からの対応表など、一度に通す�
 - #159（`?name=`付きURLからの301マッピング設計）
 - #13（構造化データ）
 
-### コメント (2件)
+### コメント (4件)
 
 **retroeater** (2026-09-12):
 
@@ -3690,6 +3725,33 @@ https://claude.ai/code/session_01Ph5dbxcvrwYgdaWbd6Jg95
 **retroeater** (2026-09-12):
 
 着手中です。指示された設計・手順に沿って進めます。
+
+https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
+
+**retroeater** (2026-09-12):
+
+シートに個別ページ用の列（説明文・尺）を追加する話は#173として別issue化した。本issueのスコープ外とする。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
+
+**retroeater** (2026-09-12):
+
+### 参考: このセッションではdocs.google.com / ryoei.pro / img.youtube.comに到達できた
+
+CLAUDE.md/docs/handover.mdには「セッション環境からは api.cloudflare.com も ryoei.pro もネットワークポリシーで遮断されている」と記載があるが、このセッション（2026-09-12）では実際に以下が到達できた（`curl`で確認）:
+
+- `https://docs.google.com` → 302（到達可）
+- `https://ryoei.pro` → 200（到達可。push後、実際に本番へ反映された変更内容もcurlで直接確認できた）
+- `https://img.youtube.com/...` → 200（到達可。`resolve_thumb()`のHEADリクエストも全て成功）
+- `https://api.cloudflare.com/client/v4/user` → 403（到達はする。認証エラーで拒否されているだけで、ネットワークポリシーでの遮断ではなさそう）
+
+このため、本issueの作業では`docs.google.com`への到達を前提にスプレッドシートを直接取得し、`scripts/generate_wayhome_episodes.py`をローカルで実行して結果を確認できた（workflow_dispatchでの間接確認は不要だった）。
+
+CLAUDE.md/handover.mdの記載自体は書き換えていない（セッションごとにネットワーク設定が違う可能性があり、今回の観測だけで「遮断されていない」と一般化してよいか判断がつかないため）。平野さんの方で状況をご確認のうえ、記載を更新するかどうか判断いただきたい。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
@@ -3751,6 +3813,18 @@ SEO/AIO施策10件の中で**10番目**（新サイトで対応）。
 ### 依存
 
 #101、#122（`?name=` の内訳スナップショット）
+
+### コメント (1件)
+
+**retroeater** (2026-09-12):
+
+#162（エピソード個別ページ38枚の静的生成）で、video_wayhome.htmlの`?name=`パラメータ受け入れを廃止した。GSCの検索結果に`video_wayhome.html?name=...`の形では出ておらず、平野さんが使う想定もないことを確認した上での判断（video_wayhome.js側の`#info_filter`初期値付けを削除。URLに`?name=`が付いていても単に無視される）。
+
+これにより、本issueが検討していた「一覧ページの`?name=`→個別ページ」パターンのうち、少なくともvideo_wayhomeは対象外になった。詳細はdocs/handover.md「URLパラメータの棚卸し（#7）」節・「#162 エピソード個別ページ38枚」節に記録。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 ---
 
