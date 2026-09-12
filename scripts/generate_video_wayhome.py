@@ -13,35 +13,31 @@ lib/page.py の content_before スロット(#102第1段で追加)は本ページ
 使わない(render()自体を使わなくなったため)。#158がh1直後にlead文を
 差し込む用途として引き続き使う想定なのでlib側はそのまま残している。
 
+#162: カードのリンク先をYouTube直リンクからエピソード個別ページ
+(wayhome/<動画ID>.html、scripts/generate_wayhome_episodes.py)に変更した。
+YouTube直リンクはヒーローの「再生」ボタンにのみ残す。最新話判定・
+サムネイル解決・VideoObject組み立てはgenerate_wayhome_episodes.pyと
+共有するため scripts/lib/wayhome.py に切り出した。
+
 使い方:
     python3 scripts/generate_video_wayhome.py
 """
-import datetime
 import json
 import pathlib
-import re
 import sys
-import urllib.error
-import urllib.request
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from lib.page import PageMeta, esc, render_content  # noqa: E402
 from lib.sheets import fetch_sheet  # noqa: E402
-
-IMG_YOUTUBE_PATTERN = re.compile(r"^https?://img\.youtube\.com/vi/([^/]+)/")
-WATCH_ID_PATTERN = re.compile(r"[?&]v=([^&]+)")
-DATE_ONLY_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-JST = datetime.timezone(datetime.timedelta(hours=9))
-MAXRES_TIMEOUT = 15  # scripts/check_image_links.py のHEADリクエストと同じ方針
-
-SPREADSHEET_ID = "1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ"
-SHEET_NAME = "帰り道"
-QUERY = 'SELECT A,B,C,D,E,F WHERE G = "Y"'
+from lib import wayhome  # noqa: E402
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
 OUTPUT_PATH = REPO_ROOT / "video_wayhome.html"
 
-SERIES_NAME = "帰り道ついていってイイっすか"
+SPREADSHEET_ID = wayhome.SPREADSHEET_ID
+SHEET_NAME = wayhome.SHEET_NAME
+QUERY = wayhome.QUERY
+SERIES_NAME = wayhome.SERIES_NAME
 
 # タイトル・descriptionは新サイト設計の「タイトルの重要性」節を踏まえ、
 # 検索した人が探しているものだと分かる形に書き換えた(#102第2段)。
@@ -54,32 +50,6 @@ META = PageMeta(
     h1=SERIES_NAME,  # render_content()では使わない(body_html側で組み立てる)。整合のため残す
     caption="",  # render_content()では使わない(表を持たないため)
 )
-
-
-def _maxres_available(video_id: str) -> bool:
-    """maxresdefault.jpg が存在するかHEADで確認する。失敗時はhqdefaultへ
-    フォールバックする(#102)。タイムアウト・例外は握りつぶさずログに出す。"""
-    url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
-    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "Mozilla/5.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=MAXRES_TIMEOUT) as res:
-            return res.status == 200
-    except Exception as e:
-        print(f"  maxresdefault確認に失敗、hqdefaultにフォールバックします: {video_id}: {e}", file=sys.stderr)
-        return False
-
-
-def _resolve_hero_thumb(image_url):
-    """最新話のヒーロー用サムネイルURL・width・heightを決める(#102第1段から移植)。
-    F列がimg.youtube.comでなければ差し替えを行わずそのまま使う。"""
-    match = IMG_YOUTUBE_PATTERN.match(image_url or "")
-    if not match:
-        # 現データ(38件)はすべてimg.youtube.comのため通常は通らない分岐。
-        return image_url, 480, 360
-    video_id = match.group(1)
-    if _maxres_available(video_id):
-        return f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg", 1280, 720
-    return f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg", 480, 360
 
 
 def build_hero_html(latest, thumb_url, width, height) -> str:
@@ -130,14 +100,31 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
     )
 
 
+def episode_url(video_id: str) -> str:
+    """エピソード個別ページの絶対URL(#162)。"""
+    return f"https://ryoei.pro/wayhome/{video_id}.html"
+
+
+def episode_href(row) -> str:
+    """一覧ページ(ルート直下)から見た個別ページへの相対href。動画IDが
+    取れない行はデータ異常のため、握りつぶさず例外にする。"""
+    interviewee, x_id, published_date, title, url, image_url = row
+    video_id = wayhome.video_id_from_watch_url(url)
+    if not video_id:
+        raise ValueError(f"視聴URLから動画IDを取り出せません: {url!r}")
+    return f"wayhome/{video_id}.html"
+
+
 def build_card_html(row) -> str:
+    """#162: カードは個別ページへリンクする(YouTube直リンクはヒーローの
+    「再生」ボタンにのみ残す)。"""
     interviewee, x_id, published_date, title, url, image_url = row
     alt = f"{title} {interviewee}" if interviewee else (title or "")
     info_value = esc(" ".join(filter(None, [published_date, title, interviewee, x_id])))
 
     return (
         f'<li class="mj-video-card" data-info="{info_value}">\n'
-        f'\t<a class="mj-video-card-link" href="{esc(url)}" target="_blank">\n'
+        f'\t<a class="mj-video-card-link" href="{esc(episode_href(row))}">\n'
         f'\t\t<img class="mj-video-card-img" alt="{esc(alt)}" loading="lazy" width="160" height="90" '
         f'src="{esc(image_url)}" data-fallback="img/125_arr_hoso.png" />\n'
         f'\t\t<span class="mj-video-card-date">{esc(published_date)}</span>\n'
@@ -148,53 +135,23 @@ def build_card_html(row) -> str:
     )
 
 
-def _to_upload_date(date_str):
-    """C列の日付文字列(YYYY-MM-DD)をuploadDate用の完全なISO 8601に変換する
-    (#13。本番のリッチリザルトテストで「日時値が無効」「タイムゾーンが無い」
-    の2件が任意の指摘として出たため)。
-
-    スプレッドシートには日付しかないため、時刻は 00:00:00 JST で近似する。
-    実際の公開時刻ではない。正確な時刻が必要になれば YouTube Data API の
-    videos.list(snippet.publishedAt)で取得できる(#62でAPIキー発行が前提)。
-
-    パースできない値は None を返す。uploadDateは呼び出し側でキーごと省略する。
-
-    uploadDateはGoogleのVideoObjectでname/thumbnailUrlと並ぶ必須プロパティ
-    であり、任意ではない(1回目の本番検証で指摘が「任意」扱いだったのは、
-    値自体は存在した上で形式が不完全だったためで、プロパティが任意だからでは
-    ない)。つまりこの分岐に入った回は、uploadDateキーの省略によって
-    VideoObjectが必須プロパティ欠落のエラーになることを承知の上で選んでいる。
-    現在38行すべてが正常にパースできており、シートの日付形式が崩れない限り
-    発動しないため実装はこのままにするが、崩れた形式が実際に入るように
-    なった場合はVideoObject自体を出さない方に倒す判断もありうる。
-    """
-    if not date_str or not DATE_ONLY_PATTERN.match(date_str):
-        return None
-    try:
-        dt = datetime.datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=JST)
-    except ValueError:
-        return None
-    return dt.isoformat()
-
-
 def build_json_ld(sorted_rows, hero_thumb_url) -> str:
     """VideoObject(最新話) + ItemList(エピソード一覧)のJSON-LDを組み立てる(#13先行実装)。
     </script>で埋め込みscriptタグが閉じてしまう事故を避けるため、シリアライズ後に
     "</" を "<\\/" へ置換する(標準的な対策)。
 
-    ItemListは本番のリッチリザルトテストの結果には現れなかった(Googleが
-    リッチリザルトの対象として扱っていないため)。itemListElement.url が
-    youtube.com(外部サイト)を指しているのが理由と見ている。#162で
-    エピソード個別ページ(自サイト内URL)ができれば、そこで初めてカルーセルの
-    候補になりうる。schema.org側の構文自体はvalidator.schema.orgでエラー・
-    警告なしを確認済みのため、削除はしない。"""
+    #162で、ItemList.itemListElement.url をYouTube直リンクから個別ページの
+    自サイトURLに変更した。ItemListが本番のリッチリザルトテストの結果に
+    現れなかったのは、urlがyoutube.com(外部サイト)を指していたためと見て
+    おり(#13)、個別ページができたことで初めてカルーセルの候補になりうる。"""
     items = []
     for i, row in enumerate(sorted_rows, start=1):
         interviewee, x_id, published_date, title, url, image_url = row
+        video_id = wayhome.video_id_from_watch_url(url)
         items.append({
             "@type": "ListItem",
             "position": i,
-            "url": url,
+            "url": episode_url(video_id) if video_id else url,
             "name": f"{title} {interviewee}".strip(),
         })
     item_list = {
@@ -204,21 +161,7 @@ def build_json_ld(sorted_rows, hero_thumb_url) -> str:
         "itemListElement": items,
     }
 
-    interviewee, x_id, published_date, title, url, image_url = sorted_rows[0]
-    watch_match = WATCH_ID_PATTERN.search(url or "")
-    video_object = {
-        "@context": "https://schema.org",
-        "@type": "VideoObject",
-        "name": f"{title} {interviewee}".strip(),
-        "description": f"日本プロ麻雀連盟「{SERIES_NAME}」。{title}を終えた{interviewee}への密着インタビュー動画です。",
-        "thumbnailUrl": [hero_thumb_url],
-        "contentUrl": url,
-    }
-    upload_date = _to_upload_date(published_date)
-    if upload_date:
-        video_object["uploadDate"] = upload_date
-    if watch_match:
-        video_object["embedUrl"] = f"https://www.youtube.com/embed/{watch_match.group(1)}"
+    video_object = wayhome.build_video_object(sorted_rows[0], hero_thumb_url)
 
     blocks = []
     for obj in (video_object, item_list):
@@ -233,13 +176,11 @@ def main():
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
     # シートの並び順に依存せず、公開日(C列)の降順に明示ソートする(#102第2段)。
-    # Pythonのsortedは安定ソートで、reverse=Trueでも同値の相対順は保たれるため、
-    # 同日が複数ある場合はシート順で先に出てくる行が結果でも先に来る
-    # (第1段のmax()ループと同じ規則を、ここではsortedの安定性で満たす)。
-    sorted_rows = sorted(raw_rows, key=lambda row: row[2] or "", reverse=True)
+    # wayhome.sorted_by_date_desc はgenerate_wayhome_episodes.py(#162)と共有。
+    sorted_rows = wayhome.sorted_by_date_desc(raw_rows)
 
     latest = sorted_rows[0]
-    hero_thumb_url, hero_width, hero_height = _resolve_hero_thumb(latest[5])
+    hero_thumb_url, hero_width, hero_height = wayhome.resolve_thumb(latest[5])
 
     hero_html = build_hero_html(latest, hero_thumb_url, hero_width, hero_height)
     cards_html = "\n".join(build_card_html(row) for row in sorted_rows)
