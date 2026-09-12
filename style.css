@@ -641,33 +641,283 @@ body:has(.mj-table) {
 	padding: 4px;
 }
 
-/* ==== .mj-hero系(最新話を大きく見せるヒーロー。#102 第1段) ====
-   video_wayhome.htmlのみで使う。他ページへは展開しない(今回の追加は
-   .mj-hero系のみで、他issueのスタイルは混入させない)。
-   margin:0 auto等で中央寄せにはしない。左端を.mj-tableの左端
-   (マージンなしでviewport左端に揃う)と揃えるため。 */
-.mj-hero {
+/* ==== video_wayhome.html 専用スタイル(#102第2段: 新サイトのパイロット) ====
+   video_wayhome.htmlのみで使う。body:has(.mj-video-page)でスコープし、
+   他26ページの見た目には一切影響しない(body:has(.mj-table)と同じ流儀)。
+   現行サイトの「作り込みすぎない」方針は、このページとこのページ専用の
+   スタイルに限り今回だけ踏み越えている(#102コメント参照)。
+   #102第1段の.mj-hero系は本ページの作り変えで使われなくなったため削除した。 */
+
+/* ---- カラートークン ----
+   背景・面・前景・弱い前景・境界・強調(+強調の上に乗る文字色)の
+   7トークンで開始する(新サイトへそのまま持ち越す前提の粒度・命名)。
+   ライトを既定、prefers-color-schemeでダークを上書きする。
+   Bootstrap 5.3のdata-bs-theme機構は採用しなかった(検証結果は
+   docs/new-site-design.md「パイロット: video_wayhome」参照)。 */
+body:has(.mj-video-page) {
+	--mj-v-bg: #ffffff;
+	--mj-v-surface: #f5f5f5;
+	--mj-v-fg: #1a1a1a;
+	--mj-v-fg-muted: #5f6368;
+	--mj-v-border: #dcdcdc;
+	--mj-v-accent: #2f5d78;
+	--mj-v-accent-fg: #ffffff;
+	background-color: var(--mj-v-bg);
+	color: var(--mj-v-fg);
+}
+
+@media (prefers-color-scheme: dark) {
+	body:has(.mj-video-page) {
+		--mj-v-bg: #121212;
+		--mj-v-surface: #1e1e1e;
+		--mj-v-fg: #f5f5f5;
+		--mj-v-fg-muted: #a8adb3;
+		--mj-v-border: #3a3a3a;
+		--mj-v-accent: #7fb3d5;
+		--mj-v-accent-fg: #0d1b24;
+	}
+}
+
+/* .mj-video-pageはbody:has()のスコープ用マーカーで、それ自体は幅を
+   制限しない(ヒーローは画面幅いっぱいに出す必要があるため)。
+   本文側の中央寄せ・最大幅は.mj-video-episodes側で個別に持たせる。 */
+.mj-video-page {
+	padding: 0 0 32px;
+}
+
+/* #searchBoxes/.mj-filter-inputは全ページ共通ルールで白背景固定のため、
+   このページのダークモードでは文字色(bodyから継承)だけ明るくなり
+   白背景に白文字で読めなくなる。このページに限りオーバーライドする
+   (他26ページの#searchBoxesは無変更)。 */
+body:has(.mj-video-page) #searchBoxes {
+	background-color: var(--mj-v-surface);
+	color: var(--mj-v-fg);
+}
+
+body:has(.mj-video-page) .mj-filter-input {
+	background-color: var(--mj-v-bg);
+	color: var(--mj-v-fg);
+	border-color: var(--mj-v-border);
+}
+
+.mj-video-page a {
+	color: var(--mj-v-accent);
+}
+
+/* ---- ヒーロー ---- */
+.mj-video-hero {
+	position: relative;
+	overflow: hidden;
+	height: clamp(420px, 72vh, 640px);
+	display: flex;
+	align-items: flex-end;
+}
+
+.mj-video-hero-bg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* hqdefault(4:3)にフォールバックした回が最新話でも、object-fit: coverで
+   ヒーローの高さいっぱいに敷き詰められるため破綻しない。 */
+.mj-video-hero-scrim {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+/* ヒーロー内の文字は任意の写真の上に乗るため、ページのカラートークンとは
+   独立して常に明色で固定する(トークンの二重管理ではなく、写真の上での
+   可読性確保という別の要請。docs/new-site-design.md参照)。 */
+.mj-video-hero-content {
+	position: relative;
+	z-index: 1;
+	width: 100%;
 	max-width: 720px;
+	padding: clamp(16px, 5vw, 48px);
+	color: #ffffff;
+}
+
+.mj-video-series-name {
+	font-size: 0.85rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
 	margin: 0 0 8px;
+	opacity: 0.85;
 }
 
-/* Bootstrap既定のh2は本文比で大きすぎるため、.mj-page-headingと同様に
-   サイズを抑える */
-.mj-hero-heading {
-	font-size: 1rem;
-	margin: 0 0 4px;
+.mj-video-hero-player {
+	font-size: clamp(1.75rem, 6vw, 3rem);
+	font-weight: 700;
+	margin: 0 0 8px;
+	line-height: 1.15;
 }
 
-.mj-hero-link {
-	display: block;
+.mj-video-hero-meta {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.9rem;
+	margin: 0 0 12px;
+	flex-wrap: wrap;
 }
 
-/* hqdefault(4:3)にフォールバックした場合、object-fit: coverで
-   上下を切って16:9の枠に収める(黒帯を見せない)。
-   heightをautoで明示しないと、img要素のheight属性(CLS対策で
-   maxres=720/hqdefault=360を指定している)がaspect-ratioより
-   優先されてしまい、幅100%のまま縦長に伸びてしまう(#102で確認)。 */
-.mj-hero-image {
+.mj-video-hero-badge {
+	background-color: #ffffff;
+	color: #1a1a1a;
+	font-size: 0.75rem;
+	font-weight: 700;
+	padding: 2px 8px;
+	border-radius: 999px;
+}
+
+.mj-video-hero-desc {
+	font-size: 0.95rem;
+	line-height: 1.5;
+	margin: 0 0 16px;
+	max-width: 56ch;
+}
+
+.mj-video-hero-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.mj-video-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	min-height: 44px; /* タップ領域確保(44x44px) */
+	padding: 0 16px;
+	border: 1px solid rgba(255, 255, 255, 0.7);
+	border-radius: 6px;
+	background-color: rgba(0, 0, 0, 0.3);
+	color: #ffffff;
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.mj-video-btn-primary {
+	background-color: #ffffff;
+	color: #1a1a1a;
+	border-color: #ffffff;
+}
+
+/* ホバー・フォーカスとも動きを伴わない変化のみ(prefers-reduced-motionの
+   分岐が不要になるよう、transitionを付けない方針を踏襲) */
+.mj-video-btn:hover {
+	background-color: rgba(255, 255, 255, 0.15);
+}
+
+.mj-video-btn-primary:hover {
+	background-color: rgba(255, 255, 255, 0.85);
+}
+
+.mj-video-btn:focus-visible {
+	outline: 2px solid #ffffff;
+	outline-offset: 2px;
+}
+
+/* ---- エピソード一覧(横スクロール) ---- */
+.mj-video-episodes {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 24px clamp(16px, 5vw, 48px) 0;
+}
+
+.mj-video-episodes-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.mj-video-episodes-heading {
+	font-size: 1.1rem;
+	font-weight: 700;
+	margin: 0;
+}
+
+.mj-video-episodes-controls {
+	display: flex;
+	gap: 4px;
+}
+
+.mj-video-scroll-btn {
+	min-width: 44px; /* タップ領域確保(44x44px) */
+	min-height: 44px;
+	border: 1px solid var(--mj-v-border);
+	border-radius: 6px;
+	background-color: var(--mj-v-surface);
+	color: var(--mj-v-fg);
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.mj-video-scroll-btn:hover {
+	background-color: var(--mj-v-border);
+}
+
+.mj-video-scroll-btn:focus-visible,
+.mj-video-track:focus-visible {
+	outline: 2px solid var(--mj-v-accent);
+	outline-offset: 2px;
+}
+
+/* スクロールバーはdisplay:noneで隠さない(操作手段として残す)。
+   scroll-snap-type: proximityはキーボード操作(左右矢印キー)を妨げない。 */
+.mj-video-track {
+	display: flex;
+	gap: 12px;
+	overflow-x: auto;
+	scroll-snap-type: x proximity;
+	list-style: none;
+	margin: 0;
+	padding: 4px 4px 16px;
+}
+
+.mj-video-card {
+	flex: 0 0 auto;
+	width: 200px;
+	scroll-snap-align: start;
+	border: 1px solid var(--mj-v-border);
+	border-radius: 8px;
+	overflow: hidden;
+	background-color: var(--mj-v-surface);
+}
+
+/* Bootstrap Rebootの[hidden]{display:none!important}に依存せず、
+   flexアイテムでも確実に非表示になるようにする(.mj-pager[hidden]と同じ理由) */
+.mj-video-card[hidden] {
+	display: none;
+}
+
+.mj-video-card-link {
+	display: flex;
+	flex-direction: column;
+	color: var(--mj-v-fg);
+	text-decoration: none;
+	height: 100%;
+}
+
+.mj-video-card-link:hover {
+	background-color: var(--mj-v-border);
+}
+
+.mj-video-card-link:focus-visible {
+	outline: 2px solid var(--mj-v-accent);
+	outline-offset: -2px;
+}
+
+.mj-video-card-img {
 	display: block;
 	width: 100%;
 	height: auto;
@@ -675,14 +925,20 @@ body:has(.mj-table) {
 	object-fit: cover;
 }
 
-/* ホバーは動きを伴わない変化のみ(prefers-reduced-motionの分岐を
-   不要にするため、transitionは付けない) */
-.mj-hero-link:hover .mj-hero-image {
-	opacity: 0.85;
+.mj-video-card-date {
+	font-size: 0.75rem;
+	color: var(--mj-v-fg-muted);
+	padding: 8px 8px 0;
 }
 
-.mj-hero-info {
-	font-size: 13px;
-	line-height: 1.4;
-	margin: 4px 0 0;
+.mj-video-card-title {
+	font-size: 0.85rem;
+	font-weight: 600;
+	padding: 2px 8px 0;
+}
+
+.mj-video-card-name {
+	font-size: 0.8rem;
+	color: var(--mj-v-fg-muted);
+	padding: 2px 8px 10px;
 }

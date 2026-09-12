@@ -34,17 +34,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 選手データ・成績データはすべてGoogleスプレッドシートが正本
 - 16ページがビルド時生成に移行済み（正は`python3 scripts/regenerate.py --list`）:
   `jpml_pros.html`（選手データベース、1000名超・15列・列ヘッダソートあり）、
-  型A・2列(一部3列)の10ページ（`jpml_titles.html` / `jpml_test.html` /
-  `resource_logs.html` / `video_live.html` / `video_wayhome.html` /
+  型A・2列(一部3列)の9ページ（`jpml_titles.html` / `jpml_test.html` /
+  `resource_logs.html` / `video_live.html` /
   `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` /
   `video_mtsuku.html`〈3列〉 / `saikyo_results.html`）、型A'・多列テキスト
   （画像列なし）の2ページ（`rh_results.html` / `rh_results_detail.html`）、
   型D・静的SVG（表を持たない）の1ページ（`resource_efficiency.html`）、
   型C・積み上げ棒+選手1名の折れ線の2ページ（`houou_leagues.html` /
-  `ouka_leagues.html`）
-  - `jpml_pros.html`は独自の`scripts/generate_jpml_pros.py`のまま。型A/A'の13ページは`scripts/lib/page.py`（HTMLテンプレート・行組み立て・画像セル・エスケープの共通処理）を使い、各`scripts/generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て関数」だけを持つ（#7の共通化）。型C・型Dは表を持たないため`lib/page.py`の`render_content()`を使う。いずれも`scripts/lib/sheets.py`経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query`と同じSELECT構文）を叩く
-  - `lib/page.py`はh1直後・`#searchBoxes`手前にページ固有のHTMLを差し込む`content_before`スロットを持つ（#102）。`video_wayhome.html`はこれを使い、最新話のサムネイルをヒーロー画像として表の上に大きく配置している（取得済みの行データから`generate()`の`build_content_before`引数経由で組み立てる）。他ページは空文字のまま影響を受けない
-  - 生成後の絞り込み・並び替え・ページ送りはページ側の軽量JSに委譲する。`jpml_pros.js`は絞り込みと並び替え（ページ送りなし・全行表示）専用。型A・型A'の12ページは共通の`table.js`（絞り込み・ページ送り、並び替えなし）を使う。設定は`<table>`要素のdata属性（`data-page-size` / `data-name-mode` / `data-filter-param`）で渡し、属性省略時はページ送りなし・完全一致フィルターなしになる。ページ固有のUI（`resource_logs.html`の名前セレクトボックス等）はtable.jsとは別の小さなJSで補う
+  `ouka_leagues.html`）、独自の全画面ヒーロー+横スクロールカード列の
+  1ページ（`video_wayhome.html`。#102第2段で型Aから離脱、新サイトの
+  先取りパイロット。詳細はdocs/new-site-design.md「12. パイロット:
+  video_wayhome」）
+  - `jpml_pros.html`は独自の`scripts/generate_jpml_pros.py`のまま。型A/A'の11ページは`scripts/lib/page.py`（HTMLテンプレート・行組み立て・画像セル・エスケープの共通処理）を使い、各`scripts/generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て関数」だけを持つ（#7の共通化）。型C・型D・`video_wayhome.html`は表を持たないため`lib/page.py`の`render_content()`を使う。いずれも`scripts/lib/sheets.py`経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query`と同じSELECT構文）を叩く
+  - `lib/page.py`はh1直後・`#searchBoxes`手前にページ固有のHTMLを差し込む`content_before`スロット（#102第1段で追加）を持つが、現在使っているページは無い（`video_wayhome.html`は#102第2段で`TableConfig`/`render()`自体から離脱したため対象外になった）。`#158`のlead文がこのスロットを使う想定でlibにはそのまま残している
+  - 生成後の絞り込み・並び替え・ページ送りはページ側の軽量JSに委譲する。`jpml_pros.js`は絞り込みと並び替え（ページ送りなし・全行表示）専用。型A・型A'の11ページは共通の`table.js`（絞り込み・ページ送り、並び替えなし）を使う。設定は`<table>`要素のdata属性（`data-page-size` / `data-name-mode` / `data-filter-param`）で渡し、属性省略時はページ送りなし・完全一致フィルターなしになる。ページ固有のUI（`resource_logs.html`の名前セレクトボックス等）はtable.jsとは別の小さなJSで補う。`video_wayhome.html`は`.mj-table`を持たないため`table.js`は読み込まず、専用の`video_wayhome.js`が絞り込み・画像フォールバック・共有ボタン等を担う（#102第2段）
   - 型Cの2ページは`leagues.js`（共通JS）を使う。積み上げ棒と既定選手の折れ線は静的SVGに焼き込み済みで、`leagues.js`は`?name=`に応じて選手1名分の`<polyline>`と凡例ラベルだけを差し替える（選手ごとの折れ線データは`houou_leagues_data.json`/`ouka_leagues_data.json`をfetchして取得）。選手選択リストは「プロ」シートのY列="Y"かつ鳳凰最高/桜花最高列に値がある選手が対象（#127/#133）
   - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/**` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。手動実行（workflow_dispatch）も可能。`table.js`・`leagues.js`はルート直下の`*.js`に該当するためpushでワークフロー自体は起動するが、どのページ名にも一致せず対象0件で終わる（HTMLに焼き込まれないため実害なし）
   - 型A（表とフィルターのみ）の他ページへ展開するための共通クラスを `style.css` に用意している: `.mj-table`（表の見た目）、`.mj-table-2col`/`.mj-table-3col`（画像列固定幅＋残り列の折り返し）、`.mj-table-auto`（画像列を持たない型A'向け、列幅は自動計算）、`.mj-pager`（ページ送りUI）、`.mj-left`（列ごとの左寄せ）、`.mj-plain`（リンクの下線を消す）。列幅・列固定・行高（`contain-intrinsic-size`）などページ固有の構造はIDセレクタ側に残す

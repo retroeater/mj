@@ -3,7 +3,7 @@
 新しい会話でこのプロジェクトを再開するときに、最初に読む文書。
 **このファイルを読めば、それまでの経緯を知らなくても作業を再開できる**ことを目的にしている。
 
-最終更新: 2026年9月12日（#102第1段: video_wayhomeにヒーロー画像追加、lib/page.pyにcontent_beforeスロット新設。#110/#76クローズ、#142初回計測とGSCエクスポート保存、#103週次cron導入、スナップショットのpush手順とチャット側の確認方法を明記）
+最終更新: 2026年9月12日（#102第2段: video_wayhomeを新サイトの先取りパイロットとして全面リデザイン。判断材料はdocs/new-site-design.md「12. パイロット: video_wayhome」に集約。#110/#76クローズ、#142初回計測とGSCエクスポート保存、#103週次cron導入、スナップショットのpush手順とチャット側の確認方法を明記）
 
 ---
 
@@ -111,10 +111,11 @@ HTMLは27ページ。大きく3系統に分かれる。
 |---|---|---|
 | `index.html` | 1 | Webサイトテンプレート（iPortfolio）由来。`index.css` と11個のvendorライブラリを使う |
 | ビルド時生成（型A・15列） | 1 | `jpml_pros.html`。独自の`generate_jpml_pros.py`のまま |
-| ビルド時生成（型A・2列/3列） | 10 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_wayhome.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列) / `saikyo_results.html`。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
+| ビルド時生成（型A・2列/3列） | 9 | `jpml_titles.html` / `jpml_test.html` / `resource_logs.html` / `video_live.html` / `video_en.html` / `rh_paifu.html` / `saikyo_mens.html` / `video_mtsuku.html`(3列) / `saikyo_results.html`。`scripts/lib/page.py` + 共有JS `table.js` を使う（#7） |
 | ビルド時生成（型A'・多列テキスト） | 2 | `rh_results.html` / `rh_results_detail.html`。画像列を持たないため`.mj-table-auto`を使う（#7、完了） |
 | ビルド時生成（型D・静的SVG） | 1 | `resource_efficiency.html`。表を持たないため`render_content()`を使う。外部JS・外部ドメインへの依存が一切ない（#7/#128、完了） |
 | ビルド時生成（型C・積み上げ棒+折れ線） | 2 | `houou_leagues.html` / `ouka_leagues.html`。積み上げ棒と既定選手の折れ線は静的SVG、`?name=`時の折れ線差し替えのみ`leagues.js`が担う（#7/#127、完了） |
+| ビルド時生成（独自: 全画面ヒーロー+横スクロールカード列） | 1 | `video_wayhome.html`。#102第2段で型Aから離脱し、新サイトの先取りパイロットとして全面リデザイン（表を廃止）。`render_content()`+専用JS`video_wayhome.js`（`table.js`は使わない）。詳細は下記「video_wayhome の全面リデザイン」節とdocs/new-site-design.md「12. パイロット: video_wayhome」 |
 | Google Charts依存 | **6** | ブラウザから直接スプレッドシートを読む。#7の対象。型B3・ランキング系A3 |
 | 静的なページ | 4 | `404.html` / `jpml_links.html` / `resource_dictionary.html` / `rh_links.html` |
 
@@ -843,6 +844,55 @@ egressポリシーに阻まれ実データを見られない状態が一度あ�
   0.5〜0.7秒程度悪化したが、accessibility/best-practices/seoは変更前後で
   同点、CLSも変化なし（想定どおりで許容範囲）。詳細は
   `docs/lighthouse-baseline.md`の「video_wayhome.html ヒーロー画像追加」節
+
+**この節の`.mj-hero`系クラス・表ベースの構成は、下記「video_wayhome の
+全面リデザイン」（#102第2段、同日）で置き換えられ現存しない。** 最新話
+判定・サムネイルHEAD確認の仕組み自体は第2段にそのまま引き継いでいる。
+
+### video_wayhome の全面リデザイン（#102 第2段、新サイトのパイロット、2026-09-12）
+
+video_wayhome.html を「新サイト（docs/new-site-design.md）の先取り
+パイロット」として、表形式をやめ全画面ヒーロー+横スクロールの
+エピソード列に作り変えた。全27ページの中で最も影響が小さいページという
+判断。現行サイトの「作り込みすぎない」方針は、このページとこのページ
+専用のCSS/JSに限り今回だけ踏み越えている。詳細な判断材料（カラー
+トークン、Bootstrap 5.3ダークモードの検証結果、トーンについて実装して
+分かったこと、共有ボタンの方針、構造化データの検証結果、新サイトへ
+持ち越せる部分/捨てる部分）は**docs/new-site-design.md「12. パイロット:
+video_wayhome」に集約した**（このファイルには実装の要点のみ記録する）。
+
+- **`scripts/generate_video_wayhome.py`は`TableConfig`/`render()`を
+  やめ、`render_content()`（型D等と同じ）に切り替えた。** `content_before`
+  スロット（第1段で追加）はこのページではもう使わない。`#158`が
+  引き続き使う想定でlib側はそのまま残している
+- **行の並びはPython側で公開日(C列)の降順に明示ソートする**
+  （`sorted(raw_rows, key=lambda row: row[2] or "", reverse=True)`）。
+  シートの並び順に依存しない。Pythonの`sorted`は安定ソートで
+  `reverse=True`でも同値の相対順は保たれるため、同日が複数ある場合は
+  シート順で先に出てくる行が結果でも先に来る（第1段の`max()`ループと
+  同じ規則を、ここでは安定ソートの性質で満たしている）
+- **`table.js`を読まないページでは`data-fallback`の画像フォールバック
+  処理も止まる。** `table.js`は`error`イベントのキャプチャフェーズ
+  ハンドラで全画像のフォールバックをまとめて処理しているが、この
+  ハンドラは`.mj-table`が無いページには効かない（`table.js`自体が
+  何もしないため）。`video_wayhome.js`に同じ処理を移植して対応した。
+  **表を持たない新しいページを作る際は、`table.js`前提の仕組み
+  （画像フォールバック・`?name=`初期値・`--navbar-height`実測）を
+  個別に確認し、必要なら移植すること。忘れると気づきにくい形で
+  壊れる**（今回はCDP経由で意図的に壊れた画像URLを読み込ませて
+  フォールバックが効くことを実地で確認した）
+- **`<main class="mj-video-page">`でページ全体を包み、Lighthouse
+  accessibilityの`landmark-one-main`指摘を解消した。** `navbar.js`を
+  触らずに済む範囲でこのページ限りの改善として反映。残る指摘は
+  `navbar.js`の検索アイコンリンクの`link-name`（全ページ共通の既知の
+  問題、navbar.jsは触らない方針のため未解決のまま）
+- JSON-LD（`VideoObject`+`ItemList`）を`extra_head`経由で出力（#13先行
+  実装）。値に`</`を含みうるため`json.dumps()`後に`"</"` → `"<\\/"`へ
+  置換している
+- Lighthouseのローカル計測は第1段からほぼ横ばい（performance
+  0.91〜0.94、LCP 3.0〜3.2s）だが、**accessibilityが0.89→0.94〜0.96に
+  改善、CLSが0.005→0.000に改善**（上記landmark修正とページ送り撤廃が
+  効いている）。詳細は`docs/lighthouse-baseline.md`
 
 ### ランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の性質
 
