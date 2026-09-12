@@ -717,8 +717,21 @@ body:has(.mj-video-page) .mj-filter-input {
 	border-color: var(--mj-v-border);
 }
 
-.mj-video-page a {
+/* ボタン(.mj-video-btn系)は自前で色を持つので除外する。除外しないと
+   この規則(詳細度0,1,1)が.mj-video-btn-primary(0,1,0)に勝ってしまい、
+   白背景のボタンに強調色の文字が乗って4.5:1を割る(濃色固定にして
+   Lighthouseのcolor-contrastで顕在化した。それまでは計測が常にライト側で
+   走っていたため気づけなかった)。 */
+.mj-video-page a:not(.mj-video-btn) {
 	color: var(--mj-v-accent);
+}
+
+/* #158のリード文(.mj-lead)は全ページ共通ルールで明色前提(#555555・境界
+   #e5e5e5)のため、濃色固定のこのページではトークンに合わせて上書きする
+   (他26ページの.mj-leadは無変更)。 */
+body:has(.mj-video-page) .mj-lead {
+	border-top-color: var(--mj-v-border);
+	color: var(--mj-v-fg-muted);
 }
 
 /* ---- ヒーロー ---- */

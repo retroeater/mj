@@ -439,3 +439,28 @@ docs/new-site-design.md「パイロット: video_wayhome」参照)。この計�
   スコアが振れることを確認済み、上記第1段の節参照)の範囲に収まる
 - 本番反映後、production環境での再計測を推奨する(このセクションの数値も
   ローカル限定)
+
+## video_wayhome.html 濃色固定（#102第2段の後始末、2026-09-12）
+
+`@media (prefers-color-scheme: dark)` をやめ、ダーク側の値を既定に固定した
+（決定の経緯は `docs/new-site-design.md` §2「トーン」/ §12「パイロット:
+video_wayhome」）。計測はローカル静的サーバー（`python3 -m http.server`）に
+対する lighthouse CLI（mobile 既定エミュレーション、`--only-categories=
+accessibility,performance`）。
+
+| 状態 | accessibility | performance | 失敗している a11y 監査 |
+|---|---|---|---|
+| 固定化直後（未修正） | 0.92 | 0.95 | `color-contrast`, `link-name` |
+| コントラスト2件を修正後 | **0.96** | 0.91 | `link-name` のみ |
+
+- **`color-contrast` はこの計測で初めて出た指摘。** Lighthouse（headless
+  Chrome）は `prefers-color-scheme` を指定せず常にライト側で走るため、
+  濃色固定にするまでこのページのダーク配色は一度も計測されていなかった。
+  検出された2件は (1) `.mj-video-page a` の詳細度が `.mj-video-btn-primary` に
+  勝ち、白背景のボタン文字が accent `#7fb3d5` になっていた（2.26:1）、
+  (2) `.mj-lead`（#158）が明色前提の `#555555` のままだった（2.51:1）。
+  いずれも修正済み（17.4:1 / 8.29:1）。詳細は new-site-design.md §12
+- performance の 0.95 → 0.91 はこのサンドボックスの計測ノイズの範囲
+  （既知。第1段の節を参照）。色の固定のみで構造は変えていない
+- **残る指摘は `link-name`（navbar.js の検索アイコン、全ページ共通）のみ。**
+  → #163 で対応（次節）
