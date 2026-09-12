@@ -90,10 +90,13 @@ jobs:
           fi
           echo "files=$(cat /tmp/targets.txt)" >> "$GITHUB_OUTPUT"
 
-      - name: sitemap.xmlのlastmodを更新
+      - name: サイトマップのlastmodを更新
         if: steps.regen.outputs.files != ''
         run: |
-          # git add する前に、再生成対象のうち実際に差分が出たファイルだけを調べる
+          # git add する前に、再生成対象のうち実際に差分が出たファイルだけを調べる。
+          # wayhome_episodes(#162)は対象が"wayhome/"(ディレクトリ)になり、
+          # 削除されたページも --name-only に含まれる(存在しないURLは
+          # update_sitemap_lastmod.py側で無視される)。
           CHANGED=$(git diff --name-only -- ${{ steps.regen.outputs.files }})
           echo "実際に差分が出たファイル: $CHANGED"
           if [ -n "$CHANGED" ]; then
@@ -105,7 +108,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ${{ steps.regen.outputs.files }} sitemap.xml
+          # -A --で削除も拾う(wayhome_episodesはシートから消えた動画IDの
+          # ページを削除するため、#162)。sitemap*.xmlはsitemap.xml(インデックス)・
+          # sitemap-pages.xml・sitemap-wayhome.xmlをまとめて拾う。
+          git add -A -- ${{ steps.regen.outputs.files }} sitemap*.xml
           git diff --cached --quiet && echo "変更なし" && exit 0
           git commit -m "chore: regenerate ${{ steps.regen.outputs.files }} via GitHub Actions"
           git push origin cloudflare

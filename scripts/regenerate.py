@@ -20,6 +20,15 @@ REPO_ROOT = pathlib.Path(__file__).parent.parent
 SCRIPTS_DIR = REPO_ROOT / "scripts"
 SHARED = "scripts/lib/"   # ここが変わったら全ページを作り直す
 
+# 出力が単一の"<ページ名>.html"にならないページの例外テーブル(#162)。
+# wayhome_episodes(scripts/generate_wayhome_episodes.py)は38枚のHTMLと
+# sitemap-wayhome.xmlをwayhome/配下・リポジトリ直下に書き出すため、
+# git add/git diffの対象パスとして"wayhome/"を返す。sitemap-wayhome.xmlは
+# ワークフロー側の`sitemap*.xml`glob(regenerate-page.yml)で別途拾われる。
+OUTPUT_OVERRIDES = {
+    "wayhome_episodes": "wayhome/",
+}
+
 
 def known_pages():
     """scripts/generate_<名前>.py があるページの一覧"""
@@ -97,7 +106,7 @@ def main():
             return result.returncode
 
     # コミット対象をワークフローに伝える
-    print(" ".join(f"{p}.html" for p in targets))
+    print(" ".join(OUTPUT_OVERRIDES.get(p, f"{p}.html") for p in targets))
     return 0
 
 

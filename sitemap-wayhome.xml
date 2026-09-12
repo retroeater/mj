@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  「帰り道」エピソード個別ページ(#162)のサイトマップ。
+  scripts/generate_wayhome_episodes.py が書き出す(手動編集しないこと)。
+  lastmodは新規追加時のみ当日日付を入れ、既存分は
+  scripts/update_sitemap_lastmod.py が実際に差分の出たページだけ更新する。
+  sitemap.xml(サイトマップインデックス)から参照される。
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/UtxpVoWy2GY.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/m8OoOeMOWNc.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/0OPca1Bl5xk.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/kf3RaFtz8o8.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/lrIjJzddSGQ.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/OoK3O2BCm8M.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/0R4-myf-D2g.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/atD2e-NgnKw.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/fQnv5PivP30.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/vVin6qbFY8s.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/6yiTh0oGwjo.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/d8N1SwtQtZU.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/uzYFufi6liQ.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/76OsWTSSnso.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/S4m-_ZTP52I.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/8w7SW0XgX64.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/AvqcVlrwU4g.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/MpdXIrcVPlo.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/PPtNFoOwtyc.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/dxkS1JZW-U0.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/o28svvuVI0M.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/WztsfHBisUM.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/9drvti0iySM.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/E_R3Kj0cuno.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/yVTZqwKpLBY.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/T286EG9Kv-4.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/lPYh4hrZe50.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/scmXoh6zpKY.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/GjzVKdJ5jSM.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/FrZWVou_Z6g.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/e0BTqZbxB_A.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/xLdmYKsyd_4.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/neHYj-A9Z7c.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/WDRBtJJME7I.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/RVXat9zRycQ.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/tXbbwFA-bjg.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/NzbQhNLRS-c.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+	<url>
+		<loc>https://ryoei.pro/wayhome/mj3hZ_udzKM.html</loc>
+		<lastmod>2026-09-12</lastmod>
+	</url>
+
+</urlset>
