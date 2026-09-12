@@ -16,6 +16,7 @@ lib/page.py の content_before スロット(#102第1段で追加)は本ページ
 使い方:
     python3 scripts/generate_video_wayhome.py
 """
+import datetime
 import json
 import pathlib
 import re
@@ -29,6 +30,8 @@ from lib.sheets import fetch_sheet  # noqa: E402
 
 IMG_YOUTUBE_PATTERN = re.compile(r"^https?://img\.youtube\.com/vi/([^/]+)/")
 WATCH_ID_PATTERN = re.compile(r"[?&]v=([^&]+)")
+DATE_ONLY_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+JST = datetime.timezone(datetime.timedelta(hours=9))
 MAXRES_TIMEOUT = 15  # scripts/check_image_links.py のHEADリクエストと同じ方針
 
 SPREADSHEET_ID = "1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ"
@@ -145,10 +148,40 @@ def build_card_html(row) -> str:
     )
 
 
+def _to_upload_date(date_str):
+    """C列の日付文字列(YYYY-MM-DD)をuploadDate用の完全なISO 8601に変換する
+    (#13。本番のリッチリザルトテストで「日時値が無効」「タイムゾーンが無い」
+    の2件が任意の指摘として出たため)。
+
+    スプレッドシートには日付しかないため、時刻は 00:00:00 JST で近似する。
+    実際の公開時刻ではない。正確な時刻が必要になれば YouTube Data API の
+    videos.list(snippet.publishedAt)で取得できる(#62でAPIキー発行が前提)。
+
+    パースできない値は None を返す。uploadDateは呼び出し側でキーごと省略する
+    (不正な文字列を出力するより安全)。VideoObject自体は出す: uploadDateは
+    必須プロパティではなく、本番の検証でも値が不正な場合ですら「任意」の
+    指摘に留まっており、欠落だけを理由にVideoObject全体を諦める理由がない。
+    """
+    if not date_str or not DATE_ONLY_PATTERN.match(date_str):
+        return None
+    try:
+        dt = datetime.datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=JST)
+    except ValueError:
+        return None
+    return dt.isoformat()
+
+
 def build_json_ld(sorted_rows, hero_thumb_url) -> str:
     """VideoObject(最新話) + ItemList(エピソード一覧)のJSON-LDを組み立てる(#13先行実装)。
     </script>で埋め込みscriptタグが閉じてしまう事故を避けるため、シリアライズ後に
-    "</" を "<\\/" へ置換する(標準的な対策)。"""
+    "</" を "<\\/" へ置換する(標準的な対策)。
+
+    ItemListは本番のリッチリザルトテストの結果には現れなかった(Googleが
+    リッチリザルトの対象として扱っていないため)。itemListElement.url が
+    youtube.com(外部サイト)を指しているのが理由と見ている。#162で
+    エピソード個別ページ(自サイト内URL)ができれば、そこで初めてカルーセルの
+    候補になりうる。schema.org側の構文自体はvalidator.schema.orgでエラー・
+    警告なしを確認済みのため、削除はしない。"""
     items = []
     for i, row in enumerate(sorted_rows, start=1):
         interviewee, x_id, published_date, title, url, image_url = row
@@ -173,9 +206,11 @@ def build_json_ld(sorted_rows, hero_thumb_url) -> str:
         "name": f"{title} {interviewee}".strip(),
         "description": f"日本プロ麻雀連盟「{SERIES_NAME}」。{title}を終えた{interviewee}への密着インタビュー動画です。",
         "thumbnailUrl": [hero_thumb_url],
-        "uploadDate": published_date,
         "contentUrl": url,
     }
+    upload_date = _to_upload_date(published_date)
+    if upload_date:
+        video_object["uploadDate"] = upload_date
     if watch_match:
         video_object["embedUrl"] = f"https://www.youtube.com/embed/{watch_match.group(1)}"
 

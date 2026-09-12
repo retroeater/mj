@@ -26,6 +26,11 @@ def fetch_sheet(spreadsheet_id: str, sheet_name: str, query: str, formatted: boo
     (_normalize()がfloatの"6010.0"を防いでいるのと同じ問題)。
     formatted=Trueを使うページでは、URLやHTML属性の組み立てに使う列が
     含まれていないことを必ず確認すること。
+
+    文字列セルは _normalize() が前後の空白を除去する(#13)。スプレッドシート
+    入力時の余分な空白(タイトル列の末尾スペース等)がJSON-LDやHTML表示に
+    そのまま混入する事故があったため、個別のページ側で対処するのではなく
+    取得処理の入口で一括して落とす。
     """
     encoded_query = urllib.parse.quote(query)
     encoded_sheet = urllib.parse.quote(sheet_name)
@@ -64,7 +69,7 @@ def _extract_cell(cell, formatted):
     if not cell:
         return None
     if formatted and "f" in cell:
-        return cell["f"]
+        return _normalize(cell["f"])
     return _normalize(cell["v"])
 
 
@@ -75,7 +80,13 @@ def _normalize(value):
 
     整数値のfloatはintに変換して、スプレッドシート上の見た目に合わせる。
     小数部を持つ値(3.5など)は意味があるためそのまま残す。
+
+    文字列セルは前後の空白を除去する(#13)。入力時に紛れ込んだ末尾スペース
+    (例:「第11期桜蕾戦 」)がそのまま連結・出力され、JSON-LDの name が
+    二重スペースになったり ?name= の完全一致が効かなくなったりしていた。
     """
     if isinstance(value, float) and value.is_integer():
         return int(value)
+    if isinstance(value, str):
+        return value.strip()
     return value
