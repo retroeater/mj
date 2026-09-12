@@ -322,6 +322,56 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ---
 
+## 4-x. 本番反映（デプロイ）の仕組み（#169、2026-09-12）
+
+**本番反映は `.github/workflows/deploy.yml` が行う。** それまで手順が
+どこにも書かれておらず、平野さんの手元での `npx wrangler deploy` だけが
+経路だった。
+
+- `cloudflare` への push で自動デプロイ。`workflow_dispatch` で手動実行も可能
+  （入力 `check_only` を true にすると、デプロイせず `wrangler whoami` だけ
+  実行してトークンの疎通を確認できる。本番には触らない）
+- 認証はリポジトリ Secret の `CLOUDFLARE_API_TOKEN`（Cloudflare の
+  テンプレート「Edit Cloudflare Workers」で発行）。トークンはリポジトリにも
+  ログにも現れない。**Secret が未登録なら明示的に失敗する。** 黙って成功
+  させると「反映したつもりで未反映」に気づけないため、意図的にそうしている
+- 第三者製の action は使わず `npx wrangler@<版> deploy` を直接叩く
+  （`regenerate-page.yml` と同じ流儀。依存を増やさないため）。
+  **wrangler の版は deploy.yml の `WRANGLER=` 行で固定してある。**
+  `package.json` が無く `npx` が毎回最新を取るため、固定しないと再現性が無い
+- デプロイ前に「除外後に配信される最上位の項目」をログに出している。
+  `.assetsignore` の漏れ（#133 の再発）に気づくため。ここに `docs` や
+  `scripts` が出ていたら異常
+  - この検査は `git -c core.quotePath=false ls-files` を使う必要がある。
+    既定では非ASCIIを含むパスが `"docs/..."` と引用符ごと出力され、先頭が
+    `"docs` になって `.assetsignore` の `docs` と一致せず誤検出する
+    （`docs/gsc` 配下にSearch Consoleの日本語名CSVがある）
+- **再生成ワークフローの `chore: regenerate ...` コミットもデプロイ対象になる。**
+  スプレッドシートの更新が自動で本番へ届く（毎週月曜の cron を含む）
+
+### セッション環境からは Cloudflare に到達できない
+
+**Claude Code のセッション環境は `api.cloudflare.com` も `ryoei.pro` も
+ネットワークポリシーで遮断されている**（`connect_rejected`）。そのため:
+
+- セッション内から `wrangler deploy` は実行できない。**APIトークンを渡しても
+  解決しない**（認証以前に到達できない）
+- **本番の状態を確認することもできない。** 反映後の目視確認は平野さんの作業になる
+- 反映が必要なときは、セッションから `workflow_dispatch` で
+  `deploy.yml` を起動する（`regenerate-page.yml` を起動するのと同じ方法）
+
+同じ制約で `docs.google.com`（スプレッドシート）・`www.gstatic.com`・`ron2.jp`
+も遮断されている。**`scripts/regenerate.py` はセッション内では実行できず**、
+再生成の確認は GitHub Actions 側で行うこと。
+
+### 検討したが採らなかった案
+
+- **Cloudflare の Git 連携（Workers Builds）**: ダッシュボードでリポジトリを
+  接続すれば push で自動デプロイでき、GitHub に Secret を置かずに済む。
+  一度採用しかけたが、設定がリポジトリ外にあり構成がコードから追えない
+- **セッション環境のネットワークポリシー変更**: 新しいセッションからしか
+  有効にならず、トークンの置き場所も広くなる
+
 ## 5. 次にやること
 
 **期限付き・確認待ちタスク**（2026-09-12時点）

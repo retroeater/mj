@@ -15,6 +15,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 静的HTML 27ページ。ビルド工程なし（Jekyllは廃止済み）
 - Cloudflare Workersの静的アセットとして配信（`wrangler.jsonc`、assets.directory は `./`）
 - 作業ブランチは cloudflare。gh-pages は旧GitHub Pages用で触らない
+- **本番反映は GitHub Actions (`.github/workflows/deploy.yml`) が行う（#169）。**
+  `cloudflare` への push で自動デプロイされ、`workflow_dispatch` で手動実行もできる
+  （`check_only` を true にするとデプロイせずトークンの疎通確認だけ行う）。
+  認証はリポジトリ Secret の `CLOUDFLARE_API_TOKEN`。**Secret が未登録だと
+  ワークフローは明示的に失敗する**（黙って成功させると未反映に気づけないため）。
+  再生成ワークフローの `chore: regenerate ...` コミットもデプロイ対象になる。
+  wrangler は版を固定してあるので、上げるときは deploy.yml の `WRANGLER=` 行を変える。
+  **Claude Code のセッション環境からは `api.cloudflare.com` も `ryoei.pro` も
+  ネットワークポリシーで遮断されているため、セッション内から直接デプロイすることも
+  本番の状態を確認することもできない。** 反映はこのワークフロー経由で行うこと
 - ローカル確認は `wrangler dev` を素のオプションで起動しないこと（無限リロードで作業不能になる）。
   必ず `--persist-to` でリポジトリ外に状態を保存すること:
   `npx wrangler dev --port 8789 --ip 127.0.0.1 --persist-to /tmp/wrangler-state`
