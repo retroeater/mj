@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 22:57 JST
+生成日時: 2026-09-12 23:00 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -602,13 +602,30 @@ https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 ## #161 llms.txt の設置を検討する
 
 - 作成: 2026-09-12
-- ラベル: 状況: 保留, 分野: SEO/AIO
+- ラベル: 分野: SEO/AIO
 
 ### 本文
 
 ### 位置づけ（2026-09-12、Claudeとの検討）
 
 SEO/AIO施策10件には**含めていない**。導入コストはほぼゼロだが、主要なAI検索が現時点で参照している証拠が弱いため。新サイトのビルド（#21）で自動生成できるなら「ついでに出す」程度でよい。判断の経緯を残すために起票。
+
+### コメント (2件)
+
+**retroeater** (2026-09-12):
+
+着手中: https://claude.ai/code/session_01W1WJWtqd9snYntmGZwJjsV
+
+**retroeater** (2026-09-12):
+
+実装完了: 7b03cb5
+
+- リポジトリ直下に `llms.txt` を手書きの静的ファイル1枚として追加。生成スクリプトは作っていない（issue本文の判断どおり、#21の新サイトビルド側で自動生成する余地を残す）
+- `.assetsignore` には追加していない（公開対象）
+- CLAUDE.mdの「構成」節にllms.txtの存在と生成スクリプトを持たない理由を追記、「CLAUDE.md / handover.mdの更新ルール」節にページ増減時の更新対象として追加
+- docs/handover.mdの「SEO」節に設置経緯を追記、冒頭の最終更新行を更新
+
+本番反映はCloudflare Workers Builds経由。ビルド成功はcheck-runsで確認できるが、本番の見え方（`https://ryoei.pro/llms.txt`）はセッションから確認できないため、平野さんの確認後にクローズをお願いします。
 
 ---
 
