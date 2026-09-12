@@ -36,6 +36,11 @@
 https://:version.:subdomain.workers.dev/*
   X-Robots-Tag: noindex
 
+# .txtにはCloudflare側でcharsetが付かず、日本語環境のブラウザが
+# Shift_JISとして解釈して文字化けする(#161)。UTF-8を明示する。
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
 /*
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
