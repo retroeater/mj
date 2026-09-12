@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 23:12 JST
+生成日時: 2026-09-12 23:25 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 56件（openのみ）。番号降順。
+件数: 55件（openのみ）。番号降順。
 
 ---
 
@@ -207,6 +207,18 @@ Include pathsが`*`のため、`chore: regenerate issues snapshot`のような
 ## 実施について
 
 **ダッシュボード側の設定変更のため、実施は平野さんの作業になる。**
+
+### コメント (1件)
+
+**retroeater** (2026-09-12):
+
+平野さんより、Cloudflare Workers BuildsのExclude pathsに`docs/**`を追加済みとの申告あり（2026-09-12）。ダッシュボードの設定値はセッションから検証できないため、「平野さんが設定した」という記録のみ残す。
+
+このIssueをクローズしてよいか、平野さんにご確認をお願いします。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 ---
 
@@ -562,150 +574,6 @@ Astro を採るかどうかで `lib/page.py` の扱いはほぼ決まるため�
 「§1『現行サイトの扱い』の前提を修正する」という別件で、9/11 にクローズ済み。
 追跡先が失われていたため、この issue を新しい追跡先として起票した。
 §7 の参照もこの issue 番号に差し替える。
-
----
-
-## #162 「帰り道」のエピソード個別ページ38枚を静的生成し、新サイトの選手個別ページのパイロットにする
-
-- 作成: 2026-09-12
-- ラベル: 状況: 対応中, 分野: 整理・保守, 対象: video_wayhome
-
-### 本文
-
-### 提案理由（2026-09-12、Claudeとの検討）
-
-#102第2段（video_wayhomeの新サイトパイロット）の延長として提案する。
-着手はしない。優先度・実施判断は平野さんに委ねる。
-
-新サイトの選手個別ページ（#101、1,000名超）は、URL設計・タイトル設計・
-sitemap・旧URL（`?name=`付き）からの対応表など、一度に通すべき論点が
-多い。1,000ページ超で最初から検証すると、設計ミスの手戻りコストが大きい。
-
-「帰り道」のエピソードは38本（video_wayhome.htmlのデータ件数）で、
-同じ論点を規模を抑えて一通り検証できる。
-
-### やること（提案。実施は別issue化・別判断）
-
-- エピソード個別ページ（`/videos/wayhome/<動画ID>` 等、38枚）を
-  `scripts/generate_*.py`パターンで静的生成する
-- タイトル設計: 「{タイトル戦名} {選手名} | 帰り道 | ryoei.pro」等、
-  #102第2段のタイトル改善（docs/new-site-design.md「タイトルの重要性」）
-  と同じ考え方を個別ページに適用する
-- sitemap.xmlへの追加、`video_wayhome.html`（一覧）から個別ページへの
-  内部リンクを張る
-- `?name=`付きURLからの301マッピング設計（#159）の材料にする。
-  video_wayhomeは`?name=`の絞り込み対象ではあるが選手個別ページへの
-  誘導ではないため、#159が検討する「一覧ページの`?name=`→個別ページ」
-  パターンの縮小版として先に試せる
-
-### 期待する効果
-
-- 1,000ページ規模で起きうる設計ミス（URL構造・canonical・sitemap生成の
-  ボトルネック等）を、38ページの失敗で済む規模で先に発見できる
-- #13（構造化データ）をエピソード単位のVideoObjectとしても展開でき、
-  ItemListとの親子関係の設計を先に検証できる
-
-### 依存・関連
-
-- #102（video_wayhomeパイロット、第2段完了）
-- #101（選手個別ページ）
-- #159（`?name=`付きURLからの301マッピング設計）
-- #13（構造化データ）
-
-### コメント (6件)
-
-**retroeater** (2026-09-12):
-
-ItemListは既に出力済みだが、URLがyoutube.comを指しているためリッチリザルトの対象外（#13の本番検証で確認。Googleリッチリザルトテストの結果に現れず、schema.org検証ツールではエラー・警告なし＝構文自体は問題ない）。個別ページができれば自サイトURLを指すようになり、カルーセルの候補になる。
-
-このissue（エピソード個別ページ38枚の静的生成）の価値を裏付ける材料として記録します。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01Ph5dbxcvrwYgdaWbd6Jg95
-
-**retroeater** (2026-09-12):
-
-着手中です。指示された設計・手順に沿って進めます。
-
-https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
-
-**retroeater** (2026-09-12):
-
-シートに個別ページ用の列（説明文・尺）を追加する話は#173として別issue化した。本issueのスコープ外とする。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
-
-**retroeater** (2026-09-12):
-
-### 参考: このセッションではdocs.google.com / ryoei.pro / img.youtube.comに到達できた
-
-CLAUDE.md/docs/handover.mdには「セッション環境からは api.cloudflare.com も ryoei.pro もネットワークポリシーで遮断されている」と記載があるが、このセッション（2026-09-12）では実際に以下が到達できた（`curl`で確認）:
-
-- `https://docs.google.com` → 302（到達可）
-- `https://ryoei.pro` → 200（到達可。push後、実際に本番へ反映された変更内容もcurlで直接確認できた）
-- `https://img.youtube.com/...` → 200（到達可。`resolve_thumb()`のHEADリクエストも全て成功）
-- `https://api.cloudflare.com/client/v4/user` → 403（到達はする。認証エラーで拒否されているだけで、ネットワークポリシーでの遮断ではなさそう）
-
-このため、本issueの作業では`docs.google.com`への到達を前提にスプレッドシートを直接取得し、`scripts/generate_wayhome_episodes.py`をローカルで実行して結果を確認できた（workflow_dispatchでの間接確認は不要だった）。
-
-CLAUDE.md/handover.mdの記載自体は書き換えていない（セッションごとにネットワーク設定が違う可能性があり、今回の観測だけで「遮断されていない」と一般化してよいか判断がつかないため）。平野さんの方で状況をご確認のうえ、記載を更新するかどうか判断いただきたい。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
-
-**retroeater** (2026-09-12):
-
-実装しました。本番反映・動作確認まで完了しています。
-
-### やったこと
-
-- `wayhome/<動画ID>.html` を38枚静的生成（`scripts/generate_wayhome_episodes.py`、新設）
-- 一覧（video_wayhome.html）のカード・ItemListのリンク先を個別ページへ変更（YouTube直リンクはヒーローの「再生」ボタンにのみ残す）
-- `lib/page.py` に `asset_prefix`（サブディレクトリのページ向け）・`og_image`系・`canonical` を追加（既定値は現状どおりで、既存16ページの出力に差分がないことを確認済み）
-- `navbar.js` の28本のhrefをルート相対パスに変更
-- `sitemap.xml` をサイトマップインデックス化し、`sitemap-pages.xml`（27ページ）と `sitemap-wayhome.xml`（38ページ）に分割
-- `video_wayhome.html` の `?name=` パラメータ受け入れを廃止（#159にコメント済み）
-- シート列追加の話は#173として別issue化
-- CLAUDE.md / docs/handover.md / docs/new-site-design.md §12 に経緯・新サイトへ持ち越せる判断を記録
-
-### 確認したこと
-
-- `regenerate.py all` で既存16ページの出力に1バイトの差分もないこと
-- `wrangler dev --persist-to` で一覧・個別ページ双方の配信、`../`でのアセット参照、個別ページ間の相互リンクを確認
-- 38ページぶんのJSON-LD（VideoObject+BreadcrumbList）が`JSON.parse`を通ること
-- push後、GitHub Actions（ページの再生成・公開対象を検査する）・Workers Builds のcheck-runがいずれもsuccess
-- 本番（ryoei.pro）に実際に反映されていることをcurlで直接確認（今回のセッションはryoei.pro/docs.google.com/img.youtube.comに到達できたため。詳細は上のコメント参照）
-
-ラベルは「状況: 対応中」のままにしてあります。内容をご確認のうえ、問題なければクローズをお願いします。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
-
-**retroeater** (2026-09-12):
-
-### 追記: 個別ページのVideoObjectが本番でリッチリザルトテストを通過
-
-本番URL（`https://ryoei.pro/wayhome/UtxpVoWy2GY.html`）でGoogleのリッチリザルトテストを実行し、`VideoObject`が有効なアイテムとして検出されたことを確認した（2026-09-12）。#13にも同内容をコメント済み。
-
-### sitemap-pages.xmlのGSCパースエラーを修正
-
-本issueの本番検証で、`sitemap-pages.xml`がGSCで「型: 不明 / 1件のエラー」になっていることが分かった。原因は冒頭のXMLコメント内の「`regenerate.py --list`」の`--`（XMLコメントは`--`を含められない）。この`--`自体は#162より前、#121（`fde321c`）の時点から存在していたバグで、#162のサイトマップインデックス化で複製されただけだった。
-
-対応:
-- `sitemap-pages.xml`のコメントから`--`を除去（`regenerate.py --list`→`regenerate.pyの一覧オプション`）
-- 再発防止として、`regenerate-page.yml`のサイトマップ更新後と`scripts/generate_wayhome_episodes.py`のサイトマップ書き出し前に、3ファイル（sitemap.xml / sitemap-pages.xml / sitemap-wayhome.xml）のwell-formedness確認を追加（壊れていればジョブ・生成を止める）
-- docs/handover.mdのSEO節に経緯を記録
-
-push後、GitHub Actions（ページの再生成・公開対象を検査する）・Workers Buildsのcheck-runがいずれもsuccess。本番の`sitemap-pages.xml`をcurlで取得し、well-formedであることも直接確認済み。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 ---
 
