@@ -7,8 +7,10 @@
                           _redirects で転送しており実体がない
   ページを追加・削除したときは、このファイルの更新も忘れないこと。
 
-  lastmod は各ページの最終コミット日（#138）。手動更新のため実態と
-  ずれる可能性がある。自動更新は #121 で対応する。
+  lastmod は各ページの最終コミット日（#138）。生成対象ページ（regenerate.py
+  --list の一覧）は、再生成で実際に差分が出たときだけワークフローが
+  当日日付（JST）に更新する（#121）。生成対象外のページ（index.html、
+  未移行のGoogle Chartsページ、静的ページ）は今も手動更新。
   changefreq / priority は Google が参照しないため削除した（#138）。
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

@@ -73,12 +73,22 @@ jobs:
           fi
           echo "files=$(cat /tmp/targets.txt)" >> "$GITHUB_OUTPUT"
 
+      - name: sitemap.xmlのlastmodを更新
+        if: steps.regen.outputs.files != ''
+        run: |
+          # git add する前に、再生成対象のうち実際に差分が出たファイルだけを調べる
+          CHANGED=$(git diff --name-only -- ${{ steps.regen.outputs.files }})
+          echo "実際に差分が出たファイル: $CHANGED"
+          if [ -n "$CHANGED" ]; then
+            python3 scripts/update_sitemap_lastmod.py $CHANGED
+          fi
+
       - name: 変更をコミット・push
         if: steps.regen.outputs.files != ''
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ${{ steps.regen.outputs.files }}
+          git add ${{ steps.regen.outputs.files }} sitemap.xml
           git diff --cached --quiet && echo "変更なし" && exit 0
           git commit -m "chore: regenerate ${{ steps.regen.outputs.files }} via GitHub Actions"
           git push origin cloudflare
