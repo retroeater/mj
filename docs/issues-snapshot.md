@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 12:05 JST
+生成日時: 2026-09-12 17:51 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -18,7 +18,213 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 162件（open/closed含む）。番号降順。
+件数: 164件（open/closed含む）。番号降順。
+
+---
+
+## #164 #7で用意した現行サイトの共通部品（lib/page.py・lib/chart.py・table.js）を新サイトへ引き継ぐかを判断する
+
+- 状態: OPEN / 作成: 2026-09-12
+- ラベル: 状況: 保留, 分野: 整理・保守
+
+### 本文
+
+#7 で用意した現行サイトの共通部品を、新サイト（`docs/new-site-design.md`）へ
+引き継ぐかどうかを判断する。
+
+対象:
+
+- `scripts/lib/page.py` — HTMLテンプレート・行組み立て・画像セル・エスケープの共通処理
+- `scripts/lib/chart.py` — チャート生成の共通処理
+- `table.js` — 絞り込み・ページ送り（型A/A' の11ページが共用）
+
+新サイトは Astro ＋ D1 を想定しており前提が異なる。Astro を採用するなら
+テンプレート/コンポーネントが `lib/page.py` の領域を担うため、Python の
+文字列組み立ては引き継がない公算が大きい。一方で `table.js` の絞り込み・
+ページ送りの挙動や、`lib/page.py` が持っているエスケープ・画像フォールバックの
+考え方は、形を変えて持ち越す価値があるかもしれない。
+
+## 判断材料
+
+**#102 第2段のパイロット（`video_wayhome` の全面リデザイン）で、実際に
+「持ち越せる部分／捨てる部分」を切り分けた実例がある。**
+`docs/new-site-design.md` §12「パイロット: video_wayhome」の
+「新サイトへ持ち越せる部分／捨てる部分」節を参照。
+
+そこでの結論を要約すると:
+
+- 持ち越せる: カラートークンの粒度・命名の考え方、共有ボタンの3段
+  フォールバック方針、構造化データのビルダー関数の形、横スクロール＋
+  `scroll-snap` のカード列パターン、WCAG AA の相対輝度計算による配色検証の手順
+- 捨てる: `--mj-v-` 接頭辞そのもの、`body:has()` によるスコープの仕方、
+  ヒーロー内テキストを固定色にする実装、**`render_content()` を手で直接呼ぶ構成**
+  （＝ `lib/page.py` に相当する部分。Astro のテンプレート/コンポーネントが
+  担う領域で、Python の文字列組み立ては引き継がない、という見立て）
+
+つまり「方針・パターンは持ち越し、実装そのものは捨てる」という切り分けが
+パイロットで実際に効いた。同じ切り分けを共通部品3点にも当てはめられるか、
+というのがこの issue の判断。
+
+## 位置づけ
+
+**Astro 採用の判断（#21）と並んで、新サイト着手時の入口になる。**
+Astro を採るかどうかで `lib/page.py` の扱いはほぼ決まるため、#21 の後に
+（あるいは同時に）判断するのが自然。
+
+## 経緯
+
+`docs/new-site-design.md` §7「既存資産の扱い > 引き継ぐもの」の検討事項が、
+追跡先として **#137** を指していた。しかし #137 は
+「§1『現行サイトの扱い』の前提を修正する」という別件で、9/11 にクローズ済み。
+追跡先が失われていたため、この issue を新しい追跡先として起票した。
+§7 の参照もこの issue 番号に差し替える。
+
+---
+
+## #163 navbar.js の検索アイコンリンクにアクセシブルネームが無い（link-name 指摘が全27ページ）
+
+- 状態: OPEN / 作成: 2026-09-12
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+`navbar.js` が描画する虫眼鏡アイコンのリンク
+
+```html
+<a class="btn" data-bs-toggle="collapse" href="#searchBoxes" role="button" aria-expanded="false" aria-controls="searchBoxes">
+  <svg ...><path .../></svg>
+</a>
+```
+
+には、中身が装飾的な `<svg>` だけでテキストも `aria-label` も無いため、
+アクセシブルネームが存在しない。結果として Lighthouse accessibility の
+`link-name`（Links do not have a discernible name）の指摘が**全27ページ**で出ている。
+
+## 経緯
+
+#102 第2段（video_wayhome の全面リデザイン）の Lighthouse 計測で判明した。
+同じ計測で `landmark-one-main` はページ側（`<main>` の追加）で解消できたが、
+`link-name` は `navbar.js` 側の問題のため、当時は「navbar.js は触らない方針」
+として未解決のまま残していた（`docs/handover.md` の同節に記録）。
+
+`navbar.js` は生成物ではない静的ファイルで全27ページが読み込んでいるため、
+1か所直せば全ページに効き、HTMLの再生成も不要。
+
+## 対応
+
+- 当該 `<a>` に `aria-label`（「検索」など、開閉する対象が分かる文言）を足す
+- 他26ページのHTML出力が変わらないことを確認する
+
+## 併せて調べること
+
+`show_filter=False` のページ（`rh_results` など）には `#searchBoxes` が
+存在せず、このリンクの `aria-controls` が存在しない要素を指している。
+これも a11y の指摘対象になりうるため、実際に指摘が出るかを確認し、
+出るなら対応方針（該当ページでアイコン自体を出さない等）をこの issue に
+コメントとして残す。
+
+### コメント (1件)
+
+**retroeater** (2026-09-12):
+
+## 対応済み: `aria-label="検索"` を追加
+
+`navbar.js` の1か所に `aria-label="検索"` を足した（commit `71276f8`）。
+
+```html
+<a class="btn" aria-label="検索" data-bs-toggle="collapse" href="#searchBoxes" role="button" aria-expanded="false" aria-controls="searchBoxes">
+```
+
+文言は「検索」。collapse の開閉状態は `aria-expanded` が伝えるため、
+ラベル側で「開く／閉じる」と書くと二重になる。対象を名詞で示すに留めた。
+
+**HTML出力は変わらない。** `navbar.js` は生成物ではない静的ファイルで、
+navbar のマークアップはどのHTMLにも焼き込まれていない
+（`grep -l 'data-bs-toggle="collapse" href="#searchBoxes"' *.html` → 0件）。
+HTMLの再生成は不要。
+
+### Lighthouse mobile（ローカル計測、前 → 後）
+
+| ページ | accessibility | perf | 残る a11y 指摘 |
+|---|---|---|---|
+| video_wayhome.html（表なし） | 0.96 → **1.00** | 0.91 → 0.91 | **なし** |
+| jpml_test.html（表あり・検索欄あり） | 0.94 → **0.98** | 0.91 → 0.91 | `landmark-one-main` |
+| rh_results.html（表あり・検索欄なし） | 0.93 → **0.98** | 0.93 → 0.93 | `landmark-one-main` |
+
+3ページとも `link-name` が消えた。video_wayhome は #102第2段で
+`landmark-one-main` を既に潰してあるため、**失敗する a11y 監査が0件**になった。
+詳細は `docs/lighthouse-baseline.md` の該当節。
+
+---
+
+## 調査結果: `aria-controls` が存在しない要素を指している件
+
+### 該当ページ（8ページ）
+
+`#searchBoxes` を持たないのは
+`404` / `index` / `jpml_links` / `resource_dictionary` / `resource_efficiency` /
+`rh_links` / `rh_results` / `rh_results_detail`。
+うち `index.html` は `navbar.js` を読み込まないので、実際に該当するのは**7ページ**。
+
+### 結論: 現状では a11y の指摘は出ない
+
+axe-core 4.13.0 / Lighthouse で実測した。
+
+- `aria-valid-attr-value` は **pass**。violation でも incomplete でもない。
+  axe は `aria-expanded="false"` のとき、参照先が存在しない `aria-controls` を
+  許容する（対象が動的に生成される可能性があるため）
+- `aria-expanded="true"` に書き換えると **violation になる**ことは確認した。
+  ただし `navbar.js` は常に `"false"` で出力し、Bootstrap の collapse は
+  対象要素が無いと何もしない。実際に該当ページでリンクをクリックしても
+  `aria-expanded` は `"false"` のまま、JSエラーも無し、URLも変化なし
+
+### ただし残る問題（機械では検出されない）
+
+該当7ページでは、**押しても何も起きないリンクが表示・フォーカス可能なまま
+残っている**。今回 `aria-label` を足したことで、スクリーンリーダーからは
+「検索」という名前で読み上げられるようになるため、
+**名前の付いた無反応なコントロール**になり、以前より目立つ状態になった。
+
+WCAG の自動判定には掛からないが、
+「何も起きないコントロールを操作させる」のは 3.2.4（一貫した識別性）や
+2.4.6（見出し及びラベル）の趣旨からは望ましくない。
+
+### 対応方針の案（今回は実装しない）
+
+1. **`navbar.js` 側で `#searchBoxes` の有無を見て、無ければアイコンを描画しない**
+   — navbar.js は `DOMContentLoaded` より前に `document.write` 相当で描画して
+   いるため、描画時点で `#searchBoxes` がまだ存在しない可能性がある。
+   描画後に `document.getElementById('searchBoxes')` を見て消す形なら安全
+2. **ページ側から明示的に制御する** — `lib/page.py` の `show_filter` の値を
+   HTML側の目印（body の data属性等）として出し、navbar.js がそれを見る。
+   意図が明示される反面、全ページの再生成が必要
+3. **そのまま残す** — 機械的な指摘は出ておらず、影響も限定的という判断
+
+個人的には 1 が安く、再生成も不要なので妥当に見える。
+ただし navbar.js は全27ページに効くため、単独で切り戻せるよう
+別コミット・別issueで扱うのが安全。
+
+---
+
+## 別件で見つかった残件: `index.html` の link-name 5件
+
+調査中に `index.html`（`navbar.js` を読み込まない唯一のページ）で、
+SNSアイコンのリンク5件にアクセシブルネームが無く
+**`link-name` の violation が出ている**ことが分かった。
+
+```
+<a href="https://twitter.com/retroeater" class="twitter">
+<a href="https://www.facebook.com/ryoei" class="facebook">
+<a href="https://www.linkedin.com/in/ryoei/" class="linkedin">
+<a href="https://github.com/retroeater/" class="github">
+<a href="https://www.imdb.com/name/nm14435079/" class="imdb">
+```
+
+このissueの対象（navbar.js）とは原因が別で、`index.html` を直接直す必要がある。
+別issueにするかどうかは判断待ち。
+
+---
+_Generated by [Claude Code](https://claude.ai/code)_
 
 ---
 
@@ -155,7 +361,7 @@ SEO/AIO施策10件の中で**6番目**。
 - 生成ページすべてに冒頭段落がある
 - meta description と矛盾しない
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-12):
 
@@ -237,6 +443,43 @@ issueのクローズは上記2点の完了後に行う。
 video_wayhome.html は #102第2段で全面リデザインし、`lib/page.py`の`TableConfig`/`render()`/`content_before`の仕組みから完全に離れた（`render_content()`＋独自組み立てのbodyに変更、表自体を廃止）。
 
 ヒーロー内に既に「タイトル戦を終えたばかりの選手に〜」という説明文（1〜2文、meta descriptionと整合させたもの）があり、これがlead文の役割を兼ねている。**video_wayhomeは本issueの対象15ページから除外してよい**（生成15ページのPageMeta経由で機械的に差し込む仕組みとは構造的に合わなくなったため）。
+
+**retroeater** (2026-09-12):
+
+### style.css追加・コミット完了（2026-09-12）
+
+mj-93の#102第2段push後、`.mj-lead`を`#searchBoxes`のすぐ下・
+video_wayhome専用スタイルの直前に追加した（`4de604f`）。
+
+```css
+.mj-lead {
+    max-width: 720px;
+    margin: 0;
+    padding: 12px 4px 18px;
+    border-top: 0.5px solid #e5e5e5;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #555555;
+}
+```
+
+### 表示確認
+
+`wrangler dev`で構造を確認: jpml_titles.html（ページ送りの`</nav>`の
+直後に区切り線と注記）、jpml_pros.html（`</table>`の直後）、
+resource_efficiency.html（本文最後、グラフ・計算方法の段落の下）は
+いずれも期待通りの位置にlead段落が出力されている。
+
+**ただしこの環境にはheadless browserがなく、実際のレンダリング画面での
+目視確認（モバイル375px幅での横溢れ含む）はできていない。** 代わりに
+以下で構造的に問題ないことを確認した:
+
+- `.mj-lead`は`max-width: 720px`で固定pxの横幅指定はない
+- `white-space: nowrap`等、折り返しを妨げるプロパティは設定していない
+- 親要素(`body`)にモバイル幅を超える固定幅・overflow制約はない
+
+実機・実ブラウザでの最終確認は平野さんにお願いしたい。問題なければ
+このissueをクローズしてください。
 
 ---
 
@@ -4291,7 +4534,7 @@ maxresdefault が存在しない動画があるため、
 フォールバックの考慮が必要（第1段でビルド時HEAD確認の
 仕組みを実装済み）。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-12):
 
@@ -4361,6 +4604,92 @@ issue本文の「外部依存はi.ytimg.comのみ」は誤りだった。既存3
 
 - 第3段（背景動画の自動再生）は本issueに残したまま、第2段完成後に改めて判断
 - 本番反映後、Search Console・Googleリッチリザルトテストでの再検証を推奨（ローカル計測の制約はdocs記載のとおり）
+
+**retroeater** (2026-09-12):
+
+## 第2段 完了
+
+完了確認を受けて、残っていたトーンの判断とその後始末を反映した。
+**第2段はこれで完了**。第3段（背景動画の自動再生）の判断待ちとして
+issue は引き続き open のままにする。
+
+### 決定: 動画セクションだけ濃色の例外とする
+
+保留になっていた「トーン記述を書き換えるか、動画セクションだけ例外にするか」は、
+**(b) 動画セクションだけ例外**を採用。新サイト全体のトーン（静か・白基調）は
+そのまま維持し、`video_wayhome` は OS のカラーモード設定に関係なく常に濃色で表示する。
+
+記録は `docs/new-site-design.md` の **§2「デザイン方針 > トーン」と
+§12「パイロット: video_wayhome」の両方**に置いた（§12 だけに書くと、
+新サイト着手時に §2 だけ読んで矛盾するため）。
+
+### 実装（commit `56cc830`）
+
+- `@media (prefers-color-scheme: dark)` による上書きをやめ、ダーク側の値を
+  `body:has(.mj-video-page)` の既定として直接持たせた
+- **トークンの構造（機能名の7つ）は両モード前提のまま残した。** 値の組を
+  差し替えれば両モードに戻せる形は崩していない。新サイトへ持ち越す資産は
+  トークンの粒度と命名であって、このページの配色値ではないため
+- 消したライト側の値は §12 に表として残してあり、CSS にコメントで複製していない
+  （二重管理を避ける）
+- **`color-scheme: dark` を `html:has(.mj-video-page)` に指定。** 指定しないと
+  OS がライト設定の利用者で入力欄・スクロールバー・フォーカスリングが明色のまま
+  浮く。ビューポートのスクロールバーはルート要素の `color-scheme` で決まるため
+  `html` 側に置いたが、`:has()` スコープなので他26ページには及ばない
+- **`<meta name="theme-color">` は入れない判断。** ナビバーは全27ページ共通で
+  `bg-dark` なので、必要なら27ページ全体で入れるべき性質のもの。1ページだけに
+  入れるとページ間でアドレスバーの色が変わる不整合が出る。全ページに入れるには
+  `HEAD_TEMPLATE` の変更が必要で今回のスコープ外。理由は §12 に記録
+
+### 固定化で顕在化したコントラスト不足2件（commit `34281de`）
+
+**Lighthouse（headless Chrome）は `prefers-color-scheme` を指定せず常にライト側で
+走るため、このページのダーク配色はこれまで一度も計測されていなかった。**
+濃色固定にして初めて計測対象になり、`color-contrast` が2件失敗した
+（accessibility 0.96 → 0.92）。いずれも配色値の問題ではない。
+
+1. **ヒーローのボタンが強調色の文字になっていた（詳細度の取り違え）。**
+   `.mj-video-page a`（0,1,1）が `.mj-video-btn-primary`（0,1,0）に勝ち、白背景の
+   「再生」ボタンの文字が `--mj-v-accent` になっていた。ダークの accent `#7fb3d5`
+   × 白で **2.26:1**。ライトの accent `#2f5d78` なら 7.0:1 で通るため、ライトでしか
+   計測していない間は表面化しなかった。`a:not(.mj-video-btn)` でボタンを除外し
+   `#1a1a1a` × 白 = **17.4:1** に是正。写真の上の副ボタンも同じ理由で accent に
+   なっていた（背景が画像のため axe は評価できず未指摘）が同時に解消
+2. **`.mj-lead`（#158 の説明文）が明色前提のままだった。** 共通ルールが
+   `color: #555555` / `border-top: #e5e5e5` をベタ書きしており `#121212` の上で
+   **2.51:1**。このページに限り `--mj-v-fg-muted` / `--mj-v-border` に差し替えて
+   **8.29:1** に
+
+**教訓**（§12 に記録）: `prefers-color-scheme` でしか持たないダークモードは、
+Lighthouse/axe の自動計測がライト側しか見ないため片側が未検証のまま残る。
+新サイトで両モードを持つなら、計測手順に「両モードで測る」を明記すること。
+
+### 確認結果
+
+Chromium で OS をライト設定相当（`colorScheme: 'light'`）にして検証。
+
+- **video_wayhome**: `html`/`body` とも `color-scheme: dark`、body 背景 `#121212`、
+  `#searchBoxes` `#1e1e1e`、`.mj-filter-input` `#121212`。**明色の浮きは無し**
+- **他26ページ**: ライト・ダークどちらの設定でも body 背景 `#ffffff`、
+  `color-scheme` は `normal` のまま。従来どおり白基調で変化なし
+- **白いページからの遷移**: `video_mtsuku.html` からこのページへ遷移した直後の
+  フレームを撮って確認したが、**白のフラッシュは観測されなかった**。
+  `color-scheme: dark` により最初の描画前からキャンバスが濃色になるため。
+  ナビバーは全27ページ共通で `bg-dark` なので画面上端の帯は遷移前後で連続しており、
+  切り替わるのはその下の本文領域だけ。**所見として許容範囲**（対策はしない）
+- 配色値はダーク側をそのまま採用しており変更していないため、トークン自体の
+  WCAG AA 再検証は不要。上記2件の修正後、Lighthouse mobile の accessibility は
+  **1.00**（#163 の `aria-label` 追加と合わせて、失敗する a11y 監査が0件になった）
+- Lighthouse の再計測は色の固定のみで構造が変わらないため本来不要だったが、
+  結果的に上記コントラスト2件を拾えた
+
+### 派生した issue
+
+- **#163**: `navbar.js` の検索アイコンにアクセシブルネームが無く `link-name` の
+  指摘が全ページで出ていた件（この第2段の計測で判明）。対応済み
+
+---
+_Generated by [Claude Code](https://claude.ai/code)_
 
 ---
 
@@ -8268,7 +8597,7 @@ https://claude.ai/code/session_01G4xEKGRnEDdr48pfKvQqqG
 ## #13 構造化データ(JSON-LD)を追加する
 
 - 状態: OPEN / 作成: 2026-09-07
-- ラベル: 状況: 保留, 分野: SEO/AIO, 対象: jpml_pros
+- ラベル: 状況: 保留, 分野: SEO/AIO, 対象: jpml_pros, 対象: video_wayhome
 
 ### 本文
 
@@ -8277,7 +8606,7 @@ ItemList と Person で選手情報を機械可読にする。静的HTML化で�
 ---
 <sub>移行前のタスク番号: 38</sub>
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-09):
 
@@ -8305,6 +8634,61 @@ VideoObject（最新話1件）とItemList（全エピソード）の2ブロッ�
 **Googleのリッチリザルトテストは未実施。** 本番未反映で検証対象URLがまだ存在しないため。本番反映後に`https://search.google.com/test/rich-results`で実URLを検証することを推奨する。
 
 このページ以外（jpml_prosの選手データベース）への展開は本issueの本来のスコープのまま、別途判断。
+
+**retroeater** (2026-09-12):
+
+## 未実行の TODO: リッチリザルトテストによる実URL検証（平野さん作業）
+
+#102 第2段で `video_wayhome.html` に JSON-LD（`VideoObject` + `ItemList`）を
+先行実装したが、**本番未反映のため実URLでの検証ができなかった**。
+代わりに ①両ブロックが構文的に有効な JSON であること（`JSON.parse`）、
+②`VideoObject` / `ItemList` の必須・推奨プロパティが揃っていることの
+コードレビュー、の2点で代替している。
+
+リッチリザルトテストは対話的な外部ツールのため**自動化で代行しない**。
+本番反映後に手で実行する作業として残す。
+
+### 本番反映後の検証手順
+
+- [ ] **リッチリザルトテストを開く** — https://search.google.com/test/rich-results
+- [ ] **検証するURL**: `https://ryoei.pro/video_wayhome.html`
+      （「URL をテスト」側を使う。未反映の間はコード貼り付けでも代替可）
+- [ ] **`VideoObject` が1件認識されること**を確認（最新話1件を出力している）
+- [ ] **`ItemList` が1件認識されること**を確認
+      （エピソード全件。`ListItem` に `position` / `url` / `name`）
+- [ ] **2ブロックとも「検出された項目」に並ぶこと**を確認
+      （片方しか出ない場合は JSON-LD のパース失敗を疑う）
+- [ ] **エラー（赤）が0件であること**を確認
+- [ ] **警告（黄）の内容を確認** — 下記の既知のギャップ以外に警告が出ていないか
+- [ ] モバイル / PC の両方で結果が同じか（差が出たら記録する）
+
+### 既知のギャップ: `duration` は未設定（警告が出ても想定内）
+
+`VideoObject` の `duration`（ISO 8601 形式の動画尺）は**意図的に設定していない**。
+スプレッドシートに秒数などの尺情報が無いため。Google は `duration` を
+**推奨プロパティ**として挙げているので、**この項目の警告が出るのは想定内**で、
+対応不要。
+
+将来シート側に尺の列を追加できるなら埋める余地がある
+（`scripts/generate_video_wayhome.py` の `build_json_ld()` に1行足すだけで済む形）。
+その判断はこの issue とは別で構わない。
+
+### 補足
+
+- 本番反映のタイミング自体は平野さんの判断。この作業では**デプロイしていない**
+- 実装の詳細と検証済み事項は `docs/new-site-design.md` §12「構造化データ（#13先行実装）」
+- ビルダー関数の形（辞書を組み立てて `json.dumps` + `</` エスケープ）は、
+  この issue の本体スコープ（選手個別ページの `Person` / `ItemList`）に
+  そのまま流用できる
+
+### ラベルの見直し
+
+`対象: jpml_pros` のみだったが、実態に合わせて **`対象: video_wayhome` を追加**した
+（VideoObject / ItemList をこのページで先行実装済み）。`対象: jpml_pros` は
+本体スコープ（選手情報の `Person` / `ItemList`）が未着手のまま残っているので併記する。
+
+---
+_Generated by [Claude Code](https://claude.ai/code)_
 
 ---
 
