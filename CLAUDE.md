@@ -88,6 +88,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 応答について
 - 日本語で応答すること
 
+## コミットのルール
+- コミット前に `git status` / `git diff --stat` を確認し、**着手中のissueと
+  無関係なファイル・ハンクを含めないこと。** 複数の変更が混ざっていたら
+  issueごとに分けてコミットする。型C（#127）のCSS 43行が無関係な#152
+  （牌効率ページの見出しフォントサイズ）のコミット `4738d8d` に混入し、
+  `git blame` / `git log -- style.css` が#152を指す状態になった例がある
+  （#157）。表示は壊れなかったが、履歴が後から読む人を誤誘導する
+
 ## CLAUDE.md / handover.md の更新ルール
 - ページの移行・追加・削除を行ったときは、同じコミットで CLAUDE.md と
   docs/handover.md の件数・ページ列挙を更新すること。件数の正は
