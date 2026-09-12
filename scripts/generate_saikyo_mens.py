@@ -30,7 +30,7 @@ OUTPUT_PATH = REPO_ROOT / "saikyo_mens.html"
 
 META = PageMeta(
     title="読者アンケート | 麻雀最強戦 | ryoei.pro",
-    description="麻雀最強戦の読者アンケートのエントリー選手をまとめています。",
+    description="麻雀最強戦の読者アンケートのエントリー選手{count}名をまとめています。",
     og_url="https://ryoei.pro/saikyo_mens.html",
     h1="麻雀最強戦 読者アンケート エントリー選手一覧",
     caption="麻雀最強戦の読者アンケートのエントリー選手一覧。",

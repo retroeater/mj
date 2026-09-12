@@ -37,7 +37,7 @@ OUTPUT_PATH = REPO_ROOT / "rh_results_detail.html"
 
 META = PageMeta(
     title="成績詳細 | 平野良栄 | ryoei.pro",
-    description="日本プロ麻雀連盟の麻雀プロ、平野良栄の公式戦成績の詳細をまとめています。",
+    description="日本プロ麻雀連盟の麻雀プロ、平野良栄の公式戦成績の詳細{count}半荘分をまとめています。",
     og_url="https://ryoei.pro/rh_results_detail.html",
     h1="平野良栄 公式戦成績詳細",
     caption="平野良栄の公式戦成績の詳細一覧。",

@@ -641,6 +641,20 @@ body:has(.mj-table) {
 	padding: 4px;
 }
 
+/* ==== .mj-lead(ページ末尾の説明文。#158) ====
+   meta description と同じ文を本文にも出す。表・ページ送りの下に置き、
+   繰り返し訪れる人の視界に入れない。左端は .mj-table のセル内テキストと
+   揃える(padding 4px)。 */
+.mj-lead {
+	max-width: 720px;
+	margin: 0;
+	padding: 12px 4px 18px;
+	border-top: 0.5px solid #e5e5e5;
+	font-size: 13px;
+	line-height: 1.7;
+	color: #555555;
+}
+
 /* ==== video_wayhome.html 専用スタイル(#102第2段: 新サイトのパイロット) ====
    video_wayhome.htmlのみで使う。body:has(.mj-video-page)でスコープし、
    他26ページの見た目には一切影響しない(body:has(.mj-table)と同じ流儀)。

@@ -28,7 +28,7 @@ OUTPUT_PATH = REPO_ROOT / "video_en.html"
 
 META = PageMeta(
     title="English | 動画 | ryoei.pro",
-    description="日本プロ麻雀連盟の麻雀プロが出演する英語動画についてまとめています。",
+    description="日本プロ麻雀連盟の麻雀プロが出演する英語動画{count}本についてまとめています。",
     og_url="https://ryoei.pro/video_en.html",
     h1="日本プロ麻雀連盟 English動画",
     caption="日本プロ麻雀連盟の麻雀プロが出演する英語動画の一覧。",

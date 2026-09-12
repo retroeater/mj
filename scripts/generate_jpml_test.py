@@ -25,7 +25,7 @@ OUTPUT_PATH = REPO_ROOT / "jpml_test.html"
 
 META = PageMeta(
     title="プロテスト | 日本プロ麻雀連盟 | ryoei.pro",
-    description="日本プロ麻雀連盟のプロテストについて、関連記事・動画をまとめています。",
+    description="日本プロ麻雀連盟のプロテストについて、関連記事・動画{count}件をまとめています。",
     og_url="https://ryoei.pro/jpml_test.html",
     h1="日本プロ麻雀連盟 プロテスト関連記事",
     caption="日本プロ麻雀連盟のプロテストに関する記事・動画一覧。",

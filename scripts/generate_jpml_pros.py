@@ -14,6 +14,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
+from lib.page import apply_count  # noqa: E402
 from lib.sheets import fetch_sheet  # noqa: E402
 
 SPREADSHEET_ID = "1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0"
@@ -25,6 +26,10 @@ QUERY = (
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
 OUTPUT_PATH = REPO_ROOT / "jpml_pros.html"
+
+# meta description・og:description・ページ末尾のlead文(#158)で共通して使う文言。
+# {count}は生成時に実際の選手数へ置換する(lib/page.apply_count()と同じ仕組み)。
+DESCRIPTION = "日本プロ麻雀連盟の麻雀プロ{count}名について、所属・出身地・龍龍・X・note・YouTube・公式戦成績（鳳凰戦・女流桜花等）をまとめています。"
 
 HEADERS = [
     "名前", "所属<br>出身地", "龍龍", "X", "note", "You<br>Tube",
@@ -39,11 +44,11 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>プロ | 日本プロ麻雀連盟 | ryoei.pro</title>
-<meta name="description" content="日本プロ麻雀連盟の麻雀プロ（1000人超）について、所属・出身地・龍龍・X・note・YouTube・公式戦成績（鳳凰戦・女流桜花等）をまとめています。">
+<meta name="description" content="{description}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ryoei.pro">
 <meta property="og:title" content="プロ | 日本プロ麻雀連盟 | ryoei.pro">
-<meta property="og:description" content="日本プロ麻雀連盟の麻雀プロ（1000人超）について、所属・出身地・龍龍・X・note・YouTube・公式戦成績（鳳凰戦・女流桜花等）をまとめています。">
+<meta property="og:description" content="{description}">
 <meta property="og:url" content="https://ryoei.pro/jpml_pros.html">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="favicon.ico">
@@ -80,6 +85,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 {rows}
 \t</tbody>
 </table>
+<p class="mj-lead">{description}</p>
 </body>
 </html>
 """
@@ -283,7 +289,8 @@ def main():
             )
     header_cells = "".join(cells)
 
-    output = PAGE_TEMPLATE.format(header_cells=header_cells, rows=row_html)
+    description = esc(apply_count(DESCRIPTION, len(raw_rows)))
+    output = PAGE_TEMPLATE.format(header_cells=header_cells, rows=row_html, description=description)
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     print(f"{OUTPUT_PATH} を更新しました。")
 

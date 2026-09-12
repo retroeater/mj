@@ -69,7 +69,7 @@ ZERO_LEAGUES = {"鳳凰位"}  # 上位人数を0扱いにする(#127着手前の
 
 META = PageMeta(
     title="リーグ推移 | 鳳凰戦 | ryoei.pro",
-    description="日本プロ麻雀連盟の鳳凰戦について、選手の所属リーグ推移（期ごとの各リーグの人数、全出場選手の中での順位等）を閲覧できます。",
+    description="日本プロ麻雀連盟の鳳凰戦について、選手{count}名の所属リーグ推移（期ごとの各リーグの人数、全出場選手の中での順位等）を閲覧できます。",
     og_url="https://ryoei.pro/houou_leagues.html",
     h1="鳳凰戦 リーグ推移",
     caption="",
@@ -202,7 +202,7 @@ def main():
         chart_desktop=chart_desktop,
         chart_mobile=chart_mobile,
     )
-    output = render_content(META, body_html)
+    output = render_content(META, body_html, count=len(option_names))
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     print(f"{OUTPUT_PATH} を更新しました。")
 

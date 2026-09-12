@@ -25,7 +25,7 @@ OUTPUT_PATH = REPO_ROOT / "video_live.html"
 
 META = PageMeta(
     title="放送対局 | 動画 | ryoei.pro",
-    description="YouTubeチャンネル「日本プロ麻雀連盟」の放送対局動画をまとめています。選手・実況・解説の名前、タイトル戦名称などで検索できます。",
+    description="YouTubeチャンネル「日本プロ麻雀連盟」の放送対局動画{count}本をまとめています。選手・実況・解説の名前、タイトル戦名称などで検索できます。",
     og_url="https://ryoei.pro/video_live.html",
     h1="日本プロ麻雀連盟 放送対局動画",
     caption="日本プロ麻雀連盟の放送対局動画の一覧。",

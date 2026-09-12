@@ -25,6 +25,14 @@ def esc(value) -> str:
     return html.escape(str(value))
 
 
+def apply_count(description: str, count: int | None) -> str:
+    """description 内の {count} を実データの件数で置換する(#158)。
+    count が None なら {count} を含まない前提でそのまま返す。"""
+    if count is None:
+        return description
+    return description.replace("{count}", f"{count:,}")
+
+
 @dataclasses.dataclass
 class PageMeta:
     """head の内容と、本文冒頭の見出し・キャプション。"""
@@ -68,8 +76,6 @@ class TableConfig:
     extra_script: str = ""
     # h1直後、#searchBoxesの手前に差し込むページ固有のHTMLブロック
     # (video_wayhomeのヒーロー画像など、#102)。空文字なら何も差し込まない。
-    # #158(冒頭に説明文の段落を置く)のlead文は、このスロットの手前に
-    # PageMeta側で足す想定(h1 → lead文 → content_before → #searchBoxes の順)。
     content_before: str = ""
 
 
@@ -137,7 +143,7 @@ PAGE_TEMPLATE = HEAD_TEMPLATE + """<body>
 {rows}
 \t</tbody>
 </table>
-{pager}</body>
+{pager}{lead}</body>
 </html>
 """
 
@@ -146,7 +152,7 @@ CONTENT_TEMPLATE = HEAD_TEMPLATE + """<body>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
-{body_html}
+{body_html}{lead}
 </body>
 </html>
 """
@@ -158,6 +164,15 @@ PAGER_TEMPLATE = """
 \t<button type="button" id="pager_next" class="mj-pager-button">次へ</button>
 </nav>
 """
+
+# ページ末尾(表・ページ送りの下)に置く説明文の段落(#158)。meta description
+# と同じ文を本文にも出す。繰り返し訪れる人の視界に入れないため、冒頭では
+# なく末尾に置く(#searchBoxesの手前には置かない)。
+LEAD_TEMPLATE = '\n<p class="mj-lead">{description}</p>\n'
+
+
+def _render_lead(description: str) -> str:
+    return LEAD_TEMPLATE.format(description=esc(description))
 
 
 def _render_search_boxes(table_config: TableConfig) -> str:
@@ -182,7 +197,10 @@ def _render_search_boxes(table_config: TableConfig) -> str:
     return f'\n<div id="searchBoxes" class="collapse">\n{inner}\n</div>\n'
 
 
-def render(meta: PageMeta, table_config: TableConfig, rows_html: str, content_before: str | None = None) -> str:
+def render(
+    meta: PageMeta, table_config: TableConfig, rows_html: str,
+    content_before: str | None = None, count: int | None = None,
+) -> str:
     """組み立て済みの行HTMLから、ページ全体のHTMLを生成する。
 
     table.js を共有JSとして使う。設定は table 要素の data 属性で渡す方式
@@ -194,9 +212,14 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str, content_be
     content_before は省略(None)なら table_config.content_before を使う。
     取得済みのスプレッドシート行に依存する内容(video_wayhomeのヒーロー等)は
     generate() の build_content_before 経由でここに渡される(#102)。
+
+    count は meta.description 内の {count} を置換する実データの件数
+    (#158)。meta description・og:description・ページ末尾のlead文の
+    3か所すべてに同じ値が入る。
     """
     if content_before is None:
         content_before = table_config.content_before
+    description = apply_count(meta.description, count)
     table_class = "mj-table"
     if table_config.extra_table_class:
         table_class += f" {table_config.extra_table_class}"
@@ -220,7 +243,7 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str, content_be
 
     return PAGE_TEMPLATE.format(
         title=esc(meta.title),
-        description=esc(meta.description),
+        description=esc(description),
         og_url=esc(meta.og_url),
         extra_head=extra_head,
         h1=esc(meta.h1),
@@ -233,23 +256,29 @@ def render(meta: PageMeta, table_config: TableConfig, rows_html: str, content_be
         search_boxes=_render_search_boxes(table_config),
         rows=rows_html,
         pager=pager,
+        lead=_render_lead(description),
     )
 
 
-def render_content(meta: PageMeta, body_html: str, extra_head: str = "") -> str:
+def render_content(meta: PageMeta, body_html: str, extra_head: str = "", count: int | None = None) -> str:
     """表を持たないページ(型D等)のHTML全体を組み立てる。
 
     render()と違いtable.jsは読み込まない(.mj-tableを探すページ専用の
     共有JSのため)。本文(body_html)は呼び出し側が丸ごと組み立てて渡す。
     見出し(h1)の扱いもページごとに異なりうるため(resource_efficiencyは
     可視のh1、型A/A'はvisually-hiddenのh1)、ここでは固定しない。
+
+    count は meta.description 内の {count} を置換する実データの件数
+    (#158)。render()と同じ仕組み。
     """
+    description = apply_count(meta.description, count)
     return CONTENT_TEMPLATE.format(
         title=esc(meta.title),
-        description=esc(meta.description),
+        description=esc(description),
         og_url=esc(meta.og_url),
         extra_head=extra_head,
         body_html=body_html,
+        lead=_render_lead(description),
     )
 
 
@@ -271,6 +300,8 @@ def generate(
     ページ固有のHTMLブロック(video_wayhomeのヒーロー等、#102)を組み立てて
     render() の content_before に渡す。省略時は table_config.content_before
     (既定は空文字)がそのまま使われる。
+
+    取得した行数(len(raw_rows))を render() の count に渡す(#158)。
     """
     print(f"「{sheet_name}」シートを取得中...")
     raw_rows = fetch_sheet(spreadsheet_id, sheet_name, query, formatted=formatted)
@@ -278,7 +309,7 @@ def generate(
 
     rows_html = "\n".join(build_row_html(row) for row in raw_rows)
     content_before = build_content_before(raw_rows) if build_content_before else None
-    output = render(meta, table_config, rows_html, content_before=content_before)
+    output = render(meta, table_config, rows_html, content_before=content_before, count=len(raw_rows))
 
     output_path = pathlib.Path(output_path)
     output_path.write_text(output, encoding="utf-8")

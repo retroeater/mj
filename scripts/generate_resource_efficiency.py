@@ -38,7 +38,7 @@ OUTPUT_PATH = REPO_ROOT / "resource_efficiency.html"
 
 META = PageMeta(
     title="牌効率 | リソース | ryoei.pro",
-    description="牌効率の比較のため、牌姿ごとにメンツが完成する組合せ数を計算した一覧表です。",
+    description="牌効率の比較のため、牌姿{count}通りごとにメンツが完成する組合せ数を計算した一覧表です。",
     og_url="https://ryoei.pro/resource_efficiency.html",
     h1="どの牌を残すとメンツができやすいか | Efficiency to create a new group from an existing group and/or an isolated tile",
     caption="",  # render_content()では使わない(表を持たないため)
@@ -124,7 +124,7 @@ def main():
         chart_svg_desktop=chart_svg_desktop,
         chart_svg_mobile=chart_svg_mobile,
     )
-    output = render_content(META, body_html)
+    output = render_content(META, body_html, count=len(data))
 
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     print(f"{OUTPUT_PATH} を更新しました。")

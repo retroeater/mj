@@ -31,7 +31,7 @@ OUTPUT_PATH = REPO_ROOT / "video_mtsuku.html"
 
 META = PageMeta(
     title="Mつく | 動画 | ryoei.pro",
-    description="YouTubeチャンネル「麻雀遊戯王」の企画「Mリーグチームを作ろう！」の動画をまとめています。選手名・所属団体名などで検索できます。",
+    description="YouTubeチャンネル「麻雀遊戯王」の企画「Mリーグチームを作ろう！」の動画{count}本をまとめています。選手名・所属団体名などで検索できます。",
     og_url="https://ryoei.pro/video_mtsuku.html",
     h1="日本プロ麻雀連盟 Mつく動画",
     caption="YouTubeチャンネル「麻雀遊戯王」の企画「Mリーグチームを作ろう！」の動画一覧。",

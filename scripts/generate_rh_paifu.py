@@ -24,7 +24,7 @@ OUTPUT_PATH = REPO_ROOT / "rh_paifu.html"
 
 META = PageMeta(
     title="牌譜 | 平野良栄 | ryoei.pro",
-    description="日本プロ麻雀連盟の麻雀プロ、平野良栄の公式戦の牌譜を公開しています。",
+    description="日本プロ麻雀連盟の麻雀プロ、平野良栄の公式戦の牌譜{count}件を公開しています。",
     og_url="https://ryoei.pro/rh_paifu.html",
     h1="平野良栄 牌譜一覧",
     caption="平野良栄の公式戦の牌譜一覧。",

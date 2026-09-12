@@ -25,7 +25,7 @@ OUTPUT_PATH = REPO_ROOT / "jpml_titles.html"
 
 META = PageMeta(
     title="タイトル | 日本プロ麻雀連盟 | ryoei.pro",
-    description="日本プロ麻雀連盟の麻雀プロが出場するタイトル戦について、歴代優勝者と決勝進出者をまとめています。選手名・タイトル戦名称などで検索できます。",
+    description="日本プロ麻雀連盟の麻雀プロが出場するタイトル戦について、歴代優勝者と決勝進出者{count}件をまとめています。選手名・タイトル戦名称などで検索できます。",
     og_url="https://ryoei.pro/jpml_titles.html",
     h1="日本プロ麻雀連盟 タイトル戦一覧",
     caption="日本プロ麻雀連盟のタイトル戦、歴代優勝者と決勝進出者一覧。",

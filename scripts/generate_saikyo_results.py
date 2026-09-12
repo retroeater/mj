@@ -50,7 +50,7 @@ OUTPUT_PATH = REPO_ROOT / "saikyo_results.html"
 
 META = PageMeta(
     title="麻雀最強戦 | ryoei.pro",
-    description="麻雀最強戦の成績（2011年以降のグループリーグおよびファイナル）をまとめています。",
+    description="麻雀最強戦の成績（2011年以降のグループリーグおよびファイナル）{count}件をまとめています。",
     og_url="https://ryoei.pro/saikyo_results.html",
     h1="麻雀最強戦 成績",
     caption="麻雀最強戦の成績（2011年以降のグループリーグおよびファイナル）一覧。",
