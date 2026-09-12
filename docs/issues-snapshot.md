@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 23:00 JST
+生成日時: 2026-09-12 23:05 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -3710,7 +3710,7 @@ sitemap・旧URL（`?name=`付き）からの対応表など、一度に通す�
 - #159（`?name=`付きURLからの301マッピング設計）
 - #13（構造化データ）
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-12):
 
@@ -3779,6 +3779,27 @@ https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 - 本番（ryoei.pro）に実際に反映されていることをcurlで直接確認（今回のセッションはryoei.pro/docs.google.com/img.youtube.comに到達できたため。詳細は上のコメント参照）
 
 ラベルは「状況: 対応中」のままにしてあります。内容をご確認のうえ、問題なければクローズをお願いします。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
+
+**retroeater** (2026-09-12):
+
+### 追記: 個別ページのVideoObjectが本番でリッチリザルトテストを通過
+
+本番URL（`https://ryoei.pro/wayhome/UtxpVoWy2GY.html`）でGoogleのリッチリザルトテストを実行し、`VideoObject`が有効なアイテムとして検出されたことを確認した（2026-09-12）。#13にも同内容をコメント済み。
+
+### sitemap-pages.xmlのGSCパースエラーを修正
+
+本issueの本番検証で、`sitemap-pages.xml`がGSCで「型: 不明 / 1件のエラー」になっていることが分かった。原因は冒頭のXMLコメント内の「`regenerate.py --list`」の`--`（XMLコメントは`--`を含められない）。この`--`自体は#162より前、#121（`fde321c`）の時点から存在していたバグで、#162のサイトマップインデックス化で複製されただけだった。
+
+対応:
+- `sitemap-pages.xml`のコメントから`--`を除去（`regenerate.py --list`→`regenerate.pyの一覧オプション`）
+- 再発防止として、`regenerate-page.yml`のサイトマップ更新後と`scripts/generate_wayhome_episodes.py`のサイトマップ書き出し前に、3ファイル（sitemap.xml / sitemap-pages.xml / sitemap-wayhome.xml）のwell-formedness確認を追加（壊れていればジョブ・生成を止める）
+- docs/handover.mdのSEO節に経緯を記録
+
+push後、GitHub Actions（ページの再生成・公開対象を検査する）・Workers Buildsのcheck-runがいずれもsuccess。本番の`sitemap-pages.xml`をcurlで取得し、well-formedであることも直接確認済み。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -8042,6 +8063,14 @@ docs/handover.mdに型A'(多列テーブル、表のみ)を新設し、rh_result
 
 このissueはまだ修正せず、起票のみ。色の最終決定は別途相談する。
 
+### コメント (1件)
+
+**retroeater** (2026-09-12):
+
+このissueは #26（リンクの見た目をモダンにする）でまとめて対応します。リンク色をBootstrap既定の#0d6efdから#14459bに変更し、.mj-tableの偶数行・ホバー行を含む3背景すべてでAA(4.5:1)を大きく上回るようにします。
+
+セッション: https://claude.ai/code/session_01HKx2jo1yaCP6ER4y33yuok
+
 ---
 
 ## #107 新サイトのUI方針を決める（カードUI・段階的開示・ダークモード）
@@ -12020,7 +12049,7 @@ https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
 ---
 <sub>移行前のタスク番号: 28</sub>
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-09):
 
@@ -12037,6 +12066,12 @@ GitHub Pagesは切り戻し用に当面残す。
 
 訂正: このissueはドメイン切替(#16)とは無関係のため再オープンします。
 上記のコメントは誤って投稿したものです。
+
+**retroeater** (2026-09-12):
+
+着手中: リンクの見た目をモダンにする(#26)。#108（.mj-table内のテキストリンクのコントラスト不足）も同じstyle.css変更で解消するため、#26でまとめて対応します。
+
+セッション: https://claude.ai/code/session_01HKx2jo1yaCP6ER4y33yuok
 
 ---
 
@@ -12475,7 +12510,7 @@ ItemList と Person で選手情報を機械可読にする。静的HTML化で�
 ---
 <sub>移行前のタスク番号: 38</sub>
 
-### コメント (8件)
+### コメント (9件)
 
 **retroeater** (2026-09-09):
 
@@ -12652,6 +12687,16 @@ durationは依然として未設定だが、2回のテストとも指摘され�
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01Ph5dbxcvrwYgdaWbd6Jg95
+
+**retroeater** (2026-09-12):
+
+#162で追加したエピソード個別ページ（`/wayhome/<動画ID>.html`）について、本番URL（`https://ryoei.pro/wayhome/UtxpVoWy2GY.html`）でGoogleのリッチリザルトテストを実行したところ、`VideoObject`が有効なアイテムとして検出された（2026-09-12）。
+
+一覧ページ（video_wayhome.html）のJSON-LDは本番未反映の時点でしか検証できず「本番反映後に実URLで改めて実行することを推奨する」と記録していたが（本issueのコメント参照）、今回個別ページで実際に本番URLでの検証が取れた。個別ページ側の`VideoObject`の組み立ては一覧ページと共通の`scripts/lib/wayhome.py`の`build_video_object()`を使っているため、一覧ページ側の実装も同様に有効と見てよい材料になる。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 ---
 
