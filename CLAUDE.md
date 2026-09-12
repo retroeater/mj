@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 構成
 - 静的HTML 27ページ + 「帰り道」エピソード個別ページ38枚（`wayhome/<動画ID>.html`、#162）。ビルド工程なし（Jekyllは廃止済み）
+- `llms.txt`（AIクローラー向けのサイト概要・ページ索引）を手書きの静的ファイル1枚として設置している（#161）。生成スクリプトは持たない。新サイトのビルド（#21）側で自動生成する余地を残すための判断
 - Cloudflare Workersの静的アセットとして配信（`wrangler.jsonc`、assets.directory は `./`）
 - 作業ブランチは cloudflare。gh-pages は旧GitHub Pages用で触らない
 - **本番反映は Cloudflare Workers Builds（ダッシュボードのGit連携）が行う。**
@@ -159,3 +160,5 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ページの移行・追加・削除を行ったときは、同じコミットで CLAUDE.md と
   docs/handover.md の件数・ページ列挙を更新すること。件数の正は
   `python3 scripts/regenerate.py --list`（#136）
+- `llms.txt` も同じタイミングで更新すること。sitemap-pages.xml と同様、
+  生成スクリプトを持たない手書きファイルのため自動では追随しない（#161）

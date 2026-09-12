@@ -1,0 +1,65 @@
+# ryoei.pro
+
+> 日本プロ麻雀連盟（JPML）所属の麻雀プロ・平野良栄の個人サイト。連盟所属プロ1,100名超の選手データベースと、鳳凰戦・女流桜花・JPML WRCリーグ・麻雀最強戦の公式戦成績、放送対局動画の索引を公開している。
+
+- サイトの言語は日本語。全ページが静的HTMLで、データの正本はGoogleスプレッドシート。
+- 成績・選手情報は公開情報をもとに個人が集計したもので、日本プロ麻雀連盟の公式発表ではない。
+- 選手のプロフィール画像は外部サービス（龍龍・X・note・YouTube等）への直リンクであり、当サイトの著作物ではない。
+- クローラー向けの意思表示は robots.txt の Content-Signal で宣言している（search=yes, ai-train=no, use=reference）。検索・回答での参照は可、学習データとしての利用は不可。
+
+## サイト全体
+
+- [トップページ](https://ryoei.pro/): 平野良栄のプロフィール・出演情報・経歴と、サイト内の各データベースへの入口。
+
+## 日本プロ麻雀連盟
+
+- [プロ](https://ryoei.pro/jpml_pros.html): 麻雀プロ1,100名の所属・出身地・龍龍・X・note・YouTube・公式戦成績（鳳凰戦・女流桜花等）の一覧。このサイトの中心となるデータベース。
+- [タイトル](https://ryoei.pro/jpml_titles.html): タイトル戦の歴代優勝者と決勝進出者2,063件。選手名・タイトル戦名称で検索できる。
+- [プロテスト](https://ryoei.pro/jpml_test.html): プロテストに関する記事・動画34件。
+- [リンク](https://ryoei.pro/jpml_links.html): 日本プロ麻雀連盟の公式サイト・各支部・関連団体へのリンク集。
+
+## 鳳凰戦
+
+- [ランキング](https://ryoei.pro/houou_ranking.html): 通算得点・期最高得点・節最高得点などの成績ランキング。
+- [リーグ推移](https://ryoei.pro/houou_leagues.html): 選手691名の所属リーグ推移（期ごとの各リーグの人数、全出場選手の中での順位等）。
+- [成績詳細](https://ryoei.pro/houou_results.html): 第17期後期以降の全選手の節単位の成績。選手名・期・リーグで検索できる。
+
+## 女流桜花
+
+- [ランキング](https://ryoei.pro/ouka_ranking.html): 通算得点・期最高得点・節最高得点などの成績ランキング。
+- [リーグ推移](https://ryoei.pro/ouka_leagues.html): 選手164名の所属リーグ推移。
+- [成績詳細](https://ryoei.pro/ouka_results.html): 全選手の節単位の成績。選手名・期・リーグで検索できる。
+
+## JPML WRCリーグ
+
+- [ランキング](https://ryoei.pro/wrc_ranking.html): 通算得点・期最高得点・節最高得点などの成績ランキング。
+- [成績詳細](https://ryoei.pro/wrc_results.html): 全選手の節単位の成績。選手名・期・リーグで検索できる。
+
+## 麻雀最強戦
+
+- [麻雀最強戦](https://ryoei.pro/saikyo_results.html): 2011年以降のグループリーグおよびファイナルの成績2,560件。
+
+## 動画
+
+- [放送対局](https://ryoei.pro/video_live.html): YouTubeチャンネル「日本プロ麻雀連盟」の放送対局動画2,332本。選手・実況・解説の名前、タイトル戦名称で検索できる。
+- [帰り道ついていってイイっすか](https://ryoei.pro/video_wayhome.html): タイトル戦を終えた選手への密着インタビュー動画の一覧。各話の個別ページを持つ。
+- [Mつく](https://ryoei.pro/video_mtsuku.html): YouTubeチャンネル「麻雀遊戯王」の企画「Mリーグチームを作ろう！」の動画61本。
+- [English](https://ryoei.pro/video_en.html): 日本プロ麻雀連盟の麻雀プロが出演する英語動画39本。
+
+## リソース
+
+- [ログ](https://ryoei.pro/resource_logs.html): 麻雀プロが訪れた飲食店2,630件をXポストに基づいてまとめた一覧。選手名・店名・メニュー名・最寄駅名で検索できる。
+- [辞書](https://ryoei.pro/resource_dictionary.html): 麻雀プロの名前および麻雀用語の辞書ファイル（Microsoft IME・Google日本語入力）。
+- [牌効率](https://ryoei.pro/resource_efficiency.html): 牌姿30通りごとにメンツが完成する組合せ数を計算した一覧表。
+
+## 平野良栄
+
+- [成績](https://ryoei.pro/rh_results.html): 公式戦成績の通算・年度別のまとめ。
+- [成績詳細](https://ryoei.pro/rh_results_detail.html): 公式戦成績の詳細321半荘分。
+- [牌譜](https://ryoei.pro/rh_paifu.html): 公式戦の牌譜57件。
+- [リンク](https://ryoei.pro/rh_links.html): 利用しているツール・サービス等のリンク集。
+
+## Optional
+
+- [サイトマップ](https://ryoei.pro/sitemap.xml): 公開ページ全件のインデックス。ルート直下の25ページ（sitemap-pages.xml）と「帰り道」各話ページ38枚（sitemap-wayhome.xml）を束ねている。
+- 「帰り道ついていってイイっすか」の各話ページは `https://ryoei.pro/wayhome/<YouTube動画ID>.html` の形式で38枚ある。一覧は上記 video_wayhome.html、URL全件は sitemap-wayhome.xml を参照。
