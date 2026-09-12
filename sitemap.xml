@@ -6,182 +6,136 @@
     tanilog.html / resource_calendar.html / resource_books.html
                           _redirects で転送しており実体がない
   ページを追加・削除したときは、このファイルの更新も忘れないこと。
+
+  lastmod は各ページの最終コミット日（#138）。手動更新のため実態と
+  ずれる可能性がある。自動更新は #121 で対応する。
+  changefreq / priority は Google が参照しないため削除した（#138）。
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<url>
 		<loc>https://ryoei.pro/</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>1.0</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_pros.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>1.0</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_titles.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.8</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_test.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.3</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/jpml_links.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.3</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/houou_ranking.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/houou_leagues.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/houou_results.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/ouka_ranking.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/ouka_leagues.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/ouka_results.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/wrc_ranking.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/wrc_results.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/saikyo_results.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_live.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_wayhome.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_mtsuku.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/video_en.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/resource_logs.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/resource_dictionary.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.3</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/resource_efficiency.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.3</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/rh_results.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/rh_results_detail.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/rh_paifu.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>monthly</changefreq>
-		<priority>0.4</priority>
+		<lastmod>2026-09-11</lastmod>
 	</url>
 
 	<url>
 		<loc>https://ryoei.pro/rh_links.html</loc>
-		<lastmod>2026-09-07</lastmod>
-		<changefreq>yearly</changefreq>
-		<priority>0.3</priority>
+		<lastmod>2026-09-09</lastmod>
 	</url>
 
 </urlset>

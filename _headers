@@ -24,6 +24,15 @@
 /ouka_leagues_data.json
   Cache-Control: public, max-age=86400
 
+# workers.dev のURLは本番(ryoei.pro)と同一内容を返すため、重複コンテンツとして
+# 評価が分散しないよう検索エンジンにインデックスさせない(#114)。
+# ホスト指定のルールなので ryoei.pro 側にはこのヘッダは付かない。
+# このパターンは本番ルート(mj.<サブドメイン>.workers.dev)と
+# プレビューURL(<prefix>-mj.<サブドメイン>.workers.dev)の両方に一致する
+# (どちらも workers.dev の前が2ラベルのため)。
+https://:version.:subdomain.workers.dev/*
+  X-Robots-Tag: noindex
+
 /*
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff

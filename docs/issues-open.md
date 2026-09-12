@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 10:42 JST
+生成日時: 2026-09-12 10:52 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 55件（openのみ）。番号降順。
+件数: 54件（openのみ）。番号降順。
 
 ---
 
@@ -581,51 +581,6 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 
 ---
 
-## #138 sitemap.xml の lastmod を暫定的に正しくする
-
-- 作成: 2026-09-11
-- ラベル: 分野: SEO/AIO
-
-### 本文
-
-### 状況
-
-`<lastmod>`が25件すべて`2026-09-07`のまま。9/11に多数のページを
-再生成しており実態と合わない。Googleは不正確なlastmodを無視する
-ようになるため、#121（sitemap自動化）までの暫定対応が必要。
-
-### 対応案（判断待ち）
-
-- (a) 各ページの最終コミット日（`git log -1 --format=%ad --date=short -- <file>`）で全件を書き直す
-- (b) `<lastmod>`を全件削除して#121で復活させる
-
-どちらでも可、平野さんの判断。
-
-### コメントの誤りについて（このissueとは別に修正済み）
-
-冒頭コメントの「`tanilog.html`はresource_logs.htmlへの転送用ページ」は
-誤り。ファイルは存在せず`_redirects`で301転送している
-（`/tanilog.html  /resource_logs.html?name=谷岡育夫  301`）。
-`resource_calendar.html` / `resource_books.html`と同じ「`_redirects`で
-転送しており実体がない」側の記述に修正した。
-
-#121に本issueへのリンクをコメントする。
-
-2026-09-11のレビューで判明。
-
-### コメント (1件)
-
-**retroeater** (2026-09-12):
-
-### 判断と優先度（2026-09-12、Claudeとの検討）
-
-SEO/AIO施策10件の中で**4番目**（#121とセット）。
-- 暫定対応は (a)（`git log -1 --format=%ad --date=short -- <file>` で全件書き直し）を採用。(b) の削除は一時的にでも信号を失うため
-- changefreq / priority は削除してよい（Googleは見ず、他エンジン向けの効果も薄い）
-- 25件すべて固定値のままだと、Googleに「信用できないlastmod」と学習される
-
----
-
 ## #135 abs.twimg.com の既定アイコンURL（13件）を img/avatar.svg に正規化する
 
 - 作成: 2026-09-11
@@ -1101,7 +1056,7 @@ SEO/AIO施策10件の中で**4番目**（#138の暫定対応の後）。`regener
 ## #114 workers.devのプレビューURLをnoindexにする
 
 - 作成: 2026-09-11
-- ラベル: 分野: SEO/AIO, 対象: 全ページ
+- ラベル: 状況: 待ち, 分野: SEO/AIO, 対象: 全ページ
 
 ### 本文
 
@@ -1120,13 +1075,41 @@ https://:version.:subdomain.workers.dev/*
 あわせて Search Console の「ページ」レポートで workers.dev のURLが
 登録されていないか確認する。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-12):
 
 ### 優先度（2026-09-12、Claudeとの検討）
 
 SEO/AIO施策10件の中で**3番目**。`_headers` に3行足すだけで、本番と同一内容の重複サイトが評価を分散させるリスクを消せる。Search Consoleで workers.dev のURLが登録されていないかの確認も同時に行う。
+
+**retroeater** (2026-09-12):
+
+### 対応（2026-09-12）
+
+`_headers` にホスト指定のルールを追加した。
+
+### 判明した追加事実
+
+issue本文はプレビューURLのみを対象にしていたが、`wrangler.jsonc` に
+`workers_dev` も `preview_urls` も未指定だった。Cloudflareの既定は
+`preview_urls = workers_dev` で、どちらも未指定なら両方が有効になる。
+つまり本番ルート `mj.<サブドメイン>.workers.dev` も同一内容を返していた。
+
+追加したパターン `https://:version.:subdomain.workers.dev/*` は、
+workers.dev の前が2ラベルという形が本番ルートとプレビューURLで共通のため、
+両方に一致する。
+
+### 採らなかった選択肢
+
+`workers_dev: false` にすればURL自体を消せるが、その場合プレビューURLの
+既定も false に連動するため、#38 で有効にしたプレビュービルドを維持するには
+`preview_urls: true` の明示が必要になる。今回はヘッダ対応にとどめた。
+
+### 残作業
+
+Search Console の「ページ」レポートで workers.dev のURLが登録されていないか
+確認する（平野さんが実施）。
 
 ---
 
