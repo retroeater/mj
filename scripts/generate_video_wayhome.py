@@ -73,8 +73,7 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
     ]
     if x_id:
         actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(x_id)}" target="_blank">X @{esc(x_id)}</a>')
-    # コピー対象はvideo_wayhome.js側でlocation.href(表示中のURL)を読む。
-    # ?name=付きで開かれた場合もその絞り込み状態ごと共有できるようにするため、
+    # コピー対象はvideo_wayhome.js側でlocation.href(表示中のURL)を読むため、
     # ここでは固定URLを属性に持たせない。
     actions.append('<button type="button" class="mj-video-btn" id="copyUrlBtn">URLをコピー</button>')
 

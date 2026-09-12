@@ -4,7 +4,7 @@
 // このページには .mj-table が存在せず table.js の対象外になるため、
 // 以下をこのファイルに移植している:
 //   - 画像の読み込み失敗時のフォールバック(data-fallback)
-//   - 検索欄(#info_filter)の絞り込みと ?name= の初期値付け
+//   - 検索欄(#info_filter)の絞り込み
 //   - #searchBoxes(虫眼鏡から開く検索欄)を画面固定表示するための
 //     --navbar-height の実測
 // 移植を忘れると、このページだけ画像フォールバックが効かなくなる
@@ -16,13 +16,6 @@
 //     選手個別ページでも同じ方式を使う想定、docs/new-site-design.md参照)
 
 document.addEventListener('DOMContentLoaded', function () {
-	// ---- ?name= の読み取り(table.jsのwindow.mjTable.getSearchParamと同じ実装) ----
-	function getSearchParam(name) {
-		const params = new URL(document.location).searchParams
-		const value = params.get(name)
-		return value && value !== 'null' ? value : ''
-	}
-
 	// ---- 画像フォールバック(table.jsから移植。忘れるとこのページだけ壊れる) ----
 	document.addEventListener('error', function (event) {
 		const img = event.target
@@ -37,8 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	const infoInput = document.getElementById('info_filter')
 	const track = document.getElementById('episodeTrack')
 	const countEl = document.getElementById('result_count')
-
-	if (infoInput) infoInput.value = getSearchParam('name')
 
 	let cardIndex = []
 	if (track) {
