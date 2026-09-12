@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 20:53 JST
+生成日時: 2026-09-12 21:02 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -13,6 +13,47 @@ issues-snapshot.md（全件）を参照します。
 issues-snapshot.md と同時に再生成されます。
 
 件数: 58件（openのみ）。番号降順。
+
+---
+
+## #172 video_wayhome.html の description に件数を入れるか決める
+
+- 作成: 2026-09-12
+- ラベル: 分野: SEO/AIO, 対象: video_wayhome
+
+### 本文
+
+### 経緯（2026-09-12、Claudeとの検討）
+
+#158 で生成済み15ページの description に `{count}`（生成時に実データの
+行数で置換）を入れ、meta description / og:description / 本文の .mj-lead の
+3か所に同じ数字が出るようにした。
+
+video_wayhome.html だけ件数が入っていない。#102第2段（8052879）で
+このページが全面リデザインされた際に description が新しい文に
+差し替わっており、`{count}` の挿入箇所がないため。
+
+### 現在の文
+
+YouTubeチャンネル「日本プロ麻雀連盟」の企画「帰り道ついていってイイっすか」。タイトル戦を終えた選手への密着インタビュー動画を、最新話から選手名・タイトル戦名で検索できます。
+
+リデザイン後の文として完成しており、このままでも問題はない。
+
+### 検討すること
+
+他の14ページが件数入りで揃うため、方針として揃えるかどうか。
+揃えるなら「密着インタビュー動画{count}本を、最新話から…」のように
+1語足す形になる（現在38本）。
+
+実装は `scripts/generate_video_wayhome.py` の description に `{count}` を
+入れるだけ。`generate()` が `len(raw_rows)` を渡す仕組みは #158 で
+共通化済みのため、他の変更は不要。
+
+### 判断の観点
+
+- 件数の表記が全ページで揃っていることに価値があるか
+- #102 の新デザインのパイロットとして、このページだけ別の文体を
+  許容するか（新サイトの description の書き方を決める材料になる）
 
 ---
 
@@ -3161,153 +3202,6 @@ SEO/AIO施策10件の中で**10番目**（新サイトで対応）。
 ### 依存
 
 #101、#122（`?name=` の内訳スナップショット）
-
----
-
-## #158 生成済みページの冒頭に説明文の段落を置く（AIO）
-
-- 作成: 2026-09-12
-- ラベル: 分野: SEO/AIO, 対象: 全ページ
-
-### 本文
-
-### 提案理由（2026-09-12、Claudeとの検討）
-
-SEO/AIO施策10件の中で**6番目**。
-
-現行ページは表だけで自然文がほぼない。AI検索・回答エンジンは表よりも「このページは何のデータで、どう更新されているか」を述べた文章を引用しやすい傾向がある。
-
-### 対応
-
-- `scripts/lib/page.py` の `PageMeta` に lead 文（1段落）を1項目足す
-- 生成ページ15枚にまとめて入る。meta description と整合させる
-- `jpml_pros.html`（独自の `generate_jpml_pros.py`）は個別に追加
-- 「現行サイトに作り込みすぎない」方針の範囲内（テンプレートに1項目足すだけ）
-
-### 完了条件
-
-- 生成ページすべてに冒頭段落がある
-- meta description と矛盾しない
-
-### コメント (4件)
-
-**retroeater** (2026-09-12):
-
-#102 第1段の実装で、`scripts/lib/page.py` に `content_before` スロットを追加した（h1直後・`#searchBoxes`手前。`TableConfig.content_before` / `generate()` の `build_content_before` 経由で差し込む）。
-
-本issueのlead文は、このスロットの**手前**に `PageMeta` 側で足す想定にしてある（h1 → lead文 → content_before → #searchBoxes の順）。着手時は `lib/page.py` の該当docstring・コメントを参照。
-
-**retroeater** (2026-09-12):
-
-### 実装方針の変更（2026-09-12、Claudeとの検討）
-
-issue本文から2点変えた。
-
-**1. 置く場所を「冒頭」から「表・ページ送りの下」に変更**
-
-現行ページは h1 が visually-hidden のため、冒頭に置くとメニューと表の間に
-毎回表示される。繰り返し訪れる人にとってノイズになるという判断で、
-ページ末尾に移した。
-
-AI検索・回答エンジンはテキストの位置より「そのテキストが存在し、ページ
-内容と一致していること」を見るため、上下の差は小さいと判断した。
-
-**検討して採らなかった案**
-
-| 案 | 却下理由 |
-|---|---|
-| visually-hidden で隠す | meta description は既にHTMLにありクローラーは読んでいる。隠したテキストを足してもクローラーから見える情報量はほぼ増えず、#158 の目的が達成されない。h1 も既に visually-hidden のため「可視テキストがほぼゼロで隠しテキストだけ」という構図になる点も避けたい |
-| 虫眼鏡（#searchBoxes）内に (i) アイコン＋ツールチップ | collapse 内のコンテンツ自体はインデックスされるが、結局は常時不可視。加えて #searchBoxes は position: fixed で高さが --content-offset に直結しており、中身を増やすと表の固定ヘッダーの位置計算に影響する |
-| 初回訪問時だけ冒頭に出す | localStorage による状態管理とJSが増える。ビルド工程を持たない構成と「作り込みすぎない」方針に合わない |
-
-**2. lead専用の文面は作らず、meta description をそのまま本文に出力**
-
-PageMeta にテキスト項目は追加しない。文面が1本化され、保守箇所が増えない。
-件数は description 内の `{count}` を生成時に置換する方式にしたため、
-meta description / og:description / 本文の3か所に同じ数字が入る。
-
-### 実装
-
-- lib/page.py に apply_count() を追加。render() / render_content() に
-  count 引数を追加し、generate() が len(raw_rows) を渡す
-- 各ページの description に {count} を挿入
-- rh_results のみ件数なし（12行が「通算1行＋年度別11年」の構成で、
-  「12件」が実態と合わないため）
-- generate_jpml_pros.py は独自テンプレートのため個別対応
-  （description が2か所ハードコードされていたので定数に集約）
-
-### 検証（全ページ再生成・完了）
-
-- 15ページすべて再生成し、meta description / og:description / .mj-lead
-  の3か所の文言が完全一致していることを確認
-- 件数は tbody 内の `<tr>` 実数と全ページ一致（jpml_titles 2,063件、
-  jpml_test 34件、resource_logs 2,630件、video_live 2,332件、video_en
-  76件、video_mtsuku 61件、rh_paifu 57件、saikyo_mens 90件、
-  saikyo_results 2,560件、rh_results_detail 321件、jpml_pros 1,100件）。
-  houou_leagues/ouka_leagues は`<option>`件数（691名/164名、期ごとに
-  前後する想定値。#127で許容済み）と一致
-- lead の位置は全ページで期待通り（ページ送りがあるページは`</nav>`の
-  直後、ページ送りなしは`</table>`の直後、resource_efficiencyは本文の
-  最後）。wrangler devでも構造を確認済み
-
-### 保留事項
-
-- **video_wayhome.html は対象外**。mj-93が#102第2段でこのページを
-  render_content()＋独自組み立てのbody（表なし）に作り変え中で、
-  lib/page.pyのTableConfig/content_beforeの仕組みから完全に離れた。
-  #158のlead文の仕組み（PageMeta経由）は構造上当てはまらなくなって
-  いる。mj-93側から別途コメントする予定とのこと
-- **style.css の `.mj-lead` はまだ追加していない**。mj-93が#102第2段で
-  style.cssを大幅に書き換え中（未コミット）で、同じファイルへの同時
-  編集を避けるため、pushを待っている。push後に追加してコミット・push
-  する
-- モバイル幅(375px)での溢れ確認は、`.mj-lead`のスタイル追加後に改めて
-  実施する
-
-issueのクローズは上記2点の完了後に行う。
-
-**retroeater** (2026-09-12):
-
-video_wayhome.html は #102第2段で全面リデザインし、`lib/page.py`の`TableConfig`/`render()`/`content_before`の仕組みから完全に離れた（`render_content()`＋独自組み立てのbodyに変更、表自体を廃止）。
-
-ヒーロー内に既に「タイトル戦を終えたばかりの選手に〜」という説明文（1〜2文、meta descriptionと整合させたもの）があり、これがlead文の役割を兼ねている。**video_wayhomeは本issueの対象15ページから除外してよい**（生成15ページのPageMeta経由で機械的に差し込む仕組みとは構造的に合わなくなったため）。
-
-**retroeater** (2026-09-12):
-
-### style.css追加・コミット完了（2026-09-12）
-
-mj-93の#102第2段push後、`.mj-lead`を`#searchBoxes`のすぐ下・
-video_wayhome専用スタイルの直前に追加した（`4de604f`）。
-
-```css
-.mj-lead {
-    max-width: 720px;
-    margin: 0;
-    padding: 12px 4px 18px;
-    border-top: 0.5px solid #e5e5e5;
-    font-size: 13px;
-    line-height: 1.7;
-    color: #555555;
-}
-```
-
-### 表示確認
-
-`wrangler dev`で構造を確認: jpml_titles.html（ページ送りの`</nav>`の
-直後に区切り線と注記）、jpml_pros.html（`</table>`の直後）、
-resource_efficiency.html（本文最後、グラフ・計算方法の段落の下）は
-いずれも期待通りの位置にlead段落が出力されている。
-
-**ただしこの環境にはheadless browserがなく、実際のレンダリング画面での
-目視確認（モバイル375px幅での横溢れ含む）はできていない。** 代わりに
-以下で構造的に問題ないことを確認した:
-
-- `.mj-lead`は`max-width: 720px`で固定pxの横幅指定はない
-- `white-space: nowrap`等、折り返しを妨げるプロパティは設定していない
-- 親要素(`body`)にモバイル幅を超える固定幅・overflow制約はない
-
-実機・実ブラウザでの最終確認は平野さんにお願いしたい。問題なければ
-このissueをクローズしてください。
 
 ---
 
