@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 23:09 JST
+生成日時: 2026-09-12 23:12 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -8136,8 +8136,8 @@ docs/handover.mdに型A'(多列テーブル、表のみ)を新設し、rh_result
 
 ## #108 .mj-table内のテキストリンクが縞模様背景に対してコントラスト不足
 
-- 状態: OPEN / 作成: 2026-09-11
-- ラベル: 状況: 保留, 分野: UI/UX, 対象: 全ページ
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-12
+- ラベル: 分野: UI/UX, 対象: 全ページ
 
 ### 本文
 
@@ -8164,13 +8164,17 @@ docs/handover.mdに型A'(多列テーブル、表のみ)を新設し、rh_result
 
 このissueはまだ修正せず、起票のみ。色の最終決定は別途相談する。
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-12):
 
 このissueは #26（リンクの見た目をモダンにする）でまとめて対応します。リンク色をBootstrap既定の#0d6efdから#14459bに変更し、.mj-tableの偶数行・ホバー行を含む3背景すべてでAA(4.5:1)を大きく上回るようにします。
 
 セッション: https://claude.ai/code/session_01HKx2jo1yaCP6ER4y33yuok
+
+**retroeater** (2026-09-12):
+
+#26で解消。lighthouse CLIで jpml_pros.html を再計測し、color-contrast監査がfail→passになったことを確認した。詳細はdocs/lighthouse-baseline.md「リンクの配色（#26/#108）」を参照。
 
 ---
 
@@ -12140,8 +12144,8 @@ https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
 
 ## #26 リンクの見た目をモダンにする
 
-- 状態: OPEN (REOPENED) / 作成: 2026-09-07
-- ラベル: 状況: 保留, 分野: UI/UX, 対象: jpml_pros
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-12
+- ラベル: 分野: UI/UX, 対象: jpml_pros
 
 ### 本文
 
@@ -12150,7 +12154,7 @@ https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
 ---
 <sub>移行前のタスク番号: 28</sub>
 
-### コメント (4件)
+### コメント (5件)
 
 **retroeater** (2026-09-09):
 
@@ -12173,6 +12177,14 @@ GitHub Pagesは切り戻し用に当面残す。
 着手中: リンクの見た目をモダンにする(#26)。#108（.mj-table内のテキストリンクのコントラスト不足）も同じstyle.css変更で解消するため、#26でまとめて対応します。
 
 セッション: https://claude.ai/code/session_01HKx2jo1yaCP6ER4y33yuok
+
+**retroeater** (2026-09-12):
+
+対応完了。style.cssのリンク色をBootstrap既定の#0d6efdから#14459bに変更（Bootstrap変数の上書きのみ）、下線位置を文字から離して細くし、画像専用リンク(a:has(> img))から下線を除去した。
+
+3背景（白/偶数行#fafafa/ホバー行#d6e9f8）すべてでAAA(7:1)以上を確認。詳細はdocs/handover.md「6. これまでに分かったこと」の「リンクの配色（#26/#108）」節、計測はdocs/lighthouse-baseline.md参照。
+
+#108（コントラスト不足）も同じ変更で解消したためクローズします。
 
 ---
 

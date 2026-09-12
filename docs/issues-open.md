@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 23:09 JST
+生成日時: 2026-09-12 23:12 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 58件（openのみ）。番号降順。
+件数: 56件（openのみ）。番号降順。
 
 ---
 
@@ -1834,46 +1834,6 @@ JSONにして、クライアントで1本だけ描く。Charts も ECharts も�
 
 ---
 
-## #108 .mj-table内のテキストリンクが縞模様背景に対してコントラスト不足
-
-- 作成: 2026-09-11
-- ラベル: 状況: 保留, 分野: UI/UX, 対象: 全ページ
-
-### 本文
-
-- docs/lighthouse-baseline.md「予想外だった点」で mobile accessibility 89
-  の原因を「.mj-plainクラスのリンク」としているが、これは誤り。
-  .mj-plain は text-decoration: none のみで色を指定していない（style.css:148）
-- 実際の原因は、.mj-table 内のテキストリンクが Bootstrap 既定色 #0d6efd の
-  ままであること。偶数行の背景 #fafafa（style.css:177）との組み合わせで
-  コントラスト比 4.31 となり、WCAG AA の 4.5 を下回る
-- 影響範囲は .mj-plain の有無と一致しない。セル内のテキストリンク数と
-  .mj-plain の内訳:
-  - jpml_pros 3,388件 / うち .mj-plain 0件
-  - resource_logs 2,576件 / うち .mj-plain 2,576件
-  - rh_paifu 57件 / うち .mj-plain 0件
-  - video_wayhome 38件 / うち .mj-plain 38件
-- 画像リンクのみのページ（jpml_titles / jpml_test / video_live / video_en /
-  saikyo_mens / video_mtsuku）は該当しない。計測で a11y 94 だったのはこのため
-- 修正案: style.css に `.mj-table td a { color: #0a58ca; }` を追加する。
-  #0a58ca は Bootstrap の既定ホバー色で、#fafafa に対して約6.17:1。
-  ただし採用前に実際の比率を計算して確認すること
-- 注意: この変更は jpml_pros の 3,388件のリンクの見た目に及ぶ。
-  適用後に jpml_pros / resource_logs / rh_paifu / video_wayhome の
-  4ページを目視確認し、平野さんに見てもらってからコミットする
-
-このissueはまだ修正せず、起票のみ。色の最終決定は別途相談する。
-
-### コメント (1件)
-
-**retroeater** (2026-09-12):
-
-このissueは #26（リンクの見た目をモダンにする）でまとめて対応します。リンク色をBootstrap既定の#0d6efdから#14459bに変更し、.mj-tableの偶数行・ホバー行を含む3背景すべてでAA(4.5:1)を大きく上回るようにします。
-
-セッション: https://claude.ai/code/session_01HKx2jo1yaCP6ER4y33yuok
-
----
-
 ## #107 新サイトのUI方針を決める（カードUI・段階的開示・ダークモード）
 
 - 作成: 2026-09-11
@@ -2379,44 +2339,6 @@ SDPデータベース(選手が自分の情報を編集する仕組み)向け。
 
 ---
 <sub>移行前のタスク番号: 65</sub>
-
----
-
-## #26 リンクの見た目をモダンにする
-
-- 作成: 2026-09-07
-- ラベル: 状況: 保留, 分野: UI/UX, 対象: jpml_pros
-
-### 本文
-
-現在はBootstrapの青(#0d6efd)＋文字直下の下線。紺系に寄せ、下線を薄く3px離す案。既訪問リンクが紫になる問題はBootstrapが解決済みだったため、当初想定より効果は小さい。
-
----
-<sub>移行前のタスク番号: 28</sub>
-
-### コメント (4件)
-
-**retroeater** (2026-09-09):
-
-ドメイン切替が完了。お名前.comのネームサーバーをCloudflareに変更し、
-WorkerにカスタムドメインとしてryoeI.proとwww.ryoei.proを設定した。
-43件の改善がこれで公開された。
-GitHub Pagesは切り戻し用に当面残す。
-
-**retroeater** (2026-09-09):
-
-訂正: 上記コメント中の「ryoeI.pro」は誤字です。正しくは「ryoei.pro」です。
-
-**retroeater** (2026-09-09):
-
-訂正: このissueはドメイン切替(#16)とは無関係のため再オープンします。
-上記のコメントは誤って投稿したものです。
-
-**retroeater** (2026-09-12):
-
-着手中: リンクの見た目をモダンにする(#26)。#108（.mj-table内のテキストリンクのコントラスト不足）も同じstyle.css変更で解消するため、#26でまとめて対応します。
-
-セッション: https://claude.ai/code/session_01HKx2jo1yaCP6ER4y33yuok
 
 ---
 
