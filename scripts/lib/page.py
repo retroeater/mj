@@ -130,7 +130,9 @@ HEAD_TEMPLATE = """<!DOCTYPE html>
 """
 
 # 表を持つページ(型A/A')用。HEAD_TEMPLATEに<body>以降を続ける。
-PAGE_TEMPLATE = HEAD_TEMPLATE + """<body>
+# {body_attrs} は #searchBoxes を持たないページにだけ ' data-search="off"' が
+# 入る(#163)。持つページでは空文字なので <body> のまま変わらない。
+PAGE_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
@@ -152,7 +154,8 @@ PAGE_TEMPLATE = HEAD_TEMPLATE + """<body>
 """
 
 # 表を持たないページ(型D等)用。本文は呼び出し側が丸ごと組み立てて渡す。
-CONTENT_TEMPLATE = HEAD_TEMPLATE + """<body>
+# {body_attrs} はPAGE_TEMPLATEと同じ(#163)。
+CONTENT_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
@@ -201,6 +204,23 @@ def _render_search_boxes(table_config: TableConfig) -> str:
     return f'\n<div id="searchBoxes" class="collapse">\n{inner}\n</div>\n'
 
 
+def _render_body_attrs(has_search_boxes: bool) -> str:
+    """<body> に差し込む属性文字列(#163)。
+
+    navbar.js は虫眼鏡アイコン(#searchBoxes を開閉するリンク)を
+    document.write で描画する。その時点ではページ本体がまだパースされて
+    おらず #searchBoxes の有無を見られないため、ページ側が <body> の
+    data属性で先に伝える。<body>タグはnavbar.jsの<script>より前に
+    パースされているので、描画のその瞬間に読める。
+
+    目印は「検索欄が無い」側にだけ付ける。属性が無ければ従来どおり
+    アイコンを出す、が既定。逆向き(あるページに"on"を付ける)にすると、
+    手書きHTMLで付け忘れたときにアイコンが消えてしまうため、
+    付け忘れが現状維持に倒れる向きを選んでいる。
+    """
+    return "" if has_search_boxes else ' data-search="off"'
+
+
 def render(
     meta: PageMeta, table_config: TableConfig, rows_html: str,
     content_before: str | None = None, count: int | None = None,
@@ -241,6 +261,11 @@ def render(
 
     pager = PAGER_TEMPLATE if table_config.page_size is not None else "\n"
 
+    # show_filter ではなく _render_search_boxes() の戻り値で判定する(#163)。
+    # show_filter が False でも search_boxes_before/after があれば
+    # #searchBoxes は出力されるため、show_filter を見ると判定を誤る。
+    search_boxes = _render_search_boxes(table_config)
+
     # table.js は`.mj-table`を探して動くページ専用の共有JS。表を持たない
     # ページ(render_content()側)は読み込まない。
     extra_head = f'<script defer src="table.js"></script>\n{table_config.extra_script}'
@@ -257,14 +282,18 @@ def render(
         table_class=table_class,
         table_data_attrs=table_data_attrs,
         header_cells=header_cells,
-        search_boxes=_render_search_boxes(table_config),
+        search_boxes=search_boxes,
+        body_attrs=_render_body_attrs(bool(search_boxes)),
         rows=rows_html,
         pager=pager,
         lead=_render_lead(description),
     )
 
 
-def render_content(meta: PageMeta, body_html: str, extra_head: str = "", count: int | None = None) -> str:
+def render_content(
+    meta: PageMeta, body_html: str, extra_head: str = "", count: int | None = None,
+    has_search_boxes: bool = True,
+) -> str:
     """表を持たないページ(型D等)のHTML全体を組み立てる。
 
     render()と違いtable.jsは読み込まない(.mj-tableを探すページ専用の
@@ -274,6 +303,13 @@ def render_content(meta: PageMeta, body_html: str, extra_head: str = "", count: 
 
     count は meta.description 内の {count} を置換する実データの件数
     (#158)。render()と同じ仕組み。
+
+    has_search_boxes は本文(body_html)に #searchBoxes を含むかどうか(#163)。
+    render()と違い表の設定(TableConfig)が渡らないため、呼び出し側が明示する。
+    既定は「検索欄あり」= <body>に属性を出さない側にしてある(付け忘れが
+    現状維持に倒れる向き)。現在の利用ページでは houou_leagues /
+    ouka_leagues / video_wayhome が既定のまま、resource_efficiency だけが
+    False を渡す。
     """
     description = apply_count(meta.description, count)
     return CONTENT_TEMPLATE.format(
@@ -282,6 +318,7 @@ def render_content(meta: PageMeta, body_html: str, extra_head: str = "", count: 
         og_url=esc(meta.og_url),
         extra_head=extra_head,
         body_html=body_html,
+        body_attrs=_render_body_attrs(has_search_boxes),
         lead=_render_lead(description),
     )
 

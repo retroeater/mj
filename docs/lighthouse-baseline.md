@@ -514,3 +514,48 @@ accessibility の `link-name` 指摘が navbar.js を読み込む全26ページ�
 スクリーンリーダーからは「検索」という名前で読み上げられるようになるため、
 名前の付いた無反応なコントロールになる点はむしろ以前より目立つ。
 対応方針（該当ページでアイコン自体を出さない等）は #163 のコメント参照。
+
+## 検索欄を持たないページで虫眼鏡アイコンを描画しない（#163、2026-09-12）
+
+`#searchBoxes` を持たない7ページでは、navbar.js の虫眼鏡アイコンが
+「押しても何も起きないリンク」になっていた。ページ側が
+`<body data-search="off">` で伝え、navbar.js が**最初から描画しない**ように
+した（描画後にDOMから消す方式ではないため、ちらつきは原理的に起きない）。
+
+計測はローカル静的サーバーに対する lighthouse CLI（mobile、
+`--only-categories=accessibility,performance`）。
+
+| ページ | accessibility | performance | 失敗している a11y 監査 |
+|---|---|---|---|
+| rh_results.html（対象・生成物） | 0.98 | 0.94 | `landmark-one-main` |
+| resource_efficiency.html（対象・生成物） | 0.98 | 0.91 | `landmark-one-main` |
+
+- **accessibility は下がっていない**（#163 の `aria-label` 追加後と同じ 0.98）。
+  もともと `aria-controls` の件は axe の指摘対象外だったため、スコアは
+  動かないのが想定どおり。今回の効果はスコアではなく、
+  **操作しても何も起きないコントロールが7ページから消えたこと**
+- 残る `landmark-one-main` は別件（ページ本体を `<main>` で包めば解消する。
+  video_wayhome で実証済み）
+
+### ちらつきの検証
+
+対象7ページで、**どのスクリプトより先に走る MutationObserver** を仕込み、
+`a[aria-controls="searchBoxes"]` が一度でもDOMに現れるかを数えた。
+7ページとも**出現回数0**。`document.write` の時点で分岐しているため、
+一瞬も描画されない。
+
+### レイアウトへの影響
+
+- デスクトップ幅（1280px）: navbar の高さは**全26ページで 80px**（アイコンの
+  有無で変わらない）。アイコンは右端にあり、`me-auto` で左寄せされた
+  ナビ項目の位置にも影響しない
+- モバイル幅（390px）: アイコンを持つページでは、アイコンが折り返して
+  2行目に回り navbar が縦に伸びる。**アイコンを消した7ページは1行に収まり、
+  むしろ縦幅が縮んだ**（従来の見た目より改善）
+
+### 開閉動作（アイコンが残る19ページ）
+
+`jpml_test` / `rh_paifu` / `video_wayhome` / `houou_leagues` で確認:
+初期は閉（0px）→ クリックで開（32〜52px、`aria-expanded="true"`、
+`aria-label="検索"` 維持）→ 再クリックで閉（0px）。濃色固定の
+`video_wayhome` でも同じ。

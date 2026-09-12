@@ -124,7 +124,9 @@ def main():
         chart_svg_desktop=chart_svg_desktop,
         chart_svg_mobile=chart_svg_mobile,
     )
-    output = render_content(META, body_html, count=len(data))
+    # このページは #searchBoxes を持たないので、navbar.js の虫眼鏡アイコンを
+    # 出さないよう <body> に data-search="off" を出す(#163)。
+    output = render_content(META, body_html, count=len(data), has_search_boxes=False)
 
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     print(f"{OUTPUT_PATH} を更新しました。")

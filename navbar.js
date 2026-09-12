@@ -1,3 +1,23 @@
+// 虫眼鏡アイコンは #searchBoxes を開閉するリンクなので、検索欄を持たない
+// ページでは押しても何も起きない。そこでページ側が <body data-search="off">
+// で「検索欄なし」を伝え、ここではそもそも描画しない(#163)。
+//
+// document.write は<body>直下の<script>から呼ばれるため、この時点で
+// document.body は参照できる(readyStateは"loading")。一方 #searchBoxes は
+// まだパースされていないので、DOMから直接有無を調べることはできない。
+// 描画後に消す方式だと対象ページで一瞬アイコンが見えてから消える。
+//
+// 目印は「検索欄が無い」側にだけ付ける。属性が無ければ従来どおり出す、が既定。
+var showSearchIcon = !(document.body && document.body.dataset.search === 'off');
+
+var searchIconHtml = showSearchIcon
+	? '<a class="btn" aria-label="検索" data-bs-toggle="collapse" href="#searchBoxes" role="button" aria-expanded="false" aria-controls="searchBoxes">' +
+			'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFFFFF" viewBox="0 0 16 16">' +
+				'<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>' +
+			'</svg>' +
+		'</a>'
+	: '';
+
 document.write(
 '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">' +
 	'<div class="container-fluid">' +
@@ -65,10 +85,6 @@ document.write(
 			'</ul>' +
 		'</div>' +
 	'</div>' +
-	'<a class="btn" aria-label="検索" data-bs-toggle="collapse" href="#searchBoxes" role="button" aria-expanded="false" aria-controls="searchBoxes">' +
-		'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFFFFF" viewBox="0 0 16 16">' +
-			'<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>' +
-		'</svg>' +
-	'</a>' +
+	searchIconHtml +
 '</nav>'
 )

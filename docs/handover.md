@@ -880,6 +880,19 @@ video_wayhome」に集約した**（このファイルには実装の要点の�
   個別に確認し、必要なら移植すること。忘れると気づきにくい形で
   壊れる**（今回はCDP経由で意図的に壊れた画像URLを読み込ませて
   フォールバックが効くことを実地で確認した）
+- **【規約】検索欄を持たないページは `<body data-search="off">` を出す（#163）。**
+  navbar.js の虫眼鏡アイコンは `#searchBoxes` を開閉するリンクなので、検索欄が
+  無いページでは押しても何も起きない。navbar.js は `document.write` で描画され
+  その時点でページ本体は未パースのため、DOMから `#searchBoxes` の有無を
+  調べられない。そこでページ側が `<body>` の data属性で先に伝える
+  （`<body>` は navbar.js の `<script>` より前にパース済みなので描画の瞬間に読める）。
+  **属性が無ければ「検索欄あり」＝従来どおり出す、が既定。** 目印を「無い」側に
+  だけ付けているのは、手書きHTMLで付け忘れたときに現状維持へ倒すため。
+  **表を持たない新しいページを作る際は、`render_content()` に
+  `has_search_boxes=False` を渡すかどうかを必ず判断すること**（既定は「あり」）。
+  手書きHTMLを追加するときは `<body>` に手で付ける。対象は現在7ページ
+  （`404` / `jpml_links` / `resource_dictionary` / `resource_efficiency` /
+  `rh_links` / `rh_results` / `rh_results_detail`）
 - **`<main class="mj-video-page">`でページ全体を包み、Lighthouse
   accessibilityの`landmark-one-main`指摘を解消した。** `navbar.js`を
   触らずに済む範囲でこのページ限りの改善として反映。残る指摘は

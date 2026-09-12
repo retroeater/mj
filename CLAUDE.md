@@ -29,6 +29,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   ではブラウザキャッシュは消えない。更新を即座に反映させたい
   場合はファイルのパスを変えること
 - ページ本体（例: `jpml_titles.html`）とロジック（同名の `.js`）はファイルを分けている。ページ末尾で navbar.js を読み込んで共通ナビを描画する
+- **検索欄（`#searchBoxes`）を持たないページは `<body>` に `data-search="off"`
+  を出すこと（#163）。** navbar.js はこの属性を見て、虫眼鏡アイコン（検索欄を
+  開閉するリンク）をそもそも描画しない。属性が無いページは「検索欄あり」として
+  扱われ、従来どおりアイコンが出る（＝既定。付け忘れは現状維持に倒れる）。
+  生成物は `lib/page.py` が `_render_search_boxes()` の結果から自動で出す
+  （`render_content()` を使うページだけ `has_search_boxes=False` を明示）。
+  **手書きHTML（`404` / `jpml_links` / `resource_dictionary` / `rh_links`）を
+  新規に追加するときは手で付けること。** 現在の対象は7ページ
 
 ## データの流れ
 - 選手データ・成績データはすべてGoogleスプレッドシートが正本
