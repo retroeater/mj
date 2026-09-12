@@ -43,7 +43,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: cloudflare
-          fetch-depth: 2   # 変更ファイルを調べるため直前のコミットも取得する
+          # push範囲(github.event.before 〜 github.sha)の差分を取るため全履歴が要る。
+          # fetch-depth: 2 では最終コミット1つ分しか遡れず、複数コミットをまとめて
+          # pushしたときに途中のコミットの変更を取りこぼしていた(#167)
+          fetch-depth: 0
 
       - name: Pythonをセットアップ
         uses: actions/setup-python@v5
@@ -55,12 +58,26 @@ jobs:
         run: |
           set -o pipefail
           if [ "${{ github.event_name }}" = "push" ]; then
-            # 直前のコミットとの差分から、作り直すべきページを判定する
-            git diff --name-only HEAD^ HEAD > /tmp/changed.txt || true
-            echo "変更されたファイル:"
-            cat /tmp/changed.txt
-            python3 scripts/regenerate.py --changed $(cat /tmp/changed.txt) \
-              | tee /tmp/targets.txt
+            # pushに含まれる全コミットの差分から、作り直すべきページを判定する。
+            # 最終コミット1つ分(HEAD^ HEAD)だけを見ると、複数コミットをまとめて
+            # pushしたときに途中のコミットの変更を取りこぼす(#167)
+            BEFORE="${{ github.event.before }}"
+            AFTER="${{ github.sha }}"
+            if [ -z "$BEFORE" ] \
+              || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] \
+              || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+              # ブランチ新規作成やforce pushでは before が取れない(全0)か、
+              # 既に存在しないコミットを指す。範囲が確定しないので安全側に倒す
+              echo "push範囲を特定できないため all で再生成する (before=$BEFORE)"
+              python3 scripts/regenerate.py all | tee /tmp/targets.txt
+            else
+              echo "push範囲: $BEFORE..$AFTER"
+              git diff --name-only "$BEFORE" "$AFTER" > /tmp/changed.txt
+              echo "変更されたファイル:"
+              cat /tmp/changed.txt
+              python3 scripts/regenerate.py --changed $(cat /tmp/changed.txt) \
+                | tee /tmp/targets.txt
+            fi
           else
             # workflow_dispatch と schedule。
             # schedule では inputs が空になるので all にフォールバックする。
