@@ -390,6 +390,16 @@ Workers & Pages → `mj` → Settings → Builds:
 - 権限は Cloudflare が決めた範囲（25権限・All zones・無期限）で、
   `wrangler deploy` に必要な範囲を大きく超えている。
   **手で絞ると次のビルドが壊れる可能性があるため触らないこと**
+- 2026-09-12、4本→1本へ整理した後の初回ビルド（Build `#5c2974bf`、対象
+  コミット`1f7f76d`、ブランチ`cloudflare`）が成功（所要40秒）し、残した
+  1本で本番反映が通ることを確認済み（GitHubのcheck-runsで確認。上記
+  「セッション環境からは Cloudflare に到達できない」節の区別のとおり、
+  確認できたのは「ビルド成功」であって本番の見え方ではない）
+- 整理後、残したトークンは `mj build token (Workers Builds)` にリネーム
+  済み。**ただしDeploymentsのビルド詳細（Build settings）に表示される
+  Build token名は`mj build token`のままだった。** リネームの反映に時間差が
+  あるのか、ビルド実行時点の名前を保持しているのかは不明。別のトークンに
+  差し替わったわけではなく、同じトークンの表示上のラグと見られる（事実として記録）
 
 ### セッション環境からは Cloudflare に到達できない
 
@@ -398,13 +408,28 @@ Workers & Pages → `mj` → Settings → Builds:
 
 - セッション内から `wrangler deploy` は実行できない。**APIトークンを渡しても
   解決しない**（認証以前に到達できない）
-- **本番の状態を確認することもできない。** 反映後の目視確認は平野さんの作業になる
 - **デプロイはCloudflare側が`cloudflare`へのpushで自動実行するため、
   セッションから能動的に起動する手段は無い（不要）。**
   `assets-check.yml`は検査専用でデプロイは行わない
-- 反映済みかどうかだけは `gh api repos/retroeater/mj/commits/<sha>/check-runs`
-  で「Workers Builds: mj」のcheck-runの`conclusion`を見れば確認できる
-  （ダッシュボードに入らずセッションから確認可能。#153で実例あり）
+
+**「ビルドが成功したか」と「本番がどう見えるか」は別物であり、確認できる
+範囲が違う。この2つを混同しないこと。**
+
+- **ビルドが成功したかどうかは確認できる。** Workers BuildsはCloudflare側で
+  走るが、結果をGitHubにチェックとして書き戻す。`api.cloudflare.com`は
+  遮断されていても`api.github.com`は通るため、この経路なら届く。
+  `gh api repos/retroeater/mj/commits/<sha>/check-runs` で
+  「Workers Builds: mj」のcheck-runを見れば、`conclusion`（success/failure）と
+  実行ログへのリンクが取得できる（ダッシュボードに入らずセッションから確認可能。
+  #153で実例、2026-09-12の#169後始末（`1f7f76d`）でも
+  `success`を確認済み）
+- **本番が実際にどう見えるかは確認できない。** `ryoei.pro`自体が遮断されて
+  いるため、check-runsの`success`は「Cloudflare側がビルドを成功として
+  報告した」ことの確認であって、本番の見え方の確認ではない。反映後の
+  目視確認は平野さんの作業のまま変わらない
+- **この区別を曖昧にしないこと。** check-runsの`success`だけを根拠に
+  「本番反映を確認しました」と報告しないこと。報告するなら
+  「ビルドは成功した。本番の見え方は未確認」の粒度で書く
 
 同じ制約で `docs.google.com`（スプレッドシート）・`www.gstatic.com`・`ron2.jp`
 も遮断されている。**`scripts/regenerate.py` はセッション内では実行できず**、

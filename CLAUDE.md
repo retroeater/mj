@@ -32,9 +32,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   止める仕組みではない。ゲートの検討は#170）。
   **Claude Code のセッション環境からは `api.cloudflare.com` も `ryoei.pro` も
   ネットワークポリシーで遮断されているため、セッション内から直接デプロイすることも
-  本番の状態を確認することもできない。** ただし `gh api repos/retroeater/mj/commits/<sha>/check-runs`
-  で「Workers Builds: mj」のcheck-runを見れば、そのコミットが本番へ反映されたか
-  どうかはダッシュボードに入らずセッションからも確認できる（#153で実例あり）
+  本番がどう見えるかを確認することもできない。** ただし
+  `gh api repos/retroeater/mj/commits/<sha>/check-runs` で「Workers Builds: mj」の
+  check-runを見れば、そのコミットのビルドが成功したかどうかはダッシュボードに
+  入らずセッションからも確認できる（Cloudflareが結果をGitHubに書き戻すため、
+  `api.cloudflare.com`は遮断されていても`api.github.com`経由で届く。#153で実例あり）。
+  **これは「ビルドが成功した」ことの確認であって「本番がその通りに見える」ことの
+  確認ではない。** 混同しないこと（詳細はdocs/handover.mdの同節）
 - ローカル確認は `wrangler dev` を素のオプションで起動しないこと（無限リロードで作業不能になる）。
   必ず `--persist-to` でリポジトリ外に状態を保存すること:
   `npx wrangler dev --port 8789 --ip 127.0.0.1 --persist-to /tmp/wrangler-state`
@@ -107,6 +111,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   なお、ダッシュボードに入らなくても `gh api` でGitHubのcheck-runsを見る、
   既存issueを検索するなど確認できる手段があるので、結論を出す前にまず試すこと
   （#153でWorkers Buildsの稼働はこの方法で既に確認されていた）
+- **「ビルドが成功したか」と「本番がどう見えるか」は確認できる範囲が違う。
+  混同しないこと。** check-runsの`success`はCloudflare側がビルドを成功と
+  報告したことの確認であって、本番の見え方の確認ではない
+  （`ryoei.pro`自体はセッションから遮断されている）。詳細は
+  docs/handover.md「セッション環境からは Cloudflare に到達できない」節
 - 外部ドメインへの依存を増やさない（CSP導入を予定しているため）
 - `.assetsignore` に開発用ファイルを列挙。公開対象を増やさないこと。
   新しいディレクトリ・ファイルを追加したときは、公開してよいか確認し
