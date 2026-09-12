@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 23:08 JST
+生成日時: 2026-09-12 23:09 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -18,7 +18,34 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 174件（open/closed含む）。番号降順。
+件数: 175件（open/closed含む）。番号降順。
+
+---
+
+## #175 robots.txt の日本語コメントが文字化けしている可能性がある
+
+- 状態: OPEN / 作成: 2026-09-12
+- ラベル: (なし)
+
+### 本文
+
+#161（llms.txtの文字化け対処）の作業中に見つけた関連課題。
+
+## 背景
+
+`llms.txt` が本番で文字化けしていた（#161）。原因は `.txt` にCloudflare側でcharsetが付かず、日本語環境のブラウザがcharset無しの `text/plain` をShift_JISとして解釈するため。`_headers` で `Content-Type: text/plain; charset=utf-8` を明示して対処した。
+
+`robots.txt` にも日本語のコメントが入っており、同じ原因で文字化けしている可能性がある。
+
+## 未確認点
+
+- `robots.txt` はCloudflareのAI Crawl Controlが管理版を前置して配信している構成のため（詳細はdocs/handover.md参照）、`_headers` でのContent-Type上書きが同じように効くかは未確認
+- そもそも実際に文字化けしているかどうかも、セッション環境から本番(ryoei.pro)へ到達できないため未確認。平野さんの確認が必要
+
+## 対応方針（未実施）
+
+- まず実際に文字化けしているか本番で確認する
+- 文字化けしていれば、`_headers` に `/robots.txt` 向けのcharset指定を試す（AI Crawl Controlの前置により効かない可能性があるため、効かなかった場合は別の対処法を検討する）
 
 ---
 
