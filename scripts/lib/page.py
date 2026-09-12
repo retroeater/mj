@@ -42,6 +42,16 @@ class PageMeta:
     og_url: str  # 例: "https://ryoei.pro/jpml_titles.html"
     h1: str  # visually-hidden の h1
     caption: str  # tableの visually-hidden caption
+    # og:image。既定は全ページ共通の1枚(#78)。ページ固有の画像を持つ
+    # ページ(#162のwayhome個別ページ等)は差し替える。
+    og_image: str = "https://ryoei.pro/img/ogp.png"
+    og_image_width: int = 1200
+    og_image_height: int = 630
+    og_image_alt: str = "ryoei.pro"
+    # <link rel="canonical">。既定はNoneで出力しない(#113。現行サイトは
+    # canonicalなし=Googleの正規化任せの方針)。#162のwayhome個別ページは
+    # ?name=等の変種を持たないため#113の理由が当てはまらず、例外として付ける。
+    canonical: str | None = None
 
 
 @dataclasses.dataclass
@@ -108,22 +118,22 @@ HEAD_TEMPLATE = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>{title}</title>
 <meta name="description" content="{description}">
-<meta property="og:type" content="website">
+{canonical}<meta property="og:type" content="website">
 <meta property="og:site_name" content="ryoei.pro">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="{og_url}">
-<meta property="og:image" content="https://ryoei.pro/img/ogp.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="ryoei.pro">
+<meta property="og:image" content="{og_image}">
+<meta property="og:image:width" content="{og_image_width}">
+<meta property="og:image:height" content="{og_image_height}">
+<meta property="og:image:alt" content="{og_image_alt}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="{asset_prefix}favicon.ico">
 <!-- Stylesheets -->
-<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" media="screen" href="style.css">
+<link href="{asset_prefix}assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" media="screen" href="{asset_prefix}style.css">
 <!-- JavaScripts -->
-<script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script defer src="{asset_prefix}assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 {extra_head}<!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "573520ec707f4a59b7b5cb06ef67cad8"}}'></script>
 </head>
@@ -134,7 +144,7 @@ HEAD_TEMPLATE = """<!DOCTYPE html>
 # 入る(#163)。持つページでは空文字なので <body> のまま変わらない。
 PAGE_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
 <!-- Bootstrap Navigation Bar -->
-<script src="navbar.js"></script>
+<script src="{asset_prefix}navbar.js"></script>
 
 <h1 class="visually-hidden">{h1}</h1>{content_before}
 {search_boxes}
@@ -157,7 +167,7 @@ PAGE_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
 # {body_attrs} はPAGE_TEMPLATEと同じ(#163)。
 CONTENT_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
 <!-- Bootstrap Navigation Bar -->
-<script src="navbar.js"></script>
+<script src="{asset_prefix}navbar.js"></script>
 
 {body_html}{lead}
 </body>
@@ -180,6 +190,25 @@ LEAD_TEMPLATE = '\n<p class="mj-lead">{description}</p>\n'
 
 def _render_lead(description: str) -> str:
     return LEAD_TEMPLATE.format(description=esc(description))
+
+
+def _render_canonical(canonical: str | None) -> str:
+    """<link rel="canonical"> の行。Noneなら出力しない(#113、既定)。"""
+    if not canonical:
+        return ""
+    return f'<link rel="canonical" href="{esc(canonical)}">\n'
+
+
+def _head_kwargs(meta: PageMeta, asset_prefix: str) -> dict:
+    """HEAD_TEMPLATEの.format()に渡す、meta由来のkwargsをrender()/render_content()で共有する。"""
+    return {
+        "og_image": esc(meta.og_image),
+        "og_image_width": meta.og_image_width,
+        "og_image_height": meta.og_image_height,
+        "og_image_alt": esc(meta.og_image_alt),
+        "canonical": _render_canonical(meta.canonical),
+        "asset_prefix": asset_prefix,
+    }
 
 
 def _render_search_boxes(table_config: TableConfig) -> str:
@@ -224,6 +253,7 @@ def _render_body_attrs(has_search_boxes: bool) -> str:
 def render(
     meta: PageMeta, table_config: TableConfig, rows_html: str,
     content_before: str | None = None, count: int | None = None,
+    asset_prefix: str = "",
 ) -> str:
     """組み立て済みの行HTMLから、ページ全体のHTMLを生成する。
 
@@ -268,12 +298,13 @@ def render(
 
     # table.js は`.mj-table`を探して動くページ専用の共有JS。表を持たない
     # ページ(render_content()側)は読み込まない。
-    extra_head = f'<script defer src="table.js"></script>\n{table_config.extra_script}'
+    extra_head = f'<script defer src="{asset_prefix}table.js"></script>\n{table_config.extra_script}'
 
     return PAGE_TEMPLATE.format(
         title=esc(meta.title),
         description=esc(description),
         og_url=esc(meta.og_url),
+        **_head_kwargs(meta, asset_prefix),
         extra_head=extra_head,
         h1=esc(meta.h1),
         content_before=content_before,
@@ -292,7 +323,7 @@ def render(
 
 def render_content(
     meta: PageMeta, body_html: str, extra_head: str = "", count: int | None = None,
-    has_search_boxes: bool = True,
+    has_search_boxes: bool = True, asset_prefix: str = "",
 ) -> str:
     """表を持たないページ(型D等)のHTML全体を組み立てる。
 
@@ -310,12 +341,17 @@ def render_content(
     現状維持に倒れる向き)。現在の利用ページでは houou_leagues /
     ouka_leagues / video_wayhome が既定のまま、resource_efficiency だけが
     False を渡す。
+
+    asset_prefix はサブディレクトリのページ(#162のwayhome個別ページ等)向けの
+    接頭辞。既定は空文字でルート直下のページの出力は変わらない。og:image・
+    canonicalはmetaから読む(PageMetaのフィールド)。
     """
     description = apply_count(meta.description, count)
     return CONTENT_TEMPLATE.format(
         title=esc(meta.title),
         description=esc(description),
         og_url=esc(meta.og_url),
+        **_head_kwargs(meta, asset_prefix),
         extra_head=extra_head,
         body_html=body_html,
         body_attrs=_render_body_attrs(has_search_boxes),
