@@ -1233,6 +1233,17 @@ for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done
   を並べたが、母数が極小（クリック3件と4件）かつ直近3日は点線データのため、
   この数字からは結論を出さない。次回計測は2026-10-07（title適用から28日）。
   詳細は#142のコメント参照
+- **`sitemap-pages.xml`がGSCで「型: 不明 / 1件のエラー」になっていた
+  （2026-09-12、#162の本番検証で発覚）。** 原因は冒頭のXMLコメント内に
+  あった「`regenerate.py --list`」の`--`。XMLコメントは`--`を含められない
+  決まりで、`xml.etree.ElementTree`でもパースエラーになることを確認した。
+  **この`--`は#162より前、#121（`fde321c`）の時点から存在していた**
+  （#162のサイトマップインデックス化で複製されただけで、#162が原因では
+  ない）。`regenerate.py --list`→`regenerate.pyの一覧オプション`に書き換えて
+  解消した。再発防止として、`regenerate-page.yml`のサイトマップ更新後と
+  `scripts/generate_wayhome_episodes.py`のサイトマップ書き出し前に、
+  3ファイル（`sitemap.xml` / `sitemap-pages.xml` / `sitemap-wayhome.xml`）の
+  well-formedness確認を追加した（壊れていれば止まる）
 
 ### URLパラメータの棚卸し（#7）
 
