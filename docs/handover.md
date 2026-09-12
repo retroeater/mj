@@ -174,6 +174,10 @@ Claude Codeは Codespace のターミナルで動いている（`/workspaces/mj`
 `refs/heads/<ブランチ名>/` 形式、またはコミットSHA指定なら正しく最新が返る。
 コミットSHAが分かっている場合はそちらが確実。
 
+NG: https://raw.githubusercontent.com/retroeater/mj/cloudflare/docs/handover.md
+OK: https://raw.githubusercontent.com/retroeater/mj/refs/heads/cloudflare/docs/handover.md
+OK: https://raw.githubusercontent.com/retroeater/mj/<コミットSHA>/docs/handover.md
+
 判断に迷ったら、チャット側で断定せず Claude Code 側に
 `gh issue view` / `git log` で実態を確認してもらうこと。
 
