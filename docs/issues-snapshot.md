@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 21:26 JST
+生成日時: 2026-09-12 21:34 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -12313,7 +12313,7 @@ https://claude.ai/code/session_01G4xEKGRnEDdr48pfKvQqqG
 ## #13 構造化データ(JSON-LD)を追加する
 
 - 状態: OPEN / 作成: 2026-09-07
-- ラベル: 状況: 保留, 分野: SEO/AIO, 対象: jpml_pros, 対象: video_wayhome
+- ラベル: 状況: 保留, 分野: SEO/AIO, 対象: jpml_pros
 
 ### 本文
 
@@ -12322,7 +12322,7 @@ ItemList と Person で選手情報を機械可読にする。静的HTML化で�
 ---
 <sub>移行前のタスク番号: 38</sub>
 
-### コメント (6件)
+### コメント (8件)
 
 **retroeater** (2026-09-09):
 
@@ -12443,6 +12443,58 @@ push後、`regenerate-page.yml`（全16ページ再生成）・`Workers Builds: 
 - 「日時プロパティ「uploadDate」にタイムゾーンがありません」
 
 このissue(#13)は、他ページへの展開が未着手のため引き続きオープンのままにします。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01Ph5dbxcvrwYgdaWbd6Jg95
+
+**retroeater** (2026-09-12):
+
+着手中: 再テスト結果(警告なし)の記録と、uploadDateコメントの記述修正(「必須プロパティではない」は誤り)を行っています。
+
+セッション: https://claude.ai/code/session_01Ph5dbxcvrwYgdaWbd6Jg95
+
+**retroeater** (2026-09-12):
+
+## 再テスト結果（平野さんが本番URLで実行。セッションからは再現できない）
+
+対象: https://ryoei.pro/video_wayhome.html（クロール 2026/09/12 21:30:59）
+
+**VideoObject: 検出・有効。警告なし。** 前回の2件（uploadDateの日時値が無効／タイムゾーンが無い）はいずれも解消。
+
+- name: 第11期桜蕾戦 武田雛歩（空白1つに是正済み）
+- description: 日本プロ麻雀連盟「帰り道ついていってイイっすか」。第11期桜蕾戦を終えた武田雛歩への密着インタビュー動画です。（不自然な空白が解消）
+- thumbnailUrl / contentUrl / embedUrl: 従来どおり
+- uploadDate: 2026-08-08T00:00:00+09:00
+
+duration の欠落は今回も指摘されなかった。
+
+## 対応内容（3点）
+
+1. **uploadDateのISO 8601化**: `2026-08-08` → `2026-08-08T00:00:00+09:00`。スプレッドシートには日付しかないため、時刻は00:00:00 JSTで近似（実際の公開時刻ではない）
+2. **lib/sheets.pyの入口でstrip()**: 個別ページではなく `fetch_sheet()` の入口で全16ページ共通に対処
+3. **ItemListは削除せず据え置き**: リッチリザルトの対象外（itemListElement.urlがyoutube.comを指しているため）。schema.org検証ツールではエラー・警告なし。#162で個別ページができれば自サイトURLを指すようになり、カルーセルの候補になる旨を#162にコメント済み
+
+### strip()はvideo_wayhome以外にも波及した
+
+個別ページではなく `fetch_sheet()` の入口で対処した結果、resource_logs.htmlで13行、saikyo_results.htmlで4行の末尾/先頭空白が解消（店名の末尾空白がaltとdata-infoの両方に入っていた等）。副次的に、saikyo_results.htmlの一部行で壊れていたリンク（`href`末尾の空白）や `?name=` 完全一致の失敗要因（`data-name`先頭の空白）も解消された。実差分はcommit [27dbc3c](https://github.com/retroeater/mj/commit/27dbc3cc7c73c2f65c066353af498a9c21a09279)。
+
+### 記述の訂正
+
+`3f0f8b4` のコミットメッセージおよび修正前の`scripts/generate_video_wayhome.py`のコメントに「uploadDateは必須プロパティではない」との記述があったが、これは誤り。**GoogleのVideoObjectではname/thumbnailUrl/uploadDateの3つが必須プロパティ。** 前回「任意」の指摘に留まったのは、値が存在した上で形式が不完全だったためであり、プロパティ自体が任意だからではない。コミットメッセージは履歴のため直せないが、ソースコメントは修正した。あわせて、パース失敗時にuploadDateキーを省略する現在の実装は「その回だけ必須プロパティ欠落のエラーになる」ことを承知の上での選択である旨を明記した（現在38行すべて正常にパースできており通常は発動しない。発動するようになった場合はVideoObject自体を出さない判断もありうる）
+
+## 他ページへ展開する際の注意
+
+- uploadDate相当の日付列を持つページでは同じISO 8601形式（00:00:00 JST近似、パース失敗時は省略）を使うこと
+- name / thumbnailUrl / uploadDate はGoogleの必須プロパティであること（今回の誤りを繰り返さない）
+
+## 残課題
+
+durationは依然として未設定だが、2回のテストとも指摘されていない。正確な公開時刻と尺が必要になれば#62（YouTube Data APIのキー発行）の後に`videos.list`で取得できる。他ページへの展開は未着手のため、引き続きオープンのままにする。
+
+## ラベルの見直し
+
+「対象: video_wayhome」を外した。video_wayhomeでの先行実装（JSON-LD追加・本番検証・指摘解消）が完了したため。「対象: jpml_pros」（選手個別ページへのPerson/一覧へのItemList）は未着手のため残す。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
