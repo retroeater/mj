@@ -10,7 +10,7 @@
 方針:
   - 書式は「ページ内容 | ryoei.pro」に統一(トップページのみサイト名なし)
   - 日本語のtitleは検索結果で約30文字前後で省略されるため、簡潔にする
-  - og:image は全ページ共通の1枚(#78)。scripts/generate_ogp.py で作る
+  - og:image は全ページ共通の1枚(#78)。scripts/build_ogp_image.py で作る
 
 使い方:
     python3 scripts/apply_page_meta.py          # 書き換え
@@ -146,7 +146,7 @@ PAGES = {
 
 def build_meta(page, title, description):
     """description と OGPタグをまとめて生成する。
-    og:image は全ページ共通の1枚(scripts/generate_ogp.py が作る)。"""
+    og:image は全ページ共通の1枚(scripts/build_ogp_image.py が作る)。"""
     url = f"{SITE_URL}/" if page == "index.html" else f"{SITE_URL}/{page}"
     e = html.escape
     return (

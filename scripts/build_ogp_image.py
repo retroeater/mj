@@ -13,8 +13,8 @@
     差分が出るのを避けるため
 
 使い方:
-    python3 scripts/generate_ogp.py          # img/ogp.png を書き出す
-    python3 scripts/generate_ogp.py --check   # 書き換えず、現在の内容と一致するか確認
+    python3 scripts/build_ogp_image.py          # img/ogp.png を書き出す
+    python3 scripts/build_ogp_image.py --check   # 書き換えず、現在の内容と一致するか確認
 """
 import argparse
 import io
