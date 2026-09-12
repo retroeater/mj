@@ -157,10 +157,16 @@ def _to_upload_date(date_str):
     実際の公開時刻ではない。正確な時刻が必要になれば YouTube Data API の
     videos.list(snippet.publishedAt)で取得できる(#62でAPIキー発行が前提)。
 
-    パースできない値は None を返す。uploadDateは呼び出し側でキーごと省略する
-    (不正な文字列を出力するより安全)。VideoObject自体は出す: uploadDateは
-    必須プロパティではなく、本番の検証でも値が不正な場合ですら「任意」の
-    指摘に留まっており、欠落だけを理由にVideoObject全体を諦める理由がない。
+    パースできない値は None を返す。uploadDateは呼び出し側でキーごと省略する。
+
+    uploadDateはGoogleのVideoObjectでname/thumbnailUrlと並ぶ必須プロパティ
+    であり、任意ではない(1回目の本番検証で指摘が「任意」扱いだったのは、
+    値自体は存在した上で形式が不完全だったためで、プロパティが任意だからでは
+    ない)。つまりこの分岐に入った回は、uploadDateキーの省略によって
+    VideoObjectが必須プロパティ欠落のエラーになることを承知の上で選んでいる。
+    現在38行すべてが正常にパースできており、シートの日付形式が崩れない限り
+    発動しないため実装はこのままにするが、崩れた形式が実際に入るように
+    なった場合はVideoObject自体を出さない方に倒す判断もありうる。
     """
     if not date_str or not DATE_ONLY_PATTERN.match(date_str):
         return None
