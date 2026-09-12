@@ -148,7 +148,13 @@ th {
 
 /* houou_leagues.html / ouka_leagues.html(型C)の積み上げ棒+選手の
    折れ線グラフ用(#127)。デスクトップ用・モバイル用の2枚のSVGを
-   切り替える方針は上の.mj-bar-chart-*(型D)と同じ理由による。 */
+   切り替える方針は上の.mj-bar-chart-*(型D)と同じ理由による。
+
+   このブロックと下の.mj-chart-legend*は、事故で#152(牌効率ページの
+   見出しフォントサイズ)のコミット4738d8dに混入して先行して入った。
+   そのため git blame / git log -- style.css は#152を指すが、型Cの
+   実装本体は#127の03cb23b(style.cssには触れていない)。
+   スタイルを直すときは#127と#157を見ること。 */
 .mj-league-chart-mobile {
 	display: none;
 }
