@@ -38,6 +38,8 @@ build_player_series() の引数を変えたときはこのスクリプトも直�
 import argparse
 import json
 import pathlib
+import re
+import subprocess
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
@@ -53,7 +55,33 @@ from lib.leagues import (  # noqa: E402
 from lib.sheets import fetch_sheet  # noqa: E402
 
 
-def analyze(mod, *, period_sort_key=None, fill_front_half=None, zero_leagues=()):
+# #127でセレクトボックスが自動生成に変わる直前のコミット。ここから
+# 手書きだった旧option一覧を取り出し、「以前は選べたのに選べなくなり、
+# かつデータを持っている」選手＝#127による実際の退行分を切り分ける。
+#
+# 漏れの総数(689名)には、鳳凰シートが52期(約26年)の履歴を持つために
+# 含まれる引退選手が大量に混ざる。それらは元々選べなかったので#127の
+# 退行ではなく、「引退選手も閲覧できるようにするか」という別の判断。
+PRE_127_REF = "03cb23b~1"
+
+
+def previous_option_names(page_file):
+    """#127直前のHTMLから、手書きだった旧option一覧を取り出す。
+
+    actions/checkout の既定(fetch-depth: 1)では履歴が無く取得できない。
+    取れなかった場合はNoneを返し、比較を省いて総数だけ報告する。
+    """
+    try:
+        html = subprocess.run(
+            ["git", "show", f"{PRE_127_REF}:{page_file}"],
+            capture_output=True, text=True, check=True,
+        ).stdout
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return set(re.findall(r"\?name=([^\"]+)\"", html))
+
+
+def analyze(mod, *, page_file, period_sort_key=None, fill_front_half=None, zero_leagues=()):
     """生成スクリプトと同じ手順で series と option_names を作り、
     両方向の差分を返す。"""
     rows = fetch_sheet(mod.SPREADSHEET_ID, mod.SHEET_NAME, mod.QUERY)
@@ -80,8 +108,13 @@ def analyze(mod, *, period_sort_key=None, fill_front_half=None, zero_leagues=())
     # 既知の向き: 候補にいるがデータが無い選手(生成時のログに出るもの)
     no_data = sorted(n for n in candidate_names if n not in series)
 
+    # #127の退行分: 以前は選べて、データもあるのに、いま選べない選手
+    previous = previous_option_names(page_file)
+    regressed = None if previous is None else sorted(set(dropped) & previous)
+
     return {
         "sheet": mod.SHEET_NAME,
+        "regressed": regressed,
         "rows": len(rows),
         "periods": len(periods),
         "candidates": len(candidate_names),
@@ -111,14 +144,46 @@ def report(result) -> str:
         "",
     ]
 
+    regressed = result["regressed"]
+    if regressed is None:
+        lines += [
+            "> #127直前のoption一覧を取得できなかったため、退行分の切り分けは"
+            "省略した(actions/checkoutのfetch-depthを0にする必要がある)。",
+            "",
+        ]
+    elif regressed:
+        lines += [
+            f"### ⚠ #127による退行分（以前は選べて、データもある）: {len(regressed)}名",
+            "",
+            "**判断が必要なのはこの人たち。** #127でセレクトボックスが手書きから"
+            "自動生成に変わった際に選べなくなり、かつリーグの実データを持つ。"
+            "`?name=`付きURLは検索流入の主力なので、インデックス済みのURLが"
+            "該当している可能性がある。",
+            "",
+            "```",
+            ", ".join(regressed),
+            "```",
+            "",
+        ]
+    else:
+        lines += [
+            "### #127による退行分: **0名**",
+            "",
+            "以前選べた選手のうち、データを持ちながら選べなくなった人はいない。"
+            "下記の漏れはすべて#127以前から選べなかった選手。",
+            "",
+        ]
+
     dropped = result["dropped"]
     if dropped:
         lines += [
-            f"### ⚠ データがあるのにoptionから漏れている選手: {len(dropped)}名",
+            f"### 参考: データがあるのにoptionから漏れている選手（総数）: {len(dropped)}名",
             "",
             "「プロ」シートの基準(Y列=\"Y\" かつ 最高リーグが非NULL)に"
             "入っていないため、選択リストにもJSONにも含まれていない。"
-            "`?name=`で直接指定しても折れ線が出ない。",
+            "**大半は引退等で「プロ」シートの公開対象から外れた選手で、"
+            "#127以前からリンクも選択肢も無かった。** 「引退選手も閲覧できる"
+            "ようにするか」は#127とは別の判断。",
             "",
             "| 名前 | データ点数 | 最後の期 |",
             "| --- | --- | --- |",
@@ -128,7 +193,7 @@ def report(result) -> str:
             for d in dropped
         ]
     else:
-        lines.append("### データがあるのにoptionから漏れている選手: **0名**")
+        lines.append("### 参考: データがあるのにoptionから漏れている選手（総数）: **0名**")
         lines.append("")
         lines.append("リーグデータを持つ選手はすべて選択リストに含まれている。対応不要。")
 
@@ -156,6 +221,7 @@ def main():
     results = [
         analyze(
             houou,
+            page_file="houou_leagues.html",
             period_sort_key=lambda p: (p[0], 0 if p[1] == "前" else 1),
             fill_front_half=houou.fill_front_half,
             zero_leagues=houou.ZERO_LEAGUES,
@@ -163,17 +229,24 @@ def main():
         # oukaは「桜花」をLEAGUESに含めないためzero_leagues指定なしで足りる
         # (generate_ouka_leagues.pyのdocstring参照)。前期A1/A2の補完も
         # houou固有なので渡さない。期は数値なので既定の並び順でよい。
-        analyze(ouka),
+        analyze(ouka, page_file="ouka_leagues.html"),
     ]
 
     print("\n\n".join(report(r) for r in results))
 
     total_dropped = sum(len(r["dropped"]) for r in results)
+    regressed_known = all(r["regressed"] is not None for r in results)
+    total_regressed = (
+        sum(len(r["regressed"]) for r in results) if regressed_known else None
+    )
     print()
-    if total_dropped:
-        print(f"==> 要対応: 合計{total_dropped}名がデータを持ちながらoptionから漏れている。")
+    print(f"==> データを持ちながらoptionから漏れている総数: {total_dropped}名")
+    if total_regressed is None:
+        print("==> #127による退行分: 判定できず(履歴が浅い)")
+    elif total_regressed:
+        print(f"==> 要判断: うち{total_regressed}名は#127以前は選べた(退行分)。")
     else:
-        print("==> 対応不要: データを持つ選手の漏れは両ページで0名。")
+        print("==> 対応不要: #127以前は選べたのに選べなくなった選手は0名。")
 
     if args.json:
         pathlib.Path(args.json).write_text(
