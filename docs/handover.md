@@ -322,32 +322,58 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 
 ---
 
-## 4-x. 本番反映（デプロイ）の仕組み（#169、2026-09-12）
+## 4-x. 本番反映（デプロイ）の仕組み（#169の後始末、2026-09-12）
 
-**本番反映は `.github/workflows/deploy.yml` が行う。** それまで手順が
-どこにも書かれておらず、平野さんの手元での `npx wrangler deploy` だけが
-経路だった。
+**本番反映は Cloudflare Workers Builds（ダッシュボードのGit連携）が行う。**
+`cloudflare` への push をCloudflare側が検知し、`wrangler deploy`相当の
+処理を自動実行する。**GitHub Actionsにデプロイを行うジョブは無い。**
 
-- `cloudflare` への push で自動デプロイ。`workflow_dispatch` で手動実行も可能
-  （入力 `check_only` を true にすると、デプロイせず `wrangler whoami` だけ
-  実行してトークンの疎通を確認できる。本番には触らない）
-- 認証はリポジトリ Secret の `CLOUDFLARE_API_TOKEN`（Cloudflare の
-  テンプレート「Edit Cloudflare Workers」で発行）。トークンはリポジトリにも
-  ログにも現れない。**Secret が未登録なら明示的に失敗する。** 黙って成功
-  させると「反映したつもりで未反映」に気づけないため、意図的にそうしている
-- 第三者製の action は使わず `npx wrangler@<版> deploy` を直接叩く
-  （`regenerate-page.yml` と同じ流儀。依存を増やさないため）。
-  **wrangler の版は deploy.yml の `WRANGLER=` 行で固定してある。**
-  `package.json` が無く `npx` が毎回最新を取るため、固定しないと再現性が無い
-- デプロイ前に「除外後に配信される最上位の項目」をログに出している。
-  `.assetsignore` の漏れ（#133 の再発）に気づくため。ここに `docs` や
-  `scripts` が出ていたら異常
-  - この検査は `git -c core.quotePath=false ls-files` を使う必要がある。
-    既定では非ASCIIを含むパスが `"docs/..."` と引用符ごと出力され、先頭が
-    `"docs` になって `.assetsignore` の `docs` と一致せず誤検出する
-    （`docs/gsc` 配下にSearch Consoleの日本語名CSVがある）
-- **再生成ワークフローの `chore: regenerate ...` コミットもデプロイ対象になる。**
-  スプレッドシートの更新が自動で本番へ届く（毎週月曜の cron を含む）
+### #169で何を誤ったか
+
+#169では「セッション環境から `api.cloudflare.com` に到達できず、Cloudflare
+の設定を確認できない」ことを「本番反映の経路が存在しない」と誤って結論づけ、
+`.github/workflows/deploy.yml` を追加して`npx wrangler deploy`を直接叩く
+ようにしていた。実際にはWorkers Buildsが既に稼働しており、この追加は
+不要かつ有害（二重デプロイになりうる）だった。
+
+- 到達できないことと存在しないことは別。確認できない領域については
+  「仕組みが存在しない」という結論を出すべきではなかった
+- `gh api repos/retroeater/mj/commits/<sha>/check-runs` でGitHub上の
+  check-runsを見れば、Cloudflareダッシュボードに入らずに「Workers Builds: mj」
+  というアプリのcheck-runが記録されていることが確認できた。実際、#153の
+  検証（2026-09-11）ではこの方法でWorkers Buildsの稼働を確認済みだったが、
+  #169（2026-09-12）はこれを確認せずに着手した
+- 対応: `deploy.yml`は削除し、デプロイ要素を除いた検査専用の
+  `.github/workflows/assets-check.yml`として残した（内容は後述）。
+  `CLOUDFLARE_API_TOKEN`のSecretは登録していない（二重デプロイになるため）
+
+### 平野さんがCloudflareダッシュボードで確認した設定値（2026-09-12時点）
+
+**以下はセッションからは検証できない。平野さんが目視で確認した時点の値
+としてそのまま記録する。** 今後この値が変わってもセッションからは気づけない。
+
+Workers & Pages → `mj` → Settings → Builds:
+
+| 項目 | 値 |
+|---|---|
+| Git repository | `retroeater/mj`（接続済み） |
+| Build command | なし |
+| Deploy command | `npx wrangler deploy` |
+| Version command | `npx wrangler versions upload` |
+| Root directory | `/` |
+| Production branch | `cloudflare` |
+| Builds for non-production branches | OFF（2026-09-12にOFFへ変更） |
+| Build watch paths: Include | `*` |
+| Build watch paths: Exclude | `node_modules/**, .git/` |
+| API token | `mj build token` |
+| Cache | Disabled |
+
+- Production branchが`cloudflare`のため、**このブランチへのpushは
+  （`regenerate-page.yml`が押す`chore: regenerate ...`コミットも含めて）
+  即座に本番へ反映される。** ワンクッションを置く仕組みは無い
+  （ゲートを設けるかどうかは#170で検討中、保留）
+- Build watch pathsのIncludeが`*`のため、ドキュメントのみのコミットでも
+  ビルドが走る（`docs/**`をExcludeに追加する案は#171、保留）
 
 ### セッション環境からは Cloudflare に到達できない
 
@@ -357,20 +383,30 @@ GitHub Pages 用に凍結している。23ページがGoogle Charts方式なの�
 - セッション内から `wrangler deploy` は実行できない。**APIトークンを渡しても
   解決しない**（認証以前に到達できない）
 - **本番の状態を確認することもできない。** 反映後の目視確認は平野さんの作業になる
-- 反映が必要なときは、セッションから `workflow_dispatch` で
-  `deploy.yml` を起動する（`regenerate-page.yml` を起動するのと同じ方法）
+- **デプロイはCloudflare側が`cloudflare`へのpushで自動実行するため、
+  セッションから能動的に起動する手段は無い（不要）。**
+  `assets-check.yml`は検査専用でデプロイは行わない
+- 反映済みかどうかだけは `gh api repos/retroeater/mj/commits/<sha>/check-runs`
+  で「Workers Builds: mj」のcheck-runの`conclusion`を見れば確認できる
+  （ダッシュボードに入らずセッションから確認可能。#153で実例あり）
 
 同じ制約で `docs.google.com`（スプレッドシート）・`www.gstatic.com`・`ron2.jp`
 も遮断されている。**`scripts/regenerate.py` はセッション内では実行できず**、
 再生成の確認は GitHub Actions 側で行うこと。
 
-### 検討したが採らなかった案
+### `.github/workflows/assets-check.yml`（旧 deploy.yml）
 
-- **Cloudflare の Git 連携（Workers Builds）**: ダッシュボードでリポジトリを
-  接続すれば push で自動デプロイでき、GitHub に Secret を置かずに済む。
-  一度採用しかけたが、設定がリポジトリ外にあり構成がコードから追えない
-- **セッション環境のネットワークポリシー変更**: 新しいセッションからしか
-  有効にならず、トークンの置き場所も広くなる
+デプロイ前に「除外後に配信される最上位の項目」をログに出し、
+`.assetsignore` の漏れ（#133 の再発）を検知する。`docs` や `scripts` が
+出ていたらジョブを失敗させる。Cloudflareへのアクセスは一切必要としない。
+
+- これは**「防止」ではなく「検知」。** Workers BuildsはGitHub Actionsと
+  独立に動くため、このワークフローが失敗しても本番反映は止まらない。
+  止めたい場合はゲート（#170）が必要
+- この検査は `git -c core.quotePath=false ls-files` を使う必要がある。
+  既定では非ASCIIを含むパスが `"docs/..."` と引用符ごと出力され、先頭が
+  `"docs` になって `.assetsignore` の `docs` と一致せず誤検出する
+  （`docs/gsc` 配下にSearch Consoleの日本語名CSVがある）
 
 ## 5. 次にやること
 

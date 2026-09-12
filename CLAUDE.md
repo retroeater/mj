@@ -15,16 +15,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 静的HTML 27ページ。ビルド工程なし（Jekyllは廃止済み）
 - Cloudflare Workersの静的アセットとして配信（`wrangler.jsonc`、assets.directory は `./`）
 - 作業ブランチは cloudflare。gh-pages は旧GitHub Pages用で触らない
-- **本番反映は GitHub Actions (`.github/workflows/deploy.yml`) が行う（#169）。**
-  `cloudflare` への push で自動デプロイされ、`workflow_dispatch` で手動実行もできる
-  （`check_only` を true にするとデプロイせずトークンの疎通確認だけ行う）。
-  認証はリポジトリ Secret の `CLOUDFLARE_API_TOKEN`。**Secret が未登録だと
-  ワークフローは明示的に失敗する**（黙って成功させると未反映に気づけないため）。
-  再生成ワークフローの `chore: regenerate ...` コミットもデプロイ対象になる。
-  wrangler は版を固定してあるので、上げるときは deploy.yml の `WRANGLER=` 行を変える。
+- **本番反映は Cloudflare Workers Builds（ダッシュボードのGit連携）が行う。**
+  `cloudflare` への push を検知し、Cloudflare側で自動的に `wrangler deploy`
+  が実行される。再生成ワークフローの `chore: regenerate ...` コミットも
+  同様に反映対象になる。**GitHub Actionsにデプロイを行うジョブは無い**
+  （一度 #169 で `.github/workflows/deploy.yml` として追加したが、Workers
+  Builds が既に稼働しており不要かつ二重デプロイになるものだったため削除した。
+  詳細はdocs/handover.md「4-x」と#169のクローズコメント）。
+  **この設定はCloudflareダッシュボード側にあり、構成がコードから追えない。**
+  確認済みの設定値はdocs/handover.md「4-x」に記録してある
+  （平野さんがダッシュボードを目視確認した時点の値。セッションからは検証不能）。
+  **`CLOUDFLARE_API_TOKEN` のGitHub Secretは登録しないこと**
+  （登録するとWorkers BuildsとGitHub Actionsの両方がデプロイを実行し二重デプロイになる）。
+  `.github/workflows/assets-check.yml` は `.assetsignore` の漏れ（#133）を
+  検知するだけで、Cloudflareへのアクセスは一切必要としない（デプロイを
+  止める仕組みではない。ゲートの検討は#170）。
   **Claude Code のセッション環境からは `api.cloudflare.com` も `ryoei.pro` も
   ネットワークポリシーで遮断されているため、セッション内から直接デプロイすることも
-  本番の状態を確認することもできない。** 反映はこのワークフロー経由で行うこと
+  本番の状態を確認することもできない。** ただし `gh api repos/retroeater/mj/commits/<sha>/check-runs`
+  で「Workers Builds: mj」のcheck-runを見れば、そのコミットが本番へ反映されたか
+  どうかはダッシュボードに入らずセッションからも確認できる（#153で実例あり）
 - ローカル確認は `wrangler dev` を素のオプションで起動しないこと（無限リロードで作業不能になる）。
   必ず `--persist-to` でリポジトリ外に状態を保存すること:
   `npx wrangler dev --port 8789 --ip 127.0.0.1 --persist-to /tmp/wrangler-state`
@@ -88,6 +98,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 実行例: `python3 scripts/check_image_links.py --json result.json`（依存は標準ライブラリのみ、追加インストール不要）
 
 ## 方針
+- **セッション環境から到達できない領域（Cloudflareダッシュボード、本番サイト、
+  スプレッドシートなど）の状態は、到達できないことをもって存在しない・
+  無いと結論づけないこと。** 推測で結論を出さず、平野さんに確認する。
+  特に「仕組みが存在しない」という結論は、確認できない場所については出さない
+  （#169で、Workers Buildsが既に稼働しているのに「デプロイ経路が無い」と
+  推測し、不要な`deploy.yml`を追加して二重デプロイ構成を作ってしまった例がある）。
+  なお、ダッシュボードに入らなくても `gh api` でGitHubのcheck-runsを見る、
+  既存issueを検索するなど確認できる手段があるので、結論を出す前にまず試すこと
+  （#153でWorkers Buildsの稼働はこの方法で既に確認されていた）
 - 外部ドメインへの依存を増やさない（CSP導入を予定しているため）
 - `.assetsignore` に開発用ファイルを列挙。公開対象を増やさないこと。
   新しいディレクトリ・ファイルを追加したときは、公開してよいか確認し

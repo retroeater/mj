@@ -1,0 +1,50 @@
+name: 公開対象を検査する
+
+# これは「防止」ではなく「検知」。本番(ryoei.pro)への反映は
+# Cloudflare Workers Builds（ダッシュボードのGit連携。cloudflareブランチへの
+# pushを検知して自動デプロイする）が行っており、GitHub Actions とは独立に
+# 動く。このワークフローが失敗しても本番反映は止まらない。止めたい場合は
+# ゲートが別途必要(#170で検討中)。詳細は docs/handover.md「4-x」。
+#
+# ここでやっているのは、デプロイ前に「除外後に配信される最上位の項目」を
+# 確認し、.assetsignore の漏れ(#133の再発)を検知すること。Cloudflareへの
+# アクセスは一切必要としない。
+#
+# 過去にここで npx wrangler deploy を直接叩くジョブを追加したことがあるが
+# (#169)、Workers Builds が既に稼働しており不要かつ二重デプロイになるもの
+# だったため削除した。後始末は#169のクローズコメント参照。
+
+on:
+  push:
+    branches:
+      - cloudflare
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      # 公開されるファイルの最上位を毎回ログに残す。.assetsignore の漏れ
+      # (#133 の再発)に気づけるようにするため。ここに docs や scripts が
+      # 出ていたら .assetsignore の漏れなので失敗させる。
+      - name: 公開対象の最上位を確認
+        run: |
+          echo "--- .assetsignore ---"
+          cat .assetsignore
+          echo
+          grep -v '^[[:space:]]*#' .assetsignore | grep -v '^[[:space:]]*$' > /tmp/ignored.txt
+          # core.quotePath=false が必須。既定では非ASCIIを含むパスが
+          # "docs/..." のように引用符ごと出力され、先頭が `"docs` になって
+          # .assetsignore の `docs` と一致せず誤検出する
+          # (docs/gsc 配下に日本語名のCSVがある)。
+          git -c core.quotePath=false ls-files | cut -d/ -f1 | sort -u > /tmp/toplevel.txt
+          echo "--- 除外後に配信される最上位の項目 ---"
+          LEAKED=$(grep -vxF -f /tmp/ignored.txt /tmp/toplevel.txt || true)
+          echo "$LEAKED"
+          if echo "$LEAKED" | grep -qx -e docs -e scripts; then
+            echo "::error::docs または scripts が配信対象として検出されました。.assetsignore の漏れです(#133)。"
+            exit 1
+          fi
