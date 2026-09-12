@@ -375,6 +375,22 @@ Workers & Pages → `mj` → Settings → Builds:
 - Build watch pathsのIncludeが`*`のため、ドキュメントのみのコミットでも
   ビルドが走る（`docs/**`をExcludeに追加する案は#171、保留）
 
+### APIトークンの棚卸し（2026-09-12）
+
+**以下もセッションからは検証できない。平野さんがダッシュボードで確認・
+操作した結果をそのまま記録する。**
+
+- Workers Builds はリポジトリを接続するたびに User API Token を自動発行する。
+  同名（`mj build token`）で増えるため、接続をやり直したら古いものを削除すること。
+  2026-09-12 に4本→1本へ整理した
+- 現役のトークンは `hirano@ryoei.net` に紐づく **User API Token**。
+  Cloudflare は Account API Token を推奨しているが、Workers Builds が
+  自動発行するのは User Token なので選べない。
+  **このユーザーのアカウントが使えなくなると本番反映が止まる**、という依存がある
+- 権限は Cloudflare が決めた範囲（25権限・All zones・無期限）で、
+  `wrangler deploy` に必要な範囲を大きく超えている。
+  **手で絞ると次のビルドが壊れる可能性があるため触らないこと**
+
 ### セッション環境からは Cloudflare に到達できない
 
 **Claude Code のセッション環境は `api.cloudflare.com` も `ryoei.pro` も
