@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 22:35 JST
+生成日時: 2026-09-12 22:39 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -3710,7 +3710,7 @@ sitemap・旧URL（`?name=`付き）からの対応表など、一度に通す�
 - #159（`?name=`付きURLからの301マッピング設計）
 - #13（構造化データ）
 
-### コメント (4件)
+### コメント (5件)
 
 **retroeater** (2026-09-12):
 
@@ -3750,6 +3750,35 @@ CLAUDE.md/docs/handover.mdには「セッション環境からは api.cloudflare
 このため、本issueの作業では`docs.google.com`への到達を前提にスプレッドシートを直接取得し、`scripts/generate_wayhome_episodes.py`をローカルで実行して結果を確認できた（workflow_dispatchでの間接確認は不要だった）。
 
 CLAUDE.md/handover.mdの記載自体は書き換えていない（セッションごとにネットワーク設定が違う可能性があり、今回の観測だけで「遮断されていない」と一般化してよいか判断がつかないため）。平野さんの方で状況をご確認のうえ、記載を更新するかどうか判断いただきたい。
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
+
+**retroeater** (2026-09-12):
+
+実装しました。本番反映・動作確認まで完了しています。
+
+### やったこと
+
+- `wayhome/<動画ID>.html` を38枚静的生成（`scripts/generate_wayhome_episodes.py`、新設）
+- 一覧（video_wayhome.html）のカード・ItemListのリンク先を個別ページへ変更（YouTube直リンクはヒーローの「再生」ボタンにのみ残す）
+- `lib/page.py` に `asset_prefix`（サブディレクトリのページ向け）・`og_image`系・`canonical` を追加（既定値は現状どおりで、既存16ページの出力に差分がないことを確認済み）
+- `navbar.js` の28本のhrefをルート相対パスに変更
+- `sitemap.xml` をサイトマップインデックス化し、`sitemap-pages.xml`（27ページ）と `sitemap-wayhome.xml`（38ページ）に分割
+- `video_wayhome.html` の `?name=` パラメータ受け入れを廃止（#159にコメント済み）
+- シート列追加の話は#173として別issue化
+- CLAUDE.md / docs/handover.md / docs/new-site-design.md §12 に経緯・新サイトへ持ち越せる判断を記録
+
+### 確認したこと
+
+- `regenerate.py all` で既存16ページの出力に1バイトの差分もないこと
+- `wrangler dev --persist-to` で一覧・個別ページ双方の配信、`../`でのアセット参照、個別ページ間の相互リンクを確認
+- 38ページぶんのJSON-LD（VideoObject+BreadcrumbList）が`JSON.parse`を通ること
+- push後、GitHub Actions（ページの再生成・公開対象を検査する）・Workers Builds のcheck-runがいずれもsuccess
+- 本番（ryoei.pro）に実際に反映されていることをcurlで直接確認（今回のセッションはryoei.pro/docs.google.com/img.youtube.comに到達できたため。詳細は上のコメント参照）
+
+ラベルは「状況: 対応中」のままにしてあります。内容をご確認のうえ、問題なければクローズをお願いします。
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
