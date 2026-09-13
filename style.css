@@ -765,15 +765,11 @@ body:has(.mj-video-page) {
 	padding: 0 0 32px;
 }
 
-/* #searchBoxes/.mj-filter-inputは全ページ共通ルールで白背景固定のため、
-   濃色固定のこのページでは文字色(bodyから継承)だけ明るくなり
-   白背景に白文字で読めなくなる。このページに限りオーバーライドする
-   (他26ページの#searchBoxesは無変更)。 */
-body:has(.mj-video-page) #searchBoxes {
-	background-color: var(--mj-v-surface);
-	color: var(--mj-v-fg);
-}
-
+/* .mj-filter-inputは全ページ共通ルールで白背景固定のため、濃色固定の
+   このページでは文字色(bodyから継承)だけ明るくなり白背景に白文字で
+   読めなくなる。このページに限りオーバーライドする(他26ページの
+   .mj-filter-inputは無変更)。#searchBoxes自体はこのページでは#189で
+   常時表示のsticky .mj-filterbarに置き換えたため使わなくなった。 */
 body:has(.mj-video-page) .mj-filter-input {
 	background-color: var(--mj-v-bg);
 	color: var(--mj-v-fg);
@@ -1036,7 +1032,7 @@ body:has(.mj-video-page) .mj-lead {
 	padding: 2px 8px 10px;
 }
 
-/* ==== video_wayhome.html(一覧)専用スタイル(#188) ====
+/* ==== video_wayhome.html(一覧)専用スタイル(#188/#189) ====
    .mj-video-page / .mj-video-episodes / .mj-video-track / .mj-video-card は
    wayhome/配下のエピソード個別ページ(#162)と共有しているため、この一覧
    ページだけに閉じたいスタイルのスコープには使えない(:has()で個別ページ
@@ -1050,12 +1046,11 @@ body:has(.mj-video-page) .mj-lead {
    body:has(.mj-table) nav.navbar(position:fixed)と同じ:has()スコープの
    手法で、position:stickyに限定して適用する。fixedにしないのは、bodyの
    padding-top調整・ページ高さ管理が発生するため。
-   --mj-nav-hはvideo_wayhome.jsがResizeObserverで実測してdocumentElementに
-   設定する(navbar.js注入後・collapse開閉時にも追随)。--mj-filter-hは
-   #189で常時表示のフィルタバーを追加するまでは何も無いため0にしておく。
+   --mj-nav-h/--mj-filter-hはvideo_wayhome.jsがResizeObserverで実測して
+   documentElementに設定する(navbar.js注入後・collapse開閉時にも追随)。
    フォールバック値はJS実行前・失敗時の妥当な概算。 */
 html:has(.mj-video-list) {
-	scroll-padding-top: calc(var(--mj-nav-h, 56px) + var(--mj-filter-h, 0px));
+	scroll-padding-top: calc(var(--mj-nav-h, 56px) + var(--mj-filter-h, 52px));
 }
 
 body:has(.mj-video-list) nav.navbar {
@@ -1069,6 +1064,52 @@ body:has(.mj-video-list) nav.navbar {
 body:has(.mj-video-list) nav.navbar .navbar-collapse {
 	max-height: calc(100vh - var(--mj-nav-h, 56px));
 	overflow-y: auto;
+}
+
+/* ---- sticky フィルタバー(#189) ----
+   虫眼鏡アイコンで開閉する#searchBoxes方式(旧)を廃止し、navbar直下に
+   常時表示するバーに置き換えた。z-indexはnavbar(1020)の1つ下にして
+   navbarの下端に潜り込ませる。 */
+body:has(.mj-video-list) .mj-filterbar {
+	position: sticky;
+	top: var(--mj-nav-h, 56px);
+	z-index: 1019;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	padding: 8px clamp(16px, 5vw, 48px);
+	background: rgba(20, 20, 24, .6);
+	backdrop-filter: blur(10px);
+	border-bottom: 1px solid rgba(255, 255, 255, .14);
+}
+
+.mj-filterbar-icon {
+	flex: 0 0 auto;
+	display: flex;
+	color: var(--mj-v-fg);
+	opacity: .8;
+}
+
+.mj-filterbar .mj-filter-input {
+	flex: 1 1 240px;
+	min-width: 0;
+	width: auto;
+	font-size: 16px; /* スマホでフォーカス時に自動ズームさせないため16px以上にする */
+}
+
+.mj-filterbar .mj-filter-input::placeholder {
+	/* 既定のプレースホルダ色は濃色背景で見えづらいため明示し、4.5:1を確保する */
+	color: var(--mj-v-fg-muted);
+	opacity: 1;
+}
+
+.mj-filterbar-count {
+	flex: 0 0 auto;
+	margin: 0;
+	font-size: 0.8rem;
+	color: var(--mj-v-fg-muted);
+	white-space: nowrap;
 }
 
 /* ==== エピソード個別ページ専用スタイル(wayhome/<動画ID>.html、#162) ====

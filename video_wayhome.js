@@ -5,15 +5,14 @@
 // 以下をこのファイルに移植している:
 //   - 画像の読み込み失敗時のフォールバック(data-fallback)
 //   - 検索欄(#info_filter)の絞り込み
-//   - #searchBoxes(虫眼鏡から開く検索欄)を画面固定表示するための
-//     --navbar-height の実測
 // 移植を忘れると、このページだけ画像フォールバックが効かなくなる
 // (docs/handover.md に注意点として記録済み)。
 //
-// #188: navbarをsticky化したため、その実高さを --mj-nav-h としてCSS変数に
-// 反映する(ブレークポイント・collapse開閉で高さが変わるためハードコード
-// しない)。旧来の#searchBoxes用--navbar-height実測はそのまま残す
-// (#searchBoxes自体は#189でフィルタバーに置き換わるまで引き続き使う)。
+// #188/#189: 虫眼鏡アイコンで開閉する#searchBoxes方式(旧)は廃止し、navbar
+// 直下の常時表示フィルタバーに置き換えた。navbarとフィルタバーはどちらも
+// position:stickyのため、互いの高さを --mj-nav-h / --mj-filter-h として
+// CSS変数に実測反映する(ブレークポイント・collapse開閉で高さが変わるため
+// ハードコードしない)。
 //
 // 追加でこのページ固有の機能:
 //   - エピソード横スクロールの矢印ボタン
@@ -42,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			return { card: card, info: (card.dataset.info || '').toLowerCase() }
 		})
 	}
+	const totalCount = cardIndex.length
 
 	function render() {
 		if (!track) return
@@ -52,7 +52,11 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (matches) shown++
 			if (entry.card.hidden === matches) entry.card.hidden = !matches
 		}
-		if (countEl) countEl.textContent = shown + '件を表示しています'
+		if (countEl) {
+			countEl.textContent = shown === 0
+				? '該当する動画がありません'
+				: totalCount + '件中 ' + shown + '件を表示'
+		}
 	}
 
 	let filterTimer = null
@@ -63,39 +67,45 @@ document.addEventListener('DOMContentLoaded', function () {
 	if (infoInput) infoInput.addEventListener('input', scheduleFilter)
 	render()
 
-	// ---- #searchBoxes を画面固定表示するための --navbar-height 実測 ----
-	// .mj-table系ページのtable.jsと違い、このページはナビバー自体を
-	// 固定しない(body:has(.mj-table)が対象外のため)。#searchBoxesのみ
-	// style.css側の既定ルールでposition:fixedになるので、開いたときの
-	// top位置がナビバーの実高さとズレないよう更新する。
-	function updateNavbarHeight() {
-		const navbar = document.querySelector('nav.navbar')
-		if (!navbar) return
-		document.documentElement.style.setProperty('--navbar-height', navbar.getBoundingClientRect().height + 'px')
-	}
-	updateNavbarHeight()
-	window.addEventListener('resize', updateNavbarHeight)
-	if (typeof ResizeObserver !== 'undefined') {
-		const navbar = document.querySelector('nav.navbar')
-		if (navbar) new ResizeObserver(updateNavbarHeight).observe(navbar)
+	// ---- `/`キーで検索欄にフォーカス、Escでフォーカス解除&クリア(#189) ----
+	// 入力欄(検索欄に限らず文字入力可能な要素全般)にフォーカスがある間は
+	// `/`を通常の文字入力として扱う。ここを分岐し忘れると検索語に
+	// 「/」が打てなくなる。
+	function isEditableTarget(el) {
+		if (!el) return false
+		const tag = el.tagName
+		return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable
 	}
 
-	// ---- navbarの実高さを --mj-nav-h に反映(#188のsticky化用) ----
-	// 上の--navbar-height実測(#searchBoxes用)とは別の変数名にしている。
-	// navbarはこのページでは(型Aページと違い)position:stickyであり、
-	// #searchBoxes用の実測とは意味も消費側も異なるため、変数を共有せず
-	// 分けておく。
-	function updateNavHeight() {
-		const navbar = document.querySelector('nav.navbar')
-		if (!navbar) return
-		document.documentElement.style.setProperty('--mj-nav-h', navbar.getBoundingClientRect().height + 'px')
+	document.addEventListener('keydown', function (event) {
+		if (event.key === '/' && infoInput && !isEditableTarget(event.target)) {
+			event.preventDefault()
+			infoInput.focus()
+		} else if (event.key === 'Escape' && document.activeElement === infoInput) {
+			infoInput.value = ''
+			infoInput.blur()
+			render()
+		}
+	})
+
+	// ---- navbar・フィルタバーの実高さを --mj-nav-h / --mj-filter-h に反映(#188/#189) ----
+	// navbar.js の document.write 注入後(このスクリプトはdeferなので後で走る)に
+	// 実測する。ブレークポイントで高さが変わる・collapse開閉でも変わるため
+	// ハードコードせず、ResizeObserverとwindowのresizeの両方で追随させる。
+	function watchHeight(selector, propName) {
+		const el = document.querySelector(selector)
+		if (!el) return
+		function update() {
+			document.documentElement.style.setProperty(propName, el.getBoundingClientRect().height + 'px')
+		}
+		update()
+		window.addEventListener('resize', update)
+		if (typeof ResizeObserver !== 'undefined') {
+			new ResizeObserver(update).observe(el)
+		}
 	}
-	updateNavHeight()
-	window.addEventListener('resize', updateNavHeight)
-	if (typeof ResizeObserver !== 'undefined') {
-		const navbar = document.querySelector('nav.navbar')
-		if (navbar) new ResizeObserver(updateNavHeight).observe(navbar)
-	}
+	watchHeight('nav.navbar', '--mj-nav-h')
+	watchHeight('.mj-filterbar', '--mj-filter-h')
 
 	// ---- エピソード横スクロールの矢印ボタン ----
 	const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches

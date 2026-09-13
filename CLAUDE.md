@@ -61,10 +61,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   扱われ、従来どおりアイコンが出る（＝既定。付け忘れは現状維持に倒れる）。
   生成物は `lib/page.py` が `_render_search_boxes()` の結果から自動で出す
   （`render_content()` を使うページだけ `has_search_boxes=False` を明示）。
-  現在の対象は7ページ（`404` / `jpml_links` / `resource_dictionary` /
-  `resource_efficiency` / `rh_links` / `rh_results` / `rh_results_detail`）。
-  うち生成物3ページ（`resource_efficiency` / `rh_results` /
-  `rh_results_detail`）は`has_search_boxes=False`の明示で自動的に出る。
+  現在の対象は8ページ（`404` / `jpml_links` / `resource_dictionary` /
+  `resource_efficiency` / `rh_links` / `rh_results` / `rh_results_detail` /
+  `video_wayhome`）。うち生成物4ページ（`resource_efficiency` / `rh_results` /
+  `rh_results_detail` / `video_wayhome`）は`has_search_boxes=False`の明示で
+  自動的に出る。`video_wayhome`は虫眼鏡アイコンで開閉する`#searchBoxes`を
+  navbar直下の常時表示フィルタバー（`.mj-filterbar`）に置き換えたため対象に
+  加わった（#189）。
   **残り4ページ（手書きHTML: `404` / `jpml_links` / `resource_dictionary` /
   `rh_links`）を新規に追加するときは手で付けること。**
 

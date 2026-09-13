@@ -105,6 +105,31 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
     )
 
 
+def build_filterbar_html(count: int) -> str:
+    """#189: navbar直下に常時表示するsticky検索バー。旧方式(虫眼鏡アイコンで
+    開閉する#searchBoxes)を廃止して置き換えた。アイコンはnavbar.js内の
+    虫眼鏡SVGと同じパスを流用する(装飾目的でaria-hidden、視覚的な一貫性のため)。
+    件数表示の初期値はJS実行前のちらつきを避けるため、生成時点の実データ件数
+    (count)でサーバー側から出しておく(video_wayhome.jsが以降の絞り込みに
+    追随させる)。"""
+    icon_svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" '
+        'viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 '
+        '1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 '
+        '1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'
+    )
+    return (
+        '<div class="mj-filterbar">\n'
+        f'\t<span class="mj-filterbar-icon">{icon_svg}</span>\n'
+        '\t<input type="search" id="info_filter" class="mj-filter-input" '
+        'placeholder="選手名・タイトル戦で検索" enterkeyhint="search" autocomplete="off" '
+        'aria-label="選手名・タイトル戦で絞り込み">\n'
+        f'\t<p id="result_count" class="mj-filterbar-count" role="status" aria-live="polite">'
+        f'{count}件中 {count}件を表示</p>\n'
+        '</div>\n'
+    )
+
+
 def episode_href(row) -> str:
     """一覧ページ(ルート直下)から見た個別ページへの相対href。動画IDが
     取れない行はデータ異常のため、握りつぶさず例外にする。"""
@@ -196,11 +221,7 @@ def main():
     body_html = (
         '<main class="mj-video-page mj-video-list">\n'
         f"{hero_html}\n"
-        '<div id="searchBoxes" class="collapse">\n'
-        '\t<div class="mj-filter"><label class="visually-hidden" for="info_filter">概要で検索</label>'
-        '<input type="text" id="info_filter" class="mj-filter-input" placeholder="概要"></div>\n'
-        "</div>\n\n"
-        '<p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>\n\n'
+        f"{build_filterbar_html(len(sorted_rows))}\n"
         '<section class="mj-video-episodes">\n'
         '\t<div class="mj-video-episodes-head">\n'
         f'\t\t<h2 class="mj-video-episodes-heading">エピソード（全{len(sorted_rows)}回）</h2>\n'
@@ -215,7 +236,11 @@ def main():
     )
 
     extra_head = f'<script defer src="video_wayhome.js"></script>\n{json_ld}\n'
-    output = render_content(META, body_html, extra_head=extra_head)
+    # has_search_boxes=False: navbar.js側の虫眼鏡アイコン(#searchBoxesの
+    # 開閉用)を出さない。検索欄は#189でnavbar直下に常時表示するfilterbarに
+    # 置き換えたため、アイコン経由の開閉手段自体が不要になった(#163と同じ
+    # <body data-search="off">の仕組みを流用)。
+    output = render_content(META, body_html, extra_head=extra_head, has_search_boxes=False)
 
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     print(f"{OUTPUT_PATH} を更新しました。")
