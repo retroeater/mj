@@ -151,6 +151,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   待ち条件・対応が解消済みでもラベルだけ残ると、クローズ済みなのに未対応に
   見えて実態と食い違う（#112で発覚、#110・#127にも残っていた）。経緯は
   コメント本文に残るため、ラベルを外しても記録は失われない
+- Projects ボードのステータスは平野さんの作業管理用。issue のクローズ時に Done へ
+  更新はするが、完了報告・完了確認の対象にはしない（issue の状態〈open/closed・
+  ラベル〉が正しければよい）。ボードの値を報告に含める必要はない
 
 ## コミットのルール
 - コミット前に `git status` / `git diff --stat` を確認し、**着手中のissueと
