@@ -167,3 +167,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   `python3 scripts/regenerate.py --list`（#136）
 - `llms.txt` も同じタイミングで更新すること。sitemap-pages.xml と同様、
   生成スクリプトを持たない手書きファイルのため自動では追随しない（#161）
+- **docs/handover.md は「現状・ルール・次にやること」のみを書く。** issue を
+  1件閉じるたびに実装の詳細を handover に書き足さないこと。書く先は
+  (a) issue のコメント、(b) 再発防止や他ページへ流用する知見なら
+  `docs/notes/<topic>.md`。handover 側には結論1〜2行と参照だけを置く
+- 記述を更新するときは古い記述を消して置き換えること（「→その後こうした」
+  という追記型にしない）。同じ内容を2箇所に書かず、片方は参照にする
+- 「最終更新」は日付＋直近の変更3行以内にする
+- handover.md の上限は60KB/900行。超えたら新しい記述を足す前に
+  `docs/notes/` へ移すこと（超過は `.github/workflows/assets-check.yml` が
+  検知する。検知であって防止ではなく、本番反映には影響しない）

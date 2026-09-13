@@ -52,3 +52,16 @@ jobs:
             echo "::error::docs または scripts が配信対象として検出されました。.assetsignore の漏れです(#133)。"
             exit 1
           fi
+
+      # docs/handover.md の肥大化を検知する(CLAUDE.mdの更新ルール参照)。
+      # docs/** はWorkers Buildsのwatchから除外済みのため、これが失敗しても
+      # 本番反映には影響しない。上記と同じ「検知であって防止ではない」位置づけ。
+      - name: docs/handover.md のサイズを確認
+        run: |
+          BYTES=$(wc -c < docs/handover.md)
+          LINES=$(wc -l < docs/handover.md)
+          echo "docs/handover.md: ${BYTES} bytes, ${LINES} lines"
+          if [ "$BYTES" -gt 61440 ] || [ "$LINES" -gt 900 ]; then
+            echo "::error::docs/handover.md が上限(60KB/900行)を超えました(${BYTES} bytes, ${LINES} lines)。docs/notes/ へ移すこと(CLAUDE.md 更新ルール参照)。"
+            exit 1
+          fi
