@@ -108,7 +108,7 @@ h6 {
   border: 8px solid #2c2f3f;
 }
 
-#header .profile h1 {
+#header .profile .text-light {
   font-size: 24px;
   margin: 0;
   padding: 0;
@@ -118,8 +118,8 @@ h6 {
   font-family: var(--font-base);
 }
 
-#header .profile h1 a,
-#header .profile h1 a:hover {
+#header .profile .text-light a,
+#header .profile .text-light a:hover {
   color: #fff;
   text-decoration: none;
 }
@@ -230,9 +230,10 @@ h6 {
   top: 15px;
   z-index: 9998;
   border: 0;
+  padding: 0;
+  font: inherit;
   font-size: 24px;
   transition: all 0.4s;
-  outline: none !important;
   background-color: #149ddd;
   color: #fff;
   width: 40px;
@@ -243,6 +244,13 @@ h6 {
   line-height: 0;
   border-radius: 50px;
   cursor: pointer;
+}
+
+/* <i>から<button>化(#185)に伴い、outline: noneの代わりにフォーカス時の
+   リングを明示する。背景が#149ddd(青)のため白系のリングにする。 */
+.mobile-nav-toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .mobile-nav-active {
