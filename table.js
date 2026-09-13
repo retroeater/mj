@@ -76,6 +76,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	let currentPage = 0 // 0-indexed
 
+	// aria-disabled="true"はfalseの値を明示せず属性ごと外す(#184)。
+	// aria-disabled="false"はスクリーンリーダーによって解釈がまちまちなため。
+	function setPagerDisabled(button, isDisabled) {
+		if (isDisabled) {
+			button.setAttribute('aria-disabled', 'true')
+		} else {
+			button.removeAttribute('aria-disabled')
+		}
+	}
+
 	function render() {
 		const infoQuery = infoInput ? infoInput.value.toLowerCase() : ''
 
@@ -123,8 +133,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		if (pagerEl) {
 			pagerEl.hidden = singlePage
-			pagerPrev.disabled = currentPage === 0
-			pagerNext.disabled = currentPage >= pageCount - 1
+			// disabled ではなく aria-disabled にする(#184)。disabled はフォーカス可能
+			// 要素から外れるため、そのボタンにフォーカスがあった状態で押すと
+			// body へフォーカスが落ちてキーボード利用者が位置を見失う。
+			setPagerDisabled(pagerPrev, currentPage === 0)
+			setPagerDisabled(pagerNext, currentPage >= pageCount - 1)
 			if (pagerStatus) {
 				pagerStatus.textContent = (currentPage + 1) + ' / ' + pageCount + 'ページ'
 			}
@@ -145,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	if (pagerPrev) {
 		pagerPrev.addEventListener('click', function () {
+			if (pagerPrev.getAttribute('aria-disabled') === 'true') return
 			if (currentPage > 0) {
 				currentPage--
 				render()
@@ -153,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 	if (pagerNext) {
 		pagerNext.addEventListener('click', function () {
+			if (pagerNext.getAttribute('aria-disabled') === 'true') return
 			currentPage++
 			render()
 		})

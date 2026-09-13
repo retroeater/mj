@@ -335,6 +335,9 @@ body:has(.mj-table) nav.navbar {
 /* 固定したメニューの分だけ本文を押し下げる */
 body:has(.mj-table) {
 	padding-top: var(--content-offset, 90px);
+	/* Tabで表内のリンクへ移動した際、ブラウザの自動スクロール先が
+	   固定ナビの真下にならないようにする(#179)。#アンカー遷移にも効く。 */
+	scroll-padding-top: var(--content-offset, 90px);
 }
 
 /* ==== .mj-table-2col(2列テーブル: 画像 + 概要) ====
@@ -668,7 +671,8 @@ body:has(.mj-table) {
 	min-width: 44px;
 }
 
-.mj-pager-button:disabled {
+.mj-pager-button:disabled,
+.mj-pager-button[aria-disabled="true"] {
 	opacity: 0.5;
 	cursor: default;
 }
