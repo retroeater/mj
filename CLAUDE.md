@@ -89,6 +89,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   指示文に作業ブランチの指定が無い場合も、セッションの判断で
   `work/<識別子>`を切ること。識別子は指示文のChat-Refから取る
   （例: `CHAT-0913-QM-02`なら`work/0913-qm`）。実例は#205参照
+- **このブランチ運用ルールに反した作業が発生した場合（自分のものでも
+  他セッションのものでも）、#176にコメントとして記録すること。**
+  記録対象と書式は#176の「スコープ変更」節を参照
 
 # ryoei.pro
 
