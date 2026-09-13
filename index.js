@@ -22,6 +22,7 @@
     const next = el.dataset.icon === 'list' ? 'x' : 'list'
     el.dataset.icon = next
     el.innerHTML = mobileNavIcons[next]
+    el.setAttribute('aria-expanded', next === 'x' ? 'true' : 'false')
   }
 
   /**
