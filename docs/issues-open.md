@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 10:43 JST
+生成日時: 2026-09-13 10:44 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,73 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 51件（openのみ）。番号降順。
+件数: 52件（openのみ）。番号降順。
+
+---
+
+## #177 jpml_pros.html のホーム画面アイコン名を「連盟プロ」にする
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: jpml_pros
+
+### 本文
+
+## 背景
+
+#174 の実機確認時に判明した。jpml_pros.html を iOS のホーム画面に
+追加すると、アイコン名が「プロ」になる。title
+「プロ | 日本プロ麻雀連盟 | ryoei.pro」から iOS が先頭を取るため。
+何のアイコンか分からない。
+
+## 対応
+
+head に次を追加する:
+
+<meta name="apple-mobile-web-app-title" content="連盟プロ">
+
+jpml_pros.html は共通の HEAD_TEMPLATE を使わず
+generate_jpml_pros.py 自前の PAGE_TEMPLATE（41行目〜）を持つため、
+影響はこのページのみ。他ページの再生成は不要。
+
+## 前提と限界
+
+- **iOSのみ有効。** Android Chrome は manifest の short_name を見るため
+  効かない。manifest は PWA却下の方針で置いていない（#174参照）
+- 追加ダイアログでユーザーが名前を編集できるため、変わるのは既定値のみ
+- すでにホーム画面に追加済みの端末には反映されない（追加時点の名前が
+  焼き付く）
+- `apple-mobile-web-app-capable` は**入れない**。スタンドアロン起動に
+  なり、戻る操作や外部リンクの挙動が変わるため。名前の制御には不要
+
+■ 作業内容
+
+1. scripts/generate_jpml_pros.py の PAGE_TEMPLATE を編集する。
+   <title>プロ | 日本プロ麻雀連盟 | ryoei.pro</title> の直後の行に
+   次を追加する:
+
+<meta name="apple-mobile-web-app-title" content="連盟プロ">
+
+   追加理由をコメントで残すこと（iOSのホーム画面アイコン名。既定では
+   titleの先頭「プロ」が使われてしまうため。#174の実機確認で判明）。
+   apple-mobile-web-app-capable は追加しないこと
+
+2. jpml_pros.html 自体は生成物なので直接編集しない。
+   スプレッドシートを読むためセッションからは再生成できないので、
+   GitHub Actions の workflow_dispatch（target_page: jpml_pros）で
+   再生成する
+
+3. 再生成後、jpml_pros.html の head に meta が入っていること、
+   それ以外の差分が選手データの更新分だけであることを確認する。
+   PAGE_TEMPLATE 由来の意図しない差分が出ていないか git diff で見ること
+
+4. コミットは対象ファイルを明示して git add する（-A は使わない）
+
+5. python3 scripts/build_issues_snapshot.py を実行し、
+   docs/issues-snapshot.md と docs/issues-open.md をコミットして
+   git push origin cloudflare
+
+6. push後、先頭SHAの check-runs で Workers Builds の conclusion を
+   確認して報告する
 
 ---
 
