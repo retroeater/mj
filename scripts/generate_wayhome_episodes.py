@@ -42,9 +42,8 @@ ASSET_PREFIX = "../"
 
 
 def build_prevnext_link(row, direction_label: str) -> str:
-    interviewee, x_id, published_date, title, url, image_url = row
-    video_id = wayhome.video_id_from_watch_url(url)
-    name = f"{title} {interviewee}".strip()
+    video_id = wayhome.video_id_from_watch_url(row.url)
+    name = f"{row.title} {row.interviewee}".strip()
     return (
         f'\t<a class="mj-video-prevnext-link" href="{esc(video_id)}.html">'
         f'<span class="mj-video-prevnext-dir">{esc(direction_label)}</span>'
@@ -53,17 +52,16 @@ def build_prevnext_link(row, direction_label: str) -> str:
 
 
 def build_related_card_html(row) -> str:
-    interviewee, x_id, published_date, title, url, image_url = row
-    video_id = wayhome.video_id_from_watch_url(url)
-    alt = f"{title} {interviewee}" if interviewee else (title or "")
+    video_id = wayhome.video_id_from_watch_url(row.url)
+    alt = f"{row.title} {row.interviewee}" if row.interviewee else (row.title or "")
     return (
         '<li class="mj-video-card">\n'
         f'\t<a class="mj-video-card-link" href="{esc(video_id)}.html">\n'
         f'\t\t<img class="mj-video-card-img" alt="{esc(alt)}" loading="lazy" width="160" height="90" '
-        f'src="{esc(image_url)}" data-fallback="{ASSET_PREFIX}img/125_arr_hoso.png" />\n'
-        f'\t\t<span class="mj-video-card-date">{esc(published_date)}</span>\n'
-        f'\t\t<span class="mj-video-card-title">{esc(title)}</span>\n'
-        f'\t\t<span class="mj-video-card-name">{esc(interviewee)}</span>\n'
+        f'src="{esc(row.image_url)}" data-fallback="{ASSET_PREFIX}img/125_arr_hoso.png" />\n'
+        f'\t\t<span class="mj-video-card-date">{esc(row.published_date)}</span>\n'
+        f'\t\t<span class="mj-video-card-title">{esc(row.title)}</span>\n'
+        f'\t\t<span class="mj-video-card-name">{esc(row.interviewee)}</span>\n'
         "\t</a>\n"
         "</li>"
     )
@@ -74,17 +72,16 @@ def build_body_html(row, is_latest, prev_row, next_row, same_player_rows, thumb_
     他エピソード、の3ブロックで組み立てる。ヒーローの構成は
     generate_video_wayhome.py の build_hero_html() と同じ考え方
     (ページのカラートークンとは独立して常に明色固定)。"""
-    interviewee, x_id, published_date, title, url, image_url = row
-    name = f"{title} {interviewee}".strip()
+    name = f"{row.title} {row.interviewee}".strip()
 
     badge = '<span class="mj-video-hero-badge">最新話</span>' if is_latest else ""
 
     actions = [
-        f'<a class="mj-video-btn mj-video-btn-primary" href="{esc(url)}" target="_blank">'
+        f'<a class="mj-video-btn mj-video-btn-primary" href="{esc(row.url)}" target="_blank">'
         f'<span aria-hidden="true">▶</span> YouTubeで再生{NEW_TAB_HINT}</a>'
     ]
-    if x_id:
-        actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(x_id)}" target="_blank">X @{esc(x_id)}{NEW_TAB_HINT}</a>')
+    if row.x_id:
+        actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(row.x_id)}" target="_blank">X @{esc(row.x_id)}{NEW_TAB_HINT}</a>')
     actions.append('<button type="button" class="mj-video-btn" id="copyUrlBtn">URLをコピー</button>')
     actions.append(f'<a class="mj-video-btn" href="{ASSET_PREFIX}video_wayhome.html">一覧へ戻る</a>')
 
@@ -96,7 +93,7 @@ def build_body_html(row, is_latest, prev_row, next_row, same_player_rows, thumb_
         '\t<div class="mj-video-hero-content">\n'
         f'\t\t<p class="mj-video-series-name"><a href="{ASSET_PREFIX}video_wayhome.html">{esc(wayhome.SERIES_NAME)}</a></p>\n'
         f'\t\t<h1 class="mj-video-hero-player">{esc(name)}</h1>\n'
-        f'\t\t<p class="mj-video-hero-meta">{badge}<span>{esc(published_date)}</span></p>\n'
+        f'\t\t<p class="mj-video-hero-meta">{badge}<span>{esc(row.published_date)}</span></p>\n'
         f'\t\t<p class="mj-video-hero-desc">{esc(wayhome.episode_description(row))}</p>\n'
         f'\t\t<div class="mj-video-hero-actions">{"".join(actions)}</div>\n'
         '\t\t<p id="copyStatus" class="visually-hidden" role="status" aria-live="polite"></p>\n'
@@ -123,7 +120,7 @@ def build_body_html(row, is_latest, prev_row, next_row, same_player_rows, thumb_
         sections.append(
             '<section class="mj-video-episodes">\n'
             '\t<div class="mj-video-episodes-head">\n'
-            f'\t\t<h2 class="mj-video-episodes-heading">{esc(interviewee)}の他のエピソード（{len(same_player_rows)}件）</h2>\n'
+            f'\t\t<h2 class="mj-video-episodes-heading">{esc(row.interviewee)}の他のエピソード（{len(same_player_rows)}件）</h2>\n'
             "\t</div>\n"
             f'\t<ul class="mj-video-track">\n{cards_html}\n\t</ul>\n'
             "</section>\n"
@@ -161,11 +158,10 @@ def build_json_ld(row, video_id, thumb_url) -> str:
 
 
 def build_meta(row, video_id, thumb_url, width, height) -> PageMeta:
-    interviewee, x_id, published_date, title, url, image_url = row
-    name = f"{title} {interviewee}".strip()
+    name = f"{row.title} {row.interviewee}".strip()
     page_url = wayhome.episode_url(video_id)
     return PageMeta(
-        title=f"{title} {interviewee} | {wayhome.SERIES_NAME} | ryoei.pro",
+        title=f"{row.title} {row.interviewee} | {wayhome.SERIES_NAME} | ryoei.pro",
         description=wayhome.episode_description(row),
         og_url=page_url,
         h1=name,  # render_content()では使わない(body_html側で組み立てる)。整合のため残す
@@ -224,14 +220,16 @@ def write_sitemap(active_urls: dict) -> None:
 
 def main():
     print(f"「{wayhome.SHEET_NAME}」シートを取得中...")
-    raw_rows = fetch_sheet(wayhome.SPREADSHEET_ID, wayhome.SHEET_NAME, wayhome.QUERY)
+    # to_rows()は位置参照のlistを列名でアクセスできるWayhomeRowに変換する
+    # (#196)。QUERYのSELECT句と列数が合わない場合はここで例外になる。
+    raw_rows = wayhome.to_rows(fetch_sheet(wayhome.SPREADSHEET_ID, wayhome.SHEET_NAME, wayhome.QUERY))
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
     sorted_rows = wayhome.sorted_by_date_desc(raw_rows)
 
-    video_ids = [wayhome.video_id_from_watch_url(row[4]) for row in sorted_rows]
+    video_ids = [wayhome.video_id_from_watch_url(row.url) for row in sorted_rows]
     if any(vid is None for vid in video_ids):
-        missing = [row[4] for row, vid in zip(sorted_rows, video_ids) if vid is None]
+        missing = [row.url for row, vid in zip(sorted_rows, video_ids) if vid is None]
         raise ValueError(f"視聴URLから動画IDを取り出せない行があります: {missing!r}")
     if len(set(video_ids)) != len(video_ids):
         dupes = {vid for vid in video_ids if video_ids.count(vid) > 1}
@@ -242,12 +240,11 @@ def main():
     active_urls = {}
     for i, row in enumerate(sorted_rows):
         video_id = video_ids[i]
-        interviewee = row[0]
         prev_row = sorted_rows[i - 1] if i > 0 else None
         next_row = sorted_rows[i + 1] if i < len(sorted_rows) - 1 else None
-        same_player_rows = [r for j, r in enumerate(sorted_rows) if j != i and r[0] == interviewee]
+        same_player_rows = [r for j, r in enumerate(sorted_rows) if j != i and r.interviewee == row.interviewee]
 
-        thumb_url, width, height = wayhome.resolve_thumb(row[5])
+        thumb_url, width, height = wayhome.resolve_thumb(row.image_url)
 
         meta = build_meta(row, video_id, thumb_url, width, height)
         body_html = build_body_html(row, i == 0, prev_row, next_row, same_player_rows, thumb_url, width, height)

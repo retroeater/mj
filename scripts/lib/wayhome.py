@@ -10,12 +10,46 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from collections import namedtuple
 
 SPREADSHEET_ID = "1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ"
 SHEET_NAME = "帰り道"
 QUERY = 'SELECT A,B,C,D,E,F WHERE G = "Y"'
 
 SERIES_NAME = "帰り道ついていってイイっすか"
+
+# 列名とコード上の呼び名の対応をここに1か所だけ定義する(#196)。QUERYの
+# SELECT句(A,B,C,D,E,F)と順序が1対1で対応する。scripts/lib/sheets.py の
+# fetch_sheet() はヘッダーではなく位置のみのlistを返すため、これまでは
+# generate_video_wayhome.py / generate_wayhome_episodes.py の各所で
+# `interviewee, x_id, published_date, title, url, image_url = row` という
+# 位置参照の分解代入が散らばっていた。QUERYのSELECT句を変える(#192で
+# published_date/image_urlを参照しなくなる、#193で列を1つ増やす)際に
+# ここを一緒に直し忘れると、位置がずれた値をエラーにならず読み込んでしまう。
+# ROW_FIELDSとWayhomeRowを介すことで、参照側は名前でアクセスするようになり
+# (存在しない名前へのアクセスはAttributeErrorになる)、QUERYとの対応も
+# この1か所を見れば分かるようにする。
+ROW_FIELDS = ("interviewee", "x_id", "published_date", "title", "url", "image_url")
+WayhomeRow = namedtuple("WayhomeRow", ROW_FIELDS)
+
+
+def to_rows(raw_rows):
+    """fetch_sheet()が返す位置参照のみの行(各行はセル値のlist)を、
+    列名でアクセスできるWayhomeRowのリストに変換する(#196)。
+
+    行の要素数がROW_FIELDSと一致しない場合、位置がずれた値を無言で
+    読み込んでしまうことを防ぐため、無言でスキップせず例外にする
+    (QUERYのSELECT句とROW_FIELDSの対応がずれている可能性が高い)。"""
+    result = []
+    for i, values in enumerate(raw_rows):
+        if len(values) != len(ROW_FIELDS):
+            raise ValueError(
+                f"「{SHEET_NAME}」シートの{i + 1}行目の列数が想定と一致しません"
+                f"(想定: {len(ROW_FIELDS)}列{ROW_FIELDS}、実際: {len(values)}列 {values!r})。"
+                "QUERYのSELECT句とROW_FIELDSの対応がずれていないか確認すること。"
+            )
+        result.append(WayhomeRow(*values))
+    return result
 
 IMG_YOUTUBE_PATTERN = re.compile(r"^https?://img\.youtube\.com/vi/([^/]+)/")
 WATCH_ID_PATTERN = re.compile(r"[?&]v=([^&]+)")
@@ -24,11 +58,11 @@ JST = datetime.timezone(datetime.timedelta(hours=9))
 MAXRES_TIMEOUT = 15  # scripts/check_image_links.py のHEADリクエストと同じ方針
 
 
-def sorted_by_date_desc(raw_rows):
+def sorted_by_date_desc(rows):
     """公開日(C列)の降順に並べる。Pythonのsortedは安定ソートなので、
     同日が複数ある場合はシート順で先に出てくる行が結果でも先に来る
     (#102第2段のmax()ループと同じ規則をsortedの安定性で満たす)。"""
-    return sorted(raw_rows, key=lambda row: row[2] or "", reverse=True)
+    return sorted(rows, key=lambda row: row.published_date or "", reverse=True)
 
 
 def video_id_from_watch_url(url):
@@ -94,26 +128,24 @@ def episode_path(video_id: str) -> str:
 def episode_description(row) -> str:
     """VideoObject.description・ページ本文・meta descriptionで共通して使う文言。
     3箇所の文言を揃えるため一本化する(#162)。"""
-    interviewee, x_id, published_date, title, url, image_url = row
-    return f"日本プロ麻雀連盟「{SERIES_NAME}」。{title}を終えた{interviewee}への密着インタビュー動画です。"
+    return f"日本プロ麻雀連盟「{SERIES_NAME}」。{row.title}を終えた{row.interviewee}への密着インタビュー動画です。"
 
 
 def build_video_object(row, thumb_url) -> dict:
     """VideoObject(単体)を組み立てる。一覧ページ(最新話1件)・個別ページ
     (そのページの動画)の両方で使う。"""
-    interviewee, x_id, published_date, title, url, image_url = row
     obj = {
         "@context": "https://schema.org",
         "@type": "VideoObject",
-        "name": f"{title} {interviewee}".strip(),
+        "name": f"{row.title} {row.interviewee}".strip(),
         "description": episode_description(row),
         "thumbnailUrl": [thumb_url],
-        "contentUrl": url,
+        "contentUrl": row.url,
     }
-    upload_date = to_upload_date(published_date)
+    upload_date = to_upload_date(row.published_date)
     if upload_date:
         obj["uploadDate"] = upload_date
-    video_id = video_id_from_watch_url(url)
+    video_id = video_id_from_watch_url(row.url)
     if video_id:
         obj["embedUrl"] = f"https://www.youtube.com/embed/{video_id}"
     return obj

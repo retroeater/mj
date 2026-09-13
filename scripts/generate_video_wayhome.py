@@ -71,7 +71,11 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
     固定にしている。任意の写真の上に文字を置く都合上の可読性確保であり、
     トークンの二重管理ではない、という整理。詳細はdocs/new-site-design.md
     「パイロット: video_wayhome」参照。"""
-    interviewee, x_id, published_date, title, url, image_url = latest
+    interviewee = latest.interviewee
+    x_id = latest.x_id
+    published_date = latest.published_date
+    title = latest.title
+    url = latest.url
 
     badge = '<span class="mj-video-hero-badge">最新話</span>'
     meta_parts = [esc(published_date)]
@@ -139,17 +143,20 @@ def build_filterbar_html(count: int) -> str:
 def episode_href(row) -> str:
     """一覧ページ(ルート直下)から見た個別ページへの相対href。動画IDが
     取れない行はデータ異常のため、握りつぶさず例外にする。"""
-    interviewee, x_id, published_date, title, url, image_url = row
-    video_id = wayhome.video_id_from_watch_url(url)
+    video_id = wayhome.video_id_from_watch_url(row.url)
     if not video_id:
-        raise ValueError(f"視聴URLから動画IDを取り出せません: {url!r}")
+        raise ValueError(f"視聴URLから動画IDを取り出せません: {row.url!r}")
     return wayhome.episode_path(video_id)
 
 
 def build_card_html(row) -> str:
     """#162: カードは個別ページへリンクする(YouTube直リンクはヒーローの
     「再生」ボタンにのみ残す)。"""
-    interviewee, x_id, published_date, title, url, image_url = row
+    interviewee = row.interviewee
+    x_id = row.x_id
+    published_date = row.published_date
+    title = row.title
+    image_url = row.image_url
     alt = f"{title} {interviewee}" if interviewee else (title or "")
     info_value = esc(" ".join(filter(None, [published_date, title, interviewee, x_id])))
 
@@ -177,13 +184,12 @@ def build_json_ld(sorted_rows, hero_thumb_url) -> str:
     おり(#13)、個別ページができたことで初めてカルーセルの候補になりうる。"""
     items = []
     for i, row in enumerate(sorted_rows, start=1):
-        interviewee, x_id, published_date, title, url, image_url = row
-        video_id = wayhome.video_id_from_watch_url(url)
+        video_id = wayhome.video_id_from_watch_url(row.url)
         items.append({
             "@type": "ListItem",
             "position": i,
-            "url": wayhome.episode_url(video_id) if video_id else url,
-            "name": f"{title} {interviewee}".strip(),
+            "url": wayhome.episode_url(video_id) if video_id else row.url,
+            "name": f"{row.title} {row.interviewee}".strip(),
         })
     item_list = {
         "@context": "https://schema.org",
@@ -203,7 +209,9 @@ def build_json_ld(sorted_rows, hero_thumb_url) -> str:
 
 def main():
     print(f"「{SHEET_NAME}」シートを取得中...")
-    raw_rows = fetch_sheet(SPREADSHEET_ID, SHEET_NAME, QUERY)
+    # to_rows()は位置参照のlistを列名でアクセスできるWayhomeRowに変換する
+    # (#196)。QUERYのSELECT句と列数が合わない場合はここで例外になる。
+    raw_rows = wayhome.to_rows(fetch_sheet(SPREADSHEET_ID, SHEET_NAME, QUERY))
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
     # シートの並び順に依存せず、公開日(C列)の降順に明示ソートする(#102第2段)。
@@ -211,7 +219,7 @@ def main():
     sorted_rows = wayhome.sorted_by_date_desc(raw_rows)
 
     latest = sorted_rows[0]
-    hero_thumb_url, hero_width, hero_height = wayhome.resolve_thumb(latest[5])
+    hero_thumb_url, hero_width, hero_height = wayhome.resolve_thumb(latest.image_url)
 
     hero_html = build_hero_html(latest, hero_thumb_url, hero_width, hero_height)
     cards_html = "\n".join(build_card_html(row) for row in sorted_rows)
