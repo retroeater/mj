@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 11:05 JST
+生成日時: 2026-09-13 11:06 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 60件（openのみ）。番号降順。
+件数: 59件（openのみ）。番号降順。
 
 ---
 
@@ -238,62 +238,6 @@ navbar.js の7つのドロップダウン toggle がすべて `id="navbarDropdow
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
-
----
-
-## #177 jpml_pros.html のホーム画面アイコン名を「連盟プロ」にする
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: jpml_pros
-
-### 本文
-
-## 背景
-
-#174 の実機確認時に判明した。jpml_pros.html を iOS のホーム画面に
-追加すると、アイコン名が「プロ」になる。title
-「プロ | 日本プロ麻雀連盟 | ryoei.pro」から iOS が先頭を取るため。
-何のアイコンか分からない。
-
-## 対応
-
-head に次を追加する:
-
-<meta name="apple-mobile-web-app-title" content="連盟プロ">
-
-jpml_pros.html は共通の HEAD_TEMPLATE を使わず
-generate_jpml_pros.py 自前の PAGE_TEMPLATE（41行目〜）を持つため、
-影響はこのページのみ。他ページの再生成は不要。
-
-## 前提と限界
-
-- **iOSのみ有効。** Android Chrome は manifest の short_name を見るため
-  効かない。manifest は PWA却下の方針で置いていない（#174参照）
-- 追加ダイアログでユーザーが名前を編集できるため、変わるのは既定値のみ
-- すでにホーム画面に追加済みの端末には反映されない（追加時点の名前が
-  焼き付く）
-- `apple-mobile-web-app-capable` は**入れない**。スタンドアロン起動に
-  なり、戻る操作や外部リンクの挙動が変わるため。名前の制御には不要
-
-### コメント (2件)
-
-**retroeater** (2026-09-13):
-
-着手中: jpml_pros.htmlのホーム画面アイコン名を「連盟プロ」にする(#177)。
-
-セッション: https://claude.ai/code/session_01TiAUwTpZWaugYkzh9gkzFa
-
-**retroeater** (2026-09-13):
-
-実機確認: iOS 17以降、「ホーム画面に追加」ダイアログに「Webアプリとして開く」
-トグルがあり、既定でオンになっている。`apple-mobile-web-app-capable`を
-宣言していなくてもオンで表示されるため、スタンドアロン起動にするかどうかは
-実質ユーザー側の選択で、宣言でオフに倒すことはできない。
-
-上の「前提と限界」に書いた「`apple-mobile-web-app-capable`は入れない。
-スタンドアロン起動になり…」の理由づけは、この点で不正確だった（宣言しなくても
-トグル自体は既に出る）。ただしcapableを追加していない実装の結論自体は
-変わらない。詳細はdocs/handover.mdのfavicon・apple-touch-iconの節に追記した。
 
 ---
 
