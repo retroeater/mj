@@ -7,6 +7,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 作業の経緯や決定事項は docs/handover.md にまとめてある。
 新しいセッションで文脈が必要なときは、まずそちらを読むこと。
 
+## ブランチ運用（A案、#198、2026-09-13決定）
+
+複数セッションが同一リポジトリを並行編集すると、共有された作業ツリー・
+ブランチ上でコミットの取り違えや衝突が起きる（#198）。これを避けるため、
+セッションごとに作業ブランチを分ける。
+
+- **`cloudflare`: 統合・デプロイ専用。セッションはここへ直接pushしない。**
+  push検知でCloudflare Workers Buildsが自動デプロイするため、
+  「`cloudflare`へのマージ＝本番反映」になる
+- **`work/<セッション識別子>`: 各セッションの作業ブランチ。**
+  識別子はチャット側のChat-Refに合わせる（例: CHAT-0913-WH-xxのセッション
+  なら`work/0913-wh`）。複数issueを1セッションで扱う場合も1ブランチでよい
+- 作業開始時に`cloudflare`から作業ブランチを切り、そこへは自由にpushして
+  よい。**`cloudflare`へのマージはセッション自身が行わない。**
+  作業完了を報告し、マージするかどうかは平野さんが判断する
+- マージ後、作業ブランチは削除してよい。長期間マージされないブランチは、
+  定期的に`cloudflare`を取り込んで乖離を小さく保つこと
+- **`git stash`は使用しないこと。** 共有パス（複数セッションが同時に
+  触りうるファイル）に対する`git stash`は、他セッションの未コミット編集を
+  無言で消しうる（#198で実例あり）。コミットを分割する必要がある場合は
+  `git add -p`、または`git diff`で対象のハンクだけを切り出して
+  `git apply --cached`で部分ステージする
+
 # ryoei.pro
 
 日本プロ麻雀連盟の選手データベースを含む個人サイト。
@@ -15,7 +38,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 静的HTML 27ページ + 「帰り道」エピソード個別ページ38枚（`wayhome/<動画ID>.html`、#162）。ビルド工程なし（Jekyllは廃止済み）
 - `llms.txt`（AIクローラー向けのサイト概要・ページ索引）を手書きの静的ファイル1枚として設置している（#161）。生成スクリプトは持たない。新サイトのビルド（#21）側で自動生成する余地を残すための判断
 - Cloudflare Workersの静的アセットとして配信（`wrangler.jsonc`、assets.directory は `./`）
-- 作業ブランチは cloudflare。gh-pages は旧GitHub Pages用で触らない
+- 統合・デプロイ用ブランチは cloudflare（直接pushしない。上の「ブランチ運用」参照）。
+  gh-pages は旧GitHub Pages用で触らない
 - **本番反映は Cloudflare Workers Builds（ダッシュボードのGit連携）が行う。**
   `cloudflare` への push を検知し、Cloudflare側で自動的に `wrangler deploy`
   が実行される。再生成ワークフローの `chore: regenerate ...` コミットも
