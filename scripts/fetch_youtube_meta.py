@@ -8,6 +8,12 @@ data/youtube_meta.json に保存する(#192)。
   - 差分(閲覧数の変動等)がgit historyから追える
   - ローカルで生成を試すときにAPIキーが無くても動く
 
+保存するのはAPIの生レスポンスではなく、publishedAt / thumbnails /
+duration / viewCount の4項目のみ(#192の実装はこれで足りる)。他の項目が
+必要になったら再取得すればよい(38本なら1リクエスト・数秒)。
+thumbnailsだけは全サイズを保存する。意図的な方針で、ドキュメントに無い
+fhd(1920×1080)の存在はこれで発見できた(WH-35)。
+
 動画IDはシート「帰り道」のE列(YouTube視聴URL)から抽出する
 (scripts/lib/wayhome.pyのQUERY/ROW_FIELDS、#196で名前ベース化済み)。
 
