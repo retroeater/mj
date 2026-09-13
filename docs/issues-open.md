@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 12:03 JST
+生成日時: 2026-09-13 12:06 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 68件（openのみ）。番号降順。
+件数: 65件（openのみ）。番号降順。
 
 ---
 
@@ -617,39 +617,6 @@ Claude Code 側では実施できない。平野さんの手作業になる。
 
 ---
 
-## #184 ページ送りボタンが disabled になった瞬間にフォーカスが消える（table.js）
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: 全ページ
-
-### 本文
-
-## 状況
-「次へ」を押して最終ページに着くと render() で `pagerNext.disabled = true`
-になり、フォーカスが body へ落ちてキーボード利用者が位置を失う。
-「前へ」で1ページ目に戻った場合も同じ（table.js 126〜127行）。
-
-## 対応（どちらか）
-- `disabled` の代わりに `aria-disabled="true"` を付け、click 時に無視する
-  （見た目は `.mj-pager-button[aria-disabled="true"]` で現状の disabled と同じに）
-- または render() の後に、有効な側のボタン（なければ #result_count）へ
-  focus() を移す
-
-## 備考
-- jpml_pros.js はページ送りを持たないため対象外
-- 再生成不要
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-### コメント (1件)
-
-**retroeater** (2026-09-13):
-
-着手中: table.js のページ送りボタンのフォーカス消失対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
-
----
-
 ## #183 target="_blank" のリンク（16,699件）に「新しいタブで開く」の予告がない
 
 - 作成: 2026-09-13
@@ -806,91 +773,6 @@ houou_leagues / ouka_leagues / houou_ranking / ouka_ranking / wrc_ranking の
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
-
----
-
-## #179 固定ナビバーと sticky ヘッダーの下にフォーカスが隠れる（WCAG 2.2 2.4.11）
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: 全ページ
-
-### 本文
-
-## 状況
-`body:has(.mj-table) nav.navbar` が position: fixed、`.mj-table thead th` が
-sticky のため、Tab で表内のリンクへ移動するとブラウザは要素をビューポート内に
-スクロールするが、その位置がナビバー／ヘッダーの真下になり見えない。
-
-## 対応
-style.css に1行追加:
-`body:has(.mj-table) { scroll-padding-top: var(--content-offset, 90px); }`
-（html 側に置いても可。`#` アンカー遷移にも効く）
-
-## 備考
-- 再生成不要
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-### コメント (2件)
-
-**retroeater** (2026-09-13):
-
-着手中: style.css へ scroll-padding-top を追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
-
-**retroeater** (2026-09-13):
-
-前回(`3c9ac7e`)の `body:has(.mj-table) { scroll-padding-top: ... }` は効いていなかった。
-
-**`scroll-padding` はスクロールコンテナ側のプロパティ。** このサイトは
-body に `overflow` 指定が無く、ビューポートのスクロールコンテナはルート要素
-(`html`)になるため、`body` に書いても無視される。`html:has(.mj-table)`
-（既存の `html:has(.mj-video-page)` と同じ流儀）に置き直した（`381cbcb`）。
-`--content-offset` は table.js / jpml_pros.js が `document.documentElement`
-（＝html）に設定しているため、html側からも問題なく読める。
-
-**このセッションではブラウザ実機での検証ができていない。** Claude in Chrome
-拡張がこのセッションに接続されていないため、Tabキーでのフォーカス移動や
-`getComputedStyle(document.documentElement).scrollPaddingTop` の確認を
-自分では実行できなかった。`wrangler dev --port 8789 --ip 127.0.0.1
---persist-to /tmp/wrangler-state` でサーバー自体が起動し `jpml_pros.html`
-が200で返ることは確認したが、それ以上の実機確認は平野さんにお願いしたい。
-確認いただくまでこのissueはcloseしない。
-
----
-
-## #178 navbar.js の id="navbarDropdown" が7回重複し、aria-label が英語
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: 全ページ
-
-### 本文
-
-## 状況
-navbar.js の7つのドロップダウン toggle がすべて `id="navbarDropdown"`。
-各メニューの `aria-labelledby="navbarDropdown"` は文書内で最初の要素に
-解決されるため、6つのメニューが「連盟JPML」と読み上げられる。
-ハンバーガーボタンの `aria-label="Toggle navigation"` は `lang="ja"` の
-日本語音声で読まれ聞き取れない。
-
-## 対応
-- id を一意化する（例: navDropdownJpml / navDropdownHouou …）か、
-  `aria-labelledby` 自体を外す（Bootstrap 5.3 では不要）
-- `aria-label="Toggle navigation"` → `aria-label="メニュー"`
-
-## 備考
-- navbar.js 1ファイルの修正で27ページ＋wayhome/38枚に効く。再生成不要
-- Lighthouse では検出されていない可能性が高い（#163 対応後に他ページが
-  0.98〜1.00 で残指摘が landmark-one-main のみ、という記録と整合）
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-### コメント (1件)
-
-**retroeater** (2026-09-13):
-
-着手中: navbar.js の id 重複・aria-label修正に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
