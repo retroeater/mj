@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 11:14 JST
+生成日時: 2026-09-13 12:01 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -18,7 +18,505 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 186件（open/closed含む）。番号降順。
+件数: 195件（open/closed含む）。番号降順。
+
+---
+
+## #195 video_wayhome の各エピソードから選手個別ページへリンクする
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: SEO/AIO, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+エピソードの主役は選手なので、選手個別ページへの導線があると内部
+リンク構造が強くなる。ただし選手個別ページ（#101）が未完成のため、
+本issueは完成後に着手する。
+
+### やること（着手は #101 完成後）
+
+- 各エピソードカードから、該当選手の個別ページへリンクする
+- 選手名の表記ゆれ（同姓同名・旧姓等）の突合方法を決める
+
+### 依存・関連
+
+- #101（トップページ刷新／選手個別ページ）
+- #162（エピソード個別ページ。実データは`scripts/lib/wayhome.py`の
+  A列=選手名を使っており、突合のキーもここが起点になる）
+
+Chat-Ref: CHAT-0913-WH-09
+
+---
+
+## #194 video_wayhome を週次で再生成し、閲覧数を更新する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 自動化, 分野: インフラ, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+閲覧数（CHAT-0913-WH-06）は変動するため、静的生成のままでは鮮度が
+落ちる。週次で再生成する仕組みを新設する。
+
+### 現状（2026-09-13、Claudeが確認）
+
+現行の `.github/workflows/regenerate-page.yml` は `scripts/generate_*.py`
+等の変更をトリガーに再生成するもので、スプレッドシート側の値の変化
+（閲覧数など）は検知できない。デプロイ自体は Cloudflare Workers
+Builds が `cloudflare` ブランチへの push を検知して行う（GitHub Actions
+側にデプロイジョブは無い。CLAUDE.md参照）。本issueが新設するのは
+「週次でYouTube APIを叩いて差分があればコミットする」ワークフローで、
+コミットさえされれば既存のWorkers Buildsがデプロイする
+
+### やること
+
+- `schedule: cron "0 21 * * 0"`
+  （**cron は UTC。**UTC日曜21:00 = JST月曜6:00）
+- `workflow_dispatch` で手動実行も可能にする
+- 処理順: YouTube API 取得 → 中間JSON更新 → ページ生成 → 差分があれば
+  コミット（Workers Buildsが以降のデプロイを行う）
+- **差分が無い場合はコミットしない**（空コミットを作らない。既存の
+  週次再生成ワークフロー `#103` も同じ方針）
+- API 取得が失敗した場合は中間JSONを壊さず、既存内容のまま生成を続行し、
+  ワークフロー自体は失敗扱いにする（サイトは落とさない）
+
+### 依存・関連
+
+- CHAT-0913-WH-06（閲覧数・メタデータ取得）
+
+Chat-Ref: CHAT-0913-WH-08
+
+---
+
+## #193 各エピソードに、そのタイトル戦の決勝戦 YouTube 動画へのリンクを追加する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+「帰り道」は優勝直後のインタビューなので、その決勝戦そのものを
+見たくなる導線が自然に発生する。ryoei.pro 内に該当する結果ページは
+無いため、決勝戦の YouTube 動画へ直接リンクする。
+
+### 現状（2026-09-13、Claudeが確認）
+
+データ元スプレッドシート（シート名「帰り道」）は現在
+`SELECT A,B,C,D,E,F WHERE G = "Y"`（A=選手名、B=X ID、C=公開日、
+D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）を
+取得している（`scripts/lib/wayhome.py`）。決勝戦動画のURLに相当する
+列は無いため、新規列の追加が必要。
+
+### やること
+
+- URL の入力元はスプレッドシート。新しい列を1つ追加する
+  （列名案: `final_video_url`。既存の命名規則に合わせること）。
+  `QUERY` の `SELECT A,B,C,D,E,F` にも列を1つ加える必要がある
+- **URLが空の行が存在する。**空の場合はリンク要素自体を出力しない。
+  「動画なし」等のプレースホルダも出さない
+- ラベルは「決勝戦を見る」等、短く
+- `target="_blank" rel="noopener"`
+- 空セルで生成が落ちないこと。落ちる場合は該当行を特定できるエラーを出す
+- 一覧（`generate_video_wayhome.py`）・個別ページ
+  （`generate_wayhome_episodes.py`）の両方が同じ行データ（`row`タプル）を
+  使っているため、列を1つ増やす場合は両スクリプトの `row` の
+  アンパック箇所（例: `interviewee, x_id, published_date, title, url,
+  image_url = row`）を揃えて直す必要がある
+
+### 依存・関連
+
+- #102（video_wayhome パイロット）
+
+Chat-Ref: CHAT-0913-WH-07
+
+---
+
+## #192 動画メタデータの取得元を YouTube Data API に切り替え、再生時間・公開日・閲覧数・サムネイルを表示する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: SEO/AIO, 分野: 自動化, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+概要欄の説明文は38本ともほぼ同一の定型文（番組趣旨1行＋「第○期○○
+○○ 編」＋著作権注意書き）で、転載しても情報量が増えない。代わりに
+API から機械的に取れる項目を表示する。
+
+日付とサムネイルURLは現在スプレッドシートから取っているが、API 由来に
+統一して二重管理をやめる。
+
+### 現状（2026-09-13、Claudeが確認）
+
+- データ元スプレッドシート（シート名「帰り道」）は
+  `SELECT A,B,C,D,E,F WHERE G = "Y"` で取得しており、列は
+  A=選手名（インタビュイー）、B=X ID、C=公開日、D=タイトル戦名、
+  E=YouTube視聴URL、F=画像URL、G=公開フラグ（`scripts/lib/wayhome.py`）
+- ItemList（一覧）・VideoObject（一覧の最新話1件＋個別ページ38枚）の
+  JSON-LD は既に実装済み（#13先行実装、#162で個別ページ対応・
+  `itemListElement.url`を自サイトの個別ページURLに変更）。
+  `name` / `uploadDate`（JST変換済みISO8601） / `thumbnailUrl` は既に
+  出力している（`scripts/lib/wayhome.py` の VideoObject 組み立て関数）。
+  本issueで追加が必要なのは `duration` と `embedUrl` の2フィールド
+  （現状YouTube APIを使っていないため未取得）
+- サムネイルは現在 `img.youtube.com/vi/<id>/maxresdefault.jpg` への
+  HEADリクエストで存在確認し、無ければ `hqdefault.jpg` にフォールバックする
+  実装が既にある（`scripts/lib/wayhome.py` の `maxres_available()` /
+  `resolve_thumb()`）。API切り替え後は、この毎回のHEADリクエストを
+  API応答の `maxres` キー有無の判定に置き換えられる（ネットワーク往復が
+  減る）
+- 公開日はC列の文字列をJSTの正午時刻とみなしてISO8601化しており
+  （`to_upload_date()`）、実際の公開時刻ではない旨がコード内コメントに
+  明記されている。API切り替え後は `snippet.publishedAt`（UTC）からの
+  変換に置き換わる
+
+### やること
+
+取得:
+- YouTube Data API v3 `videos.list`、`part=snippet,contentDetails,statistics`
+- APIキーは GitHub Secret `YOUTUBE_API_KEY`。リポジトリにもログにも
+  出さない
+- id は最大50件まで1リクエストにまとめられる。38本なら1回で済むので
+  1本ずつ叩かないこと
+- 取得結果は中間JSON（例 `data/youtube_meta.json`）に保存し、生成
+  スクリプトはそれを読む。API障害時に生成が落ちない・差分が追えるため
+
+表示:
+
+1. 再生時間（`contentDetails.duration`）
+   - ISO8601（`PT1H2M3S` / `PT12M34S` / `PT45S` 等）をパースし、
+     1時間未満は m:ss、以上は h:mm:ss
+   - 各カードに表示。加えて見出し付近に全38本の合計
+     （例「総再生時間 約7時間20分」）
+
+2. 公開日（`snippet.publishedAt`）
+   - **UTC なので JST 変換が必須。**変換漏れで1日ずれる
+   - スプレッドシートのC列（公開日）は今後読まない。列は残してよいが
+     生成スクリプトから参照しない。誤って復活しないよう docs に明記
+
+3. 閲覧数（`statistics.viewCount`）
+   - **概数表示にする**（例: 12,345 → 「1.2万回」、980 → 「980回」）。
+     週次再生成（CHAT-0913-WH-08）で毎週38件の数字が動き、意味のない
+     差分コミットが積み上がるのを避けるため。正確な数値は出さない
+   - 「YYYY年M月D日時点」をページ内1か所に明記
+
+4. サムネイル（`snippet.thumbnails`）
+   - スプレッドシートのF列（画像URL）は今後読まない（公開日と同じ扱い）
+   - **`maxresdefault.jpg` は全動画に存在するわけではない。**元動画の
+     解像度が足りないと生成されず404になるため、URL変換だけで参照しない。
+     API応答に `maxres` キーがあるかで判定し、無ければ `standard` →
+     `high` の順に落とす（現状のHEADリクエストによる存在確認は不要になる）
+   - さらに `<img onerror>` で `hqdefault` へのフォールバックを入れる
+   - `loading="lazy"` と width/height を付けて CLS を防ぐ
+
+構造化データ:
+- ItemList・VideoObjectの枠組み自体は実装済み（上記「現状」参照）。
+  本issueでは VideoObject に `duration`（ISO8601のまま） と `embedUrl`
+  を追加する
+- 個別ページのVideoObjectも同様に更新する（個別ページのJSON-LD組み立ては
+  `scripts/lib/wayhome.py` を一覧と共有しているため、片方の対応漏れは
+  起きにくい構造になっている）
+
+### 採用しない（検討済み）
+
+- 概要欄の説明文の転載
+- 自作の紹介文
+- 「初タイトル」「連覇」等のフラグ（何をタイトルと呼ぶかの定義が曖昧）
+- タイトル戦の結果ページへの内部リンク（ryoei.pro に該当ページが無い）
+
+### 依存・関連
+
+- #13（構造化データ。ItemList/VideoObjectの初期実装はここで先行実装済み）
+- #162（エピソード個別ページ。VideoObjectの出力先は既に一覧・個別ページ
+  両方にある）
+- CHAT-0913-WH-08（週次再生成。閲覧数の鮮度を保つため）
+
+Chat-Ref: CHAT-0913-WH-06
+
+---
+
+## #191 「URLをコピー」を共有メニュー（X / LINE / コピー）に置き換える
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+現在は「URLをコピー」のみで、共有先まで運ぶ手数が残っている。
+麻雀コミュニティの拡散はX、私的共有はLINEに集中するため、この2つと
+汎用手段としてのコピーを用意する。
+
+Facebook・はてなブックマーク・note は採用しない。特に note は
+X/LINE のような共有インテントURLの公開仕様が無く、ボタンを置いても
+実態が「コピーして note を開くだけ」になるため、コピーに統合する。
+
+### 現状（2026-09-13、Claudeが確認）
+
+- 「帰り道」エピソード個別ページ（`wayhome/<動画ID>.html`、38枚、#162）は
+  既に存在する。一覧ページ・個別ページとも `id="copyUrlBtn"` の
+  「URLをコピー」ボタンを実装済み（一覧側は `video_wayhome.js`、
+  個別ページ側は `wayhome_episodes.js`）。本issueは両方のJSを対象に
+  ドロップダウン化・`navigator.share`分岐を加える
+- `video_wayhome.html`（一覧）には `<link rel="canonical">` が無い
+  （#113の判断どおり、canonical無しの27ページの一つ）。一方
+  `wayhome/<動画ID>.html`（個別ページ）は `#162` の例外として
+  canonicalを持つ（例:
+  `https://ryoei.pro/wayhome/0OPca1Bl5xk.html`）
+  - 個別ページはこの既存canonicalをそのまま使えばよい
+  - 一覧ページは canonical タグが無いため、`location.href` ではなく
+    `https://ryoei.pro/video_wayhome.html` を定数として共有URLに使うこと
+    （このページは `?name=` を既に受け付けていないため、実質的に
+    `location.href` と一致するはずだが、明示的に定数化したほうが
+    将来のクエリ追加に影響されない）
+
+### やること
+
+選択肢と順番（固定。増やさない）:
+1. X
+2. LINE
+3. URLをコピー
+
+- `navigator.share` が使える環境（主にスマホ）では OS 標準の共有シートを
+  開き、自前メニューは出さない
+- 非対応環境（主にPC）では Bootstrap の dropdown で上記3項目
+- X: `https://x.com/intent/post?text=<encoded>&url=<encoded>`
+- LINE: `https://social-plugins.line.me/lineit/share?url=<encoded>`
+- コピー: `navigator.clipboard.writeText`。成功時に2秒程度のトースト。
+  `alert` は使わない
+- 共有テキストはページの title 相当
+- 共有URLは上記「現状」のとおり、一覧ページは固定の
+  `https://ryoei.pro/video_wayhome.html`、個別ページは既存の
+  `<link rel="canonical">` の値を使う。絞り込み等の一時的な状態を
+  含めない
+- `?name=` による絞り込み状態の共有は仕様から外す（現状も非対応）
+- 個別ページ（`wayhome_episodes.js`）にも同じ共有ボタンを置く。
+  そちらは個別ページ自身のURL・タイトルを共有する
+
+### 依存・関連
+
+- #162（エピソード個別ページ。実装対象は一覧・個別ページの両方）
+
+Chat-Ref: CHAT-0913-WH-05
+
+---
+
+## #190 エピソード一覧ブロックを全幅化し、動画グリッドを可変列にする
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+見出し「エピソード（全38回）」と動画リストが `.container` 幅に
+収まっており、広い画面で左右が大きく余る。動画中心のデザイン（#102）
+としては全幅のほうが合う。
+
+### やること
+
+- 見出しと動画リストを同一ブロックとして全幅化する。見出しの左端を
+  動画カードの左端と揃える
+- 実装は `margin-inline: calc(50% - 50vw)` 方式を使う。
+  `width:100vw` + `translateX` 方式は使わない
+  （Windows/Chrome で縦スクロールバー幅ぶん横スクロールが出るため）
+- 左右に `padding-inline: clamp(12px, 3vw, 48px)`
+- **同時に動画グリッドを
+  `grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`
+  に変更する。** 全幅化だけではカード1枚が巨大化して一覧性が
+  かえって落ちるため、これは分離できない
+
+### 期待する効果
+
+- 広い画面で1画面に入る本数が増える
+
+### 依存・関連
+
+- #102（video_wayhome パイロット、第2段完了）
+
+Chat-Ref: CHAT-0913-WH-04
+
+---
+
+## #189 虫眼鏡アイコンの展開方式を廃止し、常時表示の sticky フィルタバーにする
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+現在の「虫眼鏡アイコンを押すと検索ボックスが出る」方式は、検索機能の
+存在に気づかれにくい。38本から選手名・タイトル戦名で絞り込める点が
+このページの主要な価値なので、常時見える場所に置く。
+
+画面左上への固定表示（position: fixed）も検討したが、本文に重なる／
+スクロール中にコンテンツを隠す／固定 navbar と競合する、の3点が
+必ず起きるため採らない。navbar 直下の sticky バーとする。
+
+### 現状（2026-09-13、Claudeが確認）
+
+- `video_wayhome.html` の `?name=` 受け入れは #162 で既に廃止済み
+  （コミット f8ef38e「video_wayhome.htmlの?name=パラメータ受け入れを
+  廃止する(#162)」）。本issueの絞り込みが URL 状態を持たない前提は
+  現状の実装と一致している
+- 絞り込みは `#info_filter` への入力を `data-info`（各カードの
+  `日付 タイトル戦名 選手名 Xアカウント` を連結した属性）に部分一致させる
+  方式で、選手名・タイトル戦名は既に絞り込み対象になっている
+  （`video_wayhome.js`／`video_wayhome.html` の `data-info` 属性）
+- 絞り込み件数は `#result_count`（`role="status" aria-live="polite"`）
+  として既に更新される実装があるが、`class="visually-hidden"` のため
+  スクリーンリーダー向けにのみ読み上げられ、画面には表示されていない
+- `#searchBoxes` は現在 `style.css` の全ページ共通ルールで
+  `position: fixed; top: var(--navbar-height, 90px); left: 0;` に
+  なっており、`video_wayhome.js` が `--navbar-height` を実測している。
+  本issueはこのポップアップ的な固定表示を、navbar直下の常時表示バーに
+  置き換えるものになる
+
+### やること
+
+- 虫眼鏡アイコン→展開 の方式を廃止する
+- navbar 直下に sticky なフィルタバーを新設
+  - `position: sticky` / `top: <navbar高さ>` / `z-index: 1019`
+  - 背景 `rgba(20,20,24,.6)` + `backdrop-filter: blur(10px)`、下端に1px境界
+- バーの中身: 虫眼鏡アイコン（`aria-hidden="true"`）＋検索input＋件数表示
+- **件数表示「38件中 3件を表示」を絞り込みに追随させる。**
+  既存の `#result_count` は `visually-hidden` で画面に出ていないため、
+  これを可視化する形で実装する（読み上げ用の `aria-live` 自体は流用できる）。
+  絞り込み結果が常に見えることが本issueの要点なので省略しない
+- input は `type="search"` / `enterkeyhint="search"` /
+  `autocomplete="off"` / `aria-label="選手名・タイトル戦で絞り込み"` /
+  font-size 16px 以上（スマホの自動ズーム防止）
+- `/` キーでフォーカス、Esc でフォーカス解除＆クリア。
+  ただし入力欄にフォーカスがある間は `/` を通常入力として扱う
+- 半透明背景の上でコントラスト比 4.5:1 を下回らないこと
+
+### 期待する効果
+
+- 検索機能の発見率が上がる
+- 絞り込みの結果件数が常時見えることで、「ヒットしなかった」ことが
+  分かるようになる
+
+### 依存・関連
+
+- CHAT-0913-WH-02（navbar の sticky 化。top 値が navbar 高さに依存するため
+  先に実施）
+- #159（`?name=` 付きURLから選手個別ページへの301マッピングの検討。
+  video_wayhome自体の`?name=`は#162で既に廃止済みのため、本issueとは
+  直接の実装依存はないが、サイト全体の`?name=`方針として関連する）
+
+Chat-Ref: CHAT-0913-WH-03
+
+---
+
+## #188 video_wayhome の navbar をスクロール追随（sticky）にする
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: video_wayhome
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+38本の動画リストは縦に長く、スクロール中にナビゲーションへ戻る手段が
+無い。navbar をスクロールに追随させる。
+
+適用範囲は video_wayhome.html のみ。他ページを含めた共通ヘッダの
+見直しは新サイト構築時に行うため、ここでは波及させない。
+
+### 現状（2026-09-13、Claudeが確認）
+
+navbar は `navbar.js` が `document.write` で出力しており、`video_wayhome.html`
+と `wayhome/` 配下の個別ページ38枚を含む全65ページで共通のマークアップ・
+クラス（`navbar navbar-expand-lg navbar-dark bg-dark`）を出している。
+navbar.js 自体にページ固有の出し分けは無い。
+
+一方、CSS側には型A（表）のページ限定で navbar を `position: fixed` にする
+前例がある（`style.css` の `body:has(.mj-table) nav.navbar`、コメントに
+「Bootstrapのfixed-top相当」とある）。同じ手法で `body:has(.mj-video-page)`
+にスコープすれば、`navbar.js` 自体は変更せず CSS だけで
+video_wayhome.html 以外に影響させずに実装できる見込みが高い。
+
+現状このページの navbar は fixed/sticky ではなく通常のフローに乗っている。
+`#searchBoxes`（虫眼鏡から開く検索欄）だけは `video_wayhome.js` が
+`--navbar-height` を実測して `position: fixed` にしている（この値は
+本issueでも流用できる）。
+
+### やること
+
+- `.fixed-top` ではなく `.sticky-top` を使う。`fixed-top` は body に
+  padding-top の調整が必要になり、ページごとの高さ管理が発生するため
+- スコープは `body:has(.mj-video-page) nav.navbar` とし、上記の
+  `body:has(.mj-table) nav.navbar` と同じ流儀に揃える
+- `html { scroll-padding-top: <navbar高さ>; }` を入れる。
+  これが無いとアンカー遷移先が navbar の下に潜る
+- モバイルで collapse を開いたとき用に
+  `max-height: calc(100vh - <navbar高さ>); overflow-y: auto;`
+- 濃色ページなので背景は `rgba(...,.85)` + `backdrop-filter: blur(12px)`
+- z-index は 1020（`#searchBoxes` の1020および `body:has(.mj-table) nav.navbar`
+  の1030との整合を確認すること）
+
+### 注意
+
+`:has()` によるスコープ前例があるため、共通テンプレート由来の navbar でも
+他ページへの波及は避けられる見込みが高い。ただし実装時に本当に波及しないか
+（`:has()` の対応状況を含む）を確認すること。避けられない構造だった場合は
+実装せず報告すること。
+
+### 依存・関連
+
+- #102（video_wayhome パイロット）
+- CHAT-0913-WH-03 と画面上部の領域を共有するため、本issueを先に実施する
+
+Chat-Ref: CHAT-0913-WH-02
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+CHAT-0913-WH-10: 反映確認のみ実施。WH-01調査5番の2点（navbarが共通テンプレート由来〈navbar.jsが全65ページでdocument.write〉であること／`body:has(.mj-table) nav.navbar`という型A限定position:fixedの前例があり同じ手法でvideo_wayhome.htmlだけに限定できる見込みであること）は、起票時点の本文「現状」節にすでに記載済みでした。本文の追記・編集は行っていません。
+
+---
+
+## #187 handover.md の棚卸しと肥大化対策（分割・サイズ上限）
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守
+
+### 本文
+
+## 概要
+
+docs/handover.md と CLAUDE.md の棚卸し。事実修正と、handover.md の分割・肥大化対策を2コミットに分けて実施する。
+
+### 1. 事実修正（Chat-Ref: CHAT-0913-HV-01）
+CLAUDE.md / docs/handover.md の記述と実体が食い違っている箇所（sitemap-pages.xmlのページ数、navbar.jsのhref数、#158クローズ反映、#103週次cron反映、#7進捗の整理など）を、構成を変えずに直す。
+
+### 2. 分割と肥大化対策（Chat-Ref: CHAT-0913-HV-02）
+handover.md の6章「これまでに分かったこと」を docs/notes/ 配下の4ファイル（static-generation.md / video-wayhome.md / cloudflare.md / site-findings.md）に分割し、handover.md 側は結論+参照の索引にする。CLAUDE.md に肥大化防止ルールを追記し、.github/workflows/assets-check.yml に handover.md のサイズ上限チェック（60KB/900行）を追加する。
+
+### 3. issueの実態合わせ
+- #143: 実装済みのためクローズ
+- #152: 対応済みだが平野さんの目視確認待ちのため状態のみ報告
+
+Chat-Ref: CHAT-0913-HV-01
+Chat-Ref: CHAT-0913-HV-02
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_0125QVCncQpkmafrurxJQjhP
 
 ---
 
@@ -125,6 +623,12 @@ Claude Code 側では実施できない。平野さんの手作業になる。
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: table.js のページ送りボタンのフォーカス消失対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -310,6 +814,31 @@ style.css に1行追加:
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: style.css へ scroll-padding-top を追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
+**retroeater** (2026-09-13):
+
+前回(`3c9ac7e`)の `body:has(.mj-table) { scroll-padding-top: ... }` は効いていなかった。
+
+**`scroll-padding` はスクロールコンテナ側のプロパティ。** このサイトは
+body に `overflow` 指定が無く、ビューポートのスクロールコンテナはルート要素
+(`html`)になるため、`body` に書いても無視される。`html:has(.mj-table)`
+（既存の `html:has(.mj-video-page)` と同じ流儀）に置き直した（`381cbcb`）。
+`--content-offset` は table.js / jpml_pros.js が `document.documentElement`
+（＝html）に設定しているため、html側からも問題なく読める。
+
+**このセッションではブラウザ実機での検証ができていない。** Claude in Chrome
+拡張がこのセッションに接続されていないため、Tabキーでのフォーカス移動や
+`getComputedStyle(document.documentElement).scrollPaddingTop` の確認を
+自分では実行できなかった。`wrangler dev --port 8789 --ip 127.0.0.1
+--persist-to /tmp/wrangler-state` でサーバー自体が起動し `jpml_pros.html`
+が200で返ることは確認したが、それ以上の実機確認は平野さんにお願いしたい。
+確認いただくまでこのissueはcloseしない。
+
 ---
 
 ## #178 navbar.js の id="navbarDropdown" が7回重複し、aria-label が英語
@@ -338,6 +867,12 @@ navbar.js の7つのドロップダウン toggle がすべて `id="navbarDropdow
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: navbar.js の id 重複・aria-label修正に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -5363,7 +5898,7 @@ npx wrangler dev --port 8789 --ip 127.0.0.1 \
 ## #152 牌効率ページの見出しのフォントサイズが大きすぎる
 
 - 状態: OPEN / 作成: 2026-09-11
-- ラベル: 分野: UI/UX, 対象: resource_efficiency
+- ラベル: 状況: 待ち, 分野: UI/UX, 対象: resource_efficiency
 
 ### 本文
 
@@ -5386,7 +5921,7 @@ Bootstrap既定の16px）と比べて不釣り合いに大きい。
 - `resource_efficiency.html`
 - `style.css`（見出し用のスタイルを追加する場合）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-11):
 
@@ -5426,6 +5961,14 @@ Bootstrap既定の16px）と比べて不釣り合いに大きい。
 
 ---
 _Generated by [Claude Code](https://claude.ai/code)_
+
+**retroeater** (2026-09-13):
+
+対応済みです（`4738d8d`、2026-09-11）。resource_efficiency.htmlの見出しフォントサイズを本文と揃えました。
+
+本番の目視確認待ちのため「状況: 待ち」を付けています。確認後、クローズをお願いします。
+
+https://claude.ai/code/session_0125QVCncQpkmafrurxJQjhP
 
 ---
 
@@ -5923,8 +6466,8 @@ headers=["動画・記事", "概要"],
 
 ## #143 issues-snapshot.md にopenのみの要約版を追加する（提案）
 
-- 状態: OPEN / 作成: 2026-09-11
-- ラベル: 状況: 保留, 分野: 整理・保守
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-11 / クローズ: 2026-09-13
+- ラベル: 分野: 整理・保守
 
 ### 本文
 
@@ -5943,6 +6486,14 @@ headers=["動画・記事", "概要"],
 起票のみ。
 
 2026-09-11のレビューで判明。
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+実装済みのためクローズします。`build_issues_snapshot.py`が`docs/issues-open.md`（openのみ）と`docs/issues-snapshot.md`（全件）を同時生成するようになっており、提案は反映済みです。
+
+対応: https://claude.ai/code/session_0125QVCncQpkmafrurxJQjhP
 
 ---
 
