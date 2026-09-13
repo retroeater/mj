@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 13:34 JST
+生成日時: 2026-09-13 14:13 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -18,7 +18,123 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 196件（open/closed含む）。番号降順。
+件数: 198件（open/closed含む）。番号降順。
+
+---
+
+## #198 複数セッションの並行作業でワーキングツリーが衝突する問題への運用を決める
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: インフラ
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+2026-09-13 のセッションで、複数の Claude Code セッションが同一
+リポジトリを並行編集したことによる事象が2回発生した。
+
+**1件目（実害あり・復旧済み）**
+video_wayhome の #188/#189/#190 を実装中のセッションが、3本の
+コミットに分割するため `git stash push -- <files>` を実行した。
+対象に `style.css` が含まれており、別セッション（アクセシビリティ
+改善、#181 関連）の未コミット編集が無言で作業ツリーから消えた。
+気づいた時点で stash の中身から該当変更のみを復元し、事後に
+正しさを確認した（`generate_jpml_pros.py:259` の th scope="row" が
+1箇所、生成後の `jpml_pros.html` で1,100件一致）。
+
+**2件目（回避済み）**
+同セッションが後続の修正をコミットする際、再び `style.css` に
+他セッションの未コミット編集が混在していた。`git stash` を使わず
+`git diff` から自分のハンクのみを切り出し `git apply --cached` で
+部分ステージすることで回避した。
+
+**問題の本質**
+どちらも検知・対処できたが、成立条件が「セッションが衝突に気づき、
+正しい回避手段を選ぶこと」に依存している。作業が続く限り同じ状況が
+繰り返し発生し、気づかなかった場合は他セッションの作業が無言で
+失われる。現状すべてのセッションが `cloudflare` ブランチ上で直接
+作業しており、作業ツリーが共有されていることが原因。
+
+### 検討すべき論点
+
+- セッションごとに作業ブランチを切る運用にするか
+  - `cloudflare` は統合・デプロイ用に限定し、作業は
+    `work/<セッション識別子>` 等に分ける案
+  - マージのタイミングと責任者（平野さんが判断するのか、
+    セッションが自律的に行うのか）
+  - #169 の自動デプロイは `cloudflare` への push で走るため、
+    デプロイ契機が明確になるという副次的な利点がある
+- ブランチを分けない場合の代替
+  - `git stash` の使用を CLAUDE.md で禁止し、部分ステージ
+    （`git add -p` / `git apply --cached`）を標準手順とする
+  - 作業開始時に `git status` で他セッションの未コミット変更を
+    確認することを手順化する
+- そもそも同一リポジトリのセッションを並行させない運用にするか
+  - 最も単純だが、作業速度は落ちる
+
+### やること（方針決定後）
+
+- 決めた運用を CLAUDE.md および docs/handover.md に記載する
+- `git stash` の扱いを明文化する（1件目の直接原因のため、
+  どの方針を採る場合でも必要）
+
+### 依存・関連
+
+- #169（wrangler deploy の GitHub Actions 化。デプロイ契機に関わる）
+- #181（1件目で一時的に消えた変更）
+- #188 / #189 / #190（衝突が発生した作業）
+
+Chat-Ref: CHAT-0913-WH-20
+
+---
+
+## #197 rh_paifu.html のリンクの下線を消す
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: UI/UX
+
+### 本文
+
+## 状況
+rh_paifu.htmlの天鳳牌譜リンク・YouTubeリンクに下線が出ている。
+resource_logs.html（ログ）の店名リンクには下線が出ておらず、サイト内で
+扱いが揃っていない。平野さんが本番で確認（2026-09-13）。
+
+## 対応
+style.cssに汎用クラスが既にある:
+
+```css
+/* リンクの下線を消す汎用クラス(型Aの他ページでも使う想定)。
+インラインのstyle="text-decoration: none"は#9のCSPで弾かれるため、
+resource_logsの店名リンクなどはこのクラスに置き換える。 */
+.mj-table a.mj-plain { text-decoration: none; }
+```
+
+`scripts/generate_rh_paifu.py`のリンク生成箇所で`<a>`に`class="mj-plain"`
+を付ける。CSSの追加は不要。
+
+## 注意
+- **下線を消すとリンクの識別が色だけに頼ることになる**（WCAG 1.4.1
+  Use of Color）。ただし#26/#108でリンク色を`#14459b`に決めた際、
+  3背景でAAA（7:1以上）を満たしており、周囲の本文色との輝度差も十分。
+  表内のリンクという文脈（セル全体がリンクで、hoverで色が変わる）も
+  考慮すると、実務上は許容範囲と判断する
+- resource_logs側が既にこの扱いなので、**サイト内の一貫性としては
+  下線なしに揃えるのが正しい**
+- 再生成が必要（rh_paifu.htmlのみ）
+
+## 確認
+- 下線が消えること、リンク色が従来どおりであること
+- hover時の挙動がresource_logsと揃っていること
+
+レビュー出典: 2026-09-13、平野さんによる本番目視確認
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: generate_rh_paifu.pyのリンクにclass="mj-plain"を追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -401,7 +517,7 @@ CHAT-0913-WH-12: 本文「やること」に、共有テキストへ選手のX�
 
 Chat-Ref: CHAT-0913-WH-04
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
@@ -416,6 +532,10 @@ Chat-Ref: CHAT-0913-WH-04
 **retroeater** (2026-09-13):
 
 実装完了につきクローズします。
+
+**retroeater** (2026-09-13):
+
+平野さんが2026-09-13に本番でヒーロー・ドロップダウン表示を含め確認済みとのことです。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
 
 ---
 
@@ -489,7 +609,7 @@ Chat-Ref: CHAT-0913-WH-04
 
 Chat-Ref: CHAT-0913-WH-03
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
@@ -503,11 +623,15 @@ Chat-Ref: CHAT-0913-WH-03
 
 実装完了につきクローズします。
 
+**retroeater** (2026-09-13):
+
+平野さんが2026-09-13に本番でモバイル幅のメニュースクロール・アンカー位置(スキップリンク経由)を含め確認済みとのことです。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
 ---
 
 ## #188 video_wayhome の navbar をスクロール追随（sticky）にする
 
-- 状態: OPEN (REOPENED) / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -566,7 +690,7 @@ video_wayhome.html 以外に影響させずに実装できる見込みが高い�
 
 Chat-Ref: CHAT-0913-WH-02
 
-### コメント (6件)
+### コメント (10件)
 
 **retroeater** (2026-09-13):
 
@@ -605,6 +729,46 @@ CHAT-0913-WH-10: 反映確認のみ実施。WH-01調査5番の2点（navbarが�
 pushの可否は平野さんの判断のため、コミットまでで止めています。
 
 セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+ドロップダウンがヒーローに隠れる件を修正しました（未push、コミット: 9f976ab）。
+
+**原因:** `.mj-video-hero-content`（z-index:1）の親 `.mj-video-hero` が `position:relative` のみでz-indexを持たずスタッキングコンテキストを作っていなかったため、hero-contentのz-index:1が一覧ページのルート（body直下）のコンテキストにそのまま漏れ出ていました。navbar配下のドロップダウン（Bootstrap既定z-index:1000）より本来背面にあるべきヒーロー側が、ルートレベルでは前面に出てしまっていた形です。ご指摘の調査結果（クリップではなく重なり順の問題）と一致します。
+
+**修正:** `.mj-video-hero` に `isolation: isolate` を与えて子のz-indexをヒーロー内だけに閉じ込め、ヒーロー全体は `z-index: 0` としてルートコンテキストに参加させました。これによりnavbar(1020)・フィルタバー(1019)より確実に背面に回ります。Bootstrap既定の `.dropdown-menu` のz-indexは変更していません（全65ページ波及を避けるため）。`body:has(.mj-video-list)` でvideo_wayhome.htmlのみにスコープしています。
+
+フィルタバーとヒーローの前後関係も、同じ根本原因（hero-contentのz-indexの漏れ）だったため、この修正で併せて解消される見込みです。
+
+なお、コミット前に確認したところ `style.css` に他セッション（#181関連、行の縞模様とth scope="row"の整合）の未コミット編集が混在していたため、`git diff`/`git apply --cached` で自分のハンクだけを切り出して部分ステージし、他セッションの編集はワーキングツリーに未コミットのまま残しています（git stashは使っていません）。
+
+pushは平野さんの判断のため、コミットまでで止めています。
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+CHAT-0913-WH-19: push完了・本番確認待ちのままオープンを維持します。
+
+**push:** `origin/cloudflare` へ `9f976ab`（ヒーローのz-index隔離修正）をpushしました。`e8acc61..9f976ab`。
+なお `95466de`（.navbar-collapse循環参照の修正、WH-17）は、確認したところ別セッションの自身のpushに既に含まれてorigin側に乗っており、今回改めてpushしたのは1本のみです。
+
+**デプロイ確認:** `gh api repos/retroeater/mj/commits/9f976ab/check-runs` で「Workers Builds: mj」の状況を確認し、成功（success）を確認しました。 https://github.com/retroeater/mj/runs/103676681386
+（このセッションからは api.cloudflare.com に到達できないため、本番表示自体の目視確認はできていません。平野さんの確認をお願いします。）
+
+**作業ツリー:** push対象はコミット済み分のみで、他セッションの未コミット編集（style.css・docs/issues-*.md）は巻き込んでいません。コミットもstashもせずそのままワーキングツリーに残しています。
+
+本issueは本番確認待ちのためオープンのまま維持します。確認後にクローズをお願いします。
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+平野さんが2026-09-13に本番(ryoei.pro/video_wayhome.html)でドロップダウン表示・ヒーローの見た目・モバイル幅のメニュースクロール・アンカー位置(スキップリンク経由)を確認し、正常であることを確認済みとのことです。本番確認完了につきクローズします。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+本番確認完了につきクローズします。
 
 ---
 
@@ -1013,7 +1177,7 @@ ouka_ranking/ouka_results/wrc_ranking/wrc_results）すべてに
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -1031,6 +1195,50 @@ PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わ
 **retroeater** (2026-09-13):
 
 着手中: jpml_pros.htmlの名前セルをth scope="row"にする作業に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
+**retroeater** (2026-09-13):
+
+## リグレッション: 固定列の文字が重なる（本番目視確認、2026-09-13）
+
+### 症状
+jpml_pros.htmlを横スクロールすると、固定された1列目（名前）の下を通る
+2列目（所属/出身地）の文字が透けて重なる。本来は潜り込んで見えない。
+
+### 原因
+style.cssの縞模様・ホバーの指定が`> td`の子セレクタになっていた:
+
+```css
+.mj-table tbody tr:nth-child(odd) > td { background-color: #ffffff; }
+.mj-table tbody tr:nth-child(even) > td { background-color: #fafafa; }
+.mj-table tbody tr:hover > td { background-color: #d6e9f8 !important; }
+```
+
+本issue（#181）で1列目を`<th scope="row">`にしたことで、この3つの指定が
+1列目に効かなくなり背景が透明になった。`position: sticky`は背景が透明だと
+下のセルが透ける。
+
+### 対応
+上記3セレクタに`> th`を追加（style.css）。`.mj-table`は共通クラスだが、
+tbodyにthを持つのは現状jpml_prosのみのため他ページへの影響はない
+（`.mj-table tbody tr:nth-child(odd) > th`等はjpml_pros以外では
+マッチ対象が存在せず無害）。コメントも残した。
+
+### 確認結果
+- **静的確認**: 修正後のセレクタが`td`と`th`の両方にマッチすることをCSS
+  セレクタレベルで確認済み。他ページ（`.mj-table`使用の11ページ）は
+  tbodyにthを持たないため影響を受けないことをHTML側の構造からも確認
+- **CDPでの確認（`wrangler dev` + `chrome-headless-shell`）**: resource_logs.html
+  では縞模様が正しく機能すること（1行目`rgb(255,255,255)`・2行目
+  `rgb(250,250,250)`）を確認できた
+- **jpml_pros.html自体の横スクロール状態のスクリーンショットは取得できな
+  かった。** 新しいタブでこのページを開いた直後、`Runtime.evaluate`が
+  （`1+1`のような最小の式ですら）一貫してタイムアウトする現象を確認した。
+  ブラウザプロセスを完全に再起動し、新しいプロファイル・新しいポートで
+  試しても再現したため、環境側の一時的な負荷ではなく、このページ固有の
+  問題と考えられる（1,100行の`content-visibility: auto`テーブルや大量の
+  画像読み込みなどが影響している可能性はあるが未特定）。サーバー側の
+  応答（`wrangler dev`のログ）は毎回200/304で高速に返っており、
+  ページ配信自体に問題は無い。実機での目視確認（#186）に回す
 
 ---
 

@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 13:34 JST
+生成日時: 2026-09-13 14:13 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,123 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 62件（openのみ）。番号降順。
+件数: 63件（openのみ）。番号降順。
+
+---
+
+## #198 複数セッションの並行作業でワーキングツリーが衝突する問題への運用を決める
+
+- 作成: 2026-09-13
+- ラベル: 分野: インフラ
+
+### 本文
+
+### 提案理由（2026-09-13、Claudeとの検討）
+
+2026-09-13 のセッションで、複数の Claude Code セッションが同一
+リポジトリを並行編集したことによる事象が2回発生した。
+
+**1件目（実害あり・復旧済み）**
+video_wayhome の #188/#189/#190 を実装中のセッションが、3本の
+コミットに分割するため `git stash push -- <files>` を実行した。
+対象に `style.css` が含まれており、別セッション（アクセシビリティ
+改善、#181 関連）の未コミット編集が無言で作業ツリーから消えた。
+気づいた時点で stash の中身から該当変更のみを復元し、事後に
+正しさを確認した（`generate_jpml_pros.py:259` の th scope="row" が
+1箇所、生成後の `jpml_pros.html` で1,100件一致）。
+
+**2件目（回避済み）**
+同セッションが後続の修正をコミットする際、再び `style.css` に
+他セッションの未コミット編集が混在していた。`git stash` を使わず
+`git diff` から自分のハンクのみを切り出し `git apply --cached` で
+部分ステージすることで回避した。
+
+**問題の本質**
+どちらも検知・対処できたが、成立条件が「セッションが衝突に気づき、
+正しい回避手段を選ぶこと」に依存している。作業が続く限り同じ状況が
+繰り返し発生し、気づかなかった場合は他セッションの作業が無言で
+失われる。現状すべてのセッションが `cloudflare` ブランチ上で直接
+作業しており、作業ツリーが共有されていることが原因。
+
+### 検討すべき論点
+
+- セッションごとに作業ブランチを切る運用にするか
+  - `cloudflare` は統合・デプロイ用に限定し、作業は
+    `work/<セッション識別子>` 等に分ける案
+  - マージのタイミングと責任者（平野さんが判断するのか、
+    セッションが自律的に行うのか）
+  - #169 の自動デプロイは `cloudflare` への push で走るため、
+    デプロイ契機が明確になるという副次的な利点がある
+- ブランチを分けない場合の代替
+  - `git stash` の使用を CLAUDE.md で禁止し、部分ステージ
+    （`git add -p` / `git apply --cached`）を標準手順とする
+  - 作業開始時に `git status` で他セッションの未コミット変更を
+    確認することを手順化する
+- そもそも同一リポジトリのセッションを並行させない運用にするか
+  - 最も単純だが、作業速度は落ちる
+
+### やること（方針決定後）
+
+- 決めた運用を CLAUDE.md および docs/handover.md に記載する
+- `git stash` の扱いを明文化する（1件目の直接原因のため、
+  どの方針を採る場合でも必要）
+
+### 依存・関連
+
+- #169（wrangler deploy の GitHub Actions 化。デプロイ契機に関わる）
+- #181（1件目で一時的に消えた変更）
+- #188 / #189 / #190（衝突が発生した作業）
+
+Chat-Ref: CHAT-0913-WH-20
+
+---
+
+## #197 rh_paifu.html のリンクの下線を消す
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX
+
+### 本文
+
+## 状況
+rh_paifu.htmlの天鳳牌譜リンク・YouTubeリンクに下線が出ている。
+resource_logs.html（ログ）の店名リンクには下線が出ておらず、サイト内で
+扱いが揃っていない。平野さんが本番で確認（2026-09-13）。
+
+## 対応
+style.cssに汎用クラスが既にある:
+
+```css
+/* リンクの下線を消す汎用クラス(型Aの他ページでも使う想定)。
+インラインのstyle="text-decoration: none"は#9のCSPで弾かれるため、
+resource_logsの店名リンクなどはこのクラスに置き換える。 */
+.mj-table a.mj-plain { text-decoration: none; }
+```
+
+`scripts/generate_rh_paifu.py`のリンク生成箇所で`<a>`に`class="mj-plain"`
+を付ける。CSSの追加は不要。
+
+## 注意
+- **下線を消すとリンクの識別が色だけに頼ることになる**（WCAG 1.4.1
+  Use of Color）。ただし#26/#108でリンク色を`#14459b`に決めた際、
+  3背景でAAA（7:1以上）を満たしており、周囲の本文色との輝度差も十分。
+  表内のリンクという文脈（セル全体がリンクで、hoverで色が変わる）も
+  考慮すると、実務上は許容範囲と判断する
+- resource_logs側が既にこの扱いなので、**サイト内の一貫性としては
+  下線なしに揃えるのが正しい**
+- 再生成が必要（rh_paifu.htmlのみ）
+
+## 確認
+- 下線が消えること、リンク色が従来どおりであること
+- hover時の挙動がresource_logsと揃っていること
+
+レビュー出典: 2026-09-13、平野さんによる本番目視確認
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: generate_rh_paifu.pyのリンクにclass="mj-plain"を追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -359,109 +475,6 @@ CHAT-0913-WH-12: 本文「やること」に、共有テキストへ選手のX�
 
 ---
 
-## #188 video_wayhome の navbar をスクロール追随（sticky）にする
-
-- 作成: 2026-09-13
-- ラベル: 分野: 整理・保守, 対象: video_wayhome
-
-### 本文
-
-### 提案理由（2026-09-13、Claudeとの検討）
-
-38本の動画リストは縦に長く、スクロール中にナビゲーションへ戻る手段が
-無い。navbar をスクロールに追随させる。
-
-適用範囲は video_wayhome.html のみ。他ページを含めた共通ヘッダの
-見直しは新サイト構築時に行うため、ここでは波及させない。
-
-### 現状（2026-09-13、Claudeが確認）
-
-navbar は `navbar.js` が `document.write` で出力しており、`video_wayhome.html`
-と `wayhome/` 配下の個別ページ38枚を含む全65ページで共通のマークアップ・
-クラス（`navbar navbar-expand-lg navbar-dark bg-dark`）を出している。
-navbar.js 自体にページ固有の出し分けは無い。
-
-一方、CSS側には型A（表）のページ限定で navbar を `position: fixed` にする
-前例がある（`style.css` の `body:has(.mj-table) nav.navbar`、コメントに
-「Bootstrapのfixed-top相当」とある）。同じ手法で `body:has(.mj-video-page)`
-にスコープすれば、`navbar.js` 自体は変更せず CSS だけで
-video_wayhome.html 以外に影響させずに実装できる見込みが高い。
-
-現状このページの navbar は fixed/sticky ではなく通常のフローに乗っている。
-`#searchBoxes`（虫眼鏡から開く検索欄）だけは `video_wayhome.js` が
-`--navbar-height` を実測して `position: fixed` にしている（この値は
-本issueでも流用できる）。
-
-### やること
-
-- `.fixed-top` ではなく `.sticky-top` を使う。`fixed-top` は body に
-  padding-top の調整が必要になり、ページごとの高さ管理が発生するため
-- スコープは `body:has(.mj-video-page) nav.navbar` とし、上記の
-  `body:has(.mj-table) nav.navbar` と同じ流儀に揃える
-- `html { scroll-padding-top: <navbar高さ>; }` を入れる。
-  これが無いとアンカー遷移先が navbar の下に潜る
-- モバイルで collapse を開いたとき用に
-  `max-height: calc(100vh - <navbar高さ>); overflow-y: auto;`
-- 濃色ページなので背景は `rgba(...,.85)` + `backdrop-filter: blur(12px)`
-- z-index は 1020（`#searchBoxes` の1020および `body:has(.mj-table) nav.navbar`
-  の1030との整合を確認すること）
-
-### 注意
-
-`:has()` によるスコープ前例があるため、共通テンプレート由来の navbar でも
-他ページへの波及は避けられる見込みが高い。ただし実装時に本当に波及しないか
-（`:has()` の対応状況を含む）を確認すること。避けられない構造だった場合は
-実装せず報告すること。
-
-### 依存・関連
-
-- #102（video_wayhome パイロット）
-- CHAT-0913-WH-03 と画面上部の領域を共有するため、本issueを先に実施する
-
-Chat-Ref: CHAT-0913-WH-02
-
-### コメント (6件)
-
-**retroeater** (2026-09-13):
-
-CHAT-0913-WH-10: 反映確認のみ実施。WH-01調査5番の2点（navbarが共通テンプレート由来〈navbar.jsが全65ページでdocument.write〉であること／`body:has(.mj-table) nav.navbar`という型A限定position:fixedの前例があり同じ手法でvideo_wayhome.htmlだけに限定できる見込みであること）は、起票時点の本文「現状」節にすでに記載済みでした。本文の追記・編集は行っていません。
-
-**retroeater** (2026-09-13):
-
-着手中: video_wayhome.htmlのみを対象に実装します（Chat-Ref: CHAT-0913-WH-13/14/15、#188→#189→#190の順）。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
-
-**retroeater** (2026-09-13):
-
-実装完了（Chat-Ref: CHAT-0913-WH-13）。コミット: 0f1fef5「video_wayhomeのnavbarをsticky化する(#188)」。video_wayhome.htmlの<main>に専用スコープクラスmj-video-listを新設し、body:has(.mj-video-list) nav.navbarでposition:stickyを適用。--mj-nav-hはvideo_wayhome.jsがResizeObserverで実測。他64ページへの影響なし（.mj-video-listはこのページにのみ出力されることを確認済み）。本番反映(wrangler deploy)は行っていません。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
-
-**retroeater** (2026-09-13):
-
-実装完了につきクローズします。
-
-**retroeater** (2026-09-13):
-
-本番で不具合が確認されたため再オープンします（Chat-Ref: CHAT-0913-WH-17）。症状: Tabでスキップリンクにフォーカスした際、navbarの内側で予期しないスクロール/クリップが発生。着手中: 原因調査・修正を行います。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
-
-**retroeater** (2026-09-13):
-
-調査結果と修正をコミットしました（未push、コミット: 95466de）。
-
-**原因の再確認:** 依頼文の「nav.navbar自体にmax-height/overflow-yが付いている」という診断は、コードを確認したところ不正確でした。実際にそれらが付いていたのは子要素の `.navbar-collapse` で、かつメディアクエリで絞り込んでいなかったため、デスクトップ幅でも常時 `max-height: calc(100vh - var(--mj-nav-h))` が適用されていました。
-
-ここに循環参照がありました: モバイルでcollapseを開くと nav.navbar 自体の実測高さ(--mj-nav-h)がcollapse分だけ増え、その増えた値がcollapse自身のmax-height計算に使われて利用可能な高さが逆に縮みます。ビューポートが低い（モバイル横向き等）・展開項目が多いケースで、上段が切れる・不要な内部スクロールバーが出る形で顕在化します。
-
-**修正内容:** `.navbar-collapse` の max-height/overflow-y を、navbar-expand-lgのブレークポイント(992px)未満・`.show`(展開中)のみに限定し、`--mj-nav-h` を使わない `80vh` 固定値にして循環参照を断ちました。nav.navbar自体には元々overflow/max-heightが付いていなかったこともコードで確認済みです。
-
-**スキップリンクについて（未対応・報告のみ）:** `.visually-hidden-focusable`（#182）はnavbar.jsではなく `scripts/lib/page.py` のテンプレートが出しており、DOM上もnav要素の兄弟（navbar.jsのscriptタグより前）であることを確認しました。z-index(1040) > navのz-index(1020)のため、コード上はnavに覆われる関係にはなっていません。このテンプレートは生成対象11ページ+video_wayhome+wayhome配下38枚+手書き4ページ+index.htmlで共有されているため、DOM位置を変更する場合は本issue（video_wayhome限定）のスコープを超えて全ページに波及します。今回は変更していません。上記のcollapse修正だけで本番の症状（上段の切れ・内部スクロールバー）が解消するかをまず確認いただき、スキップリンクの見え方になお問題が残るようであれば、影響範囲込みで別issueとして検討することを提案します。
-
-**--mj-nav-h / --mj-filter-h の再確認:** `html:has(.mj-video-list) { scroll-padding-top: calc(var(--mj-nav-h, 56px) + var(--mj-filter-h, 52px)); }` は維持されており、両変数ともvideo_wayhome.jsのResizeObserverで実測値が入る実装のままです（フォールバック値のみ、実行前・失敗時用）。
-
-pushの可否は平野さんの判断のため、コミットまでで止めています。
-
-セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
-
----
-
 ## #186 実機の支援技術でアクセシビリティを通し確認する
 
 - 作成: 2026-09-13
@@ -759,7 +772,7 @@ ouka_ranking/ouka_results/wrc_ranking/wrc_results）すべてに
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -777,6 +790,50 @@ PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わ
 **retroeater** (2026-09-13):
 
 着手中: jpml_pros.htmlの名前セルをth scope="row"にする作業に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
+**retroeater** (2026-09-13):
+
+## リグレッション: 固定列の文字が重なる（本番目視確認、2026-09-13）
+
+### 症状
+jpml_pros.htmlを横スクロールすると、固定された1列目（名前）の下を通る
+2列目（所属/出身地）の文字が透けて重なる。本来は潜り込んで見えない。
+
+### 原因
+style.cssの縞模様・ホバーの指定が`> td`の子セレクタになっていた:
+
+```css
+.mj-table tbody tr:nth-child(odd) > td { background-color: #ffffff; }
+.mj-table tbody tr:nth-child(even) > td { background-color: #fafafa; }
+.mj-table tbody tr:hover > td { background-color: #d6e9f8 !important; }
+```
+
+本issue（#181）で1列目を`<th scope="row">`にしたことで、この3つの指定が
+1列目に効かなくなり背景が透明になった。`position: sticky`は背景が透明だと
+下のセルが透ける。
+
+### 対応
+上記3セレクタに`> th`を追加（style.css）。`.mj-table`は共通クラスだが、
+tbodyにthを持つのは現状jpml_prosのみのため他ページへの影響はない
+（`.mj-table tbody tr:nth-child(odd) > th`等はjpml_pros以外では
+マッチ対象が存在せず無害）。コメントも残した。
+
+### 確認結果
+- **静的確認**: 修正後のセレクタが`td`と`th`の両方にマッチすることをCSS
+  セレクタレベルで確認済み。他ページ（`.mj-table`使用の11ページ）は
+  tbodyにthを持たないため影響を受けないことをHTML側の構造からも確認
+- **CDPでの確認（`wrangler dev` + `chrome-headless-shell`）**: resource_logs.html
+  では縞模様が正しく機能すること（1行目`rgb(255,255,255)`・2行目
+  `rgb(250,250,250)`）を確認できた
+- **jpml_pros.html自体の横スクロール状態のスクリーンショットは取得できな
+  かった。** 新しいタブでこのページを開いた直後、`Runtime.evaluate`が
+  （`1+1`のような最小の式ですら）一貫してタイムアウトする現象を確認した。
+  ブラウザプロセスを完全に再起動し、新しいプロファイル・新しいポートで
+  試しても再現したため、環境側の一時的な負荷ではなく、このページ固有の
+  問題と考えられる（1,100行の`content-visibility: auto`テーブルや大量の
+  画像読み込みなどが影響している可能性はあるが未特定）。サーバー側の
+  応答（`wrangler dev`のログ）は毎回200/304で高速に返っており、
+  ページ配信自体に問題は無い。実機での目視確認（#186）に回す
 
 ---
 
