@@ -1283,11 +1283,20 @@ for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done
   /apple-touch-icon.png をフォールバックで取得する**（jpml_pros.html
   から追加して実測）。現在 <link rel="apple-touch-icon"> は index.html
   にしか無いが、実害は無い
-- ただしアイコン名は各ページの title 先頭から取られる（上記の例では
-  「プロ」）。`<meta name="apple-mobile-web-app-title">` を置けば
-  「ryoei.pro」に統一できる。HEAD_TEMPLATE の変更になり全26ページ＋
-  wayhome 38枚の再生成が必要なため、別の再生成が発生するタイミングに
-  合わせる
+- アイコン名は各ページの title 先頭から取られる（上記の例では
+  「プロ」）。jpml_pros.html はこの名前を
+  `<meta name="apple-mobile-web-app-title" content="連盟プロ">` で
+  個別に固定した（#177、2026-09-13）。他26ページ＋wayhome 38枚が使う
+  共通の HEAD_TEMPLATE 側は未対応のまま。全ページに広げるかどうかは
+  別issueで判断する
+- **iOS 17以降、「ホーム画面に追加」ダイアログに「Webアプリとして開く」
+  トグルがあり、既定でオンになっている（#177の実機確認、2026-09-13）。**
+  `apple-mobile-web-app-capable` を宣言していなくてもこのトグルは表示
+  され、既定でオンのため、スタンドアロン起動にするかどうかは実質
+  ユーザー側の選択になっている。宣言の有無でこのトグルをオフには
+  倒せない。「宣言しなければスタンドアロンにならない」という前提は
+  誤りだった（#177の「前提と限界」に書いた理由づけの訂正。capableを
+  追加していない結論自体は変わらない）
 
 **見送った項目**:
 

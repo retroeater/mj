@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 11:02 JST
+生成日時: 2026-09-13 11:03 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -275,13 +275,25 @@ generate_jpml_pros.py 自前の PAGE_TEMPLATE（41行目〜）を持つため、
 - `apple-mobile-web-app-capable` は**入れない**。スタンドアロン起動に
   なり、戻る操作や外部リンクの挙動が変わるため。名前の制御には不要
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
 着手中: jpml_pros.htmlのホーム画面アイコン名を「連盟プロ」にする(#177)。
 
 セッション: https://claude.ai/code/session_01TiAUwTpZWaugYkzh9gkzFa
+
+**retroeater** (2026-09-13):
+
+実機確認: iOS 17以降、「ホーム画面に追加」ダイアログに「Webアプリとして開く」
+トグルがあり、既定でオンになっている。`apple-mobile-web-app-capable`を
+宣言していなくてもオンで表示されるため、スタンドアロン起動にするかどうかは
+実質ユーザー側の選択で、宣言でオフに倒すことはできない。
+
+上の「前提と限界」に書いた「`apple-mobile-web-app-capable`は入れない。
+スタンドアロン起動になり…」の理由づけは、この点で不正確だった（宣言しなくても
+トグル自体は既に出る）。ただしcapableを追加していない実装の結論自体は
+変わらない。詳細はdocs/handover.mdのfavicon・apple-touch-iconの節に追記した。
 
 ---
 
