@@ -3,7 +3,11 @@
 新しい会話でこのプロジェクトを再開するときに、最初に読む文書。
 **このファイルを読めば、それまでの経緯を知らなくても作業を再開できる**ことを目的にしている。
 
-最終更新: 2026年9月13日（**#178〜#186起票**: アクセシビリティの静的レビューを実施し8件を起票、実機確認を#186として別途起票。詳細は「6. これまでに分かったこと」の「アクセシビリティの静的レビュー」節。#186はセッションからは実施できない（`ryoei.pro`が遮断されているため平野さんの手作業）。**#26/#108完了**: リンク色をBootstrap既定の#0d6efdから紺寄りの#14459bへ変更し、.mj-tableの偶数行・ホバー行を含む3背景すべてでAAA(7:1)以上にした。下線を文字から離して細くし、画像専用リンク(a:has(> img))からは下線を除去。style.cssのみの変更で再生成不要。本番の目視確認済み。あわせてWorkers Buildsのcheck-runの挙動2件を4-x節に追記。**#161完了**: llms.txtの文字化けを`_headers`でのContent-Type上書きで解消し、本番反映を平野さんが確認〈2026-09-12〉のうえクローズ。`_headers`でのContent-Type上書きがWorkers静的アセットに効くことをここで実証したため「6. これまでに分かったこと」のCloudflareの節に追記。#162完了: 「帰り道」エピソード個別ページ38枚〈`wayhome/`〉を静的生成し、選手個別ページ〈#101〉のURL設計・canonical・サイトマップ分割のパイロットにした。本番検証（GSCサイトマップ・リッチリザルトテスト）は平野さんが確認済み。途中で見つけたsitemap-pages.xmlのGSCパースエラー〈コメント内`--`、#121由来〉も修正しCIにwell-formedness確認を追加。詳細はdocs/new-site-design.md「12. パイロット: video_wayhome」の「#162で確かめたこと」節。#102第2段: video_wayhomeを新サイトの先取りパイロットとして全面リデザイン。#110/#76クローズ、#142初回計測とGSCエクスポート保存、#103週次cron導入、スナップショットのpush手順とチャット側の確認方法を明記。#157: 型CのCSSが#152のコミットに混入した件を整理し、issueの着手宣言とコミット範囲の確認をルール化。**#130 設定実施・9/15以降の確認待ち**: Cloudflare の旧トグル「Block AI bots」が9/15に廃止されるのを前に、新コントロール（Configure AI bot policies）で Search/Agent を Allow、Training を Block に設定した。広告のない ryoei.pro では Recommended の「Block on pages with ads」が無効になるため Block を選択。設定前後で robots.txt の管理セクション34行は完全一致で、旧トグルが同じ出力を出しているため判定は9/15以降。クローズ条件5項目をissueに記載済み。調査途中、外部記事を根拠に「旧トグルは廃止されない」とhandoverを書き換える誤りがあり、ダッシュボードの実画面で訂正した（教訓を「6. これまでに分かったこと」に追加済み）。）
+最終更新: 2026-09-13
+
+- #130: AIボット制御を新コントロール（Configure AI bot policies）へ設定済み（Search/Agent=Allow、Training=Block）。9/15の旧トグル廃止後に維持を確認してクローズする
+- #178〜#186: アクセシビリティの静的レビューを実施し8件起票。実機確認は#186として別途起票（`ryoei.pro`が遮断されているため平野さんの手作業）
+- #162: 「帰り道」エピソード個別ページ38枚を静的生成し、選手個別ページ（#101）のURL設計・canonical・サイトマップ分割のパイロットとした
 
 ---
 
@@ -143,18 +147,21 @@ HTMLは27ページ + 「帰り道」エピソード個別ページ38枚（`wayho
 更新したときは、ワークフローを`workflow_dispatch`で手動実行する
 （`target_page`にページ名、または`all`）。旧方式（Google Charts）は
 「スプレッドシートを直せば即反映」だったので、移行が進むほど手動実行の
-機会が増える。定期実行（週次など）を設けるかどうかは#103で別途判断する。
+機会が増える。**週次cron（毎週月曜05:37 JST、#103で導入済み）が`all`を
+自動実行するため、手動実行は即時反映したいときのみでよい。**
 **`gh-pages`ブランチは旧方式のままなので、この制約は受けない。**
 
 ### 自動化
 
-`.github/workflows/` に3本ある。
+`.github/workflows/` に5本ある。
 
 | ワークフロー | 内容 |
 |---|---|
-| `regenerate-page.yml` | ページの再生成。対象は `scripts/generate_<名前>.py` の有無から自動判別する |
+| `regenerate-page.yml` | ページの再生成。対象は `scripts/generate_<名前>.py` の有無から自動判別する。push検知に加え毎週月曜05:37 JSTに`all`を自動実行する（#103、差分がなければコミットしない） |
 | `check-image-links.yml` | 毎週月曜3時、画像1,985枚のリンク切れを確認しissueに書き出す |
 | `check-ron2-images.yml` | 毎週月曜4時、龍龍の画像とサイトの表示が一致するか確認する |
+| `assets-check.yml` | pushのたびに`.assetsignore`の漏れ（#133の再発）を検知する。Cloudflareへのアクセスは不要 |
+| `check-leagues-dropped.yml` | 手動実行のみ。型C（`houou_leagues`/`ouka_leagues`）で選択リストから漏れている選手を検知する（#168） |
 
 ---
 
@@ -188,18 +195,11 @@ OK: https://raw.githubusercontent.com/retroeater/mj/<コミットSHA>/docs/hando
 判断に迷ったら、チャット側で断定せず Claude Code 側に
 `gh issue view` / `git log` で実態を確認してもらうこと。
 
-**GitHub Projects の操作（2026-09-11に解消済み）。**
-Codespace既定の`GITHUB_TOKEN`（`ghu_...`）にはProjects (V2) APIの`project`
-スコープがなく、`gh project`系コマンドは`Resource not accessible by
-integration`で弾かれていた。fine-grained PATもProjectsには対応していない
-（GitHub側の制限）。`project`・`read:org`・`repo`スコープ付きのclassic PAT
-を発行し`gh auth login --with-token`で設定済み。ただし`GITHUB_TOKEN`環境変数の
-方が優先されるため、`gh project`コマンドを打つときは毎回
+**GitHub Projects の操作。** `GITHUB_TOKEN`環境変数が優先されるため、
+`gh project`コマンドを打つときは毎回
 `env -u GITHUB_TOKEN -u GH_TOKEN gh project ...`のように環境変数を外して
-実行すること。
-この制約で権限不足だった期間にcloseされ、ボードに未登録のまま残っていた
-issue71件（#1〜#100台の大半）は、2026-09-11に一括追加しDoneステータスを
-設定して解消した。
+実行すること（Codespace既定の`GITHUB_TOKEN`にはProjects (V2) APIの`project`
+スコープがないため）。
 
 ### チャット側から渡された指示と Chat-Ref（2026-09-13）
 
@@ -352,7 +352,7 @@ CSP（#9）の導入を予定しているため。Bootstrapのローカル化や
 |---|---|
 | `www.gstatic.com` / `docs.google.com` | Google Charts（残り6ページ） |
 | `static.cloudflareinsights.com` | Web Analytics のビーコン本体。**送信先は自ドメインの `/cdn-cgi/rum`**（ゾーン配下で登録し直したため）。CSPでは `script-src` にのみ必要 |
-| 画像7ドメイン | 選手のプロフィール画像 |
+| 画像12ドメイン | 選手のプロフィール画像等（→「画像ドメインの実測結果」参照） |
 
 **#7（Charts依存の解消）が終わると2つ減る。** `saikyo_mens.html`の移行(2026-09-11)で
 `abs.twimg.com`（Xアカウントなし選手の既定アイコン）への**フォールバックの**
@@ -559,7 +559,8 @@ Workers & Pages → `mj` → Settings → Builds:
 | # | 内容 | 備考 |
 |---|---|---|
 | **#7** | 残り6ページ（型B 3 / ランキング 3）のGoogle Charts依存を解消 | **最大の残件。** #9 の前提でもある |
-| #78 | OGP画像を作成 | 画像制作がボトルネック。デジタル庁素材が候補 |
+| #111 | 型B 3ページ（Dashboard＋ローソク足）の移行方針を決める | #7の残り判断1/2 |
+| #141 | ランキング3ページの移行方針を決める | #7の残り判断2/2 |
 | #8 | 龍龍の所属・出身地等との照合 | #61の仕組みを流用できる |
 | #9 | CSP設定 | #7の後にやると強いポリシーが書ける |
 | #4 | SentryでJSエラー検知 | 外部サービスの登録が必要 |
@@ -568,17 +569,17 @@ Workers & Pages → `mj` → Settings → Builds:
 
 ### #7 の進め方（検討済み）
 
-**2026-09-12時点の区切り**: 21ページ中15完了・残6。残るのは型B 3ページ
-（#111）とランキング3ページ（#141）の2つの判断のみ。型A・型A'・型C・型D
-はすべて完了。共通部品（`lib/page.py` / `lib/chart.py` / `lib/leagues.py` /
-`table.js` / `leagues.js`）は出そろっており、残り6ページは「作り方が
-分からない」のではなく「方針を決めていない」状態。
+**現状（2026-09-13時点）**: 21ページ中15完了・残6は#111/#141の判断待ち。
+型A・型A'・型C・型D はすべて完了しており、共通部品（`lib/page.py` /
+`lib/chart.py` / `lib/leagues.py` / `table.js` / `leagues.js`）は出そろって
+いる。残り6ページは「作り方が分からない」のではなく「方針を決めていない」
+状態。実装の詳細は `docs/notes/static-generation.md` を参照。
 
 対象の21ページ(15ページ完了・残6)は5つの型に分かれる。
 
 | 型 | ページ数 | 内容 | 該当ページ |
 |---|---|---|---|
-| A. 表とフィルターのみ | 13(**完了10・残3**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_wayhome`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、`saikyo_results`(完了)、ランキング3(残り) |
+| A. 表とフィルターのみ | 12(**完了9・残3**) | `jpml_pros` と同じ構造。移行しやすい | `jpml_titles`(完了)、`jpml_test`(完了)、`resource_logs`(完了)、`video_live`(完了)、`video_en`(完了)、`rh_paifu`(完了)、`saikyo_mens`(完了)、`video_mtsuku`(完了)、`saikyo_results`(完了)、ランキング3(残り) |
 | A'. 多列テーブル（表のみ） | 2(**完了2・残0**) | `jpml_pros`と同じ表構成だが6〜8列あり、`.mj-table-2col`/`.mj-table-3col`がそのままでは使えない（#109）。**完了** | `rh_results`(完了、12行・6列) / `rh_results_detail`(完了、321行・8列) |
 | B. 表＋ローソク足 | 3 | `Dashboard`(名前/期/リーグの`ControlWrapper`。ページごとに構成が違う) + `Table`(`page:'enable'`) + `?name`時のみ`CandlestickChart`。型A/A'と同じ手順では表を静的化できない（#111） | `houou_results` / `ouka_results` / `wrc_results` |
 | C. 縦棒グラフ | 2(**完了2・残0**) | `ColumnChart`(積み上げ棒は全員共通、`?name`時に選手の折れ線1本を追加。静的SVG+折れ線だけクライアント描画のハイブリッドで移行（#127、**完了**）) | `houou_leagues`(完了) / `ouka_leagues`(完了) |
@@ -615,52 +616,16 @@ Workers & Pages → `mj` → Settings → Builds:
   #7 は続ける
 - 件数の多いページの根本解決は表示件数を絞ること（#24の五十音タブ、
   新サイトで対応）。既存のINP 458msの記録と同根の問題
-- **残り17ページの行数調査で `saikyo_results`（2,560行、`?name`指定なしで
-  全件描画）が `jpml_pros`（1,099行）を上回る最大の懸念ページと判明した。**
-  ただしこれは訂正が必要（2026-09-11、実機確認）: `houou_results`
-  （15,416行）も`?name`は任意で、未指定時に表(`myTable`)は無条件で
-  描画される。現在DOM行数が500に収まっているのはGoogle Chartsの
-  `page:'enable'`+`pageSize:500`が実際にDOMをページ単位で分割している
-  ためで、自前の`row.hidden`方式に置き換えると`houou_results`が
-  `saikyo_results`を超えて**#7最大のDOM規模ページになる**。
-  `ouka_results`/`wrc_results`も同様に`?name`任意だが行数が少なく
-  （1,500〜1,600台）実害は小さい。`houou_leagues`/`ouka_leagues`は
-  `ColumnChart`への集計後は数十行、ランキング系3ページは
-  `DEFAULT_RANK_LIMIT`により実際のDOM規模リスクは低い。詳細は
-  `docs/lighthouse-baseline.md` の行数調査表を参照
-  （**`saikyo_results`は2026-09-11に移行済み。`page_size=100`の
-  `.mj-pager`を使うため、危惧していた「2,560行を無条件で全件描画」には
-  なっていない。実測値は`docs/lighthouse-baseline.md`の移行結果を参照**）
-
-未移行ページ側の参考値も記録しておく。
-
-- 未移行ページは「Reduce unused JavaScript」の指摘を受けている
-  （`video_wayhome` 410ms / `saikyo_results` 570ms）。Google Charts
-  ライブラリの未使用分で、#7の移行で自動的に解消する
-- 未移行ページはLCPが悪い傾向。`saikyo_results` はdesktopでも2,038ms
-  （他ページは500〜950ms台）。`docs.google.com` への往復待ちが原因
-
-**`jpml_titles.html`（型Aの代表）・`jpml_test.html`（2ページ目）・
-`resource_logs.html`（3ページ目）・`video_live.html`（4ページ目）の
-移行が完了し、型ができた。**
-共通部品として `.mj-table` / `.mj-pager` / `.mj-left` / `.mj-plain`
-（style.css）ができたので、残り11ページはこれを踏襲して展開する。
-ページ送りは各ページの現行仕様（件数・表示条件）をそのまま引き継ぐ方針で、
-`jpml_titles` / `resource_logs` は Google Charts版の `pageSize:100`、
-`jpml_test` / `video_live` は `pageSize:50` を踏襲した。
-`resource_logs.html` はページ内にハードコードされた内部リンク（名前の
-セレクトボックス3件、タグリンク16本）を持つ唯一の型Aページで、これらは
-`scripts/generate_resource_logs.py` 側の定数として引き継いだ。
-`video_live.js` は `jpml_test.js` とテーブルidが違うだけでほぼ同一
-（型Aの実装が収束してきた最初の例）。
-Python側のライブラリ化・JSの共有ファイル化はまだしていない
-（4ページ目〈`video_live`〉を終えた段階でも見送っており、5ページ目
-着手前に判断する）。
-#6（ワークフローの汎用化）は完了済みなので、次ページを追加する準備は整っている。
-
-**→ 2026-09-11、この判断を実行した。** `scripts/lib/page.py` + `table.js`
-に共通化したうえで5〜9ページ目を移行した。詳細は「#7（型Aの静的化）で
-用意した共通部品」の節を参照。
+- **DOM規模の最大の懸念ページは`houou_results`（15,416行）。** `?name`は
+  任意で、未指定時は表(`myTable`)が無条件で描画されるが、現在は
+  Google Chartsの`page:'enable'`+`pageSize:500`がDOMをページ単位で
+  分割しているため500行に収まっている。自前の`row.hidden`方式に置き換えると
+  この行数がそのままDOMに乗るため、**#7最大のDOM規模ページになる見込み**。
+  `ouka_results`/`wrc_results`も同様に`?name`任意だが行数は少ない
+  （1,500〜1,600台）で実害は小さい。`saikyo_results`は2026-09-11に
+  移行済みで、`page_size=100`の`.mj-pager`を使うため「2,560行を無条件で
+  全件描画」の懸念は解消済み。詳細は`docs/lighthouse-baseline.md`の
+  行数調査表を参照
 
 **テーブル描画ライブラリの選定（#95）は #7 の前提から外した。**
 #7 は現行方式（`jpml_pros.html` と同じ自前実装）で残り12ページを
@@ -677,38 +642,16 @@ Google Charts版のTable chartは既定でソート可能だったため、こ�
 適用例で、`jpml_test.html` / `resource_logs.html` / `video_live.html` も
 同様にソート機能を持たない。
 
-**`jpml_titles` / `jpml_test` / `resource_logs` / `video_live` の比較で
-見えた、共通化前に揃えるべき差分。** 2026-09-11に`scripts/lib/page.py` /
-`table.js`へ共通化する際、以下はすべて`TableConfig`の設定項目
-（`name_mode` / `filter_param` / 画像サイズ・フォールバックの引数）として
-吸収した。詳細は「#7（型Aの静的化）で用意した共通部品」の節を参照。
-
-- `?name=` の意味がページによって違う: `jpml_titles` / `resource_logs`
-  では入力欄を持たない完全一致フィルター（旧WHERE句相当）、`jpml_test` /
-  `video_live` では絞り込み入力欄の初期値（部分一致）
-- `PAGE_SIZE` がページごとに違う（`jpml_titles` / `resource_logs` は100、
-  `jpml_test` / `video_live` は50）。いずれも旧Google Charts版の
-  `pageSize` をそのまま踏襲した値
-- 画像の縦横比とフォールバック先がページごとに違う: `jpml_titles` は
-  80×80正方形・`img/avatar.svg`、`jpml_test` / `resource_logs` /
-  `video_live` は160×90(16:9)・`img/125_arr_hoso.png`
-- `resource_logs` だけ、ページ内にハードコードされた内部リンク
-  （名前セレクトボックス3件・タグリンク16本）を持つ。生成スクリプト側の
-  定数として引き継いだが、他ページにはない構造なので共通化の対象からは
-  いったん外れる可能性がある
-- `video_live.js` は `?name=`・`PAGE_SIZE`・ソートなしのいずれも
-  `jpml_test.js` と一致しており、実質的にテーブルidの違いしかない
-  （手本ページとして次の共通化検討にそのまま使える）
-
 **型Aの2列ページ（画像 + 概要）には `.mj-table-2col` を付ける。**
 画像列を168px固定、概要列を残り幅に伸縮させ、概要は折り返す
 （style.cssの`.mj-table-2col`）。`.mj-table`本体は変えず修飾クラスとして
 追加したため、15列の`jpml_pros`（`table-layout: fixed` / `width: 934px`
 のまま）には影響しない。
-移行済みの9ページ（`jpml_titles` / `jpml_test` / `video_live` /
-`resource_logs` / `video_wayhome` / `video_en` / `rh_paifu` /
+移行済みの8ページ（`jpml_titles` / `jpml_test` / `video_live` /
+`resource_logs` / `video_en` / `rh_paifu` /
 `saikyo_mens` / `saikyo_results`）に適用済み。`video_mtsuku`のみ3列のため、
 新設した`.mj-table-3col`（画像列168px固定＋残り2列を折り返し）を使う。
+`video_wayhome`は#102第2段で表自体を廃止したため対象外。
 
 ---
 
@@ -1241,7 +1184,7 @@ og:imageは各エピソードのサムネイル（一覧のヒーローと同じ
 - そのため移行は「行をHTMLにする」作業ではなく、**集計ロジックを
   Pythonへ移植する**作業になる。他の型Aとは性質が違い、分量も大きい
 - 上位100件に絞る`DEFAULT_RANK_LIMIT`があるため、出力自体は小さい
-- **進め方の案**: 8部門すべてを1つのHTMLに焼き込み、`?division=`を
+- **進め方の案**: 9部門すべてを1つのHTMLに焼き込み、`?division=`を
   ページ内の表示切替パラメータとして扱えば、現在のURL形式を維持できる
 - **検証の進め方**: 集計ロジックだけ先にPythonへ移植して結果を書き出し、
   現行ページの表示と突合して一致を確認してから、HTML生成とページ側の
@@ -1560,7 +1503,7 @@ www → apex の Redirect Rule に到達する前に失敗する。
 Redirect Rules は Workers より前に評価されるため、
 レコードを残したままで正しく308が返る。
 
-#### AIクローラーの扱い（2026-09-11 時点）
+#### AIクローラーの扱い（2026-09-13時点）
 
 Cloudflare の「Block AI bots」一括トグルは **2026-09-15 に廃止**され、
 挙動ベースの制御（Search / Agent / Training）へ移行する。
@@ -1580,9 +1523,9 @@ AI機能を単一のユーザーエージェントでクロールするため、
 本対応は#130で管理する。旧トグルは2026-09-15に廃止され、新コントロール
 （Configure AI bot policies）に置き換わる（ダッシュボードで確認済み）。
 新コントロールは2026-07-01から設定可能なため、9/15を待つ必要はない。
-2026-09-13時点で学習ブロックを担っているのは旧トグルのみで、新コントロール
-側のTrainingはAllowのまま。置き換え時に学習ブロックが外れないよう、
-新コントロール側にTrainingブロックを明示する必要がある。
+**9/13に新コントロール側でSearch/Agent=Allow・Training=Blockを設定済み。**
+設定前後でrobots.txtの管理セクション34行は完全一致し、旧トグルが同じ
+出力を出しているため判定は9/15以降。クローズ条件は#130に記載済み。
 
 **robots.txt の実測は平野さんの手元で行う（#130、2026-09-13）。**
 `ryoei.pro` はチャットセッションからも Claude Code のセッション環境からも
@@ -1618,7 +1561,7 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 
 | 機能 | 判断 |
 |---|---|
-| Polish | 不採用。自前画像は11枚178KBで、主要3枚はすでにWebP。選手画像1,985枚は外部7ドメインにあり対象外 |
+| Polish | 不採用。自前画像は11枚178KBで、主要3枚はすでにWebP。選手画像の外部ドメイン依存は同上 |
 | Mirage | 不採用。同上に加え、`<img>`をエッジで書き換えるため #9 と競合 |
 | Argo Smart Routing | 不採用。Proに含まれず別課金（月$5＋$0.10/GB） |
 | Load Balancing | 不採用。別課金かつ分散対象がない |
@@ -1635,8 +1578,9 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 | Web Analytics / ページビュー | 114 |
 | Web Analytics / 訪問 | 75 |
 
-ユニーク197に対し訪問75。差はクローラーとJS非実行分と推測
-しているが、内訳は #90 で確認する。
+ユニーク197に対し訪問75。**#90で確認済み（2026-09-09時点）**: ボットが
+約7割（Likely Automated 41% + Automated 26%）。Verified Botはわずか3%で、
+実体は素性の分からないデータセンター由来の自動化トラフィックだった。
 
 サーバーサイド計測を自前で作る場合（#19で検討・見送り）も、
 この規模なら Analytics Engine の Free 枠（1日10万書き込み）に
@@ -1677,11 +1621,11 @@ Workers静的アセットにはオリジンサーバーが存在しないため�
 | Waiting Room | 却下 | 同時接続を制限する必要がある場面がない。別課金 |
 | Cache Reserve | 却下 | R2の課金が発生する。アセット総量が小さく見合わない |
 | Logpush | 対象外 | Enterprise限定 |
-| Hotlink Protection | 却下 | 自前画像は11枚178KB。守る対象が小さい。選手画像1,985枚は外部7ドメインにあり対象外 |
+| Hotlink Protection | 却下 | 自前画像は11枚178KB。守る対象が小さい。選手画像の外部ドメイン依存は同上 |
 | HSTS preload | 見送り | `_headers` の `max-age=31536000; includeSubDomains` で実用上は十分。preloadリストへの登録は実質不可逆で、将来サブドメインをHTTPで使う自由を失う |
 | Speed Brain | 却下 | 有効化して実測したところ、prefetch が `HTTP 503` / `cf-speculation-refused: prefetch refused: disabled for worker requests` で拒否された。Workers 静的アセット配信では機能しない。#71・Polish・Mirage と同じ理由 |
 | Cache Rules による HTML のエッジキャッシュ | 却下 | `cf-cache-status: HIT` を実測。HTML はすでにキャッシュから配信されており伸びしろがない（#123） |
-| Image Transformations / Cloudflare Images | 却下 | 別課金。自前画像は11枚178KBで主要3枚はすでにWebP。選手画像1,985枚は外部7ドメインにあり対象外 |
+| Image Transformations / Cloudflare Images | 却下 | 別課金。自前画像は11枚178KBで主要3枚はすでにWebP。選手画像の外部ドメイン依存は同上 |
 | Prefetch URLs（Cloudflare） | 対象外 | Enterprise プラン限定。Speed Brain が拒否される件と合わせて、Cloudflare 側で prefetch を実現する手段は残っていない |
 | Cloudflare Fonts | 不採用 | #93 で Google Fonts を廃止しシステムフォントに統一済み。最適化する外部フォントが存在しない |
 | Automatic Platform Optimization for WordPress | 対象外 | WordPress サイトではない。ダッシュボードにも「The WordPress plugin was not detected on ryoei.pro」と表示される |
@@ -1768,8 +1712,7 @@ fail→passになったことを確認済み。詳細は `docs/lighthouse-baseli
 
 - #178 / #179 / #184 は単一ファイルの修正で再生成不要。1セッションで片付く
 - #181 / #182 / #183 は `lib/page.py`・`generate_jpml_pros.py` を触るため
-  全ページ再生成を伴う。**#177（`apple-mobile-web-app-title`）も
-  HEAD_TEMPLATE の変更で再生成待ちのため、同じ再生成に乗せる**
+  全ページ再生成を伴う
 - #180 のランキング3ページ分は #141 の移行要件に含めた（#111 にも同じ
   要件をコメント済み）。leagues 2ページだけ先に対応できる
 
@@ -1780,7 +1723,6 @@ accessibility は 0.98〜1.00 で残指摘は landmark-one-main のみという�
 
 **#183 は実装前に方針判断が要る。** (a) visually-hidden の予告テキストを
 足す / (b) そもそも別タブをやめる、のどちらか。16,699件すべてに影響する。
-
 ---
 
 ## 7. 関連文書
@@ -1792,4 +1734,6 @@ accessibility は 0.98〜1.00 で残指摘は landmark-one-main のみという�
 | `docs/astro-migration-study.md` | Astro移行の技術調査（Claude Codeによる） |
 | `docs/issues-snapshot.md` | issue一覧のエクスポート・全件（本文込み） |
 | `docs/issues-open.md` | issue一覧のエクスポート・Openのみ（本文込み） |
-| `docs/review-followup-instructions.md` | 2026-09-11の包括レビュー指摘への対応記録（完了済み） |
+| `docs/lighthouse-baseline.md` | Lighthouse実測の記録（ページ別スコア・行数調査等） |
+| `docs/gsc/` | Search Consoleのエクスポート（#142） |
+| `docs/review-followup-instructions.md` | 2026-09-11の包括レビュー指摘への対応記録（完了済み・参照のみ） |

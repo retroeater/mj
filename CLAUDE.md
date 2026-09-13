@@ -54,15 +54,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   ではブラウザキャッシュは消えない。更新を即座に反映させたい
   場合はファイルのパスを変えること
 - ページ本体（例: `jpml_titles.html`）とロジック（同名の `.js`）はファイルを分けている。ページ末尾で navbar.js を読み込んで共通ナビを描画する
-- **navbar.jsの28本のページhrefはルート相対パス（先頭`/`）にしてある（#162）。** `wayhome/`配下などサブディレクトリのページからも同じnavbar.jsがそのまま使えるようにするため。`#`・`#searchBoxes`（検索欄開閉用）は対象外
+- **navbar.jsの27本のページhrefはルート相対パス（先頭`/`）にしてある（#162）。** 実ページ25本＋`_redirects`で転送する`resource_calendar`・`resource_books`の2本。 `wayhome/`配下などサブディレクトリのページからも同じnavbar.jsがそのまま使えるようにするため。`#`・`#searchBoxes`（検索欄開閉用）は対象外
 - **検索欄（`#searchBoxes`）を持たないページは `<body>` に `data-search="off"`
   を出すこと（#163）。** navbar.js はこの属性を見て、虫眼鏡アイコン（検索欄を
   開閉するリンク）をそもそも描画しない。属性が無いページは「検索欄あり」として
   扱われ、従来どおりアイコンが出る（＝既定。付け忘れは現状維持に倒れる）。
   生成物は `lib/page.py` が `_render_search_boxes()` の結果から自動で出す
   （`render_content()` を使うページだけ `has_search_boxes=False` を明示）。
-  **手書きHTML（`404` / `jpml_links` / `resource_dictionary` / `rh_links`）を
-  新規に追加するときは手で付けること。** 現在の対象は7ページ
+  現在の対象は7ページ（`404` / `jpml_links` / `resource_dictionary` /
+  `resource_efficiency` / `rh_links` / `rh_results` / `rh_results_detail`）。
+  うち生成物3ページ（`resource_efficiency` / `rh_results` /
+  `rh_results_detail`）は`has_search_boxes=False`の明示で自動的に出る。
+  **残り4ページ（手書きHTML: `404` / `jpml_links` / `resource_dictionary` /
+  `rh_links`）を新規に追加するときは手で付けること。**
 
 ## データの流れ
 - 選手データ・成績データはすべてGoogleスプレッドシートが正本
@@ -85,11 +89,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - `jpml_pros.html`は独自の`scripts/generate_jpml_pros.py`のまま。型A/A'の11ページは`scripts/lib/page.py`（HTMLテンプレート・行組み立て・画像セル・エスケープの共通処理）を使い、各`scripts/generate_<ページ名>.py`は「設定(`PageMeta`/`TableConfig`) + 行組み立て関数」だけを持つ（#7の共通化）。型C・型D・`video_wayhome.html`・`wayhome/`のエピソード個別ページは表を持たないため`lib/page.py`の`render_content()`を使う。いずれも`scripts/lib/sheets.py`経由でスプレッドシートのgvizエンドポイント（`google.visualization.Query`と同じSELECT構文）を叩く
   - `lib/page.py`はサブディレクトリのページ（`wayhome/`配下）向けに`asset_prefix`引数を持つ（既定は空文字、#162）。head内のアセット参照（`style.css`・`assets/vendor/*`・`favicon.ico`・`navbar.js`・`table.js`）にこの接頭辞を付ける。`wayhome/`配下のページは`"../"`を渡す。あわせて`PageMeta`に`og_image`/`og_image_width`/`og_image_height`/`og_image_alt`/`canonical`を持たせ、ページごとに差し替えられるようにした（既定はそれぞれ`img/ogp.png`・1200×630・`"ryoei.pro"`・`None`=canonicalなし。#113の判断どおり）。サブディレクトリを増やす場合はこの仕組みを再利用できる
   - `wayhome/`のエピソード個別ページは`?name=`等のURL変種を持たないため、#113（canonicalなしの判断）の理由が当てはまらない例外として`<link rel="canonical">`を持つ（38ページのみ）。他27ページはcanonical無しのまま
-  - サイトマップは`sitemap.xml`（インデックス）が`sitemap-pages.xml`（27ページ、旧sitemap.xml）と`sitemap-wayhome.xml`（wayhome/38ページ、`generate_wayhome_episodes.py`が生成）を束ねる方式（#162）。`robots.txt`のSitemap行は`sitemap.xml`のまま変更していない。`scripts/update_sitemap_lastmod.py`はページパスから対象サイトマップを判定する（`wayhome/`配下なら`sitemap-wayhome.xml`、それ以外は`sitemap-pages.xml`）
-  - `lib/page.py`はh1直後・`#searchBoxes`手前にページ固有のHTMLを差し込む`content_before`スロット（#102第1段で追加）を持つが、現在使っているページは無い（`video_wayhome.html`は#102第2段で`TableConfig`/`render()`自体から離脱したため対象外になった）。`#158`のlead文がこのスロットを使う想定でlibにはそのまま残している
+  - サイトマップは`sitemap.xml`（インデックス）が`sitemap-pages.xml`（25ページ、旧sitemap.xml。27ページのうち`404.html`〈noindex〉と`saikyo_mens.html`〈年1回の単発企画〉を意図的に除外）と`sitemap-wayhome.xml`（wayhome/38ページ、`generate_wayhome_episodes.py`が生成）を束ねる方式（#162）。`robots.txt`のSitemap行は`sitemap.xml`のまま変更していない。`scripts/update_sitemap_lastmod.py`はページパスから対象サイトマップを判定する（`wayhome/`配下なら`sitemap-wayhome.xml`、それ以外は`sitemap-pages.xml`）
+  - `lib/page.py`はh1直後・`#searchBoxes`手前にページ固有のHTMLを差し込む`content_before`スロット（#102第1段で追加）を持つが、現在どのページも使っていない（`video_wayhome.html`は#102第2段で`TableConfig`/`render()`自体から離脱したため対象外になった）。ページ固有HTMLをh1直後に差し込む汎用スロットとして残している
   - 生成後の絞り込み・並び替え・ページ送りはページ側の軽量JSに委譲する。`jpml_pros.js`は絞り込みと並び替え（ページ送りなし・全行表示）専用。型A・型A'の11ページは共通の`table.js`（絞り込み・ページ送り、並び替えなし）を使う。設定は`<table>`要素のdata属性（`data-page-size` / `data-name-mode` / `data-filter-param`）で渡し、属性省略時はページ送りなし・完全一致フィルターなしになる。ページ固有のUI（`resource_logs.html`の名前セレクトボックス等）はtable.jsとは別の小さなJSで補う。`video_wayhome.html`は`.mj-table`を持たないため`table.js`は読み込まず、専用の`video_wayhome.js`が絞り込み・画像フォールバック・共有ボタン等を担う（#102第2段）
   - 型Cの2ページは`leagues.js`（共通JS）を使う。積み上げ棒と既定選手の折れ線は静的SVGに焼き込み済みで、`leagues.js`は`?name=`に応じて選手1名分の`<polyline>`と凡例ラベルだけを差し替える（選手ごとの折れ線データは`houou_leagues_data.json`/`ouka_leagues_data.json`をfetchして取得）。選手選択リストは「プロ」シートのY列="Y"かつ鳳凰最高/桜花最高列に値がある選手が対象（#127/#133）。**退会済みの選手は鳳凰/桜花シートにリーグの実データが残っていても選択リストに出ない。これは正しい挙動**（Y列="Y"が在籍・公開対象を表す。#168で退会者689名・うち#127以前は選べた78名を洗い出し、全員退会済みと確認して対応不要と判断した）
-  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/**` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。検知はpushに含まれる全コミットの範囲（`github.event.before`〜`github.sha`）の差分で行う（#167。以前は最終コミット1つ分しか見ておらず、複数コミットをまとめてpushすると途中のコミットの変更を取りこぼした状態でsuccessになっていた）。手動実行（workflow_dispatch）も可能。`table.js`・`leagues.js`はルート直下の`*.js`に該当するためpushでワークフロー自体は起動するが、どのページ名にも一致せず対象0件で終わる（HTMLに焼き込まれないため実害なし）。`regenerate.py`は出力がディレクトリになるページ向けに`OUTPUT_OVERRIDES`（例: `wayhome_episodes` → `"wayhome/"`）を持ち、コミット・lastmod更新対象のパスとして返せる（#162）。ワークフローの`git add`は`-A --`で削除も拾い、`sitemap*.xml`をまとめて対象に含める
+  - GitHub Actions (`.github/workflows/regenerate-page.yml`) が、`scripts/generate_*.py` / 対応する `.js` / `scripts/lib/**` の変更をcloudflareブランチへのpushで検知し、自動で再生成・コミットする（`chore: regenerate <ページ名>.html via GitHub Actions`）。検知はpushに含まれる全コミットの範囲（`github.event.before`〜`github.sha`）の差分で行う（#167。以前は最終コミット1つ分しか見ておらず、複数コミットをまとめてpushすると途中のコミットの変更を取りこぼした状態でsuccessになっていた）。手動実行（workflow_dispatch）も可能。毎週月曜05:37 JSTにも`all`を自動実行し、差分がなければコミットしない（#103）。`table.js`・`leagues.js`はルート直下の`*.js`に該当するためpushでワークフロー自体は起動するが、どのページ名にも一致せず対象0件で終わる（HTMLに焼き込まれないため実害なし）。`regenerate.py`は出力がディレクトリになるページ向けに`OUTPUT_OVERRIDES`（例: `wayhome_episodes` → `"wayhome/"`）を持ち、コミット・lastmod更新対象のパスとして返せる（#162）。ワークフローの`git add`は`-A --`で削除も拾い、`sitemap*.xml`をまとめて対象に含める
   - 型A（表とフィルターのみ）の他ページへ展開するための共通クラスを `style.css` に用意している: `.mj-table`（表の見た目）、`.mj-table-2col`/`.mj-table-3col`（画像列固定幅＋残り列の折り返し）、`.mj-table-auto`（画像列を持たない型A'向け、列幅は自動計算）、`.mj-pager`（ページ送りUI）、`.mj-left`（列ごとの左寄せ）、`.mj-plain`（リンクの下線を消す）。列幅・列固定・行高（`contain-intrinsic-size`）などページ固有の構造はIDセレクタ側に残す
 - 残り6ページ（`houou_ranking` / `houou_results` / `ouka_ranking` /
   `ouka_results` / `wrc_ranking` / `wrc_results`）はまだブラウザ側から
@@ -114,16 +118,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   スプレッドシートなど）の状態は、到達できないことをもって存在しない・
   無いと結論づけないこと。** 推測で結論を出さず、平野さんに確認する。
   特に「仕組みが存在しない」という結論は、確認できない場所については出さない
-  （#169で、Workers Buildsが既に稼働しているのに「デプロイ経路が無い」と
-  推測し、不要な`deploy.yml`を追加して二重デプロイ構成を作ってしまった例がある）。
-  なお、ダッシュボードに入らなくても `gh api` でGitHubのcheck-runsを見る、
-  既存issueを検索するなど確認できる手段があるので、結論を出す前にまず試すこと
-  （#153でWorkers Buildsの稼働はこの方法で既に確認されていた）
+  （#169の教訓）。結論を出す前に、`gh api`でのcheck-runs確認や既存issue検索
+  など確認できる手段を試すこと。詳細はdocs/handover.md「4-x」参照
 - **「ビルドが成功したか」と「本番がどう見えるか」は確認できる範囲が違う。
-  混同しないこと。** check-runsの`success`はCloudflare側がビルドを成功と
-  報告したことの確認であって、本番の見え方の確認ではない
-  （`ryoei.pro`自体はセッションから遮断されている）。詳細は
-  docs/handover.md「セッション環境からは Cloudflare に到達できない」節
+  混同しないこと。** 詳細はdocs/handover.md「4-x」（「セッション環境からは
+  Cloudflare に到達できない」節）参照
 - 外部ドメインへの依存を増やさない（CSP導入を予定しているため）
 - `.assetsignore` に開発用ファイルを列挙。公開対象を増やさないこと。
   新しいディレクトリ・ファイルを追加したときは、公開してよいか確認し
@@ -149,11 +148,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   ネットワーク制約で停止していたため実装の衝突は免れたが、偶然だった
 - **issueをクローズするときは「状況:」ラベル（待ち/対応中/保留）を外すこと。**
   状況が解消済みでもラベルだけ残ると、クローズ済みなのに未対応・保留中に
-  見えて実態と食い違う（#112で発覚、「状況: 待ち」「状況: 対応中」が
-  #110・#127に残っていた。2026-09-13に「状況: 保留」が#150・#102・#87・#79
-  に残っているのを確認し、対象を「状況:」ラベル全体に広げた。#79・#87は
-  「現行サイトでは対応しない」という判断を経て閉じたもので、保留中では
-  なかった）。経緯はコメント本文に残るため、ラベルを外しても記録は失われない
+  見えて実態と食い違う。経緯は#112のコメント参照
 - Projects ボードのステータスは平野さんの作業管理用。issue のクローズ時に Done へ
   更新はするが、完了報告・完了確認の対象にはしない（issue の状態〈open/closed・
   ラベル〉が正しければよい）。ボードの値を報告に含める必要はない
