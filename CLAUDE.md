@@ -22,6 +22,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 作業開始時に`cloudflare`から作業ブランチを切り、そこへは自由にpushして
   よい。**`cloudflare`へのマージはセッション自身が行わない。**
   作業完了を報告し、マージするかどうかは平野さんが判断する
+- **作業ディレクトリの分離（必須、2026-09-13決定）:**
+  全セッションが`/workspaces/mj`を共有しているため、**ブランチを分けた
+  だけでは作業ツリーは分離されない。** そのディレクトリで
+  `git checkout`/`git switch`を実行すると、他セッションの作業中
+  ブランチまで切り替わってしまう（WH-22で実際に発生。work/0913-whの
+  マージ作業中に、チェックアウト先が別セッションのwork/0913-arへ
+  無断で切り替わっていた）。
+  - 作業ブランチでの作業は`git worktree add`で作成した専用ディレクトリで
+    行うこと（例: `git worktree add ../mj-0913-wh work/0913-wh`）
+  - `/workspaces/mj`でのブランチ切り替えは行わない。このディレクトリは
+    常に他セッションが使用中とみなすこと
+  - マージ時も同様にworktree内で行い、
+    `git push origin <作業ブランチ>:cloudflare`のように、cloudflareを
+    チェックアウトせずに反映してよい
+  - 作業完了後は`git worktree remove`で片付け、作業ブランチも削除する
 - **マージ判断の基準（2026-09-13決定）:**
   - ドキュメントのみの変更（CLAUDE.md、docs/配下、README等）は、
     セッションが作業完了を報告したうえで`cloudflare`へマージしてよい。
