@@ -550,6 +550,32 @@ Workers & Pages → `mj` → Settings → Builds:
 も遮断されている。**`scripts/regenerate.py` はセッション内では実行できず**、
 再生成の確認は GitHub Actions 側で行うこと。
 
+### check-run が queued のまま・見当たらない場合（2026-09-13）
+
+短時間に連続して push すると、Cloudflare Workers Builds は複数コミットを
+1回のビルドにまとめる。**まとめられた側のコミットには check-run が
+付かないため、`gh api repos/retroeater/mj/commits/<sha>/check-runs` では
+`queued` のまま、または結果が無いように見える。** これはビルドの失敗でも
+遅延でもない。
+
+判定の手順:
+
+1. 自分のコミットに check-run が無い／queued のままでも、**その後に
+   push された後続コミットの check-run を見る。** success なら自分の
+   変更もそのビルドに含まれてデプロイ済み
+2. それでも不明なら、Cloudflare ダッシュボードの Build history を見る
+   （平野さんの作業。セッションからは `api.cloudflare.com` も `ryoei.pro` も
+   遮断されている）
+3. サイトのファイルを変更した場合は、本番の該当ページで反映を直接確認する
+   のが最も確実
+
+**「check-run が queued のまま」を「デプロイが詰まっている」と報告しない
+こと。** 2026-09-13 に AR-18（`docs/notes/a11y-manual-check.md` 追加の
+コミット `effe638`）でこの誤報が発生し、ダッシュボードを確認したところ
+実際には直近11件すべて成功しており滞留はなかった。`570928b`（AR-17）と
+`effe638`（AR-18）は Build history に個別の行を持たず、後続コミットの
+ビルドに内容ごと取り込まれていた（AR-11・AR-14 でも同じ現象を観測済み）。
+
 ### `.github/workflows/assets-check.yml`（旧 deploy.yml）
 
 デプロイ前に「除外後に配信される最上位の項目」をログに出し、
