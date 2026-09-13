@@ -92,7 +92,8 @@ title/descriptionの出し分けは新サイト（#101）で解く（#79も同�
 
 | 対象 | Cache-Control |
 |---|---|
-| `/img/*` `/favicon.ico` `/apple-touch-icon.png` | 1年・immutable |
+| `/img/*` | 1年・immutable |
+| `/favicon.ico` `/apple-touch-icon.png` | 1日（#174でimmutableから緩和） |
 | `/assets/vendor/*` | 30日 |
 | HTML・ルート直下の `.css` / `.js` | 既定のまま（毎回再検証） |
 
