@@ -8,19 +8,21 @@
 
 最終更新: 2026-09-13
 
+- #210: issue状況の把握を `docs/issues-open.md` / `docs/issues-snapshot.md` のエクスポートからGitHub Issues直接参照へ移行。両ファイルと生成スクリプト・PostToolUseフックを削除
 - #198: A案（作業ブランチ分離）に加え、`/workspaces/mj`共有によるチェックアウト競合を防ぐため`git worktree`の使用を必須化
 - #130: AIボット制御を新コントロール（Configure AI bot policies）へ設定済み（Search/Agent=Allow、Training=Block）。9/15の旧トグル廃止後に維持を確認してクローズする
-- #178〜#186: アクセシビリティの静的レビューを実施し8件起票。実機確認は#186として別途起票（`ryoei.pro`が遮断されているため平野さんの手作業）
 
 ---
 
 ## 0. 新しい会話の始め方
 
-会話開始時に読むのは `docs/handover.md` → `docs/issues-open.md` の順。
+会話開始時に読むのは `docs/handover.md` のみ。
 平野さんが毎回定型文を貼る前提にしない。
 
-全件版 `docs/issues-snapshot.md` は、クローズ済みを含めて調べる必要が
-あるときに平野さんが明示的に指定した場合だけ読む（620KBあり重い）。
+issueの状況（Open/Closedの別、本文・コメント）はGitHubのIssues一覧ページで
+確認する。Claude Codeのセッションは `gh issue list` / `gh issue view` を使う。
+チャット側（claude.ai）はClaude for Chrome経由でGitHubのIssues一覧・個別
+issueページを直接読める（2026-09-13確認、#210）。
 
 会話が長くなると1回あたりのコストが上がるため、
 **大きな作業の区切りごとに新しい会話を始める**とよい。
@@ -329,21 +331,11 @@ SHA（`953c19e`）が実行時には`c54277c`まで進んでいたことが後�
   ルールの本文は `CLAUDE.md` の「issueの着手ルール」節にある。
   実例として#127（型C）が2セッションで二重着手された（片方が
   ネットワーク制約で停止していたため衝突は免れたが、偶然だった）
-- **`docs/issues-snapshot.md`（全件）と `docs/issues-open.md`（Openのみ）は
-  本文込みのエクスポート。** 用途を分けている:
-  セッション開始時は `issues-open.md`、指示が正しく実施されたか
-  （Closeされたか）の確認には `issues-snapshot.md`（全件）を使う
-  （Open版はCloseされると当該issueが消えるため追跡できない）。
-  両ファイルは Claude Code の PostToolUse フックで `gh issue` 操作の
-  たびに同じタイミングで自動再生成される (`scripts/build_issues_snapshot.py`)。
-  ワークフローではないため、`gh issue` 以外の経路（GitHub MCP、
-  `gh api`、ブラウザ）で操作した場合も反映されない。作業の最後に
-  `python3 scripts/build_issues_snapshot.py` を手動実行すること。
-  **再生成しただけではリモートに反映されない。**
-  生成物は `docs/` 配下のファイルなので、`git add docs/issues-snapshot.md
-  docs/issues-open.md` → コミット → `git push origin cloudflare` まで
-  行って初めて反映される。フックによる自動再生成の場合も同じ。
-  念のため正確な状態は `gh issue list` で確認すること（#140、#143）
+- **issueの状況確認はGitHub Issuesを直接見る（#210）。** エクスポート
+  ファイル（`docs/issues-open.md` / `docs/issues-snapshot.md`）は廃止した。
+  Claude Codeのセッションは `gh issue list` / `gh issue view`、チャット側は
+  Claude for Chrome経由でGitHubのIssues一覧ページを直接読める
+  （2026-09-13確認）
 
 ---
 
@@ -581,7 +573,7 @@ Workers & Pages → `mj` → Settings → Builds:
 | #130 | AIボット制御の再設定 | 設定済み（9/13）。9/15以降に旧トグル廃止後の維持を確認してクローズ |
 | #84 | GitHub Pages無効化の判断 | 9/23 |
 
-`docs/issues-snapshot.md` に全件あるが、着手可能な主なものは以下。
+GitHub Issues（Open）に全件あるが、着手可能な主なものは以下。
 
 | # | 内容 | 備考 |
 |---|---|---|
@@ -769,8 +761,6 @@ accessibility は 0.98〜1.00 で残指摘は landmark-one-main のみという�
 | `CLAUDE.md` | Claude Code がセッション開始時に読む。プロジェクトの前提 |
 | `docs/new-site-design.md` | **新サイトの設計方針。**中断中で、再開手順まで書いてある |
 | `docs/astro-migration-study.md` | Astro移行の技術調査（Claude Codeによる） |
-| `docs/issues-snapshot.md` | issue一覧のエクスポート・全件（本文込み） |
-| `docs/issues-open.md` | issue一覧のエクスポート・Openのみ（本文込み） |
 | `docs/lighthouse-baseline.md` | Lighthouse実測の記録（ページ別スコア・行数調査等） |
 | `docs/gsc/` | Search Consoleのエクスポート（#142） |
 | `docs/review-followup-instructions.md` | 2026-09-11の包括レビュー指摘への対応記録（完了済み・参照のみ） |
