@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 16:38 JST
+生成日時: 2026-09-13 17:02 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -64,7 +64,7 @@ gh issue list --repo retroeater/mj --state all --limit 500 \
 
 起票メモ: チャット側（claude.ai）の Claude がブラウザ経由で作成した。gh 経由ではないため、この起票は `docs/issues-*.md` には自動反映されていない。
 
-### コメント (1件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -73,6 +73,62 @@ gh issue list --repo retroeater/mj --state all --limit 500 \
 セッション: https://claude.ai/code/session_01MArMimwQHBM39MGrUv3Mg7
 
 作業ブランチ: work/0913-pv（origin/cloudflareから分岐、git worktreeで作業）
+
+**retroeater** (2026-09-13):
+
+対応完了。ブランチ: `work/0913-pv`（origin/cloudflareから分岐、pushのみ・cloudflareへは未マージ）
+コミット: https://github.com/retroeater/mj/commit/c9b2f54da98097b458017c2b706cfbbcc47c4585
+
+## やったこと
+
+1. 削除
+   - `docs/issues-open.md` / `docs/issues-snapshot.md`
+   - `scripts/build_issues_snapshot.py`
+   - （grepの結果、これらに依存していた `.claude/commands/issues.md`（`/issues`コマンド）も併せて削除）
+
+2. PostToolUseフックの削除
+   - 設定ファイル: `.claude/settings.json`
+   - 削除内容: `gh issue create/close/reopen/edit/comment/delete` の実行後に
+     `python3 scripts/build_issues_snapshot.py` を呼ぶhookが6件登録されていた。
+     全件削除し、ファイル内容は `{}` のみに。
+
+3. リポジトリ全体をgrepし、参照を更新
+   - `CLAUDE.md`: メンテナンス用スクリプト節の該当行を削除、`docs/issues-snapshot.md #153` の参照を `#153` に変更
+   - `docs/handover.md`: 「0. 新しい会話の始め方」「3. 作業の進め方 / タスク管理」「5. 次にやること」「7. 関連文書」を書き換え（詳細は下記）
+   - `docs/review-followup-instructions.md` は**意図的に変更せず**残した。2026-09-12に受け取った指示文をそのまま記録した完了済みアーカイブ（「以下は作業時に受け取った指示文そのもの」と明記）で、当時の`issues-snapshot.md`参照は歴史的事実の一部のため書き換えない判断
+
+4. `docs/handover.md`
+   - 「0. 新しい会話の始め方」: 読むのは`docs/handover.md`のみに変更。issueの状況はGitHub Issues一覧（Claude Codeは`gh issue list`/`gh issue view`、チャット側はClaude for Chrome経由でブラウザから直接）で確認する旨に置換
+   - 「3. タスク管理」: 再生成・コミット・push手順の段落を削除し、GitHub Issues直接参照への一本化に置換
+   - 「5. 次にやること」: `docs/issues-snapshot.md`への言及を「GitHub Issues（Open）」に変更
+   - 「7. 関連文書」: 該当2行を削除
+   - 冒頭の変更履歴（直近3行）に本件を追加し、最も古い1行（#178〜#186）を押し出した（CLAUDE.mdの上限ルールどおり）
+
+5. `.assetsignore`
+   - 該当ファイル向けの個別エントリは無し（`docs`・`scripts`が丸ごと除外済みのため対応不要）。変更なし
+
+## 確認
+
+- 削除したスクリプトを呼ぶ箇所: grepで再確認し残存なし（`.github/workflows/`にも参照なし）
+- Workers Builds: 本コミットはdocs/以外（`.claude/settings.json`）も含むが、pushしたのは`work/0913-pv`でありcloudflareへは未マージのためビルドは未発火。cloudflareへマージされた時点のコミットSHAで `gh api repos/retroeater/mj/commits/<sha>/check-runs` を確認してください
+
+## マージ判断
+
+CLAUDE.mdの基準では「サイトの表示・生成物に影響する変更」ではなく設定・ドキュメントのみのため、ドキュメントのみの変更の扱いに近いですが、`.claude/settings.json`（Claude Code設定）を含むため、念のため平野さんの確認を経てからのマージとしてください。
+
+**retroeater** (2026-09-13):
+
+## 補足: リポジトリ外に残る作業
+
+このissueが完了すると、チャット側（claude.ai）のプロジェクト開始指示も
+差し替えが必要になる。現行は「`docs/handover.md`を読み、次に
+`docs/issues-open.md`でタスク状況を確認」という指示になっており、
+完了後は後半が成立しない。
+
+差し替え後の形は「`docs/handover.md` → GitHubのIssues一覧をブラウザで確認」。
+
+これはリポジトリ外の設定なのでセッションからは変更できない。平野さんの
+作業になる。完了報告に、この作業が残っている旨を含めてほしい。
 
 ---
 
@@ -262,7 +318,7 @@ CLAUDE.mdは「作業完了後は作業ブランチも削除する」と定め�
 
 Chat-Ref: CHAT-0913-QM-02
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -280,6 +336,16 @@ Chat-Ref: CHAT-0913-QM-02
 再度削除を検討すること。
 
 このissueはクローズせず保留する。
+
+**retroeater** (2026-09-13):
+
+## 補足: 再開条件と削除時の手順
+
+保留の理由は既に上のコメントに書いた通り。明確化のため補足する。
+
+- **`#192`の作業が`cloudflare`へマージされたあとに削除する**、という順番になる。
+  それまでこのissueは保留
+- 削除時は#209の手順（削除直前のSHAを完全な履歴で再確認し、記録に残す）に従うこと
 
 ---
 
@@ -1982,11 +2048,67 @@ houou_leagues / ouka_leagues / houou_ranking / ouka_ranking / wrc_ranking の
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (1件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
 着手中: houou_leagues/ouka_leaguesの2ページ分（select#selectboxのラベル追加・「表示」ボタンによる遷移方式への変更）に着手します。ranking 3ページは#141の移行に含める方針のため今回は対象外です。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
+**retroeater** (2026-09-13):
+
+## leagues 2ページ（houou_leagues / ouka_leagues）対応完了（未マージ）
+
+平野さん判断（2026-09-13）により「表示」ボタン方式（WCAG 3.2.2に最も忠実）
+で実装した。`work/0913-ar3`ブランチにpush済み、`cloudflare`へは表示に
+影響する変更のため未マージ（本番確認後にマージ判断）。
+
+**実装**:
+- `<label class="visually-hidden" for="selectbox">選手を選択</label>`を追加
+- 選択肢を`.mj-filter`で囲み、「表示」ボタン（`#selectboxGo`、既存の
+  `.mj-pager-button`を流用、新規CSSなし）を追加
+- `leagues.js`の`change`即時遷移を廃止し、ボタンの`click`に移した
+
+**CDPでの確認結果**（`wrangler dev` + `chrome-headless-shell`）:
+- 選択のみ（changeイベント発火）では遷移しないことを確認
+- 「表示」クリックで選択した選手のページへ正しく遷移すること
+  （houou→houou、ouka→ouka、相互のURL混在なし）を確認
+- 空値（「名前を選択」）のまま「表示」を押しても遷移しないことを確認
+- アクセシビリティツリーで`#selectbox`のrole=combobox・name="選手を選択"、
+  `#selectboxGo`のrole=button・name="表示"を確認（label forの関連付けが
+  正しく機能）
+- モバイル幅（390px）でセレクトとボタンが横並びのまま崩れないことを
+  スクリーンショットで確認
+- `?name=`付きURLでの折れ線・凡例の差し替え（既存機能）が壊れていないことを確認
+
+**残タスク**: ranking 3ページ（houou_ranking/ouka_ranking/wrc_ranking）は
+#141の移行に含める方針のため、本issueはOPENのまま残す。
+
+**retroeater** (2026-09-13):
+
+## ブランチ削除の記録（#209のルールに基づく）
+
+`work/0913-ar3`（削除直前の先頭SHA: `ba39d6a`）→ `cloudflare`へ通常マージ
+（squash/rebaseなし）。マージコミット`b31d2e8`。`git merge-base --is-ancestor
+ba39d6a HEAD`で`ba39d6a`が`cloudflare`の祖先であることを確認済み
+（マージ済み）。リモート・ローカルとも削除済み。
+
+**retroeater** (2026-09-13):
+
+## 確認結果（2026-09-13、平野さんが本番 ryoei.pro で実施）
+
+実装 `665f915` + 再生成 `6941d34`、本番反映 `b31d2e8`（マージ）の内容を確認。
+
+- `houou_leagues.html` で選手を選んでも遷移しない
+- 「表示」を押すと選んだ選手のページへ遷移する
+- スマホ幅でセレクトボックスと「表示」ボタンが横並びで収まっている
+- `ouka_leagues.html` でも同様に動作し、鳳凰戦のページへ飛ばない
+- 選手を切り替えて見比べる操作感も問題なし
+
+## 残作業
+
+houou_ranking / ouka_ranking / wrc_ranking の3ページは未対応。#141
+（Google Charts 6ページの移行）の要件に含めてある。**本issueはOPENのまま
+とし、#141の作業で3ページ分が片付いた時点でクローズする。**
 
 ---
 
@@ -7960,7 +8082,7 @@ GSCのエクスポートを無加工で置いている（UTF-8 / LF / BOMなし�
 
 2026-09-11のレビューで判明。
 
-### コメント (4件)
+### コメント (5件)
 
 **retroeater** (2026-09-11):
 
@@ -8046,6 +8168,14 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 **retroeater** (2026-09-13):
 
 この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
+
+**retroeater** (2026-09-13):
+
+## 追記（2026-09-13）
+
+selectの選択即遷移は#180でleagues 2ページを「表示」ボタン方式に直した
+（`<label class="visually-hidden">` ＋ `<button>` のclickで遷移、change
+リスナーは持たない）。ranking 3ページも同じ形に揃えること。
 
 ---
 
