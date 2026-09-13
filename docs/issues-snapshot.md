@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 14:56 JST
+生成日時: 2026-09-13 15:38 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -18,7 +18,293 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 199件（open/closed含む）。番号降順。
+件数: 200件（open/closed含む）。番号降順。
+
+---
+
+## #208 #198 の本文に残る #169 の誤記を訂正する
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 内容
+
+#198（CLOSED）の本文に、削除済みの`deploy.yml`が現存する前提の記述が3か所ある:
+
+- 「#169 の自動デプロイは `cloudflare` への push で走るため、」
+- 「#169（wrangler deploy の GitHub Actions 化。デプロイ契機に関わる）」
+- 「`cloudflare`へのpushで#169のワークフローが動くため、マージ＝本番反映になる」
+
+3つ目は方針決定の根拠部分で、結論（マージ＝本番反映）は正しいが根拠が誤っている。
+実際の反映経路はCloudflare Workers Builds。
+
+## 対応
+
+#198の本文は書き換えず、訂正コメントを追加する。決定当時の記述をそのまま
+残したうえで、事実関係の訂正と、結論自体は変わらない旨を書く。
+
+#170の#169参照は「後始末で判明した事実」という正しい書き方なので触らない。
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+#198へ訂正コメントを追加した: https://github.com/retroeater/mj/issues/198#issuecomment-5651705596
+
+---
+
+## #207 規約外の claude/* ブランチ3本を棚卸しする
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 対象
+
+- `claude/issue-102-phase2-cleanup-wkdavv`
+- `claude/ogp-image-metatags-x15ui2`
+- `claude/type-c-stacked-bar-hybrid-8g7t4m`
+
+いずれも`work/<識別子>`規約の制定前に作られたと思われる。規約外のブランチが
+残っていると、次のセッションがこれを前例として真似る。前例として#131
+（`claude/canonical-policy-decision-dbk5dq`の削除）がある。
+
+## 対応
+
+浅いクローンではなく完全な履歴で各ブランチが`cloudflare`にマージ済みかを判定する。
+
+- マージ済み → 削除する
+- 未マージ → 削除せず、何が入っているか（コミット数・変更ファイル・関連issue番号）
+  をissueのコメントに書いて平野さんの判断を仰ぐ
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+完全な履歴で3本とも`cloudflare`の祖先であることを確認し、削除した。
+
+- `claude/issue-102-phase2-cleanup-wkdavv` — マージ済み → 削除
+- `claude/ogp-image-metatags-x15ui2` — マージ済み → 削除
+- `claude/type-c-stacked-bar-hybrid-8g7t4m` — マージ済み → 削除
+
+未マージのブランチは無かった。
+
+---
+
+## #206 マージ済みの作業ブランチ work/0913-wh2 を削除する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 内容
+
+`work/0913-wh2`（先頭コミット`953c19e`時点）は`cloudflare`の祖先で、マージ済み。
+CLAUDE.mdは「作業完了後は作業ブランチも削除する」と定めている。
+
+## 対応
+
+完全な履歴でマージ済みであることを再確認したうえで
+`git push origin --delete work/0913-wh2`。
+
+`work/0913-hv`は未マージのため触らない（他セッションが作業中の可能性）。
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+完全な履歴で再確認したところ、指示文が前提としていた`953c19e`時点からブランチが
+進んでおり、現時点の`work/0913-wh2`（先頭`c54277c`「YouTube動画メタデータの
+取得スクリプトを新設する(#192第1段)」）は`cloudflare`の祖先になっていない
+（未マージのコミットが1つ残っている）。
+
+対応する`wh2-worktree`も稼働中で、他セッションが作業中と見られる。
+`work/0913-hv`と同様、削除せず保留する。マージ済みになったタイミングで
+再度削除を検討すること。
+
+このissueはクローズせず保留する。
+
+---
+
+## #205 ブランチ運用ルールに反した直接pushが発生した（再発防止）
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 経緯
+
+2026-09-13、`1b8eec6`（CLAUDE.md 48-50行目の#169記述修正）が `work/` ブランチを
+経由せず `cloudflare` へ直接コミット・pushされた。親は `953c19e` で、
+マージコミットも作業ブランチも存在しない。
+
+同日 CLAUDE.md に入った「`cloudflare`: 統合・デプロイ専用。セッションは
+ここへ直接pushしない」に反する。内容はドキュメントのみで実害は無いが、
+WH-22の事故と同じ条件（`/workspaces/mj`上で`cloudflare`を触る）を踏んでいる。
+
+## 原因
+
+原因の一端はチャット側の指示文にある。指示文の冒頭が「着手前に
+git log / git status で他セッションの作業がないことを確認」という
+**ブランチ運用ルール制定前の書き方**のままで、作業ブランチの指定が無かった。
+
+## 対応
+
+- CLAUDE.mdの「ブランチ運用」節に次の趣旨を追記する: チャットから渡される
+  指示文が古い前提（`cloudflare`上での直接作業、`git status`による衝突確認
+  など）を含んでいても、CLAUDE.mdのブランチ運用が優先する。指示文に作業
+  ブランチの指定が無い場合もセッションの判断で`work/<識別子>`を切る。
+  識別子は指示文のChat-Refから取る
+- 上記の経緯をdocs/handover.mdに実例として残す（`1b8eec6`を挙げる）
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+CLAUDE.mdの「ブランチ運用」節に、チャット指示より運用ルールを優先する旨を追記し、docs/handover.mdに実例（1b8eec6）を残した。work/0913-qmにコミット済み（作業完了後cloudflareへマージする）。
+
+---
+
+## #204 build_issues_snapshot.pyのgh issue list --limit 200が上限に到達
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 自動化
+
+### 本文
+
+## 状況
+`scripts/build_issues_snapshot.py`実行時に以下の警告が出るようになった:
+
+```
+警告: 全件版が --limit 200 に到達しました。上限を引き上げる必要があるかもしれません。
+```
+
+issue総数（open+closed）が200件に達し、`gh issue list --limit 200`のハードコード
+上限に到達したため。現時点でこの上限を超えるissueは無い（ちょうど200件）ため
+実害は無いが、次にissueが増えると`docs/issues-snapshot.md`から古い（番号の
+小さい）issueが黙って欠落する可能性がある。
+
+## 対応（未実施）
+`scripts/build_issues_snapshot.py`のLIMIT定数を余裕を持って引き上げる
+（例: 500）。
+
+## 経緯
+CHAT-0913-AR-12（index.htmlのアクセシビリティ修正）の作業中、着手宣言
+コメントに伴う`build_issues_snapshot.py`の実行で偶然発見した。本issue自体の
+作業には無関係。
+
+---
+
+## #203 build_issues_snapshot.py の --limit 200 が上限に到達した
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+issue #200〜#202 起票後に scripts/build_issues_snapshot.py を実行したところ、
+以下の警告が出た。
+
+    全件版が --limit 200 に到達しました。上限を引き上げる必要があるかもしれません。
+
+全件版（docs/issues-snapshot.md）が --limit 200 で頭打ちになっており、
+issue数がこれを超えると一部が snapshot から漏れる可能性がある。
+--limit の値を引き上げるか、ページングに対応するか判断する。
+
+---
+
+## #202 apple-touch-icon / apple-mobile-web-app-title を全ページへ展開するか判断する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+#177 は jpml_pros の PAGE_TEMPLATE に追加してクローズしたが、
+HEAD_TEMPLATE（他ページ）は未対応のまま。「全ページ展開は別issueで
+判断」としていたが、その issue が起票されていなかったので起票する。
+
+判断すること: (a) 全ページに展開するか、(b) jpml_pros だけで十分か。
+
+展開する場合は HEAD_TEMPLATE の変更＋生成ページの再生成が必要。
+
+やらないと決めた場合も、その決定を docs/handover.md の favicon 節に
+1行残してクローズすること。
+
+---
+
+## #201 handover 4-x「本番反映の仕組み」を docs/notes/ へ移す
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+4-x は約150行あるが、運用ルールとして handover に要るのは
+「Workers Builds が本番反映」「Secret を GitHub に登録しない」
+「check-runs で確認できる」の数行。
+
+記録・経緯である「#169で何を誤ったか」「APIトークンの棚卸し
+（2026-09-12）」「ダッシュボードで確認した設定値（2026-09-12時点）」
+「セッション環境からは Cloudflare に到達できない」は
+docs/notes/cloudflare.md へ移す。
+
+「セッション環境からは到達できない」は判断ルールの側面もあるので、
+結論1行（到達不能を不在と結論しない）は handover 側に残す。
+
+移せば handover は目安の 40KB 以下に入る見込み。
+
+移動のみ・内容の書き換えはしない（#187 と同じ方針）。
+
+---
+
+## #200 handover.md のサイズ上限（60KB/900行）を運用実績で見直す
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 状況: 待ち, 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+2026-09-13 の分割（#187、67ea3fb）直後は 747行・47,769 bytes。
+上限は assets-check.yml で 60KB/900行。
+
+分割直後の数値をもとに決めた暫定値なので、1〜2か月運用してから
+実測で見直す。目安は 2026年11月中旬。
+
+判断材料: その時点の行数・バイト数、その間に notes へ移した量、
+CI が一度でも失敗したか。
+
+厳しすぎると「上限を避けるために notes へ逃がすだけ」になり、
+緩すぎると分割前の状態に戻る。
 
 ---
 
@@ -108,7 +394,7 @@ video_wayhome の #188/#189/#190 を実装中のセッションが、3本の
 
 Chat-Ref: CHAT-0913-WH-20
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
@@ -147,6 +433,28 @@ A案の続き: git worktreeの使用を必須化しました（Chat-Ref: CHAT-09
 - `/workspaces/mj`は`cloudflare`のまま変化なし（git statusで確認）
 
 セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+## 訂正（#208、2026-09-13）
+
+本文中の以下3か所は、当時（#169前）の前提に基づく記述で、現在は事実と
+異なる。決定当時の記述としてそのまま残すが、事実関係を訂正する。
+
+- 「#169 の自動デプロイは `cloudflare` への push で走るため、」
+- 「#169（wrangler deploy の GitHub Actions 化。デプロイ契機に関わる）」
+- 「`cloudflare`へのpushで#169のワークフローが動くため、マージ＝本番反映になる」
+
+実際の本番反映経路は、`.github/workflows/deploy.yml`（#169で追加）ではなく
+**Cloudflare Workers Builds**（Cloudflareダッシュボード側のGit連携）。
+`deploy.yml`は#169の後始末で削除済み（詳細はdocs/handover.md「4-x」）。
+
+3つ目は本issueの方針決定の根拠部分だが、**結論（`cloudflare`へのマージ＝
+本番反映）自体は変わらない。** pushをトリガーに何らかの自動デプロイが
+走るという結論は、経路がGitHub ActionsであってもCloudflare Workers
+Buildsであっても成り立つため。
+
+参照: #169, #208
 
 ---
 
@@ -212,7 +520,7 @@ rh_paifu.htmlの牌譜リンクの下線が消え、色は従来どおり。
 
 ## #196 スプレッドシートの列参照を位置ベースから名前ベースに直す
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -255,7 +563,7 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 
 Chat-Ref: CHAT-0913-WH-11
 
-### コメント (1件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -276,6 +584,21 @@ Chat-Ref: CHAT-0913-WH-11
 - worktree: `/tmp`配下に作成し、確認後の修正に備えて残しています（`/workspaces/mj`には一切触れていません）
 
 セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージ完了しました。
+
+- merge: origin/cloudflare(`cf3f876`)がwork/0913-wh2の分岐後に進んでいたためfast-forwardではなく、worktree内で`git merge origin/cloudflare`(コンフリクトなし)→`git push origin work/0913-wh2:cloudflare`で反映しました
+- マージコミット: `24b7185`（`cf3f876..24b7185`）
+- デプロイ: 「Workers Builds: mj」= success
+- worktree・work/0913-wh2ブランチは削除せず残しています（#193に続けて着手するため）
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージ・デプロイ完了につきクローズします。
 
 ---
 
@@ -351,7 +674,7 @@ Chat-Ref: CHAT-0913-WH-08
 
 ## #193 各エピソードに、そのタイトル戦の決勝戦 YouTube 動画へのリンクを追加する
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -391,6 +714,53 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 - #102（video_wayhome パイロット）
 
 Chat-Ref: CHAT-0913-WH-07
+
+### コメント (4件)
+
+**retroeater** (2026-09-13):
+
+実装しました（Chat-Ref: CHAT-0913-WH-26）。生成結果に影響する変更のため、コミット・push までで止めています。
+
+**実際の列名:** H列「決勝動画URL」（指示文の案`final_video_url`はシート上のラベルとしては使わず、コード内の内部呼び名として採用。SELECT句には列記号`H`のみを使用）。
+
+**#196の仕組みへの追加方法:** `scripts/lib/wayhome.py`の列対応表を`ROW_FIELDS`（並列タプル）から`COLUMNS`（(列記号, 内部名, シート見出し)の3つ組タプル）に拡張し、`ROW_FIELDS`・`QUERY`の両方をここから組み立てるようにしました。この列だけ特別扱いする実装にはしていません。
+
+**リンクが出た行:** 武田雛歩 / 第11期桜蕾戦（1行のみ、`https://www.youtube.com/live/7C61aX9jOKU`）。
+
+**37行にリンクが出ていないことの確認:** 変更前後の生成物をdiffし、`video_wayhome.html`は追加された1行のみ、`wayhome/`配下は該当する`UtxpVoWy2GY.html`のみ変更・他36ファイルとsitemap-wayhome.xmlは無変更であることを確認しました。`grep -rl "決勝戦を見る" wayhome/`もこの1ファイルのみヒットします。
+
+**リンク追加以外の差分:** ありません（#196直後の列構成変更が意図せず波及していないことも上記diffで確認済み）。
+
+**個別ページでの配置:** ヒーローの既存アクション列（mj-video-btn）に、X @アカウントリンクの直後・「URLをコピー」ボタンの直前として追加しました。一覧ページのカードでは、`.mj-video-card-link`（サムネイル〜選手名を包む既存のリンク）の外側に兄弟要素として追加しています（入れ子の`<a>`を避けるため）。
+
+**不正URL時の方針:** 値が入っているのに`http(s)://`で始まる絶対URLとして解釈できない場合は、握りつぶさず`ValueError`（該当行の選手名・タイトル戦名を含む）で生成を止めます。ホスト名（YouTube以外）やパス形式（`watch?v=`以外の`/live/<id>`等、今回の実データがこれに該当）による制限はしていません。
+
+- 作業ブランチ: `work/0913-wh2`（push済み）
+- コミット: `953c19e`
+- worktree: 継続使用のため残しています。`/workspaces/mj`には触れていません
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージしました。本番確認待ちのためオープンのまま維持します。
+
+- マージ結果: fast-forward（`24b7185..953c19e`、マージコミットなし）
+- デプロイ: 「Workers Builds: mj」= success
+- worktree・work/0913-wh2ブランチは削除せず残しています
+- `/workspaces/mj`には触れていません（現在は別セッションが`work/0913-ar`で作業中）
+
+平野さんの本番確認後にクローズをお願いします。
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+平野さんが本番(ryoei.pro)で一覧・個別ページ・リンク先ともに正常と確認済みとのことです。本番確認完了につきクローズします。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+本番確認完了につきクローズします。
 
 ---
 
@@ -1037,6 +1407,12 @@ CDP操作が問題なく動作している。
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのモバイルナビ開閉のキーボード対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -5125,7 +5501,7 @@ HTMLを直接編集する。再生成は不要。
 mobile / desktop とも 93。`link-name` を解消すればここが上がる見込み。
 （#163 の対応で他26ページは 0.98〜1.00 になっており、index.html だけが取り残されている状態）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -5134,6 +5510,10 @@ mobile / desktop とも 93。`link-name` を解消すればここが上がる見
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのSNSアイコンリンクにaria-labelを追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -7336,7 +7716,7 @@ GSCのエクスポートを無加工で置いている（UTF-8 / LF / BOMなし�
 
 2026-09-11のレビューで判明。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-11):
 
@@ -7418,6 +7798,10 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -9936,7 +10320,7 @@ data属性だが（`document.write` 描画時点では `#searchBoxes` が未パ�
 - アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
 - 型C（#127）・型D（#128）は本issueとは別に判断する
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-11):
 
@@ -10019,6 +10403,10 @@ JSONにして、クライアントで1本だけ描く。Charts も ECharts も�
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -15101,409 +15489,5 @@ CSP設計への影響:
 
 Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_0122eHDpjFz1CugjjsePn61x
-
----
-
-## #8 龍龍の所属・出身地等との照合
-
-- 状態: OPEN / 作成: 2026-09-07
-- ラベル: 分野: 自動化, 対象: jpml_pros
-
-### 本文
-
-ron2.jp の選手ページから取得できる所属・出身地・段位・かな読みと、スプレッドシートの内容を突き合わせる。表記ゆれ(「九州本部」対「九州」など)の吸収が必要。画像の同期確認(旧61番)の後に着手する。
-
----
-<sub>移行前のタスク番号: 63</sub>
-
----
-
-## #7 他21ページのGoogle Charts依存を解消する
-
-- 状態: OPEN / 作成: 2026-09-07
-- ラベル: 状況: 対応中, 分野: パフォーマンス, 対象: 全ページ
-
-### 本文
-
-27ページ中11ページが、いまもブラウザから直接Googleスプレッドシートにクエリを投げている。www.gstatic.com と docs.google.com への依存が消え、初期表示も速くなる。旧55番が前提。Astro移行(旧73番)の判断もこのタイミング。
-
----
-<sub>移行前のタスク番号: 39</sub>
-
-### コメント (9件)
-
-**retroeater** (2026-09-11):
-
-## rh_results.html を移行(2026-09-11)
-
-型A'(多列テキストテーブル、画像列なし)の1ページ目。共通部品として以下を追加した。
-
-- `TableConfig.show_filter`(#searchBoxes自体を持たないページ用)
-- `.mj-table-auto`(style.css。画像列固定を前提としない多列テーブル用)
-- `table.js`のテーブル検出セレクタを`.mj-table[data-filter-param]`→`.mj-table`に変更(絞り込み欄なしでもナビバー固定分のオフセット計算は必要なため)
-
-これらは`rh_results_detail`と型Bの表部分でも使う想定。
-
-また、スプレッドシートの表示形式(`#,##0.0`等)が`fetch_sheet()`では取得できないことが分かった。gvizは生の数値とは別に表示用文字列を持つが`fetch_sheet()`は生の値しか返さないため、`rh_results`側で書式を再現する整形関数を追加して対処した(`scripts/lib/sheets.py`は変更していない)。数値列を持つページを今後移行する際は同じ確認が必要。
-
-進捗: 21ページ中10ページ完了・残11ページ。詳細はdocs/handover.mdの「#7 の進め方」を参照。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
-
-**retroeater** (2026-09-11):
-
-## 訂正: gvizは表示形式付き文字列(f)を返す
-
-前回のコメントで「スプレッドシートの表示形式(#,##0.0等)はfetch_sheet()では取得できない」と書いたが、これは誤り。gvizのレスポンスはセルごとに生の値(v)とは別に表示用文字列(f)を持っており、シートの表示形式が反映されている。rh_results側で書いていたCOLUMN_DECIMALS + format_number()による自前整形は不要だった。
-
-## 対応
-
-- `fetch_sheet()`(scripts/lib/sheets.py)に`formatted: bool = False`を追加。`True`でセルの`f`を優先して使う
-- 既定は`False`のまま。選手IDやYouTube動画IDなどURL・HTML属性に埋め込む値では`f`の桁区切り("6,010")がリンクを壊すため
-- `generate()`(scripts/lib/page.py)にも`formatted`引数を追加し、そのまま渡す
-- `generate_rh_results.py`をformatted=Trueを使う形に書き換え、自前整形コードを削除
-
-`rh_results.html`はバイト単位で無変更、既存9ページも出力に差分がないことを確認済み。数値列を含む他のページ(`rh_results_detail`等)を移行する際は、URL・属性に使う列が含まれていないことを確認したうえで`formatted=True`を使う。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
-
-**retroeater** (2026-09-11):
-
-## rh_results_detail.html を移行し型A'を完了(2026-09-11)
-
-- QUERY側で表示列のみ(A,C,E,G,I,R,S,T,V)を取得(22列取得して後から間引く旧方式はやめた)
-- `formatted=True`が必須だった。A列(日付)はgvizのtype=dateで、生の値(v)が"Date(2026,0,24)"というJS Date形式の文字列になるため
-- 対局列にXアイコンを後置。`build_image_cell()`は画像セル単体を作る関数のため使わず、`build_row_html`内で直接組み立てた
-- **旧Google Charts版(gh-pages)を実レンダリングして比較したところ、全列が折り返されていた。** `.mj-table`既定のnowrapのままだと375px幅で横スクロールが発生したため、`#rh_results_detail_table td`全体に`white-space: normal`を適用して解消(団体列12文字の団体名、着順列9桁の値など、短そうに見えた列にも幅を圧迫する例外値があった)
-- Lighthouse(mobile): performance 89 / TBT 236ms / DOM 3,573要素(321行のわりに軽い)
-
-型A'(rh_results / rh_results_detail)完了。進捗: 21ページ中11ページ完了・残10ページ。詳細はdocs/handover.mdとdocs/lighthouse-baseline.mdを参照。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
-
-**retroeater** (2026-09-11):
-
-## グラフ系6ページの構造調査、#111を型別に分割(2026-09-11)
-
-型A'(rh_results / rh_results_detail)の完了に続けて、残り12ページのうちグラフを描画する6ページ(型B/C/D)の構造をコードと実機の両方で確認した。
-
-### 訂正: houou_resultsが#7最大のDOM規模ページになりうる
-
-これまで「`houou_results`等は`?name`必須で未指定時は何も描画しない」と記録していたが誤り。実機確認の結果、`?name`が必須なのはローソク足(`#myChart`)だけで、**表(`myTable`)は`?name`の有無に関わらず無条件で描画される**。現在DOM行数が500に収まっているのはGoogle Chartsの`page:'enable'`+`pageSize:500`が実際にDOMを分割しているためで、自前の`.mj-pager`(`row.hidden`)方式に置き換えると15,416行が丸ごとDOMに乗り、`saikyo_results`(2,560行)を超えて**#7最大のDOM規模ページ**になる。詳細はdocs/lighthouse-baseline.md・docs/handover.mdを更新済み。
-
-### #111を型別に3分割
-
-グラフ系6ページは型B/C/Dで性質が大きく異なり、1つのissueでは判断できないため分割した。
-
-- **#111**(型B、houou_results/ouka_results/wrc_results): 常時表示のDashboard+Tableに`?name`時のみローソク足が乗る構造。3ページとも同一ではなく、houou_resultsのみリーグ欄がCategoryFilter(ドロップダウン)、ouka_resultsはStringFilter、wrc_resultsは名前欄のみ(実機確認で判明)
-- **#127**(型C、houou_leagues/ouka_leagues): 積み上げ棒は全員共通、`?name`依存は折れ線1本のみ。静的化とのハイブリッドが成立しうる
-- **#128**(型D、resource_efficiency): URLパラメータ非依存・データ固定(34行)。グラフ系で唯一、完全に静的SVG化できる
-
-6ページとも、カスタムツールチップ・`addListener`は存在しない(既定のGoogle Chartsツールチップのみ)ことも実機確認済み。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
-
-**retroeater** (2026-09-11):
-
-## resource_efficiency.html を移行し型Dを完了(2026-09-11)
-
-グラフ系6ページで唯一、完全に静的SVG化できるページ(#128)。
-
-- scripts/lib/chart.pyを新規作成(横棒グラフのSVG生成、標準ライブラリのみ)
-- scripts/lib/page.pyにrender_content()を追加。表を持たないページ用にHEAD_TEMPLATEを切り出した(既存11ページの出力は無変更を確認済み)
-- 各棒の<g>内の<title>要素でJS/CSSなしのツールチップを実現。#111/#127/#128に「ツールチップは失われる」という誤記の訂正コメントを追加した
-- gstatic.com依存を解消。グラフ系で唯一、外部JSを一切読まないページになった
-- シート名の特定に手間取った件を記録: 旧JSはgid=1188043937としか書いておらず、gid=0が「詳細」、1188043937が「シート1」という一見逆に見える対応だった
-
-型D完了。進捗: 21ページ中12ページ完了・残9ページ(型B3・型C2・型A4)。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_011Asd1Gp8BAvU9bB9fJS2SZ
-
-**retroeater** (2026-09-11):
-
-## saikyo_results.html をビルド時生成に移行（2026-09-11）
-
-型Aの2列テーブル(2,560行)を `scripts/lib/page.py` の共通処理で静的HTML化した。型Aはランキング3ページを除いて完了（残8ページ）。
-
-### `?name=` の列取り違えバグを発見・修正（#122 関連）
-
-移行前の実機確認で、旧 `saikyo_results.js` の `?name=` に列の取り違えバグがあることが分かった。
-
-- コード上のコメントは「A列=対局日 / H列=名前」と書いているが、実際のクエリは `queryStatement += ' AND A = "' + search_name + '"'` で、**A列（対局日）に対して名前文字列を完全一致させていた**。H列（名前）は一度も参照されていない
-- gh-pages版（旧方式のまま）で実機確認: `?name=`に実在の選手名を指定すると0件、実在の対局日の文字列を指定するとヒットする。バグを再現できた
-- `?name=`は#122で調査中のSearch Console実測（`?name=`付きURLの内訳）に関わる可能性があるため、削除はせず、コメントが示す「本来意図されていたはずの挙動」（H列＝名前の完全一致）に修正して移行した。バグ自体（A列に対する完全一致）は再現していない
-- 挙動としては「ほぼ常に0件」から「名前で絞り込める」への意図的な変更になる。#122の`?name=`アクセス実績を見るときは、この変更が入る前後で挙動が違う点に注意
-
-### その他の実装メモ
-
-- 写真が空の行（528件、全体の約20%）は、旧`getFormattedImage()`がTwitter IDも画像URLもない場合に戻り値が未初期化(`undefined`)になるバグを持っていたが、実機確認の結果Google Chartsはこれを空セルとして描画しており「undefined」という文字列が出るわけではなかった。`build_image_cell()`に空文字を渡すだけで同じ見た目を再現できたため、個別分岐は不要だった
-- フォールバック画像は`img/avatar.svg`に統一（旧版はTwitter IDの有無で`img/twitter.svg`と`src=''`に分かれており、後者は自ページへの画像リクエストになるバグだった。`saikyo_mens`での対応を踏襲）
-- 行高(`contain-intrinsic-size`)は160×90画像基準の98pxを、mobile幅での実測（中央値・90パーセンタイル・最大値がいずれも98px一致）で確認して採用
-- 詳細は `scripts/generate_saikyo_results.py` のモジュールdocstringと `docs/handover.md` / `docs/lighthouse-baseline.md` を参照
-
-**retroeater** (2026-09-11):
-
-## 未移行ページの gviz クエリに、URLパラメータをエスケープなしで連結している
-
-Mantis の検討中にリポジトリを読んでいて見つけたもの。
-**#7 の移行で該当ページごと消えるため、単独の対応は不要。**
-移行時に再発させないための記録。
-
-### 該当箇所は3ファイル
-
-`houou_results.js` / `ouka_results.js` / `wrc_results.js` が、
-URLパラメータ `?name=` をクエリ文字列にそのまま連結している。
-
-```js
-let search_name = params.get('name')
-let queryStatement = 'SELECT A,B,...,U WHERE V = "Y"'
-queryStatement += ' AND A = "' + search_name + '" ORDER BY B,C'
-```
-
-`"` を含む値を渡すと文字列を抜け出して WHERE 句を書き換えられる。
-
-### 他の未移行ページは該当しない（確認済み）
-
-- `houou_leagues.js` / `ouka_leagues.js` — `queryStatement` は `const` の固定文字列。
-  `?name=` は取得後のクライアント側の絞り込みにしか使っていない
-- `league_ranking.js` — クエリは `getQueryString(division)` の if/else で選ぶ固定文字列9種で、
-  連結はしていない。ただし `?sheet=` はデータソースURLに連結している
-  （`WORKBOOK_URL + '?sheet=' + SHEET_NAME + '&headers=1'`）。
-  同じワークブックのシート名を指すだけで、クエリ構文には触れない
-
-### 実害は小さい
-
-- 対象は読み取り専用の公開スプレッドシート1冊で、シート内の同じデータしか取れない
-- 認証もセッションもないため、盗める資格情報がない
-- 結果は Google Charts の Table / Chart に描画されるので、DOM XSS の経路にもならない
-
-### 移行時の留意点
-
-Python 側（`scripts/lib/page.py` の `generate()`）は QUERY をビルド時に組み立て、
-URLパラメータはブラウザ側の絞り込み（`table.js` の `data-name-mode` /
-`data-filter-param`）で扱う構造になっているため、
-**型A/A'と同じ手順で移行すればこの形は自動的に消える。**
-
-型B（#111）・型C（#127）でグラフ本体に Google Charts を残す方針を取る場合、
-`?name=` をクエリに渡す箇所が残る可能性がある。その場合は値の `"` を
-エスケープするか、取得は全件にしてフィルタをクライアント側で行うこと。
-
-### 関連
-
-同じ検討中に見つけた GitHub Actions の script injection は #132 に切り出した。
-
----
-_Generated by [Claude Code](https://claude.ai/code)_
-
-**retroeater** (2026-09-11):
-
-### 追記（2026-09-12、レビュー反映）
-
-ランキング3ページは #141 で扱う。残り8ページの内訳: 型B 3（#111）・型C 2（#127）・ランキング 3（#141）。
-
-**retroeater** (2026-09-11):
-
-### 型C(houou_leagues / ouka_leagues)完了(2026-09-11、#127)
-
-方針(c)静的SVG+折れ線だけクライアント描画のハイブリッドで移行完了。
-残るは型B(houou_results / ouka_results / wrc_results、#111で方針検討中)
-とランキング系3ページ（houou_ranking / ouka_ranking / wrc_ranking）の
-計6ページ。
-
-詳細は#127のクローズコメント参照。
-
----
-_Generated by [Claude Code](https://claude.com/claude-code)_
-
----
-
-## #6 ワークフローのpushトリガーを汎用化する
-
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
-- ラベル: 分野: 自動化
-
-### 本文
-
-.github/workflows/regenerate-page.yml は push トリガー時の対象ページを jpml_pros で決め打ちしている。2ページ目を自動化した瞬間に破綻するため、変更されたファイルから対象を判定する形に直す。Google Charts依存の解消(旧39番)の前提。
-
----
-<sub>移行前のタスク番号: 55</sub>
-
-### コメント (1件)
-
-**retroeater** (2026-09-09):
-
-生成スクリプトの有無から対象ページを自動判別する方式に変更した。
-新しいページを自動化する際、YAMLの書き換えが不要になる。
-共通ライブラリ(scripts/lib/)が変わったときは全ページを作り直す。
-生成物(*.html)の変更では発火しないため、無限ループも防げる。
-
-手動実行(target_page=all)で動作確認済み。
-(実装時、regenerate.pyでサブプロセスの標準出力がGITHUB_OUTPUTに
-混入して失敗する不具合が見つかったため、合わせて修正した)
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01G4xEKGRnEDdr48pfKvQqqG
-
----
-
-## #5 他ページへのSEO展開
-
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-09
-- ラベル: 分野: SEO/AIO, 対象: 全ページ
-
-### 本文
-
-jpml_pros.html にのみ入れた h1・meta description を他24〜25ページにも展開する。あわせて重複しているtitleを解消する(「成績詳細」が4ページ、「リンク」が2ページ)。
-
----
-<sub>移行前のタスク番号: 51</sub>
-
-### コメント (1件)
-
-**retroeater** (2026-09-09):
-
-26ページのtitleとmeta descriptionを整備した。
-- titleの書式を「ページ名 | カテゴリ | ryoei.pro」に統一。
-  カテゴリはメニュー名に合わせつつ、「連盟」だけは検索で拾われるよう
-  「日本プロ麻雀連盟」に展開した
-- 重複を解消。従来は「成績詳細」が4ページ、「ランキング」が3ページ、
-  「リンク」が2ページで重複していた
-- index.htmlは「R」の1文字だったものを「ryoei.pro」に
-- descriptionは各ページの実際の内容と、検索できる項目
-  （選手名・店名・最寄駅名など）を具体的に記載
-
-適用は scripts/apply_page_meta.py で行った。再実行しても
-タグが重複しない作りなので、今後の変更もこのスクリプトを直せばよい。
-
-なお h1・caption・label などは、新サイトで作り直す前提のため
-今回は見送った（docs/new-site-design.md の9章の方針）。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01Lm3Qo5FuabCqBZ5vwn77Zo
-
----
-
-## #4 Sentryを導入してJSエラーを検知する
-
-- 状態: OPEN / 作成: 2026-09-07
-- ラベル: 分野: 自動化, 対象: jpml_pros
-
-### 本文
-
-jpml_pros.js の自作フィルター・ソート・固定列の処理が特定の環境で壊れても気づく手段がない。無料枠(月5000エラー)で十分。外部ドメインが1つ増えるため、CSP設定(旧12番)より先に入れる。
-
----
-<sub>移行前のタスク番号: 64</sub>
-
-### コメント (1件)
-
-**retroeater** (2026-09-11):
-
-### 追記（2026-09-12、レビュー反映）
-
-「現行サイトに作り込みすぎない」方針との整合を再確認したい。現行サイトに
-外部ドメインを1つ足してからCSP（#9）を書く順序になっているが、新サイト
-（#101）側で導入するほうが自然な可能性がある。状況: 保留にするか、現行で
-入れるかを平野さんが判断する。
-
----
-
-## #3 YouTubeチャンネルアイコンの一致確認
-
-- 状態: OPEN / 作成: 2026-09-07
-- ラベル: 分野: 自動化, 対象: jpml_pros
-
-### 本文
-
-YouTube Data API v3 の channels.list で82チャンネルのアイコンURLを取得し、サイトの表示と突き合わせる。API呼び出しは2回・消費クォータ2ユニットで済む。Google CloudでのAPIキー発行と、GitHub Secretsへの登録が前提。
-
----
-<sub>移行前のタスク番号: 62</sub>
-
----
-
-## #2 龍龍画像の同期確認を運用に乗せる
-
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-08
-- ラベル: 分野: 自動化, 対象: jpml_pros
-
-### 本文
-
-龍龍(ron2.jp)の選手ページに表示されている画像と、サイトで表示中の画像が一致しているかを毎週確認する。スクリプトとワークフローは実装済み。150x150への統一(旧72番)を反映したうえで再実行し、誤検知が減ったことを確認する。
-
----
-<sub>移行前のタスク番号: 61</sub>
-
-### コメント (1件)
-
-**retroeater** (2026-09-08):
-
-843件すべて龍龍の最新画像と一致。150x150への統一により誤検知が解消され、週次の自動監視が正常に動作する状態になった。
-
----
-
-## #1 画像リンク切れの検知結果
-
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
-- ラベル: (なし)
-
-### 本文
-
-1985件を確認し、**20件**が取得できませんでした。
-
-### ホスト別
-| ホスト | 件数 |
-| --- | --- |
-| pbs.twimg.com | 17 |
-| abs.twimg.com | 3 |
-
-### ステータス別
-| ステータス | 件数 |
-| --- | --- |
-| 404 | 20 |
-
-### 詳細
-- `404` 栄田勇作 X — https://pbs.twimg.com/profile_images/1890415764919947264/zFcUCRw5_80x80.jpg
-- `404` 江崎しんのすけ X — https://pbs.twimg.com/profile_images/1836292020199153664/yycE2_Oh_80x80.jpg
-- `404` 岡リョウタ X — https://pbs.twimg.com/profile_images/2068116908961132544/cA7bdrT__80x80.jpg
-- `404` 神代陽向 X — https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png
-- `404` 川奥修二 X — https://pbs.twimg.com/profile_images/2075596142210166784/yS9Ez0ZU_80x80.jpg
-- `404` 久保隆徳 X — https://pbs.twimg.com/profile_images/1215831088603385857/agorPvf8_80x80.jpg
-- `404` 新城勇哉 X — https://pbs.twimg.com/profile_images/2085244223264305152/EG-HM3ek_80x80.jpg
-- `404` 田中羚 X — https://pbs.twimg.com/profile_images/2011328594921091073/SaZyUy_P_80x80.jpg
-- `404` 田辺ゆい X — https://pbs.twimg.com/profile_images/2070752681304768512/bPADaCry_80x80.jpg
-- `404` 東城りお X — https://pbs.twimg.com/profile_images/1754483138179547136/gEx-KG4a_80x80.jpg
-- `404` 永田泰志 X — https://pbs.twimg.com/profile_images/2090800744211591168/PUs-KJGr_80x80.jpg
-- `404` 比嘉秀樹 X — https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png
-- `404` 比屋定秀太 X — https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png
-- `404` 平野よしつね X — https://pbs.twimg.com/profile_images/2038425646851084288/ttydf_GA_80x80.jpg
-- `404` HIRO柴田 X — https://pbs.twimg.com/profile_images/1963845940693127168/L0w_2l_Q_80x80.jpg
-- `404` 星野佑太 X — https://pbs.twimg.com/profile_images/2094000710975385600/xAw1XcJ3_80x80.jpg
-- `404` 森東賢一 X — https://pbs.twimg.com/profile_images/1137877240488706048/3cZ3jct3_80x80.jpg
-- `404` 山田祐輝 X — https://pbs.twimg.com/profile_images/2037373485761368064/uSXWnsFR_80x80.jpg
-- `404` 吉野敦志 X — https://pbs.twimg.com/profile_images/1535376354103160832/x8DDWuj4_80x80.jpg
-- `404` 渡邊亮 X — https://pbs.twimg.com/profile_images/1882814781239009280/ImPQPXQ1_80x80.jpg
-
----
-_スプレッドシートの画像URLを更新すると解消します。次回の検知で解決していれば、このissueは自動的に閉じられます。_
-
-### コメント (1件)
-
-**github-actions** (2026-09-07):
-
-1985件を確認し、リンク切れは検出されませんでした。
 
 ---
