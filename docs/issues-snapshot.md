@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 10:44 JST
+生成日時: 2026-09-13 10:55 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -56,35 +56,13 @@ generate_jpml_pros.py 自前の PAGE_TEMPLATE（41行目〜）を持つため、
 - `apple-mobile-web-app-capable` は**入れない**。スタンドアロン起動に
   なり、戻る操作や外部リンクの挙動が変わるため。名前の制御には不要
 
-■ 作業内容
+### コメント (1件)
 
-1. scripts/generate_jpml_pros.py の PAGE_TEMPLATE を編集する。
-   <title>プロ | 日本プロ麻雀連盟 | ryoei.pro</title> の直後の行に
-   次を追加する:
+**retroeater** (2026-09-13):
 
-<meta name="apple-mobile-web-app-title" content="連盟プロ">
+着手中: jpml_pros.htmlのホーム画面アイコン名を「連盟プロ」にする(#177)。
 
-   追加理由をコメントで残すこと（iOSのホーム画面アイコン名。既定では
-   titleの先頭「プロ」が使われてしまうため。#174の実機確認で判明）。
-   apple-mobile-web-app-capable は追加しないこと
-
-2. jpml_pros.html 自体は生成物なので直接編集しない。
-   スプレッドシートを読むためセッションからは再生成できないので、
-   GitHub Actions の workflow_dispatch（target_page: jpml_pros）で
-   再生成する
-
-3. 再生成後、jpml_pros.html の head に meta が入っていること、
-   それ以外の差分が選手データの更新分だけであることを確認する。
-   PAGE_TEMPLATE 由来の意図しない差分が出ていないか git diff で見ること
-
-4. コミットは対象ファイルを明示して git add する（-A は使わない）
-
-5. python3 scripts/build_issues_snapshot.py を実行し、
-   docs/issues-snapshot.md と docs/issues-open.md をコミットして
-   git push origin cloudflare
-
-6. push後、先頭SHAの check-runs で Workers Builds の conclusion を
-   確認して報告する
+セッション: https://claude.ai/code/session_01TiAUwTpZWaugYkzh9gkzFa
 
 ---
 
