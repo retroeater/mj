@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 16:04 JST
+生成日時: 2026-09-13 16:11 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 61件（openのみ）。番号降順。
+件数: 59件（openのみ）。番号降順。
 
 ---
 
@@ -486,42 +486,6 @@ CDP操作が問題なく動作している。
 
 ---
 
-## #185 index.html のモバイルナビ開閉が <i> 要素でキーボード操作できない
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: index
-
-### 本文
-
-## 状況
-`<i class="mobile-nav-toggle d-xl-none">` は Tab で到達できず、役割も名前も
-ない。index.css で `outline: none !important` も当たっている。スマホ幅の
-キーボード／スイッチ利用者はナビを開けない。
-また `<h1>` が header と hero の2箇所にある。
-
-## 対応
-- `<button type="button" class="mobile-nav-toggle d-xl-none" aria-label="Menu"
-  aria-expanded="false" aria-controls="header">` に置き換える
-  （index.js の `on('click', '.mobile-nav-toggle', …)` はそのまま動く。
-  開閉時に aria-expanded を更新する1行を追加）
-- index.css の `outline: none` を `:focus-visible` のリングに変える
-- header 側の `<h1>` を `<p>` か `<div>` にする
-
-## 備考
-- トップページは #101 で作り直す方針のため最小修正に留める
-- #166 と同じファイルなので1コミットでまとめてよい
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-### コメント (1件)
-
-**retroeater** (2026-09-13):
-
-着手中: index.htmlのモバイルナビ開閉のキーボード対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
-
----
-
 ## #180 select#selectbox にラベルがなく、選択と同時にページ遷移する（5ページ）
 
 - 作成: 2026-09-13
@@ -746,70 +710,6 @@ Workers Builds の Production branch を `cloudflare` から別ブランチ
 Workers Buildsは結果をGitHubにcheck-run（`Workers Builds: mj`）として書き戻すため、セッションからも成否を確認できる。
 
 これはゲートを設計する際の材料になる。仮に`cloudflare`→`production`のマージをゲートにする案を採る場合、マージ前に`assets-check.yml`の結果を確認する、という形が取れる（現状は確認する先が無いまま反映されている）。
-
----
-
-## #166 index.html のSNSアイコンリンク5件にアクセシブルネームが無い（link-name）
-
-- 作成: 2026-09-12
-- ラベル: 分野: UI/UX, 対象: index
-
-### 本文
-
-`index.html` のSNSアイコンリンク5件が、中身が装飾的な `<svg>` だけでテキストも
-`aria-label` も持たないため、アクセシブルネームが存在しない。
-axe-core で **`link-name` の violation（impact: serious）** として検出される。
-
-## 該当箇所
-
-`index.html` の54〜58行目:
-
-```html
-<a href="https://twitter.com/retroeater" class="twitter"><i><svg …></svg></i></a>
-<a href="https://www.facebook.com/ryoei" class="facebook"><i><svg …></svg></i></a>
-<a href="https://www.linkedin.com/in/ryoei/" class="linkedin"><i><svg …></svg></i></a>
-<a href="https://github.com/retroeater/" class="github"><i><svg …></svg></i></a>
-<a href="https://www.imdb.com/name/nm14435079/" class="imdb"><i><svg …></svg></i></a>
-```
-
-スクリーンリーダーではリンク先URLがそのまま読み上げられるか、
-「リンク」としか読まれず、どこへ行くリンクなのか分からない。
-
-## 経緯
-
-#163（`navbar.js` の検索アイコンに `aria-label` を足す）の調査中に発見した。
-
-`index.html` は**全27ページで唯一 `navbar.js` を読み込まないページ**で、
-このSNSアイコンはテンプレート（iPortfolio）由来の独自マークアップ。
-#163 とは原因が別で、`index.html` を直接直す必要があるため別issueとして起票した。
-
-## 対応
-
-各リンクに `aria-label` を足す。文言はサービス名が分かるもの（例: `aria-label="X (Twitter)"`、
-`aria-label="Facebook"`、`aria-label="LinkedIn"`、`aria-label="GitHub"`、`aria-label="IMDb"`）。
-
-`index.html` はビルド時生成の対象外（`scripts/generate_index.py` は存在しない）なので、
-HTMLを直接編集する。再生成は不要。
-
-## 参考: 現状の index.html の Lighthouse
-
-`docs/lighthouse-baseline.md` の初回計測では index.html の accessibility は
-mobile / desktop とも 93。`link-name` を解消すればここが上がる見込み。
-（#163 の対応で他26ページは 0.98〜1.00 になっており、index.html だけが取り残されている状態）
-
-### コメント (2件)
-
-**retroeater** (2026-09-13):
-
-同じ index.html の a11y 修正として #185（モバイルナビ開閉が `<i>` 要素でキーボード操作できない）を起票した。
-同一ファイルのため1コミットでまとめて対応してよい。
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-**retroeater** (2026-09-13):
-
-着手中: index.htmlのSNSアイコンリンクにaria-labelを追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
