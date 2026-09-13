@@ -1036,6 +1036,41 @@ body:has(.mj-video-page) .mj-lead {
 	padding: 2px 8px 10px;
 }
 
+/* ==== video_wayhome.html(一覧)専用スタイル(#188) ====
+   .mj-video-page / .mj-video-episodes / .mj-video-track / .mj-video-card は
+   wayhome/配下のエピソード個別ページ(#162)と共有しているため、この一覧
+   ページだけに閉じたいスタイルのスコープには使えない(:has()で個別ページ
+   38枚にも波及してしまう)。そこで一覧ページの<main>にだけ付けた
+   .mj-video-list を専用のスコープフックにする
+   (scripts/generate_video_wayhome.py参照)。 */
+
+/* ---- navbarのsticky化(#188) ----
+   navbar.jsはdocument.writeで全65ページに同じマークアップを注入するため、
+   Bootstrapの.sticky-topクラスを付ける手段が無い。型Aページの
+   body:has(.mj-table) nav.navbar(position:fixed)と同じ:has()スコープの
+   手法で、position:stickyに限定して適用する。fixedにしないのは、bodyの
+   padding-top調整・ページ高さ管理が発生するため。
+   --mj-nav-hはvideo_wayhome.jsがResizeObserverで実測してdocumentElementに
+   設定する(navbar.js注入後・collapse開閉時にも追随)。--mj-filter-hは
+   #189で常時表示のフィルタバーを追加するまでは何も無いため0にしておく。
+   フォールバック値はJS実行前・失敗時の妥当な概算。 */
+html:has(.mj-video-list) {
+	scroll-padding-top: calc(var(--mj-nav-h, 56px) + var(--mj-filter-h, 0px));
+}
+
+body:has(.mj-video-list) nav.navbar {
+	position: sticky;
+	top: 0;
+	z-index: 1020;
+	background-color: rgba(18, 18, 18, .85);
+	backdrop-filter: blur(12px);
+}
+
+body:has(.mj-video-list) nav.navbar .navbar-collapse {
+	max-height: calc(100vh - var(--mj-nav-h, 56px));
+	overflow-y: auto;
+}
+
 /* ==== エピソード個別ページ専用スタイル(wayhome/<動画ID>.html、#162) ====
    .mj-video-pageを引き続き使うため上記のトークン・スコープはそのまま
    効く。ヒーロー内のパンくずリンク(シリーズ名 → 一覧)と、前後の

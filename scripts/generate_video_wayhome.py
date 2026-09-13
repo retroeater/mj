@@ -19,6 +19,12 @@ YouTube直リンクはヒーローの「再生」ボタンにのみ残す。最�
 サムネイル解決・VideoObject組み立てはgenerate_wayhome_episodes.pyと
 共有するため scripts/lib/wayhome.py に切り出した。
 
+#188: navbarのsticky化の土台として、<main>にこの一覧ページ専用のスコープ
+クラス mj-video-list を追加した。既存の .mj-video-page はエピソード個別
+ページ(#162)と共有しており一意でないため、style.css側の:has()スコープを
+一覧ページだけに閉じるには使えない。mj-video-listはこの一覧ページの
+<main>にしか付かないため、新しいスコープフックとして使う。
+
 使い方:
     python3 scripts/generate_video_wayhome.py
 """
@@ -188,7 +194,7 @@ def main():
     # link-name)が残るためscoreは上げられないが、こちらはnavbar.jsを
     # 触らずに済む範囲でこのページ限りの改善として反映した。
     body_html = (
-        '<main class="mj-video-page">\n'
+        '<main class="mj-video-page mj-video-list">\n'
         f"{hero_html}\n"
         '<div id="searchBoxes" class="collapse">\n'
         '\t<div class="mj-filter"><label class="visually-hidden" for="info_filter">概要で検索</label>'

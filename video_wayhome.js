@@ -10,6 +10,11 @@
 // 移植を忘れると、このページだけ画像フォールバックが効かなくなる
 // (docs/handover.md に注意点として記録済み)。
 //
+// #188: navbarをsticky化したため、その実高さを --mj-nav-h としてCSS変数に
+// 反映する(ブレークポイント・collapse開閉で高さが変わるためハードコード
+// しない)。旧来の#searchBoxes用--navbar-height実測はそのまま残す
+// (#searchBoxes自体は#189でフィルタバーに置き換わるまで引き続き使う)。
+//
 // 追加でこのページ固有の機能:
 //   - エピソード横スクロールの矢印ボタン
 //   - URLをコピーするボタン(navigator.clipboard.writeText()。新サイトの
@@ -73,6 +78,23 @@ document.addEventListener('DOMContentLoaded', function () {
 	if (typeof ResizeObserver !== 'undefined') {
 		const navbar = document.querySelector('nav.navbar')
 		if (navbar) new ResizeObserver(updateNavbarHeight).observe(navbar)
+	}
+
+	// ---- navbarの実高さを --mj-nav-h に反映(#188のsticky化用) ----
+	// 上の--navbar-height実測(#searchBoxes用)とは別の変数名にしている。
+	// navbarはこのページでは(型Aページと違い)position:stickyであり、
+	// #searchBoxes用の実測とは意味も消費側も異なるため、変数を共有せず
+	// 分けておく。
+	function updateNavHeight() {
+		const navbar = document.querySelector('nav.navbar')
+		if (!navbar) return
+		document.documentElement.style.setProperty('--mj-nav-h', navbar.getBoundingClientRect().height + 'px')
+	}
+	updateNavHeight()
+	window.addEventListener('resize', updateNavHeight)
+	if (typeof ResizeObserver !== 'undefined') {
+		const navbar = document.querySelector('nav.navbar')
+		if (navbar) new ResizeObserver(updateNavHeight).observe(navbar)
 	}
 
 	// ---- エピソード横スクロールの矢印ボタン ----
