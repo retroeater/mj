@@ -92,6 +92,7 @@ class TableConfig:
     extra_script: str = ""
     # h1直後、#searchBoxesの手前に差し込むページ固有のHTMLブロック
     # (video_wayhomeのヒーロー画像など、#102)。空文字なら何も差し込まない。
+    # 現在未使用。削除の可否は型B/ランキング移行(#111・#141)のときに判断する。
     content_before: str = ""
 
 

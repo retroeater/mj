@@ -16,19 +16,11 @@
 
 ## 0. 新しい会話の始め方
 
-次のように伝えれば、必要な文脈が渡る。
+会話開始時に読むのは `docs/handover.md` → `docs/issues-open.md` の順。
+平野さんが毎回定型文を貼る前提にしない。
 
-```
-ryoei.pro の改善を進めています。
-リポジトリは https://github.com/retroeater/mj の cloudflare ブランチです。
-docs/handover.md を読んでから、docs/issues-open.md で
-現在のタスク状況を確認してください。
-今日は #◯◯ に取り組みます。
-```
-
-`docs/issues-open.md` はOpenのみの要約版。指示が正しく実施されたか
-（Closeされたか）を確認するときは、全件版の `docs/issues-snapshot.md`
-を参照する（Open版はCloseされると当該issueが消えるため追跡できない）。
+全件版 `docs/issues-snapshot.md` は、クローズ済みを含めて調べる必要が
+あるときに平野さんが明示的に指定した場合だけ読む（620KBあり重い）。
 
 会話が長くなると1回あたりのコストが上がるため、
 **大きな作業の区切りごとに新しい会話を始める**とよい。
