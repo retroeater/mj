@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 11:03 JST
+生成日時: 2026-09-13 11:05 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -6826,7 +6826,7 @@ docs/handover.md の方針「検索エンジンとAIの検索・回答は許可�
 
 2026-09-15 に旧トグルが廃止される。その後すみやかに着手する。
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-11):
 
@@ -6966,6 +6966,45 @@ Agentはすでに Allow なのに Content-Signal に `ai-input` が出ていな�
 - Search / Agent は Allow のまま、混在クローラー設定も変更しない
 - いま実施すれば、混在クローラーが全挙動で評価される前かつ旧トグルが
   生きている状態で試せるため、最も安全な窓になる
+
+**retroeater** (2026-09-13):
+
+### 設定変更を実施(2026-09-13)
+
+Configure AI bot policies で以下に設定した。
+
+| 分類 | 設定 |
+|---|---|
+| Search | Allow (do not block) |
+| Agent | Allow (do not block) |
+| Training | **Block** |
+
+混在クローラーの設定(Mixed purpose crawlers will continue to be allowed)
+は変更していない。
+
+**「Block on pages with ads」は選ばなかった。** Cloudflareの Recommended は
+こちらだが、広告表示のあるページにしか効かないため、広告のない
+ryoei.pro では学習クローラーを一切ブロックしないのと同じになる。
+
+### robots.txt は変化しない見込み
+
+旧トグルがまだ有効で同じ `ai-train=no` と Disallow 群を出力しているため、
+新旧どちらが出力しているかを robots.txt から区別できない。
+**本日時点で robots.txt が変わらないことは正常。**
+
+### クローズ条件(9/15以降に実施)
+
+1. 旧トグル `Block AI bots` の行がダッシュボードから消えたことを確認
+2. robots.txt を再取得し、`ai-train=no` と GPTBot / ClaudeBot / CCBot /
+   Google-Extended / Amazonbot 等の Disallow が維持されていることを確認
+   (維持されていれば新コントロール側の設定が効いた証明になる)
+3. `ai-input` の有無を確認し、結果をここに記録する
+4. Search Console のクロールの統計情報で、Googlebot に 403 が
+   出ていないことを数日分確認(混在クローラーのオプトアウトの答え合わせ)
+5. Cloudflare の Security Events をボットアクションでフィルタし、
+   Googlebot / Applebot / Bingbot のブロックが無いことを確認
+
+上記1〜5が揃った時点でクローズする。
 
 ---
 
