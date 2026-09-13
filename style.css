@@ -304,17 +304,24 @@ th {
 }
 
 /* 縞模様。Bootstrapの.tableクラスは外したが、
-   td側に指定しておく方が他のスタイルと競合しにくい */
-.mj-table tbody tr:nth-child(odd) > td {
+   td側に指定しておく方が他のスタイルと競合しにくい。
+   1列目がth scope="row"のページ(#181、現状jpml_prosのみ)でも縞模様と
+   ホバーが効くよう、tdとthの両方を対象にする。付けないとth側の背景が
+   透明のままになり、position: stickyで固定された1列目の下を2列目の
+   文字が透けて見えてしまう(#181のリグレッション)。 */
+.mj-table tbody tr:nth-child(odd) > td,
+.mj-table tbody tr:nth-child(odd) > th {
 	background-color: #ffffff;
 }
 
-.mj-table tbody tr:nth-child(even) > td {
+.mj-table tbody tr:nth-child(even) > td,
+.mj-table tbody tr:nth-child(even) > th {
 	background-color: #fafafa;
 }
 
 /* ホバー時のハイライト。縞模様より後に書くこと */
-.mj-table tbody tr:hover > td {
+.mj-table tbody tr:hover > td,
+.mj-table tbody tr:hover > th {
 	background-color: #d6e9f8 !important;
 }
 
