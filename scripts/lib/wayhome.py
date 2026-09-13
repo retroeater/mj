@@ -6,31 +6,48 @@ generate_wayhome_episodes.py(エピソード個別ページ38枚、wayhome/、#1
 組み立てを二重実装しないためにここへ集約した。
 """
 import datetime
+import pathlib
 import re
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections import namedtuple
 
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
+from lib.page import NEW_TAB_HINT, esc  # noqa: E402
+
 SPREADSHEET_ID = "1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ"
 SHEET_NAME = "帰り道"
-QUERY = 'SELECT A,B,C,D,E,F WHERE G = "Y"'
 
 SERIES_NAME = "帰り道ついていってイイっすか"
 
-# 列名とコード上の呼び名の対応をここに1か所だけ定義する(#196)。QUERYの
-# SELECT句(A,B,C,D,E,F)と順序が1対1で対応する。scripts/lib/sheets.py の
-# fetch_sheet() はヘッダーではなく位置のみのlistを返すため、これまでは
+# シート「帰り道」の列とコード上の呼び名の対応をここに1か所だけ定義する
+# (#196/#193)。(列記号, コード上の呼び名, シート上の見出し(参考表示用))の
+# 順。QUERYはここから組み立てる(SELECT句に書くのは列記号であり、シート上の
+# 見出し文字列ではない。取り違えないこと)。列を増減・並び替えるときは
+# このCOLUMNSだけを直せばよい。scripts/lib/sheets.py の fetch_sheet() は
+# ヘッダーではなく位置のみのlistを返すため、これまでは
 # generate_video_wayhome.py / generate_wayhome_episodes.py の各所で
 # `interviewee, x_id, published_date, title, url, image_url = row` という
-# 位置参照の分解代入が散らばっていた。QUERYのSELECT句を変える(#192で
-# published_date/image_urlを参照しなくなる、#193で列を1つ増やす)際に
-# ここを一緒に直し忘れると、位置がずれた値をエラーにならず読み込んでしまう。
-# ROW_FIELDSとWayhomeRowを介すことで、参照側は名前でアクセスするようになり
-# (存在しない名前へのアクセスはAttributeErrorになる)、QUERYとの対応も
-# この1か所を見れば分かるようにする。
-ROW_FIELDS = ("interviewee", "x_id", "published_date", "title", "url", "image_url")
+# 位置参照の分解代入が散らばっていた。COLUMNSと実際にずれると、位置が
+# ずれた値をエラーにならず読み込んでしまう(#196)。ROW_FIELDSとWayhomeRowを
+# 介すことで、参照側は名前でアクセスするようになる(存在しない名前への
+# アクセスはAttributeErrorになる)。
+COLUMNS = (
+    ("A", "interviewee", "名前"),
+    ("B", "x_id", "X ID"),
+    ("C", "published_date", "公開日"),
+    ("D", "title", "タイトル"),
+    ("E", "url", "URL"),
+    ("F", "image_url", "画像URL"),
+    # #193: 決勝戦動画へのリンク用。38行中1行のみ値が入っており、残りは
+    # 空欄(未入力)が正常。
+    ("H", "final_video_url", "決勝動画URL"),
+)
+ROW_FIELDS = tuple(name for _, name, _ in COLUMNS)
 WayhomeRow = namedtuple("WayhomeRow", ROW_FIELDS)
+QUERY = 'SELECT {} WHERE G = "Y"'.format(",".join(letter for letter, _, _ in COLUMNS))
 
 
 def to_rows(raw_rows):
@@ -129,6 +146,26 @@ def episode_description(row) -> str:
     """VideoObject.description・ページ本文・meta descriptionで共通して使う文言。
     3箇所の文言を揃えるため一本化する(#162)。"""
     return f"日本プロ麻雀連盟「{SERIES_NAME}」。{row.title}を終えた{row.interviewee}への密着インタビュー動画です。"
+
+
+def build_final_video_link_html(row, css_class: str = "") -> str:
+    """決勝戦動画へのリンク(H列「決勝動画URL」、#193)。空セルの行では
+    何も返さない(プレースホルダも出さない)。値が入っているのに
+    http(s)://で始まる絶対URLとして解釈できない場合は、握りつぶさず
+    例外にする(どの行かを含める)。YouTube以外のホスト・パス形式
+    (例: youtube.com/watch?v=... 以外の /live/<id> 等)は許容し、
+    ホスト名やパス形式による制限はしない。"""
+    url = (row.final_video_url or "").strip()
+    if not url:
+        return ""
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        raise ValueError(
+            f"決勝動画URLの形式が想定外です(http(s)://で始まる絶対URLではありません): "
+            f"{url!r}(行: {row.interviewee} / {row.title})"
+        )
+    class_attr = f' class="{esc(css_class)}"' if css_class else ""
+    return f'<a{class_attr} href="{esc(url)}" target="_blank" rel="noopener">決勝戦を見る{NEW_TAB_HINT}</a>'
 
 
 def build_video_object(row, thumb_url) -> dict:

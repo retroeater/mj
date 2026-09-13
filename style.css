@@ -1041,6 +1041,15 @@ body:has(.mj-video-page) .mj-lead {
 	padding: 2px 8px 10px;
 }
 
+/* 決勝戦動画へのリンク(#193)。値が入っているカードにだけ出る
+   (.mj-video-card-linkの外側の兄弟要素なので、入れ子の<a>にはならない)。
+   色は.mj-video-page a:not(.mj-video-btn)の既定(--mj-v-accent)に任せる。 */
+.mj-video-card-final-link {
+	display: block;
+	padding: 0 8px 10px;
+	font-size: 0.8rem;
+}
+
 /* ==== video_wayhome.html(一覧)専用スタイル(#188/#189/#190) ====
    .mj-video-page / .mj-video-episodes / .mj-video-track / .mj-video-card は
    wayhome/配下のエピソード個別ページ(#162)と共有しているため、この一覧

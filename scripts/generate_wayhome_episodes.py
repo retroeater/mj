@@ -82,6 +82,12 @@ def build_body_html(row, is_latest, prev_row, next_row, same_player_rows, thumb_
     ]
     if row.x_id:
         actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(row.x_id)}" target="_blank">X @{esc(row.x_id)}{NEW_TAB_HINT}</a>')
+    # #193: 決勝戦動画へのリンク。値が入っている行にのみ追加される
+    # (build_final_video_link_html()が空文字を返せば何も追加しない)。
+    # 既存のmj-video-btnボタン列にそのまま並べる。
+    final_video_link = wayhome.build_final_video_link_html(row, css_class="mj-video-btn")
+    if final_video_link:
+        actions.append(final_video_link)
     actions.append('<button type="button" class="mj-video-btn" id="copyUrlBtn">URLをコピー</button>')
     actions.append(f'<a class="mj-video-btn" href="{ASSET_PREFIX}video_wayhome.html">一覧へ戻る</a>')
 

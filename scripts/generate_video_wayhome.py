@@ -160,6 +160,12 @@ def build_card_html(row) -> str:
     alt = f"{title} {interviewee}" if interviewee else (title or "")
     info_value = esc(" ".join(filter(None, [published_date, title, interviewee, x_id])))
 
+    # #193: 決勝戦動画へのリンク。値が入っている行にのみ出す
+    # (build_final_video_link_html()が空文字を返せば何も追加しない)。
+    # card-linkの<a>の外側(兄弟)に置く。入れ子の<a>はHTML的に無効なため。
+    final_video_link = wayhome.build_final_video_link_html(row, css_class="mj-video-card-final-link")
+    final_video_line = f"\t{final_video_link}\n" if final_video_link else ""
+
     return (
         f'<li class="mj-video-card" data-info="{info_value}">\n'
         f'\t<a class="mj-video-card-link" href="{esc(episode_href(row))}">\n'
@@ -169,6 +175,7 @@ def build_card_html(row) -> str:
         f'\t\t<span class="mj-video-card-title">{esc(title)}</span>\n'
         f'\t\t<span class="mj-video-card-name">{esc(interviewee)}</span>\n'
         "\t</a>\n"
+        f"{final_video_line}"
         "</li>"
     )
 
