@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 11:06 JST
+生成日時: 2026-09-13 11:11 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -1220,7 +1220,7 @@ docs/handover.md の方針「検索エンジンとAIの検索・回答は許可�
 
 2026-09-15 に旧トグルが廃止される。その後すみやかに着手する。
 
-### コメント (6件)
+### コメント (7件)
 
 **retroeater** (2026-09-11):
 
@@ -1399,6 +1399,28 @@ ryoei.pro では学習クローラーを一切ブロックしないのと同じ�
    Googlebot / Applebot / Bingbot のブロックが無いことを確認
 
 上記1〜5が揃った時点でクローズする。
+
+**retroeater** (2026-09-13):
+
+### robots.txt の変更前後比較(2026-09-13)
+
+設定変更(Training: Allow → Block)の前後で robots.txt を取得し、
+Cloudflare管理セクション(BEGIN〜END)を機械的に比較した。
+
+**34行すべて完全一致。差分なし。**
+
+- `Content-Signal: search=yes,ai-train=no,use=reference` 維持
+- `Disallow` 9件(Amazonbot / Applebot-Extended / Bytespider / CCBot /
+  ClaudeBot / CloudflareBrowserRenderingCrawler / Google-Extended /
+  GPTBot / meta-externalagent)すべて維持
+
+旧トグルが同じ出力を出しているため、**変化しないことが想定どおりの結果**。
+この時点では新コントロール側が効いているかは判定できず、学習ブロックが
+途切れていないことのみ確認できた。判定は9/15以降になる。
+
+`ai-input` は変更後も出力されていない。Agent を Allow に明示しても
+出ないため、現在の Content-Signal 行は旧トグル由来と判断する。
+9/15以降に `ai-input=yes` が加わるかどうかを観察する。
 
 ---
 
