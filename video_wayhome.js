@@ -14,8 +14,10 @@
 // CSS変数に実測反映する(ブレークポイント・collapse開閉で高さが変わるため
 // ハードコードしない)。
 //
+// #190: エピソード一覧を可変列グリッドに変えたため、横スクロールの矢印
+// ボタン(旧)は廃止した(ラップして複数行になるグリッドでは意味を持たない)。
+//
 // 追加でこのページ固有の機能:
-//   - エピソード横スクロールの矢印ボタン
 //   - URLをコピーするボタン(navigator.clipboard.writeText()。新サイトの
 //     選手個別ページでも同じ方式を使う想定、docs/new-site-design.md参照)
 
@@ -106,18 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 	watchHeight('nav.navbar', '--mj-nav-h')
 	watchHeight('.mj-filterbar', '--mj-filter-h')
-
-	// ---- エピソード横スクロールの矢印ボタン ----
-	const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-	document.querySelectorAll('.mj-video-scroll-btn').forEach(function (btn) {
-		btn.addEventListener('click', function () {
-			if (!track) return
-			const cardWidth = track.querySelector('.mj-video-card')?.getBoundingClientRect().width || 200
-			const amount = (cardWidth + 12) * 2 // gapぶんを含めた1クリックの移動量(カード2枚分)
-			const delta = btn.dataset.dir === 'prev' ? -amount : amount
-			track.scrollBy({ left: delta, behavior: reducedMotion ? 'auto' : 'smooth' })
-		})
-	})
 
 	// ---- URLをコピー ----
 	// navigator.clipboard は非セキュアコンテキスト(http、file://等)や

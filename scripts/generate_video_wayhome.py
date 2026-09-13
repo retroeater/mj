@@ -25,6 +25,12 @@ YouTube直リンクはヒーローの「再生」ボタンにのみ残す。最�
 一覧ページだけに閉じるには使えない。mj-video-listはこの一覧ページの
 <main>にしか付かないため、新しいスコープフックとして使う。
 
+#190: エピソード一覧を全幅化し、横スクロールの矢印ボタン
+(.mj-video-episodes-controls/.mj-video-scroll-btn)を廃止して可変列グリッド
+(.mj-video-grid)に変えた。個別ページ(wayhome/、#162)の「同じ選手の他
+エピソード」は引き続き.mj-video-track(横スクロール)のままなので、
+generate_wayhome_episodes.py側は変更していない。
+
 使い方:
     python3 scripts/generate_video_wayhome.py
 """
@@ -222,15 +228,9 @@ def main():
         '<main class="mj-video-page mj-video-list">\n'
         f"{hero_html}\n"
         f"{build_filterbar_html(len(sorted_rows))}\n"
-        '<section class="mj-video-episodes">\n'
-        '\t<div class="mj-video-episodes-head">\n'
-        f'\t\t<h2 class="mj-video-episodes-heading">エピソード（全{len(sorted_rows)}回）</h2>\n'
-        '\t\t<div class="mj-video-episodes-controls">\n'
-        '\t\t\t<button type="button" class="mj-video-scroll-btn" data-dir="prev" aria-label="前のエピソードへ">‹</button>\n'
-        '\t\t\t<button type="button" class="mj-video-scroll-btn" data-dir="next" aria-label="次のエピソードへ">›</button>\n'
-        "\t\t</div>\n"
-        "\t</div>\n"
-        f'\t<ul class="mj-video-track" id="episodeTrack">\n{cards_html}\n\t</ul>\n'
+        '<section class="mj-video-episodes mj-fullbleed">\n'
+        f'\t<h2 class="mj-video-episodes-heading">エピソード（全{len(sorted_rows)}回）</h2>\n'
+        f'\t<ul class="mj-video-grid" id="episodeTrack">\n{cards_html}\n\t</ul>\n'
         "</section>\n"
         "</main>\n"
     )
