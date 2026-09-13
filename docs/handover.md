@@ -1198,6 +1198,37 @@ for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done
 紛れ込むため、#9でCSPの`img-src`を書くときは、生成済みHTMLから実際に
 使われているドメインを機械的に洗い出すこと。
 
+### favicon・apple-touch-icon の扱い（#174、2026-09-12）
+
+**iOSはホーム画面アイコンのアルファチャンネルを扱わず、透過部分を黒で
+合成する。** 紺の円＋白いRで四隅が透過だった apple-touch-icon.png は、
+ホーム画面で黒い四隅が見える状態だった（角丸マスクはiOS側が後から掛ける）。
+透過を保ったまま黒を消すことはできないため、四隅まで紺で埋めた不透明版
+（180×180・RGB）に差し替えた。円の輪郭はiOSの角丸マスクが代わりを果たす。
+
+- **favicon.ico は透過のままでよい。** ブラウザのタブは透過を正しく扱う
+  ため、丸く表示されるのが正しい挙動。変更していない
+- **すでにホーム画面に追加済みのアイコンは差し替わらない。** 追加時点の
+  画像が端末に焼き付くため、検証は削除→再追加で行う
+- **link タグの無い下層ページからでも、iOSはルートの
+  /apple-touch-icon.png をフォールバックで取得する**（jpml_pros.html
+  から追加して実測）。現在 <link rel="apple-touch-icon"> は index.html
+  にしか無いが、実害は無い
+- ただしアイコン名は各ページの title 先頭から取られる（上記の例では
+  「プロ」）。`<meta name="apple-mobile-web-app-title">` を置けば
+  「ryoei.pro」に統一できる。HEAD_TEMPLATE の変更になり全26ページ＋
+  wayhome 38枚の再生成が必要なため、別の再生成が発生するタイミングに
+  合わせる
+
+**見送った項目**:
+
+- SVG favicon の追加。favicon.ico は15.4KBで、SVGなら数百バイトかつ
+  全解像度に対応できるが、Rのベクター原本が必要
+- Web App Manifest。PWA化を却下済みのため見送り。Androidもmanifestが
+  なければ apple-touch-icon を拾うため、アイコン品質の面では不要。
+  theme-color は manifest 不要で効くが、video_wayhome が濃色固定のため
+  全ページ共通値を置けず、ページ別の出し分けは手間に見合わない
+
 ### index.html の特殊性（#15）
 
 トップページのみテンプレート（BootstrapMade の iPortfolio）由来で、

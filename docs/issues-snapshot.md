@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 10:17 JST
+生成日時: 2026-09-13 10:27 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -77,7 +77,7 @@ docs/handover.mdの該当節（#161で追記した箇所）も、拡張子に紐
 
 ## #174 apple-touch-icon.png の透過をやめ、iOSホーム画面の黒い四隅を解消する
 
-- 状態: OPEN / 作成: 2026-09-12
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-12 / クローズ: 2026-09-13
 - ラベル: 分野: UI/UX, 対象: 全ページ
 
 ### 本文
@@ -125,7 +125,7 @@ assets/vendor（30日）と同じ落とし穴。max-age=86400 に緩和する。
 - SVG favicon の追加（Rのベクター原本が必要）
 - Web App Manifest（PWA化を却下済みのため見送り）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-12):
 
@@ -134,6 +134,32 @@ apple-touch-icon.png は差し替え済み（180×180・RGB・アルファなし
 続けて_headersのキャッシュ設定を緩和します。
 
 セッション: https://claude.ai/code/session_01KNWyAGfPCu3cU6wGCrDyTN
+
+**retroeater** (2026-09-13):
+
+実機確認完了（iOS、ホーム画面から削除→再追加）。黒い四隅が消え、
+紺の角丸タイルに白いRが表示されることを確認した。
+
+反映コミット: 977cd8d
+- apple-touch-icon.png を 180×180・RGB（アルファなし）に差し替え
+- _headers の /apple-touch-icon.png と /favicon.ico を
+  max-age=31536000, immutable → max-age=86400 に緩和
+- handover.md のキャッシュ一覧表を実態に合わせて修正（db923bf）
+
+### 確認時に分かったこと
+
+- **link タグのない下層ページからでも正しいアイコンが取得された。**
+  確認は jpml_pros.html から「ホーム画面に追加」して行ったが、
+  このページに <link rel="apple-touch-icon"> は無い。iOSが宣言の無い
+  場合にルートの /apple-touch-icon.png を探しに行く挙動が実測で
+  裏付けられた。全ページへのlinkタグ明示を見送った判断は妥当だった
+- **一方、アイコン名は「プロ」になった。** title の
+  「プロ | 日本プロ麻雀連盟 | ryoei.pro」から iOS が先頭を取ったもの。
+  apple-mobile-web-app-title を置けば「ryoei.pro」に統一できる。
+  スコープ外にした項目のうち、残る実利はこの名前の制御のみ
+- iOSはホーム画面追加時点の画像を端末に焼き付けるため、再追加しない
+  限り差し替えは反映されない。今後アイコンを変更したときの検証も
+  同じ手順が必要
 
 ---
 
