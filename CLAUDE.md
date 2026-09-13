@@ -19,6 +19,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **`work/<セッション識別子>`: 各セッションの作業ブランチ。**
   識別子はチャット側のChat-Refに合わせる（例: CHAT-0913-WH-xxのセッション
   なら`work/0913-wh`）。複数issueを1セッションで扱う場合も1ブランチでよい
+- **作業ブランチを切る前に、分岐元が`cloudflare`であることを確認すること
+  （2026-09-13決定）。** work/0913-hvが誤って`work/0913-wh2`から分岐した
+  例がある。`git merge-base --is-ancestor origin/cloudflare HEAD`などで
+  確認する
 - 作業開始時に`cloudflare`から作業ブランチを切り、そこへは自由にpushして
   よい。**`cloudflare`へのマージはセッション自身が行わない。**
   作業完了を報告し、マージするかどうかは平野さんが判断する
@@ -45,16 +49,49 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     データ取得まわり等）は、平野さんが本番または生成結果を確認した
     のちにマージする。セッションは報告して判断を待つ
   - 判断に迷う変更は「表示に影響する」側として扱い、確認を待つこと
-  - ドキュメントのみの変更でも、`cloudflare`へのpushにより#169の
-    ワークフローが走りデプロイが1回発生する。サイトの表示は変わらないが、
-    デプロイ自体は動く
+  - ドキュメントのみの変更でも、`cloudflare`へのpushにより
+    Workers Builds が走りデプロイが1回発生する。サイトの表示は
+    変わらないが、デプロイ自体は動く
 - マージ後、作業ブランチは削除してよい。長期間マージされないブランチは、
   定期的に`cloudflare`を取り込んで乖離を小さく保つこと
+- **ブランチを削除するときの手順（#209、2026-09-13決定）:**
+  - マージ済みの判定は、削除の直前に、完全な履歴に対して行うこと。
+    浅いクローンでは判定できない。また、指示文に書かれたSHAや判定結果は
+    作成時点のもので古くなりうるため、根拠にしないこと（#206が実例。
+    指示文作成時点では`work/0913-wh2`の先頭は`953c19e`＝マージ済み
+    だったが、実行時には`c54277c`＝未マージまで進んでいた）
+  - 未マージのブランチは削除しない。内容（コミット数・変更ファイル・
+    関連issue番号）を記録して平野さんの判断を仰ぐこと
+  - 削除する際は、削除直前の先頭SHAを必ず記録に残すこと。記録先は、
+    対応するissueのコメント（issueが無い場合は完了報告）。ブランチ名・
+    SHA・マージ済み/未マージの判定を、ブランチごとに1行で書く。
+    削除するとリモートから参照が消え、判定の正しさを後から検証できず、
+    誤って未マージのブランチを消していた場合も復旧できなくなる
+    （#207はSHAを記録せず削除したため、本来はこの検証ができない
+    状態だった）
+  - **積み直して（rebase / cherry-pick / squash）マージした場合は、
+    元のSHAと、対応する`cloudflare`側のSHAの両方を記録すること。**
+    積み直すと元のSHAは`cloudflare`の祖先にならず、祖先関係だけでは
+    検証できなくなる（#209の後始末。`work/0913-hv`の元`feae0e3`が、
+    積み直し後`2deb7d4`として`cloudflare`に入っていた）
+  - **マージ済みかを判定する側の手順:** 祖先でなかった場合に「未マージ」
+    と即断しないこと。同じ内容が別SHAで`cloudflare`に入っていないかを、
+    件名・差分の突き合わせで確認してから判定する
 - **`git stash`は使用しないこと。** 共有パス（複数セッションが同時に
   触りうるファイル）に対する`git stash`は、他セッションの未コミット編集を
   無言で消しうる（#198で実例あり）。コミットを分割する必要がある場合は
   `git add -p`、または`git diff`で対象のハンクだけを切り出して
   `git apply --cached`で部分ステージする
+- **チャット側の指示文より、このCLAUDE.mdのブランチ運用が優先する
+  （#205、2026-09-13決定）:** チャットから渡される指示文が、`cloudflare`
+  上での直接作業や`git status`による衝突確認など、このルール制定前の
+  古い前提を含んでいても、その指示文には従わずこの節に従うこと。
+  指示文に作業ブランチの指定が無い場合も、セッションの判断で
+  `work/<識別子>`を切ること。識別子は指示文のChat-Refから取る
+  （例: `CHAT-0913-QM-02`なら`work/0913-qm`）。実例は#205参照
+- **このブランチ運用ルールに反した作業が発生した場合（自分のものでも
+  他セッションのものでも）、#176にコメントとして記録すること。**
+  記録対象と書式は#176の「スコープ変更」節を参照
 
 # ryoei.pro
 
@@ -93,7 +130,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ローカル確認は `wrangler dev` を素のオプションで起動しないこと（無限リロードで作業不能になる）。
   必ず `--persist-to` でリポジトリ外に状態を保存すること:
   `npx wrangler dev --port 8789 --ip 127.0.0.1 --persist-to /tmp/wrangler-state`
-  （`.wrangler/` への書き込みをアセット変更と誤検知しリロードが無限に続くため。詳細は docs/issues-snapshot.md #153）
+  （`.wrangler/` への書き込みをアセット変更と誤検知しリロードが無限に続くため。詳細は#153）
   `--persist-to` で退避されるのはstate（KV/D1/R2/observability）のみで、`.wrangler/tmp`・`.wrangler/cache`は起動時にリポジトリ直下へ作られるが、これは正常で無限リロードの原因ではない（#155）
 - Bootstrap 5.3.8 をローカル配信（assets/vendor）。CDNは使わない
 - assets/vendor 配下のライブラリを更新・追加した際は、末尾の
@@ -163,7 +200,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `regenerate.py` — ページ再生成の共通入口。`scripts/generate_<ページ名>.py`が存在するページを「生成対象」とみなす。`--list`で対象ページ一覧、`all`で全ページ再生成、ページ名指定で単体再生成、`--changed`で変更ファイルから対象判定（`regenerate-page.yml`が使用）
 - `apply_page_meta.py` — 全ページの`<title>`・meta description・OGPタグを一括書き換え（#5）。`--dry`でプレビューのみ
 - `build_ogp_image.py` — OGP画像 `img/ogp.png`（1200×630、背景#ffffff、「ryoei.pro」の文字のみ）を生成（#78、手動実行）。Pillowが必要。全ページ共通の1枚で、`lib/page.py` / `generate_jpml_pros.py` のテンプレートと静的ページに `og:image` として入っている。生成したPNGもコミットする（生成環境のフォント差で再生成のたびに差分が出るのを避けるため）。`--check`でコミット済みのPNGと一致するか確認できる
-- `build_issues_snapshot.py` — `docs/issues-snapshot.md`（全件）と`docs/issues-open.md`（Openのみ）を`gh issue`の現状から同時に再生成する。`.claude/settings.json`のPostToolUseフックから`gh issue`操作のたびに自動実行される
 - 実行例: `python3 scripts/check_image_links.py --json result.json`（依存は標準ライブラリのみ、追加インストール不要）
 
 ## 方針
