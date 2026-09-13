@@ -1042,6 +1042,24 @@ body:has(.mj-video-page) .mj-lead {
    .mj-video-list を専用のスコープフックにする
    (scripts/generate_video_wayhome.py参照)。 */
 
+/* ---- ヒーローのスタッキングコンテキスト隔離(#188、WH-18) ----
+   下の「ヒーロー」節にある.mj-video-hero-contentのz-index:1は、親の
+   .mj-video-heroがposition:relativeのみでz-indexを持たずスタッキング
+   コンテキストを作らないため、実際にはこのページのルート(body直下)の
+   コンテキストにそのまま漏れ出ていた。navbarのドロップダウン(Bootstrap
+   既定z-index:1000、navbar配下)より本来背面にあるべきヒーロー側の
+   z-index:1がルートレベルで前面に出てしまい、ドロップダウンの下端を
+   隠す不具合が本番で確認された。
+   .mj-video-heroにisolation:isolateを与えて子(.mj-video-hero-content)の
+   z-indexをヒーロー内だけに閉じ込め、ヒーロー全体を低いz-index(0)で
+   ルートコンテキストに参加させることで、navbar(1020)・フィルタバー(1019)
+   より確実に背面に回す。Bootstrap既定の.dropdown-menuのz-indexは変更
+   しない(全65ページに波及するため)。 */
+body:has(.mj-video-list) .mj-video-hero {
+	isolation: isolate;
+	z-index: 0;
+}
+
 /* ---- navbarのsticky化(#188) ----
    navbar.jsはdocument.writeで全65ページに同じマークアップを注入するため、
    Bootstrapの.sticky-topクラスを付ける手段が無い。型Aページの
