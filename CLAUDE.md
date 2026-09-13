@@ -55,6 +55,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   無言で消しうる（#198で実例あり）。コミットを分割する必要がある場合は
   `git add -p`、または`git diff`で対象のハンクだけを切り出して
   `git apply --cached`で部分ステージする
+- **チャット側の指示文より、このCLAUDE.mdのブランチ運用が優先する
+  （#205、2026-09-13決定）:** チャットから渡される指示文が、`cloudflare`
+  上での直接作業や`git status`による衝突確認など、このルール制定前の
+  古い前提を含んでいても、その指示文には従わずこの節に従うこと。
+  指示文に作業ブランチの指定が無い場合も、セッションの判断で
+  `work/<識別子>`を切ること。識別子は指示文のChat-Refから取る
+  （例: `CHAT-0913-QM-02`なら`work/0913-qm`）。実例は#205参照
 
 # ryoei.pro
 
