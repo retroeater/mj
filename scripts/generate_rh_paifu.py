@@ -63,7 +63,7 @@ def build_row_html(row) -> str:
         css_class="videos", width=160, height=90, fallback="img/125_arr_hoso.png",
     )
 
-    paifu_link = f'<a href="{esc(paifu_url)}" target="_blank">{esc(full_hand_name)}{NEW_TAB_HINT}</a>' if paifu_url else esc(full_hand_name)
+    paifu_link = f'<a href="{esc(paifu_url)}" target="_blank" class="mj-plain">{esc(full_hand_name)}{NEW_TAB_HINT}</a>' if paifu_url else esc(full_hand_name)
     info_cell = "<br>".join(filter(None, [esc(game_date), esc(game), paifu_link, esc(name)]))
 
     # 検索用文字列は <br> ではなく半角スペースで連結する。
