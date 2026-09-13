@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 14:36 JST
+生成日時: 2026-09-13 14:56 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -60,6 +60,28 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 - #193（決勝戦動画リンク。列を追加する）
 
 Chat-Ref: CHAT-0913-WH-11
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+実装しました（Chat-Ref: CHAT-0913-WH-24）。マージ基準に従い、コミット・push までで止めています。
+
+**変更前の状態:** 位置参照でした。`scripts/lib/sheets.py`の`fetch_sheet()`は列名を持たない位置のみのlist（各行）を返し、`generate_video_wayhome.py`・`generate_wayhome_episodes.py`の各所で`interviewee, x_id, published_date, title, url, image_url = row`という分解代入や`row[0]`/`row[4]`/`row[5]`の直接indexingが散らばっていました。
+
+**取得基盤の共有範囲:** `fetch_sheet()`（`scripts/lib/sheets.py`）と`scripts/lib/page.py`の`generate()`は、jpml_titles/jpml_test/resource_logs/video_live/video_en/rh_paifu/saikyo_mens/video_mtsuku/saikyo_results/rh_results/rh_results_detailの11ページ超が共有する基盤です。**どちらも変更していません。** 位置→名前の変換は`scripts/lib/wayhome.py`内に閉じており、これは元々`generate_video_wayhome.py`と`generate_wayhome_episodes.py`の2スクリプトだけが使う専用モジュールのため、波及はありません。
+
+**変更内容:** `wayhome.py`に列名とコード上の呼び名の対応を1か所（`ROW_FIELDS`）にまとめ、`to_rows()`で行をnamedtuple（`WayhomeRow`）に変換するようにしました。行の要素数が`ROW_FIELDS`と一致しない場合は無言でスキップせず、内容を含む`ValueError`で生成を止めます（単体呼び出しで実際にエラーになることを確認済み）。
+
+**回帰確認:** 変更前後で`video_wayhome.html`・`wayhome/`配下38枚・`sitemap-wayhome.xml`のいずれも`diff`で完全一致（1バイトも変わらず）を確認しました。
+
+シート側のC列（公開日）・F列（画像URL）は引き続き参照しています（参照をやめるのは#192の作業）。
+
+- 作業ブランチ: `work/0913-wh2`（push済み、`origin/cloudflare`から作成）
+- コミット: `33e51d5`
+- worktree: `/tmp`配下に作成し、確認後の修正に備えて残しています（`/workspaces/mj`には一切触れていません）
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
 
 ---
 
