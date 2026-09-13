@@ -332,6 +332,14 @@ body:has(.mj-table) nav.navbar {
 	z-index: 1030; /* Bootstrapのfixed-top相当。テーブルのsticky(最大4)より手前 */
 }
 
+/* 本文へスキップリンク(#182)。このページ群はnav.navbarがposition:fixed・
+   z-index:1030でページ上端を覆っているため、フォーカス時にリンク自体を
+   position:relativeにしてナビより手前に出す。 */
+.visually-hidden-focusable:focus {
+	position: relative;
+	z-index: 1040;
+}
+
 /* 固定したメニューの分だけ本文を押し下げる */
 body:has(.mj-table) {
 	padding-top: var(--content-offset, 90px);

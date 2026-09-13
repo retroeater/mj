@@ -225,7 +225,10 @@ def main():
     # link-name)が残るためscoreは上げられないが、こちらはnavbar.jsを
     # 触らずに済む範囲でこのページ限りの改善として反映した。
     body_html = (
-        '<main class="mj-video-page mj-video-list">\n'
+        # id="main"・tabindex="-1"はrender_content()のスキップリンク(#182)の
+        # 飛び先。この<main>はbody_html側で組み立てるためwrap_main=Falseの
+        # まま(二重<main>を避ける)、ここで直接付ける。
+        '<main class="mj-video-page mj-video-list" id="main" tabindex="-1">\n'
         f"{hero_html}\n"
         f"{build_filterbar_html(len(sorted_rows))}\n"
         '<section class="mj-video-episodes mj-fullbleed">\n'

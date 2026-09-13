@@ -22,6 +22,16 @@ body {
   color: #272829;
 }
 
+/* 本文へスキップリンク(#182)。デスクトップ幅では#headerがposition:fixed・
+   z-index:9997でページ左上を覆っているため、フォーカス時にリンク自体を
+   position:relativeにして#header・.mobile-nav-toggle(z-index:9998)より
+   手前に出す。モバイル幅では#headerは既定で画面外(left:-300px)のため
+   実害はないが、統一のため同じ指定にしておく。 */
+.visually-hidden-focusable:focus {
+  position: relative;
+  z-index: 9999;
+}
+
 a {
   color: #149ddd;
   text-decoration: none;

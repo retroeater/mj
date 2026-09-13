@@ -68,9 +68,11 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "573520ec707f4a59b7b5cb06ef67cad8"}}'></script>
 </head>
 <body>
+<a class="visually-hidden-focusable" href="#main">本文へスキップ</a>
 <!-- Bootstrap Navigation Bar -->
 <script src="navbar.js"></script>
 
+<main id="main" tabindex="-1">
 <h1 class="visually-hidden">日本プロ麻雀連盟 プロ雀士データベース</h1>
 
 <div id="searchBoxes" class="collapse">
@@ -92,6 +94,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 \t</tbody>
 </table>
 <p class="mj-lead">{description}</p>
+</main>
 </body>
 </html>
 """

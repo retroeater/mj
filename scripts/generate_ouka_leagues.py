@@ -146,7 +146,7 @@ def main():
         chart_desktop=chart_desktop,
         chart_mobile=chart_mobile,
     )
-    output = render_content(META, body_html, count=len(option_names))
+    output = render_content(META, body_html, count=len(option_names), wrap_main=True)
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     print(f"{OUTPUT_PATH} を更新しました。")
 

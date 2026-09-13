@@ -129,7 +129,10 @@ def build_body_html(row, is_latest, prev_row, next_row, same_player_rows, thumb_
             "</section>\n"
         )
 
-    return '<main class="mj-video-page">\n' + "\n".join(sections) + "</main>\n"
+    # id="main"・tabindex="-1"はrender_content()のスキップリンク(#182)の
+    # 飛び先。この<main>はbody_html側で組み立てるためwrap_main=Falseのまま
+    # (二重<main>を避ける)、ここで直接付ける。
+    return '<main class="mj-video-page" id="main" tabindex="-1">\n' + "\n".join(sections) + "</main>\n"
 
 
 def build_json_ld(row, video_id, thumb_url) -> str:

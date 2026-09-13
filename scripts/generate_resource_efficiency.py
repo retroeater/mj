@@ -126,7 +126,7 @@ def main():
     )
     # このページは #searchBoxes を持たないので、navbar.js の虫眼鏡アイコンを
     # 出さないよう <body> に data-search="off" を出す(#163)。
-    output = render_content(META, body_html, count=len(data), has_search_boxes=False)
+    output = render_content(META, body_html, count=len(data), has_search_boxes=False, wrap_main=True)
 
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     print(f"{OUTPUT_PATH} を更新しました。")

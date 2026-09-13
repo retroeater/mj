@@ -139,13 +139,20 @@ HEAD_TEMPLATE = """<!DOCTYPE html>
 </head>
 """
 
+# キーボード利用者が固定ナビの手前で本文へ飛べるスキップリンク(#182)。
+# Bootstrap 5.3組み込みのvisually-hidden-focusableを使うため追加CSSは
+# 不要(index.html以外はbootstrap.min.cssを読む)。navbar.jsの<script>より
+# 前に置くことで、Tab最初の1回で先に到達できるようにする。
+SKIP_LINK = '<a class="visually-hidden-focusable" href="#main">本文へスキップ</a>\n'
+
 # 表を持つページ(型A/A')用。HEAD_TEMPLATEに<body>以降を続ける。
 # {body_attrs} は #searchBoxes を持たないページにだけ ' data-search="off"' が
 # 入る(#163)。持つページでは空文字なので <body> のまま変わらない。
 PAGE_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
-<!-- Bootstrap Navigation Bar -->
+{skip_link}<!-- Bootstrap Navigation Bar -->
 <script src="{asset_prefix}navbar.js"></script>
 
+<main id="main" tabindex="-1">
 <h1 class="visually-hidden">{h1}</h1>{content_before}
 {search_boxes}
 <p id="result_count" class="visually-hidden" role="status" aria-live="polite"></p>
@@ -159,18 +166,22 @@ PAGE_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
 {rows}
 \t</tbody>
 </table>
-{pager}{lead}</body>
+{pager}{lead}</main>
+</body>
 </html>
 """
 
 # 表を持たないページ(型D等)用。本文は呼び出し側が丸ごと組み立てて渡す。
 # {body_attrs} はPAGE_TEMPLATEと同じ(#163)。
+# {main_open}/{main_close} は wrap_main(render_content()参照)で切り替える。
+# body_html側が既に独自の<main>を持つページ(video_wayhome/wayhome、#102/#162)は
+# 二重<main>を避けるためwrap_main=Falseで空文字になる。
 CONTENT_TEMPLATE = HEAD_TEMPLATE + """<body{body_attrs}>
-<!-- Bootstrap Navigation Bar -->
+{skip_link}<!-- Bootstrap Navigation Bar -->
 <script src="{asset_prefix}navbar.js"></script>
 
-{body_html}{lead}
-</body>
+{main_open}{body_html}{lead}
+{main_close}</body>
 </html>
 """
 
@@ -318,12 +329,13 @@ def render(
         rows=rows_html,
         pager=pager,
         lead=_render_lead(description),
+        skip_link=SKIP_LINK,
     )
 
 
 def render_content(
     meta: PageMeta, body_html: str, extra_head: str = "", count: int | None = None,
-    has_search_boxes: bool = True, asset_prefix: str = "",
+    has_search_boxes: bool = True, asset_prefix: str = "", wrap_main: bool = False,
 ) -> str:
     """表を持たないページ(型D等)のHTML全体を組み立てる。
 
@@ -342,20 +354,31 @@ def render_content(
     ouka_leagues / video_wayhome が既定のまま、resource_efficiency だけが
     False を渡す。
 
+    wrap_main は本文全体を <main id="main" tabindex="-1"> で包むかどうか(#182)。
+    既定はFalse。body_html側が既に独自の<main>を持つページ(video_wayhome/
+    wayhome、#102/#162)はFalseのまま(呼び出し側でid="main"・tabindex="-1"を
+    その<main>に直接付ける)。持たないページ(houou_leagues/ouka_leagues/
+    resource_efficiency)はTrueを渡す。
+
     asset_prefix はサブディレクトリのページ(#162のwayhome個別ページ等)向けの
     接頭辞。既定は空文字でルート直下のページの出力は変わらない。og:image・
     canonicalはmetaから読む(PageMetaのフィールド)。
     """
     description = apply_count(meta.description, count)
+    main_open = '<main id="main" tabindex="-1">\n' if wrap_main else ""
+    main_close = "</main>\n" if wrap_main else ""
     return CONTENT_TEMPLATE.format(
         title=esc(meta.title),
         description=esc(description),
         og_url=esc(meta.og_url),
         **_head_kwargs(meta, asset_prefix),
         extra_head=extra_head,
+        main_open=main_open,
         body_html=body_html,
+        main_close=main_close,
         body_attrs=_render_body_attrs(has_search_boxes),
         lead=_render_lead(description),
+        skip_link=SKIP_LINK,
     )
 
 
