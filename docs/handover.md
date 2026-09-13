@@ -230,12 +230,12 @@ llms.txt を設置する(#161)
 
 （本文）
 
-Chat-Ref: CHAT-0913-K7-01
+Chat-Ref: CHAT-MMDD-XX-nn
 Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 ```
 
 これにより、チャット側は
-`git log --all --grep="CHAT-0913-K7-01" --oneline`
+`git log --all --grep="CHAT-MMDD-XX-nn" --oneline`
 で到達を確認でき、未達の指示だけを再掲できる。
 
 指示を受け取ったが実行しない判断をした場合も、その旨を平野さんに
