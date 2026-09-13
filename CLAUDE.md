@@ -19,6 +19,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **`work/<セッション識別子>`: 各セッションの作業ブランチ。**
   識別子はチャット側のChat-Refに合わせる（例: CHAT-0913-WH-xxのセッション
   なら`work/0913-wh`）。複数issueを1セッションで扱う場合も1ブランチでよい
+- **作業ブランチを切る前に、分岐元が`cloudflare`であることを確認すること
+  （2026-09-13決定）。** work/0913-hvが誤って`work/0913-wh2`から分岐した
+  例がある。`git merge-base --is-ancestor origin/cloudflare HEAD`などで
+  確認する
 - 作業開始時に`cloudflare`から作業ブランチを切り、そこへは自由にpushして
   よい。**`cloudflare`へのマージはセッション自身が行わない。**
   作業完了を報告し、マージするかどうかは平野さんが判断する
