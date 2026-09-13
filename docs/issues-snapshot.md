@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 09:57 JST
+生成日時: 2026-09-13 09:59 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -46,6 +46,16 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 - まず実際に文字化けしているか本番で確認する
 - 文字化けしていれば、`_headers` に `/robots.txt` 向けのcharset指定を試す（AI Crawl Controlの前置により効かない可能性があるため、効かなかった場合は別の対処法を検討する）
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+#161がクローズしました。実証結果を追記します。
+
+`_headers` での `Content-Type: text/plain; charset=utf-8` 上書きは、`/llms.txt` に対して実際に効いていることを平野さんが本番で確認済みです（文字化け解消、2026-09-12）。Cloudflare Workers の静的アセット配信に対して `_headers` でのContent-Type上書きが有効であることが実証されました。
+
+ただし、`robots.txt` はCloudflareのAI Crawl Controlの管理robots.txtが前置される構成のため、`llms.txt`と同じように`_headers`が効くとは限りません（この点は未確認のまま）。まずは本番で実際に文字化けしているかどうかの確認が引き続き必要です。
 
 ---
 
