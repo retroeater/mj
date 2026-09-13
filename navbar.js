@@ -67,8 +67,8 @@ document.write(
 				'</li>' +
 				'<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">リソース<br>Resource</a>' +
 					'<div class="dropdown-menu">' +
-						'<a class="dropdown-item" href="/resource_calendar.html" target="_blank">カレンダー</a>' +
-						'<a class="dropdown-item" href="/resource_books.html" target="_blank">書籍</a>' +
+						'<a class="dropdown-item" href="/resource_calendar.html" target="_blank">カレンダー<span class="visually-hidden">（新しいタブで開く）</span></a>' +
+						'<a class="dropdown-item" href="/resource_books.html" target="_blank">書籍<span class="visually-hidden">（新しいタブで開く）</span></a>' +
 						'<a class="dropdown-item" href="/resource_logs.html">ログ</a>' +
 						'<a class="dropdown-item" href="/resource_dictionary.html">辞書</a>' +
 						'<a class="dropdown-item" href="/resource_efficiency.html">牌効率</a>' +

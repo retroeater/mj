@@ -16,7 +16,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from lib.page import PageMeta, TableConfig, build_image_cell, esc, generate  # noqa: E402
+from lib.page import NEW_TAB_HINT, PageMeta, TableConfig, build_image_cell, esc, generate  # noqa: E402
 
 SPREADSHEET_ID = "1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ"
 SHEET_NAME = "ログ"
@@ -90,7 +90,7 @@ def get_info_cell(date, menu, restaurant_name, restaurant_url, tags) -> str:
     店名リンクのインラインstyle(text-decoration: none)は#9のCSPで
     弾かれるため、style.cssの.mj-plainクラスに置き換える。"""
     if restaurant_name and restaurant_url:
-        restaurant_html = f'<a href="{esc(restaurant_url)}" target="_blank" class="mj-plain">{esc(restaurant_name)}</a>'
+        restaurant_html = f'<a href="{esc(restaurant_url)}" target="_blank" class="mj-plain">{esc(restaurant_name)}{NEW_TAB_HINT}</a>'
     else:
         restaurant_html = esc(restaurant_name)
 

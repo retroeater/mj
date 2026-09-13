@@ -25,6 +25,12 @@ def esc(value) -> str:
     return html.escape(str(value))
 
 
+# target="_blank"のリンクに付ける別タブ予告(#183)。altとの重複読み上げを
+# 避けるため、alt自体は変えずリンク内にこのspanを追加する。文言は全箇所で
+# 統一する(表記ゆれを作らない)。
+NEW_TAB_HINT = '<span class="visually-hidden">（新しいタブで開く）</span>'
+
+
 def apply_count(description: str, count: int | None) -> str:
     """description 内の {count} を実データの件数で置換する(#158)。
     count が None なら {count} を含まない前提でそのまま返す。"""
@@ -107,7 +113,7 @@ def build_image_cell(alt, url, image_url, css_class, width, height, fallback) ->
         f'src="{esc(image_url or fallback)}" data-fallback="{esc(fallback)}" />'
     )
     if url:
-        return f'<a href="{esc(url)}" target="_blank">{img}</a>'
+        return f'<a href="{esc(url)}" target="_blank">{img}{NEW_TAB_HINT}</a>'
     return img
 
 

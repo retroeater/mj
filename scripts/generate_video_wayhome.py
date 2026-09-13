@@ -39,7 +39,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from lib.page import PageMeta, esc, render_content  # noqa: E402
+from lib.page import NEW_TAB_HINT, PageMeta, esc, render_content  # noqa: E402
 from lib.sheets import fetch_sheet  # noqa: E402
 from lib import wayhome  # noqa: E402
 
@@ -81,10 +81,10 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
 
     actions = [
         f'<a class="mj-video-btn mj-video-btn-primary" href="{esc(url)}" target="_blank">'
-        f'<span aria-hidden="true">▶</span> 再生</a>'
+        f'<span aria-hidden="true">▶</span> 再生{NEW_TAB_HINT}</a>'
     ]
     if x_id:
-        actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(x_id)}" target="_blank">X @{esc(x_id)}</a>')
+        actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(x_id)}" target="_blank">X @{esc(x_id)}{NEW_TAB_HINT}</a>')
     # コピー対象はvideo_wayhome.js側でlocation.href(表示中のURL)を読むため、
     # ここでは固定URLを属性に持たせない。
     actions.append('<button type="button" class="mj-video-btn" id="copyUrlBtn">URLをコピー</button>')

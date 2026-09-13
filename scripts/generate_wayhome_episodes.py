@@ -26,7 +26,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from lib.page import PageMeta, esc, render_content  # noqa: E402
+from lib.page import NEW_TAB_HINT, PageMeta, esc, render_content  # noqa: E402
 from lib.sheets import fetch_sheet  # noqa: E402
 from lib import wayhome  # noqa: E402
 
@@ -81,10 +81,10 @@ def build_body_html(row, is_latest, prev_row, next_row, same_player_rows, thumb_
 
     actions = [
         f'<a class="mj-video-btn mj-video-btn-primary" href="{esc(url)}" target="_blank">'
-        f'<span aria-hidden="true">▶</span> YouTubeで再生</a>'
+        f'<span aria-hidden="true">▶</span> YouTubeで再生{NEW_TAB_HINT}</a>'
     ]
     if x_id:
-        actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(x_id)}" target="_blank">X @{esc(x_id)}</a>')
+        actions.append(f'<a class="mj-video-btn" href="https://x.com/{esc(x_id)}" target="_blank">X @{esc(x_id)}{NEW_TAB_HINT}</a>')
     actions.append('<button type="button" class="mj-video-btn" id="copyUrlBtn">URLをコピー</button>')
     actions.append(f'<a class="mj-video-btn" href="{ASSET_PREFIX}video_wayhome.html">一覧へ戻る</a>')
 

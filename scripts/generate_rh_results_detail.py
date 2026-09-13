@@ -26,7 +26,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from lib.page import PageMeta, TableConfig, esc, generate  # noqa: E402
+from lib.page import NEW_TAB_HINT, PageMeta, TableConfig, esc, generate  # noqa: E402
 
 SPREADSHEET_ID = "1WxXJJ2vQPfjNsMYT9zBE2UU1Xo7T-PkhWYE6dtWtk50"
 SHEET_NAME = "成績詳細"
@@ -67,7 +67,7 @@ def build_row_html(row) -> str:
     if twitter_url:
         game_cell += (
             f' <a href="{esc(twitter_url)}" target="_blank">'
-            f'<img alt="{esc(game)} X" src="img/twitter.svg" width="16" height="16"></a>'
+            f'<img alt="{esc(game)} X" src="img/twitter.svg" width="16" height="16">{NEW_TAB_HINT}</a>'
         )
 
     cells = [esc(date), esc(org), esc(title), game_cell, esc(players), esc(rank), esc(score), esc(result)]
