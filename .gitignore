@@ -3,3 +3,7 @@ _site
 Gemfile.lock
 __pycache__/
 .wrangler/
+
+# YouTube Data APIキーのローカル実行用ファイル(#192、WH-29)。
+# scripts/fetch_youtube_meta.pyが環境変数の次に読む。絶対にコミットしない。
+.youtube_api_key
