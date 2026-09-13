@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 12:48 JST
+生成日時: 2026-09-13 13:34 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -507,7 +507,7 @@ Chat-Ref: CHAT-0913-WH-03
 
 ## #188 video_wayhome の navbar をスクロール追随（sticky）にする
 
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- 状態: OPEN (REOPENED) / 作成: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -566,7 +566,7 @@ video_wayhome.html 以外に影響させずに実装できる見込みが高い�
 
 Chat-Ref: CHAT-0913-WH-02
 
-### コメント (4件)
+### コメント (6件)
 
 **retroeater** (2026-09-13):
 
@@ -583,6 +583,28 @@ CHAT-0913-WH-10: 反映確認のみ実施。WH-01調査5番の2点（navbarが�
 **retroeater** (2026-09-13):
 
 実装完了につきクローズします。
+
+**retroeater** (2026-09-13):
+
+本番で不具合が確認されたため再オープンします（Chat-Ref: CHAT-0913-WH-17）。症状: Tabでスキップリンクにフォーカスした際、navbarの内側で予期しないスクロール/クリップが発生。着手中: 原因調査・修正を行います。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+調査結果と修正をコミットしました（未push、コミット: 95466de）。
+
+**原因の再確認:** 依頼文の「nav.navbar自体にmax-height/overflow-yが付いている」という診断は、コードを確認したところ不正確でした。実際にそれらが付いていたのは子要素の `.navbar-collapse` で、かつメディアクエリで絞り込んでいなかったため、デスクトップ幅でも常時 `max-height: calc(100vh - var(--mj-nav-h))` が適用されていました。
+
+ここに循環参照がありました: モバイルでcollapseを開くと nav.navbar 自体の実測高さ(--mj-nav-h)がcollapse分だけ増え、その増えた値がcollapse自身のmax-height計算に使われて利用可能な高さが逆に縮みます。ビューポートが低い（モバイル横向き等）・展開項目が多いケースで、上段が切れる・不要な内部スクロールバーが出る形で顕在化します。
+
+**修正内容:** `.navbar-collapse` の max-height/overflow-y を、navbar-expand-lgのブレークポイント(992px)未満・`.show`(展開中)のみに限定し、`--mj-nav-h` を使わない `80vh` 固定値にして循環参照を断ちました。nav.navbar自体には元々overflow/max-heightが付いていなかったこともコードで確認済みです。
+
+**スキップリンクについて（未対応・報告のみ）:** `.visually-hidden-focusable`（#182）はnavbar.jsではなく `scripts/lib/page.py` のテンプレートが出しており、DOM上もnav要素の兄弟（navbar.jsのscriptタグより前）であることを確認しました。z-index(1040) > navのz-index(1020)のため、コード上はnavに覆われる関係にはなっていません。このテンプレートは生成対象11ページ+video_wayhome+wayhome配下38枚+手書き4ページ+index.htmlで共有されているため、DOM位置を変更する場合は本issue（video_wayhome限定）のスコープを超えて全ページに波及します。今回は変更していません。上記のcollapse修正だけで本番の症状（上段の切れ・内部スクロールバー）が解消するかをまず確認いただき、スキップリンクの見え方になお問題が残るようであれば、影響範囲込みで別issueとして検討することを提案します。
+
+**--mj-nav-h / --mj-filter-h の再確認:** `html:has(.mj-video-list) { scroll-padding-top: calc(var(--mj-nav-h, 56px) + var(--mj-filter-h, 52px)); }` は維持されており、両変数ともvideo_wayhome.jsのResizeObserverで実測値が入る実装のままです（フォールバック値のみ、実行前・失敗時用）。
+
+pushの可否は平野さんの判断のため、コミットまでで止めています。
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
 
 ---
 
@@ -805,7 +827,7 @@ Claude Code 側では実施できない。平野さんの手作業になる。
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
@@ -855,6 +877,28 @@ B）が起票時の想定（130KB・3,388件）にほぼ一致する。C）は�
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
+**retroeater** (2026-09-13):
+
+## jpml_pros.html: 方針をA）からB）に変更（2026-09-13）
+
+上記の比較データを踏まえ、再検討の結果 **B）外部リンクのみを採用**することに
+決定（A）見送りから変更）。
+
+**判断の根拠**: 起票時の想定「約130KB増・3,388件」は外部リンクのみを
+対象とした見積もりで、実測のB）（+132,861バイト・1,983件）がこれに一致する。
+C）が2.7倍に膨らんだのは`get_internal_link()`の内部リンク（鳳凰/桜花成績・
+最強戦・タイトル戦・放送対局）まで含めたためで、想定超過は対象範囲の
+違いによるものだった。jpml_pros.htmlは選手1,099人のSNSリンクが集中する、
+この指摘が最も効くページであり、+130KBは許容する。
+
+**実装**: `generate_jpml_pros.py`の`get_external_link()`（龍龍・X・note・
+YouTube）のみに`NEW_TAB_HINT`を追加。`get_internal_link()`（鳳凰/桜花成績・
+最強戦・タイトル戦・放送対局への同一サイト内リンク）には追加していない。
+
+**実測結果**: 1,391,312 bytes（+132,861バイト）、span 1,983件。事前の
+B）実測値と一致。alt文言は変更なし（例:「合澤雄貴 X」→
+「合澤雄貴 X （新しいタブで開く）」）。
+
 ---
 
 ## #182 <main> ランドマークとスキップリンクをテンプレートに追加する（25ページ）
@@ -886,7 +930,7 @@ Lighthouse の landmark-one-main が残っている。ナビバーは最上位8�
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (2件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
@@ -904,6 +948,44 @@ PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わ
 **retroeater** (2026-09-13):
 
 着手中: <main>ランドマークとスキップリンクの追加に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
+**retroeater** (2026-09-13):
+
+着手中: 残っていたGoogle Charts 6ページ(houou_ranking/houou_results/ouka_ranking/ouka_results/wrc_ranking/wrc_results)への<main>・スキップリンク追加に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
+**retroeater** (2026-09-13):
+
+## Google Charts 6ページへの`<main>`・スキップリンク追加（2026-09-13）
+
+### 1. AR-07で対象外だった理由
+
+**意図的な除外ではなく、issue本文の対象範囲に元々含まれていなかったための漏れです。**
+#182の本文は「25ページ」（`lib/page.py`のテンプレートを使う型A/A'・型C/D等）
+＋手書き4ページ（404/jpml_links/rh_links/resource_dictionary）＋
+video_wayhome/wayhome＋index.htmlという構成で、houou_ranking等6ページは
+最初から列挙に入っていませんでした（2026-09-12のチャット側静的レビュー時点で、
+この6ページがまだGoogle Charts直接方式のまま`#7`未着手であることが
+見落とされていたと考えられます）。AR-07の実施中、私も本文に列挙された
+ページのみを対象とし、この6ページの欠落には気づきませんでした。
+
+### 2. 対応
+
+技術的に可能だったため、6ページ（houou_ranking/houou_results/
+ouka_ranking/ouka_results/wrc_ranking/wrc_results）すべてに
+`<a class="visually-hidden-focusable" href="#main">本文へスキップ</a>`と
+`<main id="main" tabindex="-1">`を追加した（手動編集、生成スクリプトなし）。
+
+**Google Chartsの描画確認（`wrangler dev` + `chrome-headless-shell`のCDP）**:
+- `houou_ranking.html`: `#dashboard_div`配下に`#table_div`が描画され
+  (子要素1件)、`<main>`・スキップリンクとも存在を確認
+- `houou_results.html`: `#myTable`配下にテーブルが描画されることを確認
+  (`#myChart`は選手・クラス・リーグの絞り込み後に描画される仕様のため
+  未選択時は空。既存の挙動どおりで今回の変更による影響ではない)
+- いずれのJS（`league_ranking.js`/`houou_results.js`/`ouka_results.js`/
+  `wrc_results.js`）も`document.getElementById()`でDOM要素を参照しており、
+  祖先要素（`<main>`で包むこと）に依存する記述は無いことをソースで確認済み
+
+見た目・機能に影響は無い。
 
 ---
 
