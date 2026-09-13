@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 14:13 JST
+生成日時: 2026-09-13 14:36 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,123 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 63件（openのみ）。番号降順。
-
----
-
-## #198 複数セッションの並行作業でワーキングツリーが衝突する問題への運用を決める
-
-- 作成: 2026-09-13
-- ラベル: 分野: インフラ
-
-### 本文
-
-### 提案理由（2026-09-13、Claudeとの検討）
-
-2026-09-13 のセッションで、複数の Claude Code セッションが同一
-リポジトリを並行編集したことによる事象が2回発生した。
-
-**1件目（実害あり・復旧済み）**
-video_wayhome の #188/#189/#190 を実装中のセッションが、3本の
-コミットに分割するため `git stash push -- <files>` を実行した。
-対象に `style.css` が含まれており、別セッション（アクセシビリティ
-改善、#181 関連）の未コミット編集が無言で作業ツリーから消えた。
-気づいた時点で stash の中身から該当変更のみを復元し、事後に
-正しさを確認した（`generate_jpml_pros.py:259` の th scope="row" が
-1箇所、生成後の `jpml_pros.html` で1,100件一致）。
-
-**2件目（回避済み）**
-同セッションが後続の修正をコミットする際、再び `style.css` に
-他セッションの未コミット編集が混在していた。`git stash` を使わず
-`git diff` から自分のハンクのみを切り出し `git apply --cached` で
-部分ステージすることで回避した。
-
-**問題の本質**
-どちらも検知・対処できたが、成立条件が「セッションが衝突に気づき、
-正しい回避手段を選ぶこと」に依存している。作業が続く限り同じ状況が
-繰り返し発生し、気づかなかった場合は他セッションの作業が無言で
-失われる。現状すべてのセッションが `cloudflare` ブランチ上で直接
-作業しており、作業ツリーが共有されていることが原因。
-
-### 検討すべき論点
-
-- セッションごとに作業ブランチを切る運用にするか
-  - `cloudflare` は統合・デプロイ用に限定し、作業は
-    `work/<セッション識別子>` 等に分ける案
-  - マージのタイミングと責任者（平野さんが判断するのか、
-    セッションが自律的に行うのか）
-  - #169 の自動デプロイは `cloudflare` への push で走るため、
-    デプロイ契機が明確になるという副次的な利点がある
-- ブランチを分けない場合の代替
-  - `git stash` の使用を CLAUDE.md で禁止し、部分ステージ
-    （`git add -p` / `git apply --cached`）を標準手順とする
-  - 作業開始時に `git status` で他セッションの未コミット変更を
-    確認することを手順化する
-- そもそも同一リポジトリのセッションを並行させない運用にするか
-  - 最も単純だが、作業速度は落ちる
-
-### やること（方針決定後）
-
-- 決めた運用を CLAUDE.md および docs/handover.md に記載する
-- `git stash` の扱いを明文化する（1件目の直接原因のため、
-  どの方針を採る場合でも必要）
-
-### 依存・関連
-
-- #169（wrangler deploy の GitHub Actions 化。デプロイ契機に関わる）
-- #181（1件目で一時的に消えた変更）
-- #188 / #189 / #190（衝突が発生した作業）
-
-Chat-Ref: CHAT-0913-WH-20
-
----
-
-## #197 rh_paifu.html のリンクの下線を消す
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX
-
-### 本文
-
-## 状況
-rh_paifu.htmlの天鳳牌譜リンク・YouTubeリンクに下線が出ている。
-resource_logs.html（ログ）の店名リンクには下線が出ておらず、サイト内で
-扱いが揃っていない。平野さんが本番で確認（2026-09-13）。
-
-## 対応
-style.cssに汎用クラスが既にある:
-
-```css
-/* リンクの下線を消す汎用クラス(型Aの他ページでも使う想定)。
-インラインのstyle="text-decoration: none"は#9のCSPで弾かれるため、
-resource_logsの店名リンクなどはこのクラスに置き換える。 */
-.mj-table a.mj-plain { text-decoration: none; }
-```
-
-`scripts/generate_rh_paifu.py`のリンク生成箇所で`<a>`に`class="mj-plain"`
-を付ける。CSSの追加は不要。
-
-## 注意
-- **下線を消すとリンクの識別が色だけに頼ることになる**（WCAG 1.4.1
-  Use of Color）。ただし#26/#108でリンク色を`#14459b`に決めた際、
-  3背景でAAA（7:1以上）を満たしており、周囲の本文色との輝度差も十分。
-  表内のリンクという文脈（セル全体がリンクで、hoverで色が変わる）も
-  考慮すると、実務上は許容範囲と判断する
-- resource_logs側が既にこの扱いなので、**サイト内の一貫性としては
-  下線なしに揃えるのが正しい**
-- 再生成が必要（rh_paifu.htmlのみ）
-
-## 確認
-- 下線が消えること、リンク色が従来どおりであること
-- hover時の挙動がresource_logsと揃っていること
-
-レビュー出典: 2026-09-13、平野さんによる本番目視確認
-
-### コメント (1件)
-
-**retroeater** (2026-09-13):
-
-着手中: generate_rh_paifu.pyのリンクにclass="mj-plain"を追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+件数: 58件（openのみ）。番号降順。
 
 ---
 
@@ -522,11 +406,37 @@ Claude Code 側では実施できない。平野さんの手作業になる。
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
 このissueをクローズするとき、docs/handover.md 6章のアクセシビリティ節を docs/notes/site-findings.md へ移すこと（handover の肥大化対策、#187）
+
+**retroeater** (2026-09-13):
+
+## jpml_pros.html でヘッドレスChromeのCDPがタイムアウトする件（2026-09-13）
+
+2026-09-13の#181/#182/#183の作業中、jpml_pros.htmlに対してのみ、
+`wrangler dev` + chrome-headless-shellのCDPが`Runtime.evaluate`で
+`1+1`のような最小の式でも一貫してタイムアウトする現象が発生した。
+ブラウザプロセスの完全再起動・新しいプロファイル・新しいポートでも再現。
+`wrangler dev`側はページ・JSとも200/304を高速に返しており配信は正常。
+他ページ（resource_efficiency / rh_paifu / resource_logs等）では同じ
+CDP操作が問題なく動作している。
+
+**平野さんが実機（スマホを含む）で確認したところ、スクロール・検索とも
+体感上の問題はない**（2026-09-13）。このためユーザー影響のある性能問題
+ではなく、**ヘッドレス環境固有の事象**と判断し、性能issueとしては
+起票しない。
+
+心当たりのある要因: 1,099行の表に`content-visibility: auto`が効いており、
+`position: sticky`の1列目・theadと組み合わさっている（#181で1列目は
+`th scope="row"`になった）。ヘッドレスでレイアウト計算が収束しない
+可能性があるが、切り分けは未実施。
+
+**本issue（#186）でjpml_pros.htmlを扱う際、CDPによる自動確認が使えない
+前提で計画すること。** 平野さんの手元のブラウザ・スクリーンリーダーでの
+確認が必要になる。
 
 ---
 
@@ -557,283 +467,6 @@ Claude Code 側では実施できない。平野さんの手作業になる。
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
-
----
-
-## #183 target="_blank" のリンク（16,699件）に「新しいタブで開く」の予告がない
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: 全ページ
-
-### 本文
-
-## 状況
-画像リンクのアクセシブルネームは alt（例「合澤雄貴 X」）だけで、別タブが
-開くことが伝わらない（WCAG 3.2.5 / G201）。ナビバーのカレンダー・書籍も同様。
-件数は27ページ＋wayhome/38枚の合計。
-
-## 対応（どちらかを決める）
-- (a) lib/page.py の build_image_cell() と generate_jpml_pros.py の
-  get_x() 等で、`<a>` 内に `<span class="visually-hidden">（新しいタブで開く）</span>`
-  を追加する
-- (b) そもそも別タブで開く必要があるか（同タブ＋戻るで十分か）を判断し、
-  target="_blank" を外す
-
-## 備考
-- どちらも全ページ再生成が必要。A-4 / A-5 とまとめる
-- rel="noopener" は現行ブラウザが target="_blank" に暗黙付与するため必須ではない
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-### コメント (4件)
-
-**retroeater** (2026-09-13):
-
-起票時、本issueは「#177 とまとめて全ページ再生成を1回で済ませる」
-前提で書かれていたが、この前提は成立しなくなったため本文を修正した。
-
-#177（jpml_pros.html のホーム画面アイコン名）は、jpml_pros.html が
-共通の HEAD_TEMPLATE を使わず generate_jpml_pros.py 自前の
-PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わずに
-完了した（59c14eb）。
-
-本issueを含む再生成が必要な変更は、#7 の残り6ページ（型B 3 /
-ランキング 3）の作業で再生成が走るタイミングに寄せるのが現実的。
-
-**retroeater** (2026-09-13):
-
-着手中: target="_blank"リンクへの別タブ予告テキスト追加に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
-
-方針決定(2026-09-13、平野さん判断): (a) visually-hiddenの予告テキストを足す、を採用します。issue本文にあった(b) 別タブをやめる案は不採用です。
-
-**retroeater** (2026-09-13):
-
-## jpml_pros.html: 新しいタブ予告spanの対象範囲による比較（2026-09-13）
-
-実装時、jpml_pros.htmlだけ想定(130KB増)を大きく超えたため(実測373KB増)、
-3パターンを実測して比較した。差は`get_internal_link()`（鳳凰/桜花成績・
-最強戦・タイトル戦・放送対局など、同一サイト内の`target="_blank"`リンク）
-まで対象に含めるかどうか。
-
-| パターン | ファイルサイズ | 差分 | span件数 |
-|---|---|---|---|
-| A) なし | 1,258,451 bytes | ±0 | 0件 |
-| B) 外部リンクのみ（龍龍・X・note・YouTube） | 1,391,312 bytes | +132,861 bytes | 1,983件 |
-| C) 外部+内部リンク（鳳凰/桜花成績等も含む） | 1,618,308 bytes | +359,857 bytes | 5,371件 |
-
-B）が起票時の想定（130KB・3,388件）にほぼ一致する。C）は内部リンクの
-件数が想定より多く、増加量が約2.7倍になった。
-
-サイト全体（jpml_pros以外の26ページ+wayhome/38枚+navbar.js+手書き4ページ）
-の合計は16,734件で、起票時の想定「16,699件」とほぼ一致（誤差0.2%）。
-この合計は既に反映済み。
-
-**平野さんの判断（2026-09-13）**: jpml_pros.htmlについては今回A）を採用し、
-新しいタブ予告の追加を見送る（保留）。他ページはそのまま実装済み。
-再検討する場合はB）（外部リンクのみ、想定どおり+130KB）が現実的な選択肢。
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-**retroeater** (2026-09-13):
-
-## jpml_pros.html: 方針をA）からB）に変更（2026-09-13）
-
-上記の比較データを踏まえ、再検討の結果 **B）外部リンクのみを採用**することに
-決定（A）見送りから変更）。
-
-**判断の根拠**: 起票時の想定「約130KB増・3,388件」は外部リンクのみを
-対象とした見積もりで、実測のB）（+132,861バイト・1,983件）がこれに一致する。
-C）が2.7倍に膨らんだのは`get_internal_link()`の内部リンク（鳳凰/桜花成績・
-最強戦・タイトル戦・放送対局）まで含めたためで、想定超過は対象範囲の
-違いによるものだった。jpml_pros.htmlは選手1,099人のSNSリンクが集中する、
-この指摘が最も効くページであり、+130KBは許容する。
-
-**実装**: `generate_jpml_pros.py`の`get_external_link()`（龍龍・X・note・
-YouTube）のみに`NEW_TAB_HINT`を追加。`get_internal_link()`（鳳凰/桜花成績・
-最強戦・タイトル戦・放送対局への同一サイト内リンク）には追加していない。
-
-**実測結果**: 1,391,312 bytes（+132,861バイト）、span 1,983件。事前の
-B）実測値と一致。alt文言は変更なし（例:「合澤雄貴 X」→
-「合澤雄貴 X （新しいタブで開く）」）。
-
----
-
-## #182 <main> ランドマークとスキップリンクをテンプレートに追加する（25ページ）
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: 全ページ
-
-### 本文
-
-## 状況
-video_wayhome / index / wayhome/ 配下以外の25ページに `<main>` がなく、
-Lighthouse の landmark-one-main が残っている。ナビバーは最上位8項目＋検索で、
-表ページでは本文到達までの Tab 数が多い。
-
-## 対応
-- scripts/lib/page.py の PAGE_TEMPLATE / CONTENT_TEMPLATE で本文を
-  `<main id="main" tabindex="-1">` で包む
-- navbar.js の `<script>` より前に
-  `<a class="visually-hidden-focusable" href="#main">本文へスキップ</a>`
-  を置く（Bootstrap 組み込みクラス）
-- 手書き4ページ（404 / jpml_links / rh_links / resource_dictionary）と
-  jpml_pros（独自テンプレート）は個別に対応
-- video_wayhome と wayhome/ 配下は `<main class="mj-video-page">` 済みなので
-  id とスキップリンクのみ追加
-
-## 備考
-- 全ページ再生成が必要。A-4 / A-6 とまとめる
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-### コメント (4件)
-
-**retroeater** (2026-09-13):
-
-起票時、本issueは「#177 とまとめて全ページ再生成を1回で済ませる」
-前提で書かれていたが、この前提は成立しなくなったため本文を修正した。
-
-#177（jpml_pros.html のホーム画面アイコン名）は、jpml_pros.html が
-共通の HEAD_TEMPLATE を使わず generate_jpml_pros.py 自前の
-PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わずに
-完了した（59c14eb）。
-
-本issueを含む再生成が必要な変更は、#7 の残り6ページ（型B 3 /
-ランキング 3）の作業で再生成が走るタイミングに寄せるのが現実的。
-
-**retroeater** (2026-09-13):
-
-着手中: <main>ランドマークとスキップリンクの追加に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
-
-**retroeater** (2026-09-13):
-
-着手中: 残っていたGoogle Charts 6ページ(houou_ranking/houou_results/ouka_ranking/ouka_results/wrc_ranking/wrc_results)への<main>・スキップリンク追加に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
-
-**retroeater** (2026-09-13):
-
-## Google Charts 6ページへの`<main>`・スキップリンク追加（2026-09-13）
-
-### 1. AR-07で対象外だった理由
-
-**意図的な除外ではなく、issue本文の対象範囲に元々含まれていなかったための漏れです。**
-#182の本文は「25ページ」（`lib/page.py`のテンプレートを使う型A/A'・型C/D等）
-＋手書き4ページ（404/jpml_links/rh_links/resource_dictionary）＋
-video_wayhome/wayhome＋index.htmlという構成で、houou_ranking等6ページは
-最初から列挙に入っていませんでした（2026-09-12のチャット側静的レビュー時点で、
-この6ページがまだGoogle Charts直接方式のまま`#7`未着手であることが
-見落とされていたと考えられます）。AR-07の実施中、私も本文に列挙された
-ページのみを対象とし、この6ページの欠落には気づきませんでした。
-
-### 2. 対応
-
-技術的に可能だったため、6ページ（houou_ranking/houou_results/
-ouka_ranking/ouka_results/wrc_ranking/wrc_results）すべてに
-`<a class="visually-hidden-focusable" href="#main">本文へスキップ</a>`と
-`<main id="main" tabindex="-1">`を追加した（手動編集、生成スクリプトなし）。
-
-**Google Chartsの描画確認（`wrangler dev` + `chrome-headless-shell`のCDP）**:
-- `houou_ranking.html`: `#dashboard_div`配下に`#table_div`が描画され
-  (子要素1件)、`<main>`・スキップリンクとも存在を確認
-- `houou_results.html`: `#myTable`配下にテーブルが描画されることを確認
-  (`#myChart`は選手・クラス・リーグの絞り込み後に描画される仕様のため
-  未選択時は空。既存の挙動どおりで今回の変更による影響ではない)
-- いずれのJS（`league_ranking.js`/`houou_results.js`/`ouka_results.js`/
-  `wrc_results.js`）も`document.getElementById()`でDOM要素を参照しており、
-  祖先要素（`<main>`で包むこと）に依存する記述は無いことをソースで確認済み
-
-見た目・機能に影響は無い。
-
----
-
-## #181 jpml_pros.html の「名前」セルを th scope="row" にする
-
-- 作成: 2026-09-13
-- ラベル: 分野: UI/UX, 対象: jpml_pros
-
-### 本文
-
-## 状況
-1,099行×15列の表で名前列が `<td>` のため、スクリーンリーダーでセル移動して
-「X」「龍龍」の画像リンクを読むとき、誰の行かが伝わらない（WCAG 1.3.1）。
-
-## 対応
-- generate_jpml_pros.py で1列目を `<th scope="row" data-sort="…">` にする
-- style.css の `#pros_table td:nth-child(1)`（sticky 列・幅・z-index）と
-  `#pros_table td { height: 56px }` のセレクタに `th` を追加する
-- jpml_pros.js のソート・絞り込みが `td` 前提で1列目を参照していないか確認
-
-## 備考
-- 再生成が必要。A-5 / A-6 とまとめて1回で済ませる
-- rh_results_detail の1列目も同様に検討する余地あり（本 issue の範囲外）
-
-レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
-実機の支援技術での検証は未実施
-
-### コメント (3件)
-
-**retroeater** (2026-09-13):
-
-起票時、本issueは「#177 とまとめて全ページ再生成を1回で済ませる」
-前提で書かれていたが、この前提は成立しなくなったため本文を修正した。
-
-#177（jpml_pros.html のホーム画面アイコン名）は、jpml_pros.html が
-共通の HEAD_TEMPLATE を使わず generate_jpml_pros.py 自前の
-PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わずに
-完了した（59c14eb）。
-
-本issueを含む再生成が必要な変更は、#7 の残り6ページ（型B 3 /
-ランキング 3）の作業で再生成が走るタイミングに寄せるのが現実的。
-
-**retroeater** (2026-09-13):
-
-着手中: jpml_pros.htmlの名前セルをth scope="row"にする作業に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
-
-**retroeater** (2026-09-13):
-
-## リグレッション: 固定列の文字が重なる（本番目視確認、2026-09-13）
-
-### 症状
-jpml_pros.htmlを横スクロールすると、固定された1列目（名前）の下を通る
-2列目（所属/出身地）の文字が透けて重なる。本来は潜り込んで見えない。
-
-### 原因
-style.cssの縞模様・ホバーの指定が`> td`の子セレクタになっていた:
-
-```css
-.mj-table tbody tr:nth-child(odd) > td { background-color: #ffffff; }
-.mj-table tbody tr:nth-child(even) > td { background-color: #fafafa; }
-.mj-table tbody tr:hover > td { background-color: #d6e9f8 !important; }
-```
-
-本issue（#181）で1列目を`<th scope="row">`にしたことで、この3つの指定が
-1列目に効かなくなり背景が透明になった。`position: sticky`は背景が透明だと
-下のセルが透ける。
-
-### 対応
-上記3セレクタに`> th`を追加（style.css）。`.mj-table`は共通クラスだが、
-tbodyにthを持つのは現状jpml_prosのみのため他ページへの影響はない
-（`.mj-table tbody tr:nth-child(odd) > th`等はjpml_pros以外では
-マッチ対象が存在せず無害）。コメントも残した。
-
-### 確認結果
-- **静的確認**: 修正後のセレクタが`td`と`th`の両方にマッチすることをCSS
-  セレクタレベルで確認済み。他ページ（`.mj-table`使用の11ページ）は
-  tbodyにthを持たないため影響を受けないことをHTML側の構造からも確認
-- **CDPでの確認（`wrangler dev` + `chrome-headless-shell`）**: resource_logs.html
-  では縞模様が正しく機能すること（1行目`rgb(255,255,255)`・2行目
-  `rgb(250,250,250)`）を確認できた
-- **jpml_pros.html自体の横スクロール状態のスクリーンショットは取得できな
-  かった。** 新しいタブでこのページを開いた直後、`Runtime.evaluate`が
-  （`1+1`のような最小の式ですら）一貫してタイムアウトする現象を確認した。
-  ブラウザプロセスを完全に再起動し、新しいプロファイル・新しいポートで
-  試しても再現したため、環境側の一時的な負荷ではなく、このページ固有の
-  問題と考えられる（1,100行の`content-visibility: auto`テーブルや大量の
-  画像読み込みなどが影響している可能性はあるが未特定）。サーバー側の
-  応答（`wrangler dev`のログ）は毎回200/304で高速に返っており、
-  ページ配信自体に問題は無い。実機での目視確認（#186）に回す
 
 ---
 
