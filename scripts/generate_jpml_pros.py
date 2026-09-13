@@ -14,7 +14,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from lib.page import apply_count  # noqa: E402
+from lib.page import NEW_TAB_HINT, apply_count  # noqa: E402
 from lib.sheets import fetch_sheet  # noqa: E402
 
 SPREADSHEET_ID = "1h4-DhmvaBJzfkA61mTKkz4mMuICGliuzglakql5TeP0"
@@ -132,7 +132,7 @@ def get_external_link(url, img_url, alt_text, alt_img_url) -> str:
         f'<img alt="{esc(alt_text)}" class="pros" loading="lazy" '
         f'width="48" height="48" '
         f'src="{esc(img_url)}" data-fallback="{esc(alt_img_url)}" />'
-        f"</a>"
+        f"{NEW_TAB_HINT}</a>"
     )
 
 
