@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 14:56 JST
+生成日時: 2026-09-13 15:41 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,76 +12,145 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 58件（openのみ）。番号降順。
+件数: 61件（openのみ）。番号降順。
 
 ---
 
-## #196 スプレッドシートの列参照を位置ベースから名前ベースに直す
+## #206 マージ済みの作業ブランチ work/0913-wh2 を削除する
 
 - 作成: 2026-09-13
-- ラベル: 分野: 整理・保守, 対象: video_wayhome
+- ラベル: (なし)
 
 ### 本文
 
-### 提案理由（2026-09-13、Claudeとの検討）
+## 内容
 
-現在のシート「帰り道」の取得は
-`SELECT A,B,C,D,E,F WHERE G="Y"`（A=選手名、B=X ID、C=公開日、
-D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）。
+`work/0913-wh2`（先頭コミット`953c19e`時点）は`cloudflare`の祖先で、マージ済み。
+CLAUDE.mdは「作業完了後は作業ブランチも削除する」と定めている。
 
-ここに #192（YouTube Data API化）と #193（決勝戦動画リンク）が
-同時に入ると、列構成が次のように変わる。
+## 対応
 
-- #192: C（公開日）と F（画像URL）を読まなくする
-- #193: 決勝戦動画URLの列を新規追加する
+完全な履歴でマージ済みであることを再確認したうえで
+`git push origin --delete work/0913-wh2`。
 
-結果としてSELECT句が `A,B,D,E,H WHERE G="Y"` のような形になり、
-**取得後の列インデックスが全部ずれる。**スクリプトが位置参照
-（0,1,2…）で値を読んでいる場合、エラーにならず静かに別の値が
-入るため、発見が遅れる。
+`work/0913-hv`は未マージのため触らない（他セッションが作業中の可能性）。
 
-### やること
+Chat-Ref: CHAT-0913-QM-02
 
-- 取得結果を位置ではなく列名（またはヘッダ行由来のキー）で参照する
-  形に直す
-- 想定する列名が見つからない場合は、無言でスキップせず、列名を含む
-  明示的なエラーで生成を止めること
-- 読まなくなる列（公開日・画像URL）はシート上からは削除しない。
-  参照しないだけにする
-
-### 実施順序
-
-**#192 と #193 のどちらよりも先に実施すること。**後から直すと、
-ずれた状態で生成されたページを一度検証する手間が発生する。
-
-### 依存・関連
-
-- #192（YouTube Data API化。C列・F列を参照しなくなる）
-- #193（決勝戦動画リンク。列を追加する）
-
-Chat-Ref: CHAT-0913-WH-11
-
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
-実装しました（Chat-Ref: CHAT-0913-WH-24）。マージ基準に従い、コミット・push までで止めています。
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
 
-**変更前の状態:** 位置参照でした。`scripts/lib/sheets.py`の`fetch_sheet()`は列名を持たない位置のみのlist（各行）を返し、`generate_video_wayhome.py`・`generate_wayhome_episodes.py`の各所で`interviewee, x_id, published_date, title, url, image_url = row`という分解代入や`row[0]`/`row[4]`/`row[5]`の直接indexingが散らばっていました。
+**retroeater** (2026-09-13):
 
-**取得基盤の共有範囲:** `fetch_sheet()`（`scripts/lib/sheets.py`）と`scripts/lib/page.py`の`generate()`は、jpml_titles/jpml_test/resource_logs/video_live/video_en/rh_paifu/saikyo_mens/video_mtsuku/saikyo_results/rh_results/rh_results_detailの11ページ超が共有する基盤です。**どちらも変更していません。** 位置→名前の変換は`scripts/lib/wayhome.py`内に閉じており、これは元々`generate_video_wayhome.py`と`generate_wayhome_episodes.py`の2スクリプトだけが使う専用モジュールのため、波及はありません。
+完全な履歴で再確認したところ、指示文が前提としていた`953c19e`時点からブランチが
+進んでおり、現時点の`work/0913-wh2`（先頭`c54277c`「YouTube動画メタデータの
+取得スクリプトを新設する(#192第1段)」）は`cloudflare`の祖先になっていない
+（未マージのコミットが1つ残っている）。
 
-**変更内容:** `wayhome.py`に列名とコード上の呼び名の対応を1か所（`ROW_FIELDS`）にまとめ、`to_rows()`で行をnamedtuple（`WayhomeRow`）に変換するようにしました。行の要素数が`ROW_FIELDS`と一致しない場合は無言でスキップせず、内容を含む`ValueError`で生成を止めます（単体呼び出しで実際にエラーになることを確認済み）。
+対応する`wh2-worktree`も稼働中で、他セッションが作業中と見られる。
+`work/0913-hv`と同様、削除せず保留する。マージ済みになったタイミングで
+再度削除を検討すること。
 
-**回帰確認:** 変更前後で`video_wayhome.html`・`wayhome/`配下38枚・`sitemap-wayhome.xml`のいずれも`diff`で完全一致（1バイトも変わらず）を確認しました。
+このissueはクローズせず保留する。
 
-シート側のC列（公開日）・F列（画像URL）は引き続き参照しています（参照をやめるのは#192の作業）。
+---
 
-- 作業ブランチ: `work/0913-wh2`（push済み、`origin/cloudflare`から作成）
-- コミット: `33e51d5`
-- worktree: `/tmp`配下に作成し、確認後の修正に備えて残しています（`/workspaces/mj`には一切触れていません）
+## #204 build_issues_snapshot.pyのgh issue list --limit 200が上限に到達
 
-セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+- 作成: 2026-09-13
+- ラベル: 分野: 自動化
+
+### 本文
+
+## 状況
+`scripts/build_issues_snapshot.py`実行時に以下の警告が出るようになった:
+
+```
+警告: 全件版が --limit 200 に到達しました。上限を引き上げる必要があるかもしれません。
+```
+
+issue総数（open+closed）が200件に達し、`gh issue list --limit 200`のハードコード
+上限に到達したため。現時点でこの上限を超えるissueは無い（ちょうど200件）ため
+実害は無いが、次にissueが増えると`docs/issues-snapshot.md`から古い（番号の
+小さい）issueが黙って欠落する可能性がある。
+
+## 対応（未実施）
+`scripts/build_issues_snapshot.py`のLIMIT定数を余裕を持って引き上げる
+（例: 500）。
+
+## 経緯
+CHAT-0913-AR-12（index.htmlのアクセシビリティ修正）の作業中、着手宣言
+コメントに伴う`build_issues_snapshot.py`の実行で偶然発見した。本issue自体の
+作業には無関係。
+
+---
+
+## #202 apple-touch-icon / apple-mobile-web-app-title を全ページへ展開するか判断する
+
+- 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+#177 は jpml_pros の PAGE_TEMPLATE に追加してクローズしたが、
+HEAD_TEMPLATE（他ページ）は未対応のまま。「全ページ展開は別issueで
+判断」としていたが、その issue が起票されていなかったので起票する。
+
+判断すること: (a) 全ページに展開するか、(b) jpml_pros だけで十分か。
+
+展開する場合は HEAD_TEMPLATE の変更＋生成ページの再生成が必要。
+
+やらないと決めた場合も、その決定を docs/handover.md の favicon 節に
+1行残してクローズすること。
+
+---
+
+## #201 handover 4-x「本番反映の仕組み」を docs/notes/ へ移す
+
+- 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+4-x は約150行あるが、運用ルールとして handover に要るのは
+「Workers Builds が本番反映」「Secret を GitHub に登録しない」
+「check-runs で確認できる」の数行。
+
+記録・経緯である「#169で何を誤ったか」「APIトークンの棚卸し
+（2026-09-12）」「ダッシュボードで確認した設定値（2026-09-12時点）」
+「セッション環境からは Cloudflare に到達できない」は
+docs/notes/cloudflare.md へ移す。
+
+「セッション環境からは到達できない」は判断ルールの側面もあるので、
+結論1行（到達不能を不在と結論しない）は handover 側に残す。
+
+移せば handover は目安の 40KB 以下に入る見込み。
+
+移動のみ・内容の書き換えはしない（#187 と同じ方針）。
+
+---
+
+## #200 handover.md のサイズ上限（60KB/900行）を運用実績で見直す
+
+- 作成: 2026-09-13
+- ラベル: 状況: 待ち, 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+2026-09-13 の分割（#187、67ea3fb）直後は 747行・47,769 bytes。
+上限は assets-check.yml で 60KB/900行。
+
+分割直後の数値をもとに決めた暫定値なので、1〜2か月運用してから
+実測で見直す。目安は 2026年11月中旬。
+
+判断材料: その時点の行数・バイト数、その間に notes へ移した量、
+CI が一度でも失敗したか。
+
+厳しすぎると「上限を避けるために notes へ逃がすだけ」になり、
+緩すぎると分割前の状態に戻る。
 
 ---
 
@@ -152,51 +221,6 @@ Builds が `cloudflare` ブランチへの push を検知して行う（GitHub A
 - CHAT-0913-WH-06（閲覧数・メタデータ取得）
 
 Chat-Ref: CHAT-0913-WH-08
-
----
-
-## #193 各エピソードに、そのタイトル戦の決勝戦 YouTube 動画へのリンクを追加する
-
-- 作成: 2026-09-13
-- ラベル: 分野: 整理・保守, 対象: video_wayhome
-
-### 本文
-
-### 提案理由（2026-09-13、Claudeとの検討）
-
-「帰り道」は優勝直後のインタビューなので、その決勝戦そのものを
-見たくなる導線が自然に発生する。ryoei.pro 内に該当する結果ページは
-無いため、決勝戦の YouTube 動画へ直接リンクする。
-
-### 現状（2026-09-13、Claudeが確認）
-
-データ元スプレッドシート（シート名「帰り道」）は現在
-`SELECT A,B,C,D,E,F WHERE G = "Y"`（A=選手名、B=X ID、C=公開日、
-D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）を
-取得している（`scripts/lib/wayhome.py`）。決勝戦動画のURLに相当する
-列は無いため、新規列の追加が必要。
-
-### やること
-
-- URL の入力元はスプレッドシート。新しい列を1つ追加する
-  （列名案: `final_video_url`。既存の命名規則に合わせること）。
-  `QUERY` の `SELECT A,B,C,D,E,F` にも列を1つ加える必要がある
-- **URLが空の行が存在する。**空の場合はリンク要素自体を出力しない。
-  「動画なし」等のプレースホルダも出さない
-- ラベルは「決勝戦を見る」等、短く
-- `target="_blank" rel="noopener"`
-- 空セルで生成が落ちないこと。落ちる場合は該当行を特定できるエラーを出す
-- 一覧（`generate_video_wayhome.py`）・個別ページ
-  （`generate_wayhome_episodes.py`）の両方が同じ行データ（`row`タプル）を
-  使っているため、列を1つ増やす場合は両スクリプトの `row` の
-  アンパック箇所（例: `interviewee, x_id, published_date, title, url,
-  image_url = row`）を揃えて直す必要がある
-
-### 依存・関連
-
-- #102（video_wayhome パイロット）
-
-Chat-Ref: CHAT-0913-WH-07
 
 ---
 
@@ -490,6 +514,12 @@ CDP操作が問題なく動作している。
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのモバイルナビ開閉のキーボード対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
 ---
 
 ## #180 select#selectbox にラベルがなく、選択と同時にページ遷移する（5ページ）
@@ -767,7 +797,7 @@ HTMLを直接編集する。再生成は不要。
 mobile / desktop とも 93。`link-name` を解消すればここが上がる見込み。
 （#163 の対応で他26ページは 0.98〜1.00 になっており、index.html だけが取り残されている状態）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -776,6 +806,10 @@ mobile / desktop とも 93。`link-name` を解消すればここが上がる見
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのSNSアイコンリンクにaria-labelを追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -1148,7 +1182,7 @@ GSCのエクスポートを無加工で置いている（UTF-8 / LF / BOMなし�
 
 2026-09-11のレビューで判明。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-11):
 
@@ -1230,6 +1264,10 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -2001,7 +2039,7 @@ _Generated by [Claude Code](https://claude.ai/code)_
 - アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
 - 型C（#127）・型D（#128）は本issueとは別に判断する
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-11):
 
@@ -2084,6 +2122,10 @@ JSONにして、クライアントで1本だけ描く。Charts も ECharts も�
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 

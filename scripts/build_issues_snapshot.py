@@ -23,7 +23,7 @@ REPO = "retroeater/mj"
 REPO_ROOT = pathlib.Path(__file__).parent.parent
 SNAPSHOT_PATH = REPO_ROOT / "docs" / "issues-snapshot.md"
 OPEN_PATH = REPO_ROOT / "docs" / "issues-open.md"
-LIMIT = 200
+LIMIT = 500
 
 ALL_FIELDS = "number,title,state,stateReason,labels,body,comments,createdAt,closedAt"
 

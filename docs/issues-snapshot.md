@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 14:56 JST
+生成日時: 2026-09-13 15:41 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -14,11 +14,309 @@
 issues-open.md と同時に再生成してください。
 
 ```
-gh issue list --repo retroeater/mj --state all --limit 200 \
+gh issue list --repo retroeater/mj --state all --limit 500 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 199件（open/closed含む）。番号降順。
+件数: 208件（open/closed含む）。番号降順。
+
+---
+
+## #208 #198 の本文に残る #169 の誤記を訂正する
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 内容
+
+#198（CLOSED）の本文に、削除済みの`deploy.yml`が現存する前提の記述が3か所ある:
+
+- 「#169 の自動デプロイは `cloudflare` への push で走るため、」
+- 「#169（wrangler deploy の GitHub Actions 化。デプロイ契機に関わる）」
+- 「`cloudflare`へのpushで#169のワークフローが動くため、マージ＝本番反映になる」
+
+3つ目は方針決定の根拠部分で、結論（マージ＝本番反映）は正しいが根拠が誤っている。
+実際の反映経路はCloudflare Workers Builds。
+
+## 対応
+
+#198の本文は書き換えず、訂正コメントを追加する。決定当時の記述をそのまま
+残したうえで、事実関係の訂正と、結論自体は変わらない旨を書く。
+
+#170の#169参照は「後始末で判明した事実」という正しい書き方なので触らない。
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+#198へ訂正コメントを追加した: https://github.com/retroeater/mj/issues/198#issuecomment-5651705596
+
+---
+
+## #207 規約外の claude/* ブランチ3本を棚卸しする
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 対象
+
+- `claude/issue-102-phase2-cleanup-wkdavv`
+- `claude/ogp-image-metatags-x15ui2`
+- `claude/type-c-stacked-bar-hybrid-8g7t4m`
+
+いずれも`work/<識別子>`規約の制定前に作られたと思われる。規約外のブランチが
+残っていると、次のセッションがこれを前例として真似る。前例として#131
+（`claude/canonical-policy-decision-dbk5dq`の削除）がある。
+
+## 対応
+
+浅いクローンではなく完全な履歴で各ブランチが`cloudflare`にマージ済みかを判定する。
+
+- マージ済み → 削除する
+- 未マージ → 削除せず、何が入っているか（コミット数・変更ファイル・関連issue番号）
+  をissueのコメントに書いて平野さんの判断を仰ぐ
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+完全な履歴で3本とも`cloudflare`の祖先であることを確認し、削除した。
+
+- `claude/issue-102-phase2-cleanup-wkdavv` — マージ済み → 削除
+- `claude/ogp-image-metatags-x15ui2` — マージ済み → 削除
+- `claude/type-c-stacked-bar-hybrid-8g7t4m` — マージ済み → 削除
+
+未マージのブランチは無かった。
+
+---
+
+## #206 マージ済みの作業ブランチ work/0913-wh2 を削除する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 内容
+
+`work/0913-wh2`（先頭コミット`953c19e`時点）は`cloudflare`の祖先で、マージ済み。
+CLAUDE.mdは「作業完了後は作業ブランチも削除する」と定めている。
+
+## 対応
+
+完全な履歴でマージ済みであることを再確認したうえで
+`git push origin --delete work/0913-wh2`。
+
+`work/0913-hv`は未マージのため触らない（他セッションが作業中の可能性）。
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+完全な履歴で再確認したところ、指示文が前提としていた`953c19e`時点からブランチが
+進んでおり、現時点の`work/0913-wh2`（先頭`c54277c`「YouTube動画メタデータの
+取得スクリプトを新設する(#192第1段)」）は`cloudflare`の祖先になっていない
+（未マージのコミットが1つ残っている）。
+
+対応する`wh2-worktree`も稼働中で、他セッションが作業中と見られる。
+`work/0913-hv`と同様、削除せず保留する。マージ済みになったタイミングで
+再度削除を検討すること。
+
+このissueはクローズせず保留する。
+
+---
+
+## #205 ブランチ運用ルールに反した直接pushが発生した（再発防止）
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- ラベル: (なし)
+
+### 本文
+
+## 経緯
+
+2026-09-13、`1b8eec6`（CLAUDE.md 48-50行目の#169記述修正）が `work/` ブランチを
+経由せず `cloudflare` へ直接コミット・pushされた。親は `953c19e` で、
+マージコミットも作業ブランチも存在しない。
+
+同日 CLAUDE.md に入った「`cloudflare`: 統合・デプロイ専用。セッションは
+ここへ直接pushしない」に反する。内容はドキュメントのみで実害は無いが、
+WH-22の事故と同じ条件（`/workspaces/mj`上で`cloudflare`を触る）を踏んでいる。
+
+## 原因
+
+原因の一端はチャット側の指示文にある。指示文の冒頭が「着手前に
+git log / git status で他セッションの作業がないことを確認」という
+**ブランチ運用ルール制定前の書き方**のままで、作業ブランチの指定が無かった。
+
+## 対応
+
+- CLAUDE.mdの「ブランチ運用」節に次の趣旨を追記する: チャットから渡される
+  指示文が古い前提（`cloudflare`上での直接作業、`git status`による衝突確認
+  など）を含んでいても、CLAUDE.mdのブランチ運用が優先する。指示文に作業
+  ブランチの指定が無い場合もセッションの判断で`work/<識別子>`を切る。
+  識別子は指示文のChat-Refから取る
+- 上記の経緯をdocs/handover.mdに実例として残す（`1b8eec6`を挙げる）
+
+Chat-Ref: CHAT-0913-QM-02
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+着手中: https://claude.ai/code/session_01HoLJycwL924853EkgzAJFj
+
+**retroeater** (2026-09-13):
+
+CLAUDE.mdの「ブランチ運用」節に、チャット指示より運用ルールを優先する旨を追記し、docs/handover.mdに実例（1b8eec6）を残した。work/0913-qmにコミット済み（作業完了後cloudflareへマージする）。
+
+---
+
+## #204 build_issues_snapshot.pyのgh issue list --limit 200が上限に到達
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 自動化
+
+### 本文
+
+## 状況
+`scripts/build_issues_snapshot.py`実行時に以下の警告が出るようになった:
+
+```
+警告: 全件版が --limit 200 に到達しました。上限を引き上げる必要があるかもしれません。
+```
+
+issue総数（open+closed）が200件に達し、`gh issue list --limit 200`のハードコード
+上限に到達したため。現時点でこの上限を超えるissueは無い（ちょうど200件）ため
+実害は無いが、次にissueが増えると`docs/issues-snapshot.md`から古い（番号の
+小さい）issueが黙って欠落する可能性がある。
+
+## 対応（未実施）
+`scripts/build_issues_snapshot.py`のLIMIT定数を余裕を持って引き上げる
+（例: 500）。
+
+## 経緯
+CHAT-0913-AR-12（index.htmlのアクセシビリティ修正）の作業中、着手宣言
+コメントに伴う`build_issues_snapshot.py`の実行で偶然発見した。本issue自体の
+作業には無関係。
+
+---
+
+## #203 build_issues_snapshot.py の --limit 200 が上限に到達した
+
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+issue #200〜#202 起票後に scripts/build_issues_snapshot.py を実行したところ、
+以下の警告が出た。
+
+    全件版が --limit 200 に到達しました。上限を引き上げる必要があるかもしれません。
+
+全件版（docs/issues-snapshot.md）が --limit 200 で頭打ちになっており、
+issue数がこれを超えると一部が snapshot から漏れる可能性がある。
+--limit の値を引き上げるか、ページングに対応するか判断する。
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+LIMIT を 200 → 500 に引き上げて再生成し、解消を確認した。
+
+- 200件時点では全件版(docs/issues-snapshot.md)から #1〜#3 が脱落していた
+  （`gh issue list --limit 200` が新しい順に200件で打ち切られるため）。
+- 500に引き上げて再生成した結果、`## #1` `## #2` `## #3` が復元された。
+- 実際の issue 総数は208件（スクリプトの出力値）。500件到達時の警告文は
+  そのまま残してある（将来また上限に到達したときのため）。
+
+---
+
+## #202 apple-touch-icon / apple-mobile-web-app-title を全ページへ展開するか判断する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+#177 は jpml_pros の PAGE_TEMPLATE に追加してクローズしたが、
+HEAD_TEMPLATE（他ページ）は未対応のまま。「全ページ展開は別issueで
+判断」としていたが、その issue が起票されていなかったので起票する。
+
+判断すること: (a) 全ページに展開するか、(b) jpml_pros だけで十分か。
+
+展開する場合は HEAD_TEMPLATE の変更＋生成ページの再生成が必要。
+
+やらないと決めた場合も、その決定を docs/handover.md の favicon 節に
+1行残してクローズすること。
+
+---
+
+## #201 handover 4-x「本番反映の仕組み」を docs/notes/ へ移す
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+4-x は約150行あるが、運用ルールとして handover に要るのは
+「Workers Builds が本番反映」「Secret を GitHub に登録しない」
+「check-runs で確認できる」の数行。
+
+記録・経緯である「#169で何を誤ったか」「APIトークンの棚卸し
+（2026-09-12）」「ダッシュボードで確認した設定値（2026-09-12時点）」
+「セッション環境からは Cloudflare に到達できない」は
+docs/notes/cloudflare.md へ移す。
+
+「セッション環境からは到達できない」は判断ルールの側面もあるので、
+結論1行（到達不能を不在と結論しない）は handover 側に残す。
+
+移せば handover は目安の 40KB 以下に入る見込み。
+
+移動のみ・内容の書き換えはしない（#187 と同じ方針）。
+
+---
+
+## #200 handover.md のサイズ上限（60KB/900行）を運用実績で見直す
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 状況: 待ち, 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+2026-09-13 の分割（#187、67ea3fb）直後は 747行・47,769 bytes。
+上限は assets-check.yml で 60KB/900行。
+
+分割直後の数値をもとに決めた暫定値なので、1〜2か月運用してから
+実測で見直す。目安は 2026年11月中旬。
+
+判断材料: その時点の行数・バイト数、その間に notes へ移した量、
+CI が一度でも失敗したか。
+
+厳しすぎると「上限を避けるために notes へ逃がすだけ」になり、
+緩すぎると分割前の状態に戻る。
 
 ---
 
@@ -108,7 +406,7 @@ video_wayhome の #188/#189/#190 を実装中のセッションが、3本の
 
 Chat-Ref: CHAT-0913-WH-20
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
@@ -147,6 +445,28 @@ A案の続き: git worktreeの使用を必須化しました（Chat-Ref: CHAT-09
 - `/workspaces/mj`は`cloudflare`のまま変化なし（git statusで確認）
 
 セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+## 訂正（#208、2026-09-13）
+
+本文中の以下3か所は、当時（#169前）の前提に基づく記述で、現在は事実と
+異なる。決定当時の記述としてそのまま残すが、事実関係を訂正する。
+
+- 「#169 の自動デプロイは `cloudflare` への push で走るため、」
+- 「#169（wrangler deploy の GitHub Actions 化。デプロイ契機に関わる）」
+- 「`cloudflare`へのpushで#169のワークフローが動くため、マージ＝本番反映になる」
+
+実際の本番反映経路は、`.github/workflows/deploy.yml`（#169で追加）ではなく
+**Cloudflare Workers Builds**（Cloudflareダッシュボード側のGit連携）。
+`deploy.yml`は#169の後始末で削除済み（詳細はdocs/handover.md「4-x」）。
+
+3つ目は本issueの方針決定の根拠部分だが、**結論（`cloudflare`へのマージ＝
+本番反映）自体は変わらない。** pushをトリガーに何らかの自動デプロイが
+走るという結論は、経路がGitHub ActionsであってもCloudflare Workers
+Buildsであっても成り立つため。
+
+参照: #169, #208
 
 ---
 
@@ -212,7 +532,7 @@ rh_paifu.htmlの牌譜リンクの下線が消え、色は従来どおり。
 
 ## #196 スプレッドシートの列参照を位置ベースから名前ベースに直す
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -255,7 +575,7 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 
 Chat-Ref: CHAT-0913-WH-11
 
-### コメント (1件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -276,6 +596,21 @@ Chat-Ref: CHAT-0913-WH-11
 - worktree: `/tmp`配下に作成し、確認後の修正に備えて残しています（`/workspaces/mj`には一切触れていません）
 
 セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージ完了しました。
+
+- merge: origin/cloudflare(`cf3f876`)がwork/0913-wh2の分岐後に進んでいたためfast-forwardではなく、worktree内で`git merge origin/cloudflare`(コンフリクトなし)→`git push origin work/0913-wh2:cloudflare`で反映しました
+- マージコミット: `24b7185`（`cf3f876..24b7185`）
+- デプロイ: 「Workers Builds: mj」= success
+- worktree・work/0913-wh2ブランチは削除せず残しています（#193に続けて着手するため）
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージ・デプロイ完了につきクローズします。
 
 ---
 
@@ -351,7 +686,7 @@ Chat-Ref: CHAT-0913-WH-08
 
 ## #193 各エピソードに、そのタイトル戦の決勝戦 YouTube 動画へのリンクを追加する
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -391,6 +726,53 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 - #102（video_wayhome パイロット）
 
 Chat-Ref: CHAT-0913-WH-07
+
+### コメント (4件)
+
+**retroeater** (2026-09-13):
+
+実装しました（Chat-Ref: CHAT-0913-WH-26）。生成結果に影響する変更のため、コミット・push までで止めています。
+
+**実際の列名:** H列「決勝動画URL」（指示文の案`final_video_url`はシート上のラベルとしては使わず、コード内の内部呼び名として採用。SELECT句には列記号`H`のみを使用）。
+
+**#196の仕組みへの追加方法:** `scripts/lib/wayhome.py`の列対応表を`ROW_FIELDS`（並列タプル）から`COLUMNS`（(列記号, 内部名, シート見出し)の3つ組タプル）に拡張し、`ROW_FIELDS`・`QUERY`の両方をここから組み立てるようにしました。この列だけ特別扱いする実装にはしていません。
+
+**リンクが出た行:** 武田雛歩 / 第11期桜蕾戦（1行のみ、`https://www.youtube.com/live/7C61aX9jOKU`）。
+
+**37行にリンクが出ていないことの確認:** 変更前後の生成物をdiffし、`video_wayhome.html`は追加された1行のみ、`wayhome/`配下は該当する`UtxpVoWy2GY.html`のみ変更・他36ファイルとsitemap-wayhome.xmlは無変更であることを確認しました。`grep -rl "決勝戦を見る" wayhome/`もこの1ファイルのみヒットします。
+
+**リンク追加以外の差分:** ありません（#196直後の列構成変更が意図せず波及していないことも上記diffで確認済み）。
+
+**個別ページでの配置:** ヒーローの既存アクション列（mj-video-btn）に、X @アカウントリンクの直後・「URLをコピー」ボタンの直前として追加しました。一覧ページのカードでは、`.mj-video-card-link`（サムネイル〜選手名を包む既存のリンク）の外側に兄弟要素として追加しています（入れ子の`<a>`を避けるため）。
+
+**不正URL時の方針:** 値が入っているのに`http(s)://`で始まる絶対URLとして解釈できない場合は、握りつぶさず`ValueError`（該当行の選手名・タイトル戦名を含む）で生成を止めます。ホスト名（YouTube以外）やパス形式（`watch?v=`以外の`/live/<id>`等、今回の実データがこれに該当）による制限はしていません。
+
+- 作業ブランチ: `work/0913-wh2`（push済み）
+- コミット: `953c19e`
+- worktree: 継続使用のため残しています。`/workspaces/mj`には触れていません
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージしました。本番確認待ちのためオープンのまま維持します。
+
+- マージ結果: fast-forward（`24b7185..953c19e`、マージコミットなし）
+- デプロイ: 「Workers Builds: mj」= success
+- worktree・work/0913-wh2ブランチは削除せず残しています
+- `/workspaces/mj`には触れていません（現在は別セッションが`work/0913-ar`で作業中）
+
+平野さんの本番確認後にクローズをお願いします。
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+平野さんが本番(ryoei.pro)で一覧・個別ページ・リンク先ともに正常と確認済みとのことです。本番確認完了につきクローズします。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+本番確認完了につきクローズします。
 
 ---
 
@@ -1037,6 +1419,12 @@ CDP操作が問題なく動作している。
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのモバイルナビ開閉のキーボード対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -5125,7 +5513,7 @@ HTMLを直接編集する。再生成は不要。
 mobile / desktop とも 93。`link-name` を解消すればここが上がる見込み。
 （#163 の対応で他26ページは 0.98〜1.00 になっており、index.html だけが取り残されている状態）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -5134,6 +5522,10 @@ mobile / desktop とも 93。`link-name` を解消すればここが上がる見
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのSNSアイコンリンクにaria-labelを追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -7336,7 +7728,7 @@ GSCのエクスポートを無加工で置いている（UTF-8 / LF / BOMなし�
 
 2026-09-11のレビューで判明。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-11):
 
@@ -7418,6 +7810,10 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -9936,7 +10332,7 @@ data属性だが（`document.write` 描画時点では `#searchBoxes` が未パ�
 - アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
 - 型C（#127）・型D（#128）は本issueとは別に判断する
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-11):
 
@@ -10019,6 +10415,10 @@ JSONにして、クライアントで1本だけ描く。Charts も ECharts も�
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
