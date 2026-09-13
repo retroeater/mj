@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 09:59 JST
+生成日時: 2026-09-13 10:10 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -224,7 +224,7 @@ Include pathsが`*`のため、`chore: regenerate issues snapshot`のような
 
 **ダッシュボード側の設定変更のため、実施は平野さんの作業になる。**
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-12):
 
@@ -239,6 +239,15 @@ https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 **retroeater** (2026-09-13):
 
 平野さんが Exclude paths に docs/** を設定済み（2026-09-12 申告）。設定値はセッションから検証できないため申告の記録として残す。以後 docs/** のみの push でビルドがスキップされない事象があれば再オープン
+
+**retroeater** (2026-09-13):
+
+check-runs 側から設定が効いていることを確認（2026-09-13）。
+ドキュメントのみのコミット c4083c4 / 8466d08 には GitHub Actions の
+`check` のみが付き、`Workers Builds: mj` は付いていない。ダッシュボードの
+設定値はセッションから見られないが、結果は check-runs から観測できる。
+再オープンの条件（docs/** のみの push でビルドがスキップされない）は
+現時点では発生していない。docs/handover.md の 4-x 節に記録した。
 
 ---
 
@@ -12228,7 +12237,7 @@ https://claude.ai/code/session_01LiwfpYJccthi3DV9jAuFLd
 ---
 <sub>移行前のタスク番号: 28</sub>
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-09):
 
@@ -12259,6 +12268,16 @@ GitHub Pagesは切り戻し用に当面残す。
 3背景（白/偶数行#fafafa/ホバー行#d6e9f8）すべてでAAA(7:1)以上を確認。詳細はdocs/handover.md「6. これまでに分かったこと」の「リンクの配色（#26/#108）」節、計測はdocs/lighthouse-baseline.md参照。
 
 #108（コントラスト不足）も同じ変更で解消したためクローズします。
+
+**retroeater** (2026-09-13):
+
+平野さんによる本番の目視確認が完了（2026-09-13）。jpml_pros /
+jpml_links / resource_logs の3ページで、文字リンクの視認性・画像
+リンクの下線除去・ナビと video_wayhome の色が不変であることを確認。
+
+ビルドは 9780f83 の Workers Builds: mj = success で成功を確認済み
+（実装コミット c002bd1 自体には check-run が付かない。理由は
+docs/handover.md 4-x 節参照）。
 
 ---
 
