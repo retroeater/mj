@@ -1351,14 +1351,19 @@ for f in *.html; do grep -o 'src="https\?://[^/"]*' "$f" | sed 's/src="//'; done
 
 ### Cloudflare
 
-- **`_headers` でのContent-Type上書きは Workers の静的アセット配信に対して
-  有効。** `.txt` はCloudflare側でcharsetが付かず`text/plain`のみになり、
-  日本語環境のブラウザがShift_JISとして誤認して文字化けする。`_headers`に
-  `Content-Type: text/plain; charset=utf-8`のようなルールを足せば上書きできる
-  ことを`/llms.txt`で実証した（#161、平野さんが本番確認済み）。charsetの
-  付かない拡張子を新たに公開するときはこの方法を使う
+- **charsetが付くかどうかは拡張子ではなく配信経路で決まる。** Workersの
+  静的アセットとしてそのまま返るファイル（例: `/llms.txt`）はCloudflare側で
+  charsetが付かず`text/plain`のみになり、日本語環境のブラウザがShift_JISと
+  誤認して文字化けする。`_headers`に`Content-Type: text/plain; charset=utf-8`
+  のようなルールを足せば上書きできることを`/llms.txt`で実証した（#161、
+  平野さんが本番確認済み）。`_headers`でのContent-Type上書きがWorkers静的
+  アセットに効くこと自体はこれで実証済み。日本語を含むテキストファイルを
+  新たに公開するときはこの方法を使う
 - **AI Crawl Control が管理 robots.txt を自動で前置する。** そのため自作の
-  `robots.txt` は `Sitemap:` の宣言のみにしている
+  `robots.txt` は `Sitemap:` の宣言のみにしている。前置されたrobots.txtは
+  Cloudflare側でcharset込みの`Content-Type: text/plain; charset=utf-8`が
+  組み立てられるため、`llms.txt`と違い`_headers`での明示は不要（#175で
+  本番確認済み。文字化けの疑いはなかった）
 - AI学習用クローラー（GPTBot/ClaudeBot等）はブロック、検索エンジンとAIの検索・回答は許可
   （詳細・経緯は下記「AIクローラーの扱い」参照。本対応は#130で管理）
 - Tiered Cache は**効果がない**（Workersの静的アセットにはオリジンサーバーがないため）

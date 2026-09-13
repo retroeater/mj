@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 10:10 JST
+生成日時: 2026-09-13 10:17 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,44 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 53件（openのみ）。番号降順。
-
----
-
-## #175 robots.txt の日本語コメントが文字化けしている可能性がある
-
-- 作成: 2026-09-12
-- ラベル: (なし)
-
-### 本文
-
-#161（llms.txtの文字化け対処）の作業中に見つけた関連課題。
-
-## 背景
-
-`llms.txt` が本番で文字化けしていた（#161）。原因は `.txt` にCloudflare側でcharsetが付かず、日本語環境のブラウザがcharset無しの `text/plain` をShift_JISとして解釈するため。`_headers` で `Content-Type: text/plain; charset=utf-8` を明示して対処した。
-
-`robots.txt` にも日本語のコメントが入っており、同じ原因で文字化けしている可能性がある。
-
-## 未確認点
-
-- `robots.txt` はCloudflareのAI Crawl Controlが管理版を前置して配信している構成のため（詳細はdocs/handover.md参照）、`_headers` でのContent-Type上書きが同じように効くかは未確認
-- そもそも実際に文字化けしているかどうかも、セッション環境から本番(ryoei.pro)へ到達できないため未確認。平野さんの確認が必要
-
-## 対応方針（未実施）
-
-- まず実際に文字化けしているか本番で確認する
-- 文字化けしていれば、`_headers` に `/robots.txt` 向けのcharset指定を試す（AI Crawl Controlの前置により効かない可能性があるため、効かなかった場合は別の対処法を検討する）
-
-### コメント (1件)
-
-**retroeater** (2026-09-13):
-
-#161がクローズしました。実証結果を追記します。
-
-`_headers` での `Content-Type: text/plain; charset=utf-8` 上書きは、`/llms.txt` に対して実際に効いていることを平野さんが本番で確認済みです（文字化け解消、2026-09-12）。Cloudflare Workers の静的アセット配信に対して `_headers` でのContent-Type上書きが有効であることが実証されました。
-
-ただし、`robots.txt` はCloudflareのAI Crawl Controlの管理robots.txtが前置される構成のため、`llms.txt`と同じように`_headers`が効くとは限りません（この点は未確認のまま）。まずは本番で実際に文字化けしているかどうかの確認が引き続き必要です。
+件数: 52件（openのみ）。番号降順。
 
 ---
 

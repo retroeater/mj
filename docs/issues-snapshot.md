@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 10:10 JST
+生成日時: 2026-09-13 10:17 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -24,7 +24,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 
 ## #175 robots.txt の日本語コメントが文字化けしている可能性がある
 
-- 状態: OPEN / 作成: 2026-09-12
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-12 / クローズ: 2026-09-13
 - ラベル: (なし)
 
 ### 本文
@@ -47,7 +47,7 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 - まず実際に文字化けしているか本番で確認する
 - 文字化けしていれば、`_headers` に `/robots.txt` 向けのcharset指定を試す（AI Crawl Controlの前置により効かない可能性があるため、効かなかった場合は別の対処法を検討する）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -56,6 +56,22 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
 `_headers` での `Content-Type: text/plain; charset=utf-8` 上書きは、`/llms.txt` に対して実際に効いていることを平野さんが本番で確認済みです（文字化け解消、2026-09-12）。Cloudflare Workers の静的アセット配信に対して `_headers` でのContent-Type上書きが有効であることが実証されました。
 
 ただし、`robots.txt` はCloudflareのAI Crawl Controlの管理robots.txtが前置される構成のため、`llms.txt`と同じように`_headers`が効くとは限りません（この点は未確認のまま）。まずは本番で実際に文字化けしているかどうかの確認が引き続き必要です。
+
+**retroeater** (2026-09-13):
+
+2026-09-13、平野さんが本番で確認しました。
+
+## 確認結果
+
+- https://ryoei.pro/robots.txt の日本語コメントは文字化けしていない
+- Response Headers: `Content-Type: text/plain; charset=utf-8`
+- 同時に `Cf-Cache-Status: HIT` / `Server: cloudflare`、および `_headers` の `/*` ブロック由来のヘッダ（X-Frame-Options: SAMEORIGIN / X-Content-Type-Options: nosniff / HSTS / Permissions-Policy）も付いている
+
+## 結論
+
+robots.txt に charset が付くのは、AI Crawl Control が管理版を前置して生成・配信しているため。Cloudflare側がContent-Typeをcharset込みで組み立てている。llms.txt（#161）はWorkersの静的アセットとしてそのまま返るためcharsetが付かなかった。したがって対処は不要で、`_headers` に `/robots.txt` 向けのルールを追加する必要もない。
+
+docs/handover.mdの該当節（#161で追記した箇所）も、拡張子に紐づく一般則ではなく配信経路で決まる旨に修正する。
 
 ---
 
