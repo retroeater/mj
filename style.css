@@ -1066,9 +1066,21 @@ body:has(.mj-video-list) nav.navbar {
 	backdrop-filter: blur(12px);
 }
 
-body:has(.mj-video-list) nav.navbar .navbar-collapse {
-	max-height: calc(100vh - var(--mj-nav-h, 56px));
-	overflow-y: auto;
+/* #188再修正(WH-17): モバイルでcollapseを開いたときだけ内部スクロールさせる。
+   以前は`.navbar-collapse`常時(デスクトップ含む)に`max-height: calc(100vh -
+   var(--mj-nav-h))`を適用しており、これが循環参照になっていた——
+   collapseが開くとnav.navbar自体の実測高さ(--mj-nav-h)がcollapse分だけ
+   増え、その増えた値がcollapse自身のmax-height計算に使われて利用可能な
+   高さが逆に縮む(結果、上段が切れる・不要な内部スクロールバーが出る)。
+   navbar-expand-lg(Bootstrap既定のlgブレークポイント、992px)未満・
+   `.show`(展開中)に限定し、`--mj-nav-h`を使わない100vh基準の固定値にして
+   参照元を断ち切る。nav.navbar自体は絶対にoverflow/max-heightを持たせない
+   (position:stickyの子孫クリップ・スキップリンクの表示阻害を避けるため)。 */
+@media (max-width: 991.98px) {
+	body:has(.mj-video-list) nav.navbar .navbar-collapse.show {
+		max-height: 80vh;
+		overflow-y: auto;
+	}
 }
 
 /* ---- sticky フィルタバー(#189) ----
