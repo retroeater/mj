@@ -76,10 +76,14 @@ META = PageMeta(
 )
 
 BODY_TEMPLATE = """<div id="searchBoxes" class="collapse">
-\t<select id="selectbox" name="">
-\t\t<option value="">名前を選択</option>
+\t<div class="mj-filter">
+\t\t<label class="visually-hidden" for="selectbox">選手を選択</label>
+\t\t<select id="selectbox" name="">
+\t\t\t<option value="">名前を選択</option>
 {options}
-\t</select>
+\t\t</select>
+\t\t<button type="button" id="selectboxGo" class="mj-pager-button">表示</button>
+\t</div>
 </div>
 {legend}
 <div>
@@ -192,7 +196,7 @@ def main():
     legend_html = render_legend(legend_items)
 
     options_html = "\n".join(
-        f'\t\t<option value="houou_leagues.html?name={esc(n)}">{esc(n)}</option>'
+        f'\t\t\t<option value="houou_leagues.html?name={esc(n)}">{esc(n)}</option>'
         for n in option_names
     )
 

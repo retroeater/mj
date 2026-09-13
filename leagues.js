@@ -10,15 +10,21 @@
 //
 // インラインイベントハンドラは使わない(#9)。旧版の
 // onchange="javascript:location.href = this.value" を廃止し、ここで
-// addEventListener('change', ...) を登録する。
+// addEventListener('change', ...) を登録していた。
+//
+// 選択と同時の遷移はWCAG 3.2.2(On Input)の失敗のため、#180で「表示」
+// ボタンのclickに移した。changeのリスナーは持たない(残すと即遷移が
+// 再発する)。<select>上でEnterを押しても<form>が無いため既定では何も
+// 起きない(Enterでの遷移も3.2.2の議論に戻るため、意図的にそのまま)。
 (function () {
 	'use strict'
 
 	const select = document.getElementById('selectbox')
-	if (select) {
-		select.addEventListener('change', function () {
-			if (this.value) {
-				location.href = this.value
+	const goButton = document.getElementById('selectboxGo')
+	if (select && goButton) {
+		goButton.addEventListener('click', function () {
+			if (select.value) {
+				location.href = select.value
 			}
 		})
 	}
