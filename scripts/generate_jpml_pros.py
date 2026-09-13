@@ -44,6 +44,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>プロ | 日本プロ麻雀連盟 | ryoei.pro</title>
+<!-- iOSのホーム画面アイコン名。既定ではtitleの先頭「プロ」が使われてしまうため(#174の実機確認で判明) -->
+<meta name="apple-mobile-web-app-title" content="連盟プロ">
 <meta name="description" content="{description}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ryoei.pro">
