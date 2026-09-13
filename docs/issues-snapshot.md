@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 14:56 JST
+生成日時: 2026-09-13 15:25 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -18,7 +18,91 @@ gh issue list --repo retroeater/mj --state all --limit 200 \
   --json number,title,state,stateReason,labels,body,comments,createdAt,closedAt
 ```
 
-件数: 199件（open/closed含む）。番号降順。
+件数: 200件（open/closed含む）。番号降順。
+
+---
+
+## #203 build_issues_snapshot.py の --limit 200 が上限に到達した
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+issue #200〜#202 起票後に scripts/build_issues_snapshot.py を実行したところ、
+以下の警告が出た。
+
+    全件版が --limit 200 に到達しました。上限を引き上げる必要があるかもしれません。
+
+全件版（docs/issues-snapshot.md）が --limit 200 で頭打ちになっており、
+issue数がこれを超えると一部が snapshot から漏れる可能性がある。
+--limit の値を引き上げるか、ページングに対応するか判断する。
+
+---
+
+## #202 apple-touch-icon / apple-mobile-web-app-title を全ページへ展開するか判断する
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+#177 は jpml_pros の PAGE_TEMPLATE に追加してクローズしたが、
+HEAD_TEMPLATE（他ページ）は未対応のまま。「全ページ展開は別issueで
+判断」としていたが、その issue が起票されていなかったので起票する。
+
+判断すること: (a) 全ページに展開するか、(b) jpml_pros だけで十分か。
+
+展開する場合は HEAD_TEMPLATE の変更＋生成ページの再生成が必要。
+
+やらないと決めた場合も、その決定を docs/handover.md の favicon 節に
+1行残してクローズすること。
+
+---
+
+## #201 handover 4-x「本番反映の仕組み」を docs/notes/ へ移す
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+4-x は約150行あるが、運用ルールとして handover に要るのは
+「Workers Builds が本番反映」「Secret を GitHub に登録しない」
+「check-runs で確認できる」の数行。
+
+記録・経緯である「#169で何を誤ったか」「APIトークンの棚卸し
+（2026-09-12）」「ダッシュボードで確認した設定値（2026-09-12時点）」
+「セッション環境からは Cloudflare に到達できない」は
+docs/notes/cloudflare.md へ移す。
+
+「セッション環境からは到達できない」は判断ルールの側面もあるので、
+結論1行（到達不能を不在と結論しない）は handover 側に残す。
+
+移せば handover は目安の 40KB 以下に入る見込み。
+
+移動のみ・内容の書き換えはしない（#187 と同じ方針）。
+
+---
+
+## #200 handover.md のサイズ上限（60KB/900行）を運用実績で見直す
+
+- 状態: OPEN / 作成: 2026-09-13
+- ラベル: 状況: 待ち, 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+2026-09-13 の分割（#187、67ea3fb）直後は 747行・47,769 bytes。
+上限は assets-check.yml で 60KB/900行。
+
+分割直後の数値をもとに決めた暫定値なので、1〜2か月運用してから
+実測で見直す。目安は 2026年11月中旬。
+
+判断材料: その時点の行数・バイト数、その間に notes へ移した量、
+CI が一度でも失敗したか。
+
+厳しすぎると「上限を避けるために notes へ逃がすだけ」になり、
+緩すぎると分割前の状態に戻る。
 
 ---
 
@@ -212,7 +296,7 @@ rh_paifu.htmlの牌譜リンクの下線が消え、色は従来どおり。
 
 ## #196 スプレッドシートの列参照を位置ベースから名前ベースに直す
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -255,7 +339,7 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 
 Chat-Ref: CHAT-0913-WH-11
 
-### コメント (1件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -276,6 +360,21 @@ Chat-Ref: CHAT-0913-WH-11
 - worktree: `/tmp`配下に作成し、確認後の修正に備えて残しています（`/workspaces/mj`には一切触れていません）
 
 セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージ完了しました。
+
+- merge: origin/cloudflare(`cf3f876`)がwork/0913-wh2の分岐後に進んでいたためfast-forwardではなく、worktree内で`git merge origin/cloudflare`(コンフリクトなし)→`git push origin work/0913-wh2:cloudflare`で反映しました
+- マージコミット: `24b7185`（`cf3f876..24b7185`）
+- デプロイ: 「Workers Builds: mj」= success
+- worktree・work/0913-wh2ブランチは削除せず残しています（#193に続けて着手するため）
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージ・デプロイ完了につきクローズします。
 
 ---
 
@@ -391,6 +490,45 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 - #102（video_wayhome パイロット）
 
 Chat-Ref: CHAT-0913-WH-07
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+実装しました（Chat-Ref: CHAT-0913-WH-26）。生成結果に影響する変更のため、コミット・push までで止めています。
+
+**実際の列名:** H列「決勝動画URL」（指示文の案`final_video_url`はシート上のラベルとしては使わず、コード内の内部呼び名として採用。SELECT句には列記号`H`のみを使用）。
+
+**#196の仕組みへの追加方法:** `scripts/lib/wayhome.py`の列対応表を`ROW_FIELDS`（並列タプル）から`COLUMNS`（(列記号, 内部名, シート見出し)の3つ組タプル）に拡張し、`ROW_FIELDS`・`QUERY`の両方をここから組み立てるようにしました。この列だけ特別扱いする実装にはしていません。
+
+**リンクが出た行:** 武田雛歩 / 第11期桜蕾戦（1行のみ、`https://www.youtube.com/live/7C61aX9jOKU`）。
+
+**37行にリンクが出ていないことの確認:** 変更前後の生成物をdiffし、`video_wayhome.html`は追加された1行のみ、`wayhome/`配下は該当する`UtxpVoWy2GY.html`のみ変更・他36ファイルとsitemap-wayhome.xmlは無変更であることを確認しました。`grep -rl "決勝戦を見る" wayhome/`もこの1ファイルのみヒットします。
+
+**リンク追加以外の差分:** ありません（#196直後の列構成変更が意図せず波及していないことも上記diffで確認済み）。
+
+**個別ページでの配置:** ヒーローの既存アクション列（mj-video-btn）に、X @アカウントリンクの直後・「URLをコピー」ボタンの直前として追加しました。一覧ページのカードでは、`.mj-video-card-link`（サムネイル〜選手名を包む既存のリンク）の外側に兄弟要素として追加しています（入れ子の`<a>`を避けるため）。
+
+**不正URL時の方針:** 値が入っているのに`http(s)://`で始まる絶対URLとして解釈できない場合は、握りつぶさず`ValueError`（該当行の選手名・タイトル戦名を含む）で生成を止めます。ホスト名（YouTube以外）やパス形式（`watch?v=`以外の`/live/<id>`等、今回の実データがこれに該当）による制限はしていません。
+
+- 作業ブランチ: `work/0913-wh2`（push済み）
+- コミット: `953c19e`
+- worktree: 継続使用のため残しています。`/workspaces/mj`には触れていません
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージしました。本番確認待ちのためオープンのまま維持します。
+
+- マージ結果: fast-forward（`24b7185..953c19e`、マージコミットなし）
+- デプロイ: 「Workers Builds: mj」= success
+- worktree・work/0913-wh2ブランチは削除せず残しています
+- `/workspaces/mj`には触れていません（現在は別セッションが`work/0913-ar`で作業中）
+
+平野さんの本番確認後にクローズをお願いします。
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
 
 ---
 
@@ -1037,6 +1175,12 @@ CDP操作が問題なく動作している。
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのモバイルナビ開閉のキーボード対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -5125,7 +5269,7 @@ HTMLを直接編集する。再生成は不要。
 mobile / desktop とも 93。`link-name` を解消すればここが上がる見込み。
 （#163 の対応で他26ページは 0.98〜1.00 になっており、index.html だけが取り残されている状態）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -5134,6 +5278,10 @@ mobile / desktop とも 93。`link-name` を解消すればここが上がる見
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのSNSアイコンリンクにaria-labelを追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -7336,7 +7484,7 @@ GSCのエクスポートを無加工で置いている（UTF-8 / LF / BOMなし�
 
 2026-09-11のレビューで判明。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-11):
 
@@ -7418,6 +7566,10 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -9936,7 +10088,7 @@ data属性だが（`document.write` 描画時点では `#searchBoxes` が未パ�
 - アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
 - 型C（#127）・型D（#128）は本issueとは別に判断する
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-11):
 
@@ -10019,6 +10171,10 @@ JSONにして、クライアントで1本だけ描く。Charts も ECharts も�
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -15418,92 +15574,5 @@ jpml_pros.js の自作フィルター・ソート・固定列の処理が特定�
 外部ドメインを1つ足してからCSP（#9）を書く順序になっているが、新サイト
 （#101）側で導入するほうが自然な可能性がある。状況: 保留にするか、現行で
 入れるかを平野さんが判断する。
-
----
-
-## #3 YouTubeチャンネルアイコンの一致確認
-
-- 状態: OPEN / 作成: 2026-09-07
-- ラベル: 分野: 自動化, 対象: jpml_pros
-
-### 本文
-
-YouTube Data API v3 の channels.list で82チャンネルのアイコンURLを取得し、サイトの表示と突き合わせる。API呼び出しは2回・消費クォータ2ユニットで済む。Google CloudでのAPIキー発行と、GitHub Secretsへの登録が前提。
-
----
-<sub>移行前のタスク番号: 62</sub>
-
----
-
-## #2 龍龍画像の同期確認を運用に乗せる
-
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-08
-- ラベル: 分野: 自動化, 対象: jpml_pros
-
-### 本文
-
-龍龍(ron2.jp)の選手ページに表示されている画像と、サイトで表示中の画像が一致しているかを毎週確認する。スクリプトとワークフローは実装済み。150x150への統一(旧72番)を反映したうえで再実行し、誤検知が減ったことを確認する。
-
----
-<sub>移行前のタスク番号: 61</sub>
-
-### コメント (1件)
-
-**retroeater** (2026-09-08):
-
-843件すべて龍龍の最新画像と一致。150x150への統一により誤検知が解消され、週次の自動監視が正常に動作する状態になった。
-
----
-
-## #1 画像リンク切れの検知結果
-
-- 状態: CLOSED (COMPLETED) / 作成: 2026-09-07 / クローズ: 2026-09-07
-- ラベル: (なし)
-
-### 本文
-
-1985件を確認し、**20件**が取得できませんでした。
-
-### ホスト別
-| ホスト | 件数 |
-| --- | --- |
-| pbs.twimg.com | 17 |
-| abs.twimg.com | 3 |
-
-### ステータス別
-| ステータス | 件数 |
-| --- | --- |
-| 404 | 20 |
-
-### 詳細
-- `404` 栄田勇作 X — https://pbs.twimg.com/profile_images/1890415764919947264/zFcUCRw5_80x80.jpg
-- `404` 江崎しんのすけ X — https://pbs.twimg.com/profile_images/1836292020199153664/yycE2_Oh_80x80.jpg
-- `404` 岡リョウタ X — https://pbs.twimg.com/profile_images/2068116908961132544/cA7bdrT__80x80.jpg
-- `404` 神代陽向 X — https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png
-- `404` 川奥修二 X — https://pbs.twimg.com/profile_images/2075596142210166784/yS9Ez0ZU_80x80.jpg
-- `404` 久保隆徳 X — https://pbs.twimg.com/profile_images/1215831088603385857/agorPvf8_80x80.jpg
-- `404` 新城勇哉 X — https://pbs.twimg.com/profile_images/2085244223264305152/EG-HM3ek_80x80.jpg
-- `404` 田中羚 X — https://pbs.twimg.com/profile_images/2011328594921091073/SaZyUy_P_80x80.jpg
-- `404` 田辺ゆい X — https://pbs.twimg.com/profile_images/2070752681304768512/bPADaCry_80x80.jpg
-- `404` 東城りお X — https://pbs.twimg.com/profile_images/1754483138179547136/gEx-KG4a_80x80.jpg
-- `404` 永田泰志 X — https://pbs.twimg.com/profile_images/2090800744211591168/PUs-KJGr_80x80.jpg
-- `404` 比嘉秀樹 X — https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png
-- `404` 比屋定秀太 X — https://abs.twimg.com/sticky/default_profile_images/default_profile_80x80.png
-- `404` 平野よしつね X — https://pbs.twimg.com/profile_images/2038425646851084288/ttydf_GA_80x80.jpg
-- `404` HIRO柴田 X — https://pbs.twimg.com/profile_images/1963845940693127168/L0w_2l_Q_80x80.jpg
-- `404` 星野佑太 X — https://pbs.twimg.com/profile_images/2094000710975385600/xAw1XcJ3_80x80.jpg
-- `404` 森東賢一 X — https://pbs.twimg.com/profile_images/1137877240488706048/3cZ3jct3_80x80.jpg
-- `404` 山田祐輝 X — https://pbs.twimg.com/profile_images/2037373485761368064/uSXWnsFR_80x80.jpg
-- `404` 吉野敦志 X — https://pbs.twimg.com/profile_images/1535376354103160832/x8DDWuj4_80x80.jpg
-- `404` 渡邊亮 X — https://pbs.twimg.com/profile_images/1882814781239009280/ImPQPXQ1_80x80.jpg
-
----
-_スプレッドシートの画像URLを更新すると解消します。次回の検知で解決していれば、このissueは自動的に閉じられます。_
-
-### コメント (1件)
-
-**github-actions** (2026-09-07):
-
-1985件を確認し、リンク切れは検出されませんでした。
 
 ---

@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 14:56 JST
+生成日時: 2026-09-13 15:25 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,76 +12,91 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 58件（openのみ）。番号降順。
+件数: 60件（openのみ）。番号降順。
 
 ---
 
-## #196 スプレッドシートの列参照を位置ベースから名前ベースに直す
+## #203 build_issues_snapshot.py の --limit 200 が上限に到達した
 
 - 作成: 2026-09-13
-- ラベル: 分野: 整理・保守, 対象: video_wayhome
+- ラベル: 分野: 整理・保守, 対象: 全ページ
 
 ### 本文
 
-### 提案理由（2026-09-13、Claudeとの検討）
+issue #200〜#202 起票後に scripts/build_issues_snapshot.py を実行したところ、
+以下の警告が出た。
 
-現在のシート「帰り道」の取得は
-`SELECT A,B,C,D,E,F WHERE G="Y"`（A=選手名、B=X ID、C=公開日、
-D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）。
+    全件版が --limit 200 に到達しました。上限を引き上げる必要があるかもしれません。
 
-ここに #192（YouTube Data API化）と #193（決勝戦動画リンク）が
-同時に入ると、列構成が次のように変わる。
+全件版（docs/issues-snapshot.md）が --limit 200 で頭打ちになっており、
+issue数がこれを超えると一部が snapshot から漏れる可能性がある。
+--limit の値を引き上げるか、ページングに対応するか判断する。
 
-- #192: C（公開日）と F（画像URL）を読まなくする
-- #193: 決勝戦動画URLの列を新規追加する
+---
 
-結果としてSELECT句が `A,B,D,E,H WHERE G="Y"` のような形になり、
-**取得後の列インデックスが全部ずれる。**スクリプトが位置参照
-（0,1,2…）で値を読んでいる場合、エラーにならず静かに別の値が
-入るため、発見が遅れる。
+## #202 apple-touch-icon / apple-mobile-web-app-title を全ページへ展開するか判断する
 
-### やること
+- 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
 
-- 取得結果を位置ではなく列名（またはヘッダ行由来のキー）で参照する
-  形に直す
-- 想定する列名が見つからない場合は、無言でスキップせず、列名を含む
-  明示的なエラーで生成を止めること
-- 読まなくなる列（公開日・画像URL）はシート上からは削除しない。
-  参照しないだけにする
+### 本文
 
-### 実施順序
+#177 は jpml_pros の PAGE_TEMPLATE に追加してクローズしたが、
+HEAD_TEMPLATE（他ページ）は未対応のまま。「全ページ展開は別issueで
+判断」としていたが、その issue が起票されていなかったので起票する。
 
-**#192 と #193 のどちらよりも先に実施すること。**後から直すと、
-ずれた状態で生成されたページを一度検証する手間が発生する。
+判断すること: (a) 全ページに展開するか、(b) jpml_pros だけで十分か。
 
-### 依存・関連
+展開する場合は HEAD_TEMPLATE の変更＋生成ページの再生成が必要。
 
-- #192（YouTube Data API化。C列・F列を参照しなくなる）
-- #193（決勝戦動画リンク。列を追加する）
+やらないと決めた場合も、その決定を docs/handover.md の favicon 節に
+1行残してクローズすること。
 
-Chat-Ref: CHAT-0913-WH-11
+---
 
-### コメント (1件)
+## #201 handover 4-x「本番反映の仕組み」を docs/notes/ へ移す
 
-**retroeater** (2026-09-13):
+- 作成: 2026-09-13
+- ラベル: 分野: 整理・保守, 対象: 全ページ
 
-実装しました（Chat-Ref: CHAT-0913-WH-24）。マージ基準に従い、コミット・push までで止めています。
+### 本文
 
-**変更前の状態:** 位置参照でした。`scripts/lib/sheets.py`の`fetch_sheet()`は列名を持たない位置のみのlist（各行）を返し、`generate_video_wayhome.py`・`generate_wayhome_episodes.py`の各所で`interviewee, x_id, published_date, title, url, image_url = row`という分解代入や`row[0]`/`row[4]`/`row[5]`の直接indexingが散らばっていました。
+4-x は約150行あるが、運用ルールとして handover に要るのは
+「Workers Builds が本番反映」「Secret を GitHub に登録しない」
+「check-runs で確認できる」の数行。
 
-**取得基盤の共有範囲:** `fetch_sheet()`（`scripts/lib/sheets.py`）と`scripts/lib/page.py`の`generate()`は、jpml_titles/jpml_test/resource_logs/video_live/video_en/rh_paifu/saikyo_mens/video_mtsuku/saikyo_results/rh_results/rh_results_detailの11ページ超が共有する基盤です。**どちらも変更していません。** 位置→名前の変換は`scripts/lib/wayhome.py`内に閉じており、これは元々`generate_video_wayhome.py`と`generate_wayhome_episodes.py`の2スクリプトだけが使う専用モジュールのため、波及はありません。
+記録・経緯である「#169で何を誤ったか」「APIトークンの棚卸し
+（2026-09-12）」「ダッシュボードで確認した設定値（2026-09-12時点）」
+「セッション環境からは Cloudflare に到達できない」は
+docs/notes/cloudflare.md へ移す。
 
-**変更内容:** `wayhome.py`に列名とコード上の呼び名の対応を1か所（`ROW_FIELDS`）にまとめ、`to_rows()`で行をnamedtuple（`WayhomeRow`）に変換するようにしました。行の要素数が`ROW_FIELDS`と一致しない場合は無言でスキップせず、内容を含む`ValueError`で生成を止めます（単体呼び出しで実際にエラーになることを確認済み）。
+「セッション環境からは到達できない」は判断ルールの側面もあるので、
+結論1行（到達不能を不在と結論しない）は handover 側に残す。
 
-**回帰確認:** 変更前後で`video_wayhome.html`・`wayhome/`配下38枚・`sitemap-wayhome.xml`のいずれも`diff`で完全一致（1バイトも変わらず）を確認しました。
+移せば handover は目安の 40KB 以下に入る見込み。
 
-シート側のC列（公開日）・F列（画像URL）は引き続き参照しています（参照をやめるのは#192の作業）。
+移動のみ・内容の書き換えはしない（#187 と同じ方針）。
 
-- 作業ブランチ: `work/0913-wh2`（push済み、`origin/cloudflare`から作成）
-- コミット: `33e51d5`
-- worktree: `/tmp`配下に作成し、確認後の修正に備えて残しています（`/workspaces/mj`には一切触れていません）
+---
 
-セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+## #200 handover.md のサイズ上限（60KB/900行）を運用実績で見直す
+
+- 作成: 2026-09-13
+- ラベル: 状況: 待ち, 分野: 整理・保守, 対象: 全ページ
+
+### 本文
+
+2026-09-13 の分割（#187、67ea3fb）直後は 747行・47,769 bytes。
+上限は assets-check.yml で 60KB/900行。
+
+分割直後の数値をもとに決めた暫定値なので、1〜2か月運用してから
+実測で見直す。目安は 2026年11月中旬。
+
+判断材料: その時点の行数・バイト数、その間に notes へ移した量、
+CI が一度でも失敗したか。
+
+厳しすぎると「上限を避けるために notes へ逃がすだけ」になり、
+緩すぎると分割前の状態に戻る。
 
 ---
 
@@ -197,6 +212,45 @@ D=タイトル戦名、E=YouTube視聴URL、F=画像URL、G=公開フラグ）�
 - #102（video_wayhome パイロット）
 
 Chat-Ref: CHAT-0913-WH-07
+
+### コメント (2件)
+
+**retroeater** (2026-09-13):
+
+実装しました（Chat-Ref: CHAT-0913-WH-26）。生成結果に影響する変更のため、コミット・push までで止めています。
+
+**実際の列名:** H列「決勝動画URL」（指示文の案`final_video_url`はシート上のラベルとしては使わず、コード内の内部呼び名として採用。SELECT句には列記号`H`のみを使用）。
+
+**#196の仕組みへの追加方法:** `scripts/lib/wayhome.py`の列対応表を`ROW_FIELDS`（並列タプル）から`COLUMNS`（(列記号, 内部名, シート見出し)の3つ組タプル）に拡張し、`ROW_FIELDS`・`QUERY`の両方をここから組み立てるようにしました。この列だけ特別扱いする実装にはしていません。
+
+**リンクが出た行:** 武田雛歩 / 第11期桜蕾戦（1行のみ、`https://www.youtube.com/live/7C61aX9jOKU`）。
+
+**37行にリンクが出ていないことの確認:** 変更前後の生成物をdiffし、`video_wayhome.html`は追加された1行のみ、`wayhome/`配下は該当する`UtxpVoWy2GY.html`のみ変更・他36ファイルとsitemap-wayhome.xmlは無変更であることを確認しました。`grep -rl "決勝戦を見る" wayhome/`もこの1ファイルのみヒットします。
+
+**リンク追加以外の差分:** ありません（#196直後の列構成変更が意図せず波及していないことも上記diffで確認済み）。
+
+**個別ページでの配置:** ヒーローの既存アクション列（mj-video-btn）に、X @アカウントリンクの直後・「URLをコピー」ボタンの直前として追加しました。一覧ページのカードでは、`.mj-video-card-link`（サムネイル〜選手名を包む既存のリンク）の外側に兄弟要素として追加しています（入れ子の`<a>`を避けるため）。
+
+**不正URL時の方針:** 値が入っているのに`http(s)://`で始まる絶対URLとして解釈できない場合は、握りつぶさず`ValueError`（該当行の選手名・タイトル戦名を含む）で生成を止めます。ホスト名（YouTube以外）やパス形式（`watch?v=`以外の`/live/<id>`等、今回の実データがこれに該当）による制限はしていません。
+
+- 作業ブランチ: `work/0913-wh2`（push済み）
+- コミット: `953c19e`
+- worktree: 継続使用のため残しています。`/workspaces/mj`には触れていません
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+マージしました。本番確認待ちのためオープンのまま維持します。
+
+- マージ結果: fast-forward（`24b7185..953c19e`、マージコミットなし）
+- デプロイ: 「Workers Builds: mj」= success
+- worktree・work/0913-wh2ブランチは削除せず残しています
+- `/workspaces/mj`には触れていません（現在は別セッションが`work/0913-ar`で作業中）
+
+平野さんの本番確認後にクローズをお願いします。
+
+セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
 
 ---
 
@@ -490,6 +544,12 @@ CDP操作が問題なく動作している。
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのモバイルナビ開閉のキーボード対応に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
 ---
 
 ## #180 select#selectbox にラベルがなく、選択と同時にページ遷移する（5ページ）
@@ -767,7 +827,7 @@ HTMLを直接編集する。再生成は不要。
 mobile / desktop とも 93。`link-name` を解消すればここが上がる見込み。
 （#163 の対応で他26ページは 0.98〜1.00 になっており、index.html だけが取り残されている状態）
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -776,6 +836,10 @@ mobile / desktop とも 93。`link-name` を解消すればここが上がる見
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+着手中: index.htmlのSNSアイコンリンクにaria-labelを追加します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -1148,7 +1212,7 @@ GSCのエクスポートを無加工で置いている（UTF-8 / LF / BOMなし�
 
 2026-09-11のレビューで判明。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-11):
 
@@ -1230,6 +1294,10 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -2001,7 +2069,7 @@ _Generated by [Claude Code](https://claude.ai/code)_
 - アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
 - 型C（#127）・型D（#128）は本issueとは別に判断する
 
-### コメント (5件)
+### コメント (6件)
 
 **retroeater** (2026-09-11):
 
@@ -2084,6 +2152,10 @@ JSONにして、クライアントで1本だけ描く。Charts も ECharts も�
 
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
+
+**retroeater** (2026-09-13):
+
+この移行に着手するとき、未使用スロット `content_before`（scripts/lib/page.py）を残すか削除するかを併せて判断すること。
 
 ---
 
@@ -3335,19 +3407,5 @@ jpml_pros.js の自作フィルター・ソート・固定列の処理が特定�
 外部ドメインを1つ足してからCSP（#9）を書く順序になっているが、新サイト
 （#101）側で導入するほうが自然な可能性がある。状況: 保留にするか、現行で
 入れるかを平野さんが判断する。
-
----
-
-## #3 YouTubeチャンネルアイコンの一致確認
-
-- 作成: 2026-09-07
-- ラベル: 分野: 自動化, 対象: jpml_pros
-
-### 本文
-
-YouTube Data API v3 の channels.list で82チャンネルのアイコンURLを取得し、サイトの表示と突き合わせる。API呼び出しは2回・消費クォータ2ユニットで済む。Google CloudでのAPIキー発行と、GitHub Secretsへの登録が前提。
-
----
-<sub>移行前のタスク番号: 62</sub>
 
 ---
