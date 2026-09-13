@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-13 10:57 JST
+生成日時: 2026-09-13 11:02 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,232 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 52件（openのみ）。番号降順。
+件数: 60件（openのみ）。番号降順。
+
+---
+
+## #185 index.html のモバイルナビ開閉が <i> 要素でキーボード操作できない
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: index
+
+### 本文
+
+## 状況
+`<i class="mobile-nav-toggle d-xl-none">` は Tab で到達できず、役割も名前も
+ない。index.css で `outline: none !important` も当たっている。スマホ幅の
+キーボード／スイッチ利用者はナビを開けない。
+また `<h1>` が header と hero の2箇所にある。
+
+## 対応
+- `<button type="button" class="mobile-nav-toggle d-xl-none" aria-label="Menu"
+  aria-expanded="false" aria-controls="header">` に置き換える
+  （index.js の `on('click', '.mobile-nav-toggle', …)` はそのまま動く。
+  開閉時に aria-expanded を更新する1行を追加）
+- index.css の `outline: none` を `:focus-visible` のリングに変える
+- header 側の `<h1>` を `<p>` か `<div>` にする
+
+## 備考
+- トップページは #101 で作り直す方針のため最小修正に留める
+- #166 と同じファイルなので1コミットでまとめてよい
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
+---
+
+## #184 ページ送りボタンが disabled になった瞬間にフォーカスが消える（table.js）
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+## 状況
+「次へ」を押して最終ページに着くと render() で `pagerNext.disabled = true`
+になり、フォーカスが body へ落ちてキーボード利用者が位置を失う。
+「前へ」で1ページ目に戻った場合も同じ（table.js 126〜127行）。
+
+## 対応（どちらか）
+- `disabled` の代わりに `aria-disabled="true"` を付け、click 時に無視する
+  （見た目は `.mj-pager-button[aria-disabled="true"]` で現状の disabled と同じに）
+- または render() の後に、有効な側のボタン（なければ #result_count）へ
+  focus() を移す
+
+## 備考
+- jpml_pros.js はページ送りを持たないため対象外
+- 再生成不要
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
+---
+
+## #183 target="_blank" のリンク（16,699件）に「新しいタブで開く」の予告がない
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+## 状況
+画像リンクのアクセシブルネームは alt（例「合澤雄貴 X」）だけで、別タブが
+開くことが伝わらない（WCAG 3.2.5 / G201）。ナビバーのカレンダー・書籍も同様。
+件数は27ページ＋wayhome/38枚の合計。
+
+## 対応（どちらかを決める）
+- (a) lib/page.py の build_image_cell() と generate_jpml_pros.py の
+  get_x() 等で、`<a>` 内に `<span class="visually-hidden">（新しいタブで開く）</span>`
+  を追加する
+- (b) そもそも別タブで開く必要があるか（同タブ＋戻るで十分か）を判断し、
+  target="_blank" を外す
+
+## 備考
+- どちらも全ページ再生成が必要。A-4 / A-5 / #177 とまとめる
+- rel="noopener" は現行ブラウザが target="_blank" に暗黙付与するため必須ではない
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
+---
+
+## #182 <main> ランドマークとスキップリンクをテンプレートに追加する（25ページ）
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+## 状況
+video_wayhome / index / wayhome/ 配下以外の25ページに `<main>` がなく、
+Lighthouse の landmark-one-main が残っている。ナビバーは最上位8項目＋検索で、
+表ページでは本文到達までの Tab 数が多い。
+
+## 対応
+- scripts/lib/page.py の PAGE_TEMPLATE / CONTENT_TEMPLATE で本文を
+  `<main id="main" tabindex="-1">` で包む
+- navbar.js の `<script>` より前に
+  `<a class="visually-hidden-focusable" href="#main">本文へスキップ</a>`
+  を置く（Bootstrap 組み込みクラス）
+- 手書き4ページ（404 / jpml_links / rh_links / resource_dictionary）と
+  jpml_pros（独自テンプレート）は個別に対応
+- video_wayhome と wayhome/ 配下は `<main class="mj-video-page">` 済みなので
+  id とスキップリンクのみ追加
+
+## 備考
+- 全ページ再生成が必要。A-4 / A-6 / #177 とまとめる
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
+---
+
+## #181 jpml_pros.html の「名前」セルを th scope="row" にする
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: jpml_pros
+
+### 本文
+
+## 状況
+1,099行×15列の表で名前列が `<td>` のため、スクリーンリーダーでセル移動して
+「X」「龍龍」の画像リンクを読むとき、誰の行かが伝わらない（WCAG 1.3.1）。
+
+## 対応
+- generate_jpml_pros.py で1列目を `<th scope="row" data-sort="…">` にする
+- style.css の `#pros_table td:nth-child(1)`（sticky 列・幅・z-index）と
+  `#pros_table td { height: 56px }` のセレクタに `th` を追加する
+- jpml_pros.js のソート・絞り込みが `td` 前提で1列目を参照していないか確認
+
+## 備考
+- 再生成が必要。A-5 / A-6 / #177 とまとめて1回で済ませる
+- rh_results_detail の1列目も同様に検討する余地あり（本 issue の範囲外）
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
+---
+
+## #180 select#selectbox にラベルがなく、選択と同時にページ遷移する（5ページ）
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX
+
+### 本文
+
+## 状況
+houou_leagues / ouka_leagues / houou_ranking / ouka_ranking / wrc_ranking の
+`<select id="selectbox">` に `<label>` がない（WCAG 3.3.2）。
+加えて選択即遷移（leagues は leagues.js の change リスナー、ranking は
+インライン onchange）は 3.2.2 On Input の典型的な失敗。Firefox はキーボードの
+↑↓で change を発火するため、選択肢を眺めているだけで遷移する。
+
+## 対応
+- 生成側（generate_houou_leagues.py / generate_ouka_leagues.py）で
+  `<label class="visually-hidden" for="selectbox">選手を選択</label>` を追加
+- 「表示」ボタンを追加し、遷移はボタンの click に移す（change では遷移しない）
+- ranking 3ページ分は #141 の移行要件に含める（インライン onchange の廃止は
+  #9 でも予定済み）
+
+## 備考
+- leagues 2ページは再生成が必要
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
+---
+
+## #179 固定ナビバーと sticky ヘッダーの下にフォーカスが隠れる（WCAG 2.2 2.4.11）
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+## 状況
+`body:has(.mj-table) nav.navbar` が position: fixed、`.mj-table thead th` が
+sticky のため、Tab で表内のリンクへ移動するとブラウザは要素をビューポート内に
+スクロールするが、その位置がナビバー／ヘッダーの真下になり見えない。
+
+## 対応
+style.css に1行追加:
+`body:has(.mj-table) { scroll-padding-top: var(--content-offset, 90px); }`
+（html 側に置いても可。`#` アンカー遷移にも効く）
+
+## 備考
+- 再生成不要
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
+---
+
+## #178 navbar.js の id="navbarDropdown" が7回重複し、aria-label が英語
+
+- 作成: 2026-09-13
+- ラベル: 分野: UI/UX, 対象: 全ページ
+
+### 本文
+
+## 状況
+navbar.js の7つのドロップダウン toggle がすべて `id="navbarDropdown"`。
+各メニューの `aria-labelledby="navbarDropdown"` は文書内で最初の要素に
+解決されるため、6つのメニューが「連盟JPML」と読み上げられる。
+ハンバーガーボタンの `aria-label="Toggle navigation"` は `lang="ja"` の
+日本語音声で読まれ聞き取れない。
+
+## 対応
+- id を一意化する（例: navDropdownJpml / navDropdownHouou …）か、
+  `aria-labelledby` 自体を外す（Bootstrap 5.3 では不要）
+- `aria-label="Toggle navigation"` → `aria-label="メニュー"`
+
+## 備考
+- navbar.js 1ファイルの修正で27ページ＋wayhome/38枚に効く。再生成不要
+- Lighthouse では検出されていない可能性が高い（#163 対応後に他ページが
+  0.98〜1.00 で残指摘が landmark-one-main のみ、という記録と整合）
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
 
 ---
 
@@ -288,6 +513,16 @@ HTMLを直接編集する。再生成は不要。
 mobile / desktop とも 93。`link-name` を解消すればここが上がる見込み。
 （#163 の対応で他26ページは 0.98〜1.00 になっており、index.html だけが取り残されている状態）
 
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+同じ index.html の a11y 修正として #185（モバイルナビ開閉が `<i>` 要素でキーボード操作できない）を起票した。
+同一ファイルのため1コミットでまとめて対応してよい。
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
+
 ---
 
 ## #165 新サイトでOGP画像をページ別に出し分けるか検討する
@@ -401,6 +636,20 @@ SEO/AIO施策10件の中で**10番目**（新サイトで対応）。
 ### 依存
 
 #101、#24、#13、#21
+
+### コメント (1件)
+
+**retroeater** (2026-09-13):
+
+## 参考（2026-09-12 アクセシビリティレビュー）
+現行サイトでは22ページで h1 が visually-hidden のため、晴眼者はタブタイトル
+以外に「いまどのページか」を示す要素がない。#53 の意図的な判断であり
+現行サイトでは変更しないが、新サイトの h1 設計の材料として記録する。
+現行で可視化するなら `.mj-page-heading`（1rem、#152 で既存）を使えば
+見た目をほぼ変えずに出せる。
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
 
 ---
 
@@ -739,7 +988,7 @@ GSCのエクスポートを無加工で置いている（UTF-8 / LF / BOMなし�
 
 2026-09-11のレビューで判明。
 
-### コメント (2件)
+### コメント (3件)
 
 **retroeater** (2026-09-11):
 
@@ -804,6 +1053,23 @@ CSPへの効果はゼロ。したがって #111 の結論が出てから本issue
 このissueはパフォーマンス案件として立てたが、SEO/AIO施策10件の中では**2番目**に重要。
 
 理由: Google Charts依存ページはクローラーから見て本文が空。#142の初回計測で唯一クリックを獲得しているのが `houou_ranking.html?sheet=鳳凰`（4クリック/20表示/順位7.4）で、このランキング3ページに含まれる。検索流入の実績があるページの中身が検索エンジン・AIに読めない状態のため、#111（型B）より先に、SEO観点を加えて判断する。
+
+**retroeater** (2026-09-13):
+
+## 移行時のアクセシビリティ要件（2026-09-12 レビュー）
+据え置き／静的化どちらを選ぶにせよ、以下を要件に含める:
+- 絞り込み欄（現 StringFilter 相当）に `<label>` を付ける
+- ソートは button ＋ aria-sort（#75 と同じ）でキーボード操作可能にする
+- グラフは `role="img"` ＋ `<title>/<desc>`（型C/D と同じ）に加え、
+  数値の表を併置する（ローソク足の内容にテキスト代替がない）
+- #141 のみ: select#selectbox のラベル追加とインライン onchange の廃止
+  （#180 参照）
+
+現状の Google Charts 版は、Table のソートがクリック専用で、ローソク足に
+テキスト代替がない。
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
 
 ---
 
@@ -1514,7 +1780,7 @@ _Generated by [Claude Code](https://claude.ai/code)_
 - アクセス実態は Cloudflare Pro の HTTP Traffic 分析でパス別に確認できる
 - 型C（#127）・型D（#128）は本issueとは別に判断する
 
-### コメント (4件)
+### コメント (5件)
 
 **retroeater** (2026-09-11):
 
@@ -1580,6 +1846,23 @@ JSONにして、クライアントで1本だけ描く。Charts も ECharts も�
 ### SEO/AIO観点の追加（2026-09-12、Claudeとの検討）
 
 #141と同じ理由で、Google Charts依存はクローラーに本文が届かない問題でもある。`houou_results.html?name=` は検索結果に出た `?name=` 付きURLの一例でもあり（handover SEO節）、静的化はSEO/AIO施策としても意味がある。優先順位は#141の後。
+
+**retroeater** (2026-09-13):
+
+## 移行時のアクセシビリティ要件（2026-09-12 レビュー）
+据え置き／静的化どちらを選ぶにせよ、以下を要件に含める:
+- 絞り込み欄（現 StringFilter 相当）に `<label>` を付ける
+- ソートは button ＋ aria-sort（#75 と同じ）でキーボード操作可能にする
+- グラフは `role="img"` ＋ `<title>/<desc>`（型C/D と同じ）に加え、
+  数値の表を併置する（ローソク足の内容にテキスト代替がない）
+- #141 のみ: select#selectbox のラベル追加とインライン onchange の廃止
+  （#180 参照）
+
+現状の Google Charts 版は、Table のソートがクリック専用で、ローソク足に
+テキスト代替がない。
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
 
 ---
 
