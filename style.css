@@ -487,9 +487,14 @@ html:has(.mj-table) {
    - 固定: 横スクロール時にこの列だけ固定する。2列しかないページ
            (jpml_titlesなど)では不要なため .mj-table 側には汎用化しない。
    - 重なり順(手前ほど大きい値): 4=固定列のヘッダー(縦固定と横固定が交差する
-     セル) / 3=通常のヘッダー(.mj-table側) / 2=固定列のデータセル */
+     セル) / 3=通常のヘッダー(.mj-table側) / 2=固定列のデータセル
+   1列目のデータセルは th scope="row"(#181)。.mj-table thead th 側の指定は
+   thead限定でtbodyのthには効かないため、tbody th:nth-child(1)を明示的に
+   同じセレクタへ加える。UA既定のfont-weight: boldだけは.mj-table td
+   (通常の重さ)と見た目を揃えるため下で個別に打ち消す。 */
 #pros_table thead th:nth-child(1),
-#pros_table td:nth-child(1) {
+#pros_table td:nth-child(1),
+#pros_table tbody th:nth-child(1) {
 	width: 150px;
 	padding: 4px 8px;
 	position: sticky;
@@ -500,14 +505,20 @@ html:has(.mj-table) {
 	z-index: 4;
 }
 
-#pros_table td:nth-child(1) {
+#pros_table td:nth-child(1),
+#pros_table tbody th:nth-child(1) {
 	z-index: 2;
+}
+
+#pros_table tbody th:nth-child(1) {
+	font-weight: normal;
 }
 
 /* 行の高さ。画像48px + 上下padding 4px×2 = 56px。
    注意: table-cellでは max-height と overflow が無効なため指定しない。
    height は最小値として働くので、中身が56pxに収まる前提で成立している。 */
-#pros_table td {
+#pros_table td,
+#pros_table tbody th {
 	height: 56px;
 }
 

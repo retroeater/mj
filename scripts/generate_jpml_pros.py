@@ -248,9 +248,14 @@ def build_row_html(row) -> str:
     ]
 
     tds = []
-    for content, sort_value in cells:
+    for i, (content, sort_value) in enumerate(cells):
         sort_attr = f' data-sort="{esc(sort_value)}"' if sort_value is not None else ""
-        tds.append(f"<td{sort_attr}>{content}</td>")
+        # 1列目(名前)は th scope="row" にする。スクリーンリーダーでセル移動
+        # したときに行の主語(誰の行か)が伝わるようにするため(#181)。
+        if i == 0:
+            tds.append(f"<th scope=\"row\"{sort_attr}>{content}</th>")
+        else:
+            tds.append(f"<td{sort_attr}>{content}</td>")
 
     # 表示用の get_places() は <br /> を含むため、そのままエスケープすると
     # data-place に "&lt;br /&gt;" が入り、「br」で検索すると全行がヒットする。
