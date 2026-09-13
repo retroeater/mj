@@ -4,14 +4,16 @@ generate_video_wayhome.py(一覧、video_wayhome.html)と
 generate_wayhome_episodes.py(エピソード個別ページ38枚、wayhome/、#162)の
 両方から使う。最新話判定・サムネイル解決・uploadDate変換・VideoObjectの
 組み立てを二重実装しないためにここへ集約した。
+
+#192第2段: 公開日とサムネイルはシートではなく data/youtube_meta.json
+(scripts/fetch_youtube_meta.py が YouTube Data API から取得)を正とする。
 """
 import datetime
+import json
 import pathlib
 import re
 import sys
-import urllib.error
 import urllib.parse
-import urllib.request
 from collections import namedtuple
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
@@ -21,6 +23,8 @@ SPREADSHEET_ID = "1y8xBxGpIt-C23cwG7MDjDkebMlpnBufa4_IzYAo2QyQ"
 SHEET_NAME = "帰り道"
 
 SERIES_NAME = "帰り道ついていってイイっすか"
+
+YOUTUBE_META_PATH = pathlib.Path(__file__).parent.parent.parent / "data" / "youtube_meta.json"
 
 # シート「帰り道」の列とコード上の呼び名の対応をここに1か所だけ定義する
 # (#196/#193)。(列記号, コード上の呼び名, シート上の見出し(参考表示用))の
@@ -37,6 +41,7 @@ SERIES_NAME = "帰り道ついていってイイっすか"
 COLUMNS = (
     ("A", "interviewee", "名前"),
     ("B", "x_id", "X ID"),
+    # C・F列はシートに残すが生成には使わない(#192第2段、API由来に切り替え)。
     ("C", "published_date", "公開日"),
     ("D", "title", "タイトル"),
     ("E", "url", "URL"),
@@ -48,6 +53,13 @@ COLUMNS = (
 ROW_FIELDS = tuple(name for _, name, _ in COLUMNS)
 WayhomeRow = namedtuple("WayhomeRow", ROW_FIELDS)
 QUERY = 'SELECT {} WHERE G = "Y"'.format(",".join(letter for letter, _, _ in COLUMNS))
+
+# 生成側が使う1エピソード分。シート由来の項目にAPI由来の公開日時(JST)と
+# サムネイル一覧を合わせたもの。C・F列の値は持たせない(#192第2段)。
+Episode = namedtuple(
+    "Episode",
+    ("interviewee", "x_id", "title", "url", "final_video_url", "video_id", "published_at", "thumbnails"),
+)
 
 
 def to_rows(raw_rows):
@@ -68,18 +80,56 @@ def to_rows(raw_rows):
         result.append(WayhomeRow(*values))
     return result
 
-IMG_YOUTUBE_PATTERN = re.compile(r"^https?://img\.youtube\.com/vi/([^/]+)/")
 WATCH_ID_PATTERN = re.compile(r"[?&]v=([^&]+)")
-DATE_ONLY_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 JST = datetime.timezone(datetime.timedelta(hours=9))
-MAXRES_TIMEOUT = 15  # scripts/check_image_links.py のHEADリクエストと同じ方針
+
+THUMB_BASE = "https://img.youtube.com/vi"
+# (APIのthumbnailsのキー, img.youtube.com上のファイル名)。URLはAPIが返す
+# i.ytimg.comではなくimg.youtube.comで組み立てる(CSP導入#9に向けて依存
+# ドメインを増やさない)。有無の判定はAPIのキーで行い、404には頼らない。
+# fhd(1920×1080)はAPIに載っていても実体が404のため使わない(#192)。
+HERO_THUMB_PRIORITY = (("maxres", "maxresdefault"), ("standard", "sddefault"), ("high", "hqdefault"))
+CARD_THUMB = ("medium", "mqdefault")  # 表示160×90のカード用。maxresだと38枚で約7MBになる
+HERO_FALLBACK_FILE = "hqdefault"  # 読み込み失敗時のdata-fallback先
 
 
-def sorted_by_date_desc(rows):
-    """公開日(C列)の降順に並べる。Pythonのsortedは安定ソートなので、
-    同日が複数ある場合はシート順で先に出てくる行が結果でも先に来る
-    (#102第2段のmax()ループと同じ規則をsortedの安定性で満たす)。"""
-    return sorted(rows, key=lambda row: row.published_date or "", reverse=True)
+def load_episodes(rows, meta_path=YOUTUBE_META_PATH):
+    """WayhomeRowのリストに data/youtube_meta.json の公開日時・サムネイルを
+    合わせてEpisodeのリストにする。シートにあってJSONに無い動画は、
+    再取得漏れ(scripts/fetch_youtube_meta.py未実行)なので生成を止める。"""
+    videos = json.loads(meta_path.read_text(encoding="utf-8"))["videos"]
+    episodes = []
+    missing = []
+    for row in rows:
+        video_id = video_id_from_watch_url(row.url)
+        if not video_id:
+            raise ValueError(f"視聴URLから動画IDを取り出せません: {row.url!r}")
+        video = videos.get(video_id)
+        if video is None:
+            missing.append(f"{video_id}({row.title} {row.interviewee})")
+            continue
+        published_at = datetime.datetime.fromisoformat(video["publishedAt"].replace("Z", "+00:00")).astimezone(JST)
+        episodes.append(Episode(
+            row.interviewee, row.x_id, row.title, row.url, row.final_video_url,
+            video_id, published_at, video["thumbnails"],
+        ))
+    if missing:
+        raise ValueError(
+            f"{meta_path.name} に無い動画があります。scripts/fetch_youtube_meta.py で"
+            f"再取得すること: {', '.join(missing)}"
+        )
+    return episodes
+
+
+def sorted_by_date_desc(episodes):
+    """公開日時(API由来、#192第2段)の降順に並べる。同時刻は無い前提だが、
+    Pythonのsortedは安定ソートなのでその場合もシート順が保たれる。"""
+    return sorted(episodes, key=lambda ep: ep.published_at, reverse=True)
+
+
+def published_date_text(episode) -> str:
+    """表示用の公開日(JST、YYYY-MM-DD)。"""
+    return episode.published_at.strftime("%Y-%m-%d")
 
 
 def video_id_from_watch_url(url):
@@ -89,47 +139,31 @@ def video_id_from_watch_url(url):
     return match.group(1) if match else None
 
 
-def maxres_available(video_id: str) -> bool:
-    """maxresdefault.jpg が存在するかHEADで確認する。失敗時はhqdefaultへ
-    フォールバックする(#102)。タイムアウト・例外は握りつぶさずログに出す。"""
-    url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
-    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "Mozilla/5.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=MAXRES_TIMEOUT) as res:
-            return res.status == 200
-    except Exception as e:
-        print(f"  maxresdefault確認に失敗、hqdefaultにフォールバックします: {video_id}: {e}", file=sys.stderr)
-        return False
+def thumb_url(video_id: str, file_name: str) -> str:
+    return f"{THUMB_BASE}/{video_id}/{file_name}.jpg"
 
 
-def resolve_thumb(image_url):
-    """大きいサムネイル用のURL・width・heightを決める(#102第1段から移植)。
-    F列がimg.youtube.comでなければ差し替えを行わずそのまま使う。"""
-    match = IMG_YOUTUBE_PATTERN.match(image_url or "")
-    if not match:
-        # 現データ(38件)はすべてimg.youtube.comのため通常は通らない分岐。
-        return image_url, 480, 360
-    video_id = match.group(1)
-    if maxres_available(video_id):
-        return f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg", 1280, 720
-    return f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg", 480, 360
+def resolve_hero_thumb(episode):
+    """ヒーロー・og:image用のURL・width・height。HERO_THUMB_PRIORITYの
+    順にAPIのキーがあるものを使う。width/heightはAPIが返す実寸。"""
+    for key, file_name in HERO_THUMB_PRIORITY:
+        thumb = episode.thumbnails.get(key)
+        if thumb:
+            return thumb_url(episode.video_id, file_name), thumb["width"], thumb["height"]
+    raise ValueError(f"ヒーロー用のサムネイルがAPIレスポンスにありません: {episode.video_id}")
 
 
-def to_upload_date(date_str):
-    """C列の日付文字列(YYYY-MM-DD)をuploadDate用の完全なISO 8601に変換する
-    (#13。本番のリッチリザルトテストで「日時値が無効」「タイムゾーンが無い」
-    の2件が任意の指摘として出たため)。
+def resolve_card_thumb(episode):
+    """カード用のURL・width・height(APIのmedium、320×180)。"""
+    key, file_name = CARD_THUMB
+    thumb = episode.thumbnails.get(key)
+    if not thumb:
+        raise ValueError(f"カード用のサムネイル({key})がAPIレスポンスにありません: {episode.video_id}")
+    return thumb_url(episode.video_id, file_name), thumb["width"], thumb["height"]
 
-    スプレッドシートには日付しかないため、時刻は 00:00:00 JST で近似する。
-    実際の公開時刻ではない。パースできない値はNoneを返す。uploadDateは
-    呼び出し側でキーごと省略する。"""
-    if not date_str or not DATE_ONLY_PATTERN.match(date_str):
-        return None
-    try:
-        dt = datetime.datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=JST)
-    except ValueError:
-        return None
-    return dt.isoformat()
+
+def hero_fallback_url(episode) -> str:
+    return thumb_url(episode.video_id, HERO_FALLBACK_FILE)
 
 
 def episode_url(video_id: str) -> str:
@@ -168,21 +202,17 @@ def build_final_video_link_html(row, css_class: str = "") -> str:
     return f'<a{class_attr} href="{esc(url)}" target="_blank" rel="noopener">決勝戦を見る{NEW_TAB_HINT}</a>'
 
 
-def build_video_object(row, thumb_url) -> dict:
+def build_video_object(episode, thumb_url) -> dict:
     """VideoObject(単体)を組み立てる。一覧ページ(最新話1件)・個別ページ
-    (そのページの動画)の両方で使う。"""
-    obj = {
+    (そのページの動画)の両方で使う。uploadDateはAPIの実際の公開時刻
+    (JST、#13で求められたタイムゾーン付きISO 8601)。"""
+    return {
         "@context": "https://schema.org",
         "@type": "VideoObject",
-        "name": f"{row.title} {row.interviewee}".strip(),
-        "description": episode_description(row),
+        "name": f"{episode.title} {episode.interviewee}".strip(),
+        "description": episode_description(episode),
         "thumbnailUrl": [thumb_url],
-        "contentUrl": row.url,
+        "contentUrl": episode.url,
+        "uploadDate": episode.published_at.isoformat(),
+        "embedUrl": f"https://www.youtube.com/embed/{episode.video_id}",
     }
-    upload_date = to_upload_date(row.published_date)
-    if upload_date:
-        obj["uploadDate"] = upload_date
-    video_id = video_id_from_watch_url(row.url)
-    if video_id:
-        obj["embedUrl"] = f"https://www.youtube.com/embed/{video_id}"
-    return obj

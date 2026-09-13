@@ -54,12 +54,13 @@ def build_prevnext_link(row, direction_label: str) -> str:
 def build_related_card_html(row) -> str:
     video_id = wayhome.video_id_from_watch_url(row.url)
     alt = f"{row.title} {row.interviewee}" if row.interviewee else (row.title or "")
+    image_url, image_width, image_height = wayhome.resolve_card_thumb(row)
     return (
         '<li class="mj-video-card">\n'
         f'\t<a class="mj-video-card-link" href="{esc(video_id)}.html">\n'
-        f'\t\t<img class="mj-video-card-img" alt="{esc(alt)}" loading="lazy" width="160" height="90" '
-        f'src="{esc(row.image_url)}" data-fallback="{ASSET_PREFIX}img/125_arr_hoso.png" />\n'
-        f'\t\t<span class="mj-video-card-date">{esc(row.published_date)}</span>\n'
+        f'\t\t<img class="mj-video-card-img" alt="{esc(alt)}" loading="lazy" width="{image_width}" height="{image_height}" '
+        f'src="{esc(image_url)}" data-fallback="{ASSET_PREFIX}img/125_arr_hoso.png" />\n'
+        f'\t\t<span class="mj-video-card-date">{esc(wayhome.published_date_text(row))}</span>\n'
         f'\t\t<span class="mj-video-card-title">{esc(row.title)}</span>\n'
         f'\t\t<span class="mj-video-card-name">{esc(row.interviewee)}</span>\n'
         "\t</a>\n"
@@ -94,12 +95,12 @@ def build_body_html(row, is_latest, prev_row, next_row, same_player_rows, thumb_
     hero_html = (
         '<section class="mj-video-hero">\n'
         f'\t<img class="mj-video-hero-bg" src="{esc(thumb_url)}" alt="" width="{width}" height="{height}" '
-        f'fetchpriority="high" />\n'
+        f'fetchpriority="high" data-fallback="{esc(wayhome.hero_fallback_url(row))}" />\n'
         '\t<div class="mj-video-hero-scrim"></div>\n'
         '\t<div class="mj-video-hero-content">\n'
         f'\t\t<p class="mj-video-series-name"><a href="{ASSET_PREFIX}video_wayhome.html">{esc(wayhome.SERIES_NAME)}</a></p>\n'
         f'\t\t<h1 class="mj-video-hero-player">{esc(name)}</h1>\n'
-        f'\t\t<p class="mj-video-hero-meta">{badge}<span>{esc(row.published_date)}</span></p>\n'
+        f'\t\t<p class="mj-video-hero-meta">{badge}<span>{esc(wayhome.published_date_text(row))}</span></p>\n'
         f'\t\t<p class="mj-video-hero-desc">{esc(wayhome.episode_description(row))}</p>\n'
         f'\t\t<div class="mj-video-hero-actions">{"".join(actions)}</div>\n'
         '\t\t<p id="copyStatus" class="visually-hidden" role="status" aria-live="polite"></p>\n'
@@ -231,7 +232,7 @@ def main():
     raw_rows = wayhome.to_rows(fetch_sheet(wayhome.SPREADSHEET_ID, wayhome.SHEET_NAME, wayhome.QUERY))
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
-    sorted_rows = wayhome.sorted_by_date_desc(raw_rows)
+    sorted_rows = wayhome.sorted_by_date_desc(wayhome.load_episodes(raw_rows))
 
     video_ids = [wayhome.video_id_from_watch_url(row.url) for row in sorted_rows]
     if any(vid is None for vid in video_ids):
@@ -250,7 +251,7 @@ def main():
         next_row = sorted_rows[i + 1] if i < len(sorted_rows) - 1 else None
         same_player_rows = [r for j, r in enumerate(sorted_rows) if j != i and r.interviewee == row.interviewee]
 
-        thumb_url, width, height = wayhome.resolve_thumb(row.image_url)
+        thumb_url, width, height = wayhome.resolve_hero_thumb(row)
 
         meta = build_meta(row, video_id, thumb_url, width, height)
         body_html = build_body_html(row, i == 0, prev_row, next_row, same_player_rows, thumb_url, width, height)

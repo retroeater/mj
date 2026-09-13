@@ -64,7 +64,7 @@ META = PageMeta(
 )
 
 
-def build_hero_html(latest, thumb_url, width, height) -> str:
+def build_hero_html(latest) -> str:
     """全画面ヒーロー(背景=最新話のサムネイル)を組み立てる。
     テキストはヒーロー内に焼き込んだグラデーションスクリム(常に暗)の上に
     乗るため、ページのカラートークン(ライト/ダーク)とは独立して常に明色
@@ -73,9 +73,10 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
     「パイロット: video_wayhome」参照。"""
     interviewee = latest.interviewee
     x_id = latest.x_id
-    published_date = latest.published_date
+    published_date = wayhome.published_date_text(latest)
     title = latest.title
     url = latest.url
+    thumb_url, width, height = wayhome.resolve_hero_thumb(latest)
 
     badge = '<span class="mj-video-hero-badge">最新話</span>'
     meta_parts = [esc(published_date)]
@@ -101,7 +102,7 @@ def build_hero_html(latest, thumb_url, width, height) -> str:
     return (
         '<section class="mj-video-hero">\n'
         f'\t<img class="mj-video-hero-bg" src="{esc(thumb_url)}" alt="" width="{width}" height="{height}" '
-        f'fetchpriority="high" />\n'
+        f'fetchpriority="high" data-fallback="{esc(wayhome.hero_fallback_url(latest))}" />\n'
         '\t<div class="mj-video-hero-scrim"></div>\n'
         '\t<div class="mj-video-hero-content">\n'
         f'\t\t<h1 class="mj-video-series-name">{esc(SERIES_NAME)}</h1>\n'
@@ -154,9 +155,9 @@ def build_card_html(row) -> str:
     「再生」ボタンにのみ残す)。"""
     interviewee = row.interviewee
     x_id = row.x_id
-    published_date = row.published_date
+    published_date = wayhome.published_date_text(row)
     title = row.title
-    image_url = row.image_url
+    image_url, image_width, image_height = wayhome.resolve_card_thumb(row)
     alt = f"{title} {interviewee}" if interviewee else (title or "")
     info_value = esc(" ".join(filter(None, [published_date, title, interviewee, x_id])))
 
@@ -169,7 +170,7 @@ def build_card_html(row) -> str:
     return (
         f'<li class="mj-video-card" data-info="{info_value}">\n'
         f'\t<a class="mj-video-card-link" href="{esc(episode_href(row))}">\n'
-        f'\t\t<img class="mj-video-card-img" alt="{esc(alt)}" loading="lazy" width="160" height="90" '
+        f'\t\t<img class="mj-video-card-img" alt="{esc(alt)}" loading="lazy" width="{image_width}" height="{image_height}" '
         f'src="{esc(image_url)}" data-fallback="img/125_arr_hoso.png" />\n'
         f'\t\t<span class="mj-video-card-date">{esc(published_date)}</span>\n'
         f'\t\t<span class="mj-video-card-title">{esc(title)}</span>\n'
@@ -221,14 +222,15 @@ def main():
     raw_rows = wayhome.to_rows(fetch_sheet(SPREADSHEET_ID, SHEET_NAME, QUERY))
     print(f"{len(raw_rows)}件取得しました。HTML生成中...")
 
-    # シートの並び順に依存せず、公開日(C列)の降順に明示ソートする(#102第2段)。
-    # wayhome.sorted_by_date_desc はgenerate_wayhome_episodes.py(#162)と共有。
-    sorted_rows = wayhome.sorted_by_date_desc(raw_rows)
+    # シートの並び順に依存せず、公開日時(API由来、#192第2段)の降順に明示
+    # ソートする(#102第2段)。wayhome.sorted_by_date_desc は
+    # generate_wayhome_episodes.py(#162)と共有。
+    sorted_rows = wayhome.sorted_by_date_desc(wayhome.load_episodes(raw_rows))
 
     latest = sorted_rows[0]
-    hero_thumb_url, hero_width, hero_height = wayhome.resolve_thumb(latest.image_url)
+    hero_thumb_url, _, _ = wayhome.resolve_hero_thumb(latest)
 
-    hero_html = build_hero_html(latest, hero_thumb_url, hero_width, hero_height)
+    hero_html = build_hero_html(latest)
     cards_html = "\n".join(build_card_html(row) for row in sorted_rows)
     json_ld = build_json_ld(sorted_rows, hero_thumb_url)
 
