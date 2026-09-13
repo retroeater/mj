@@ -335,8 +335,17 @@ body:has(.mj-table) nav.navbar {
 /* 固定したメニューの分だけ本文を押し下げる */
 body:has(.mj-table) {
 	padding-top: var(--content-offset, 90px);
-	/* Tabで表内のリンクへ移動した際、ブラウザの自動スクロール先が
-	   固定ナビの真下にならないようにする(#179)。#アンカー遷移にも効く。 */
+}
+
+/* Tabキーでの移動時、ブラウザは対象をビューポート内に入れるが、その位置が
+   固定ナビ(position:fixed)とstickyヘッダーの真下になり見えない(WCAG 2.2
+   2.4.11)。スクロール時に上端へ確保する余白を、ナビ+検索欄の実測値
+   (--content-offset)と同じにする。#アンカー遷移にも効く。
+   scroll-paddingはスクロールコンテナ側のプロパティで、このサイトの
+   ビューポートのスクロールコンテナはルート要素(html)。bodyに書くと
+   無視されるためhtml側に置く(html:has(.mj-video-page)と同じ流儀)。
+   最初bodyに書いて効かなかった経緯がある(#179)。 */
+html:has(.mj-table) {
 	scroll-padding-top: var(--content-offset, 90px);
 }
 
