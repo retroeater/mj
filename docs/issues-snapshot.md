@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-13 12:13 JST
+生成日時: 2026-09-13 12:48 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -367,7 +367,7 @@ CHAT-0913-WH-12: 本文「やること」に、共有テキストへ選手のX�
 
 ## #190 エピソード一覧ブロックを全幅化し、動画グリッドを可変列にする
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -401,11 +401,27 @@ CHAT-0913-WH-12: 本文「やること」に、共有テキストへ選手のX�
 
 Chat-Ref: CHAT-0913-WH-04
 
+### コメント (3件)
+
+**retroeater** (2026-09-13):
+
+着手中: video_wayhome.htmlのみを対象に実装します（Chat-Ref: CHAT-0913-WH-13/14/15、#188→#189→#190の順）。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+実装完了（Chat-Ref: CHAT-0913-WH-15）。コミット: 1245104「video_wayhomeのエピソード一覧を全幅化し可変列グリッドにする(#190)」。.mj-fullbleed(margin-inline: calc(50% - 50vw))で全幅化、.mj-video-grid(grid-template-columns: repeat(auto-fill, minmax(280px,1fr)))で可変列化。overflow-x:hiddenは使わずhtml側でscrollbar-gutter: stableのみで対処（#188/#189のposition:stickyとの競合を避けるため）。横スクロール矢印ボタン(旧)は廃止しJSも削除。個別ページ(wayhome/)の「同じ選手の他エピソード」は無変更。他64ページへの影響なし。本番反映は行っていません。
+
+**注記:** Windows/Chromeの実ウィンドウでの横スクロールバー目視確認は、このセッション環境にブラウザが無いため実施できていません。平野さんの環境での確認をお願いします。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+実装完了につきクローズします。
+
 ---
 
 ## #189 虫眼鏡アイコンの展開方式を廃止し、常時表示の sticky フィルタバーにする
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -473,11 +489,25 @@ Chat-Ref: CHAT-0913-WH-04
 
 Chat-Ref: CHAT-0913-WH-03
 
+### コメント (3件)
+
+**retroeater** (2026-09-13):
+
+着手中: video_wayhome.htmlのみを対象に実装します（Chat-Ref: CHAT-0913-WH-13/14/15、#188→#189→#190の順）。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+実装完了（Chat-Ref: CHAT-0913-WH-14）。コミット: 251e0c2「video_wayhomeの検索をnavbar直下の常時表示フィルタバーにする(#189)」。虫眼鏡アイコン開閉方式を廃止しnavbar直下常時表示の.mj-filterbarに置き換え。絞り込み件数を可視化（0件時は「該当する動画がありません」）。/キーでフォーカス・Escでクリアに対応。has_search_boxes=Falseに伴いCLAUDE.mdのdata-search対象ページ数を7→8に更新。他64ページへの影響なし。本番反映は行っていません。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+実装完了につきクローズします。
+
 ---
 
 ## #188 video_wayhome の navbar をスクロール追随（sticky）にする
 
-- 状態: OPEN / 作成: 2026-09-13
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-13 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守, 対象: video_wayhome
 
 ### 本文
@@ -536,11 +566,23 @@ video_wayhome.html 以外に影響させずに実装できる見込みが高い�
 
 Chat-Ref: CHAT-0913-WH-02
 
-### コメント (1件)
+### コメント (4件)
 
 **retroeater** (2026-09-13):
 
 CHAT-0913-WH-10: 反映確認のみ実施。WH-01調査5番の2点（navbarが共通テンプレート由来〈navbar.jsが全65ページでdocument.write〉であること／`body:has(.mj-table) nav.navbar`という型A限定position:fixedの前例があり同じ手法でvideo_wayhome.htmlだけに限定できる見込みであること）は、起票時点の本文「現状」節にすでに記載済みでした。本文の追記・編集は行っていません。
+
+**retroeater** (2026-09-13):
+
+着手中: video_wayhome.htmlのみを対象に実装します（Chat-Ref: CHAT-0913-WH-13/14/15、#188→#189→#190の順）。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+実装完了（Chat-Ref: CHAT-0913-WH-13）。コミット: 0f1fef5「video_wayhomeのnavbarをsticky化する(#188)」。video_wayhome.htmlの<main>に専用スコープクラスmj-video-listを新設し、body:has(.mj-video-list) nav.navbarでposition:stickyを適用。--mj-nav-hはvideo_wayhome.jsがResizeObserverで実測。他64ページへの影響なし（.mj-video-listはこのページにのみ出力されることを確認済み）。本番反映(wrangler deploy)は行っていません。セッション: https://claude.ai/code/session_019isVywWPRYnK59LHarV6Cn
+
+**retroeater** (2026-09-13):
+
+実装完了につきクローズします。
 
 ---
 
@@ -763,7 +805,7 @@ Claude Code 側では実施できない。平野さんの手作業になる。
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (1件)
+### コメント (3件)
 
 **retroeater** (2026-09-13):
 
@@ -777,6 +819,41 @@ PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わ
 
 本issueを含む再生成が必要な変更は、#7 の残り6ページ（型B 3 /
 ランキング 3）の作業で再生成が走るタイミングに寄せるのが現実的。
+
+**retroeater** (2026-09-13):
+
+着手中: target="_blank"リンクへの別タブ予告テキスト追加に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
+
+方針決定(2026-09-13、平野さん判断): (a) visually-hiddenの予告テキストを足す、を採用します。issue本文にあった(b) 別タブをやめる案は不採用です。
+
+**retroeater** (2026-09-13):
+
+## jpml_pros.html: 新しいタブ予告spanの対象範囲による比較（2026-09-13）
+
+実装時、jpml_pros.htmlだけ想定(130KB増)を大きく超えたため(実測373KB増)、
+3パターンを実測して比較した。差は`get_internal_link()`（鳳凰/桜花成績・
+最強戦・タイトル戦・放送対局など、同一サイト内の`target="_blank"`リンク）
+まで対象に含めるかどうか。
+
+| パターン | ファイルサイズ | 差分 | span件数 |
+|---|---|---|---|
+| A) なし | 1,258,451 bytes | ±0 | 0件 |
+| B) 外部リンクのみ（龍龍・X・note・YouTube） | 1,391,312 bytes | +132,861 bytes | 1,983件 |
+| C) 外部+内部リンク（鳳凰/桜花成績等も含む） | 1,618,308 bytes | +359,857 bytes | 5,371件 |
+
+B）が起票時の想定（130KB・3,388件）にほぼ一致する。C）は内部リンクの
+件数が想定より多く、増加量が約2.7倍になった。
+
+サイト全体（jpml_pros以外の26ページ+wayhome/38枚+navbar.js+手書き4ページ）
+の合計は16,734件で、起票時の想定「16,699件」とほぼ一致（誤差0.2%）。
+この合計は既に反映済み。
+
+**平野さんの判断（2026-09-13）**: jpml_pros.htmlについては今回A）を採用し、
+新しいタブ予告の追加を見送る（保留）。他ページはそのまま実装済み。
+再検討する場合はB）（外部リンクのみ、想定どおり+130KB）が現実的な選択肢。
+
+レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
+実機の支援技術での検証は未実施
 
 ---
 
@@ -809,7 +886,7 @@ Lighthouse の landmark-one-main が残っている。ナビバーは最上位8�
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -823,6 +900,10 @@ PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わ
 
 本issueを含む再生成が必要な変更は、#7 の残り6ページ（型B 3 /
 ランキング 3）の作業で再生成が走るタイミングに寄せるのが現実的。
+
+**retroeater** (2026-09-13):
+
+着手中: <main>ランドマークとスキップリンクの追加に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
@@ -850,7 +931,7 @@ PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わ
 レビュー出典: 2026-09-12、Claude（チャット）による静的レビュー。
 実機の支援技術での検証は未実施
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-13):
 
@@ -864,6 +945,10 @@ PAGE_TEMPLATE を持つページだったため、全ページ再生成を伴わ
 
 本issueを含む再生成が必要な変更は、#7 の残り6ページ（型B 3 /
 ランキング 3）の作業で再生成が走るタイミングに寄せるのが現実的。
+
+**retroeater** (2026-09-13):
+
+着手中: jpml_pros.htmlの名前セルをth scope="row"にする作業に着手します。https://claude.ai/code/session_01WPd4DCvv5vBi2FG1AvqeGK
 
 ---
 
