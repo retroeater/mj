@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（Openのみ）
 
-生成日時: 2026-09-12 23:25 JST
+生成日時: 2026-09-13 09:57 JST
 
 未完了のissueだけを抜き出したスナップショットです。本文・コメントを
 含みます（他のClaudeチャットに経緯まで正しく理解してもらうため）。
@@ -12,7 +12,7 @@ issues-snapshot.md（全件）を参照します。
 最新化が必要になったら `/issues` コマンドを実行してください。
 issues-snapshot.md と同時に再生成されます。
 
-件数: 55件（openのみ）。番号降順。
+件数: 53件（openのみ）。番号降順。
 
 ---
 
@@ -178,47 +178,6 @@ YouTubeチャンネル「日本プロ麻雀連盟」の企画「帰り道つい�
 - 件数の表記が全ページで揃っていることに価値があるか
 - #102 の新デザインのパイロットとして、このページだけ別の文体を
   許容するか（新サイトの description の書き方を決める材料になる）
-
----
-
-## #171 Workers Builds の Build watch paths を見直す
-
-- 作成: 2026-09-12
-- ラベル: 分野: 整理・保守
-
-### 本文
-
-## 背景
-
-#169の後始末で、Cloudflare Workers Builds（ダッシュボードのGit連携）の
-Build watch pathsがInclude paths: `*` / Exclude paths: `node_modules/**, .git/`
-であることが判明した（平野さんがダッシュボードで確認、2026-09-12時点）。
-
-## 問題
-
-Include pathsが`*`のため、`chore: regenerate issues snapshot`のような
-ドキュメントのみのコミットでもビルドが走る。
-
-## 案
-
-`docs/**`をExclude pathsに追加すれば無駄なビルドが減る。`docs`は
-`.assetsignore`で配信対象外なので、スキップしても配信物は変わらない。
-
-## 実施について
-
-**ダッシュボード側の設定変更のため、実施は平野さんの作業になる。**
-
-### コメント (1件)
-
-**retroeater** (2026-09-12):
-
-平野さんより、Cloudflare Workers BuildsのExclude pathsに`docs/**`を追加済みとの申告あり（2026-09-12）。ダッシュボードの設定値はセッションから検証できないため、「平野さんが設定した」という記録のみ残す。
-
-このIssueをクローズしてよいか、平野さんにご確認をお願いします。
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 ---
 
@@ -574,48 +533,6 @@ Astro を採るかどうかで `lib/page.py` の扱いはほぼ決まるため�
 「§1『現行サイトの扱い』の前提を修正する」という別件で、9/11 にクローズ済み。
 追跡先が失われていたため、この issue を新しい追跡先として起票した。
 §7 の参照もこの issue 番号に差し替える。
-
----
-
-## #161 llms.txt の設置を検討する
-
-- 作成: 2026-09-12
-- ラベル: 分野: SEO/AIO
-
-### 本文
-
-### 位置づけ（2026-09-12、Claudeとの検討）
-
-SEO/AIO施策10件には**含めていない**。導入コストはほぼゼロだが、主要なAI検索が現時点で参照している証拠が弱いため。新サイトのビルド（#21）で自動生成できるなら「ついでに出す」程度でよい。判断の経緯を残すために起票。
-
-### コメント (3件)
-
-**retroeater** (2026-09-12):
-
-着手中: https://claude.ai/code/session_01W1WJWtqd9snYntmGZwJjsV
-
-**retroeater** (2026-09-12):
-
-実装完了: 7b03cb5
-
-- リポジトリ直下に `llms.txt` を手書きの静的ファイル1枚として追加。生成スクリプトは作っていない（issue本文の判断どおり、#21の新サイトビルド側で自動生成する余地を残す）
-- `.assetsignore` には追加していない（公開対象）
-- CLAUDE.mdの「構成」節にllms.txtの存在と生成スクリプトを持たない理由を追記、「CLAUDE.md / handover.mdの更新ルール」節にページ増減時の更新対象として追加
-- docs/handover.mdの「SEO」節に設置経緯を追記、冒頭の最終更新行を更新
-
-本番反映はCloudflare Workers Builds経由。ビルド成功はcheck-runsで確認できるが、本番の見え方（`https://ryoei.pro/llms.txt`）はセッションから確認できないため、平野さんの確認後にクローズをお願いします。
-
-**retroeater** (2026-09-12):
-
-本番の https://ryoei.pro/llms.txt が文字化けしていた件、対処しました(1467cac)。
-
-**原因**: `.txt` には Cloudflare 側で charset が付与されず、Content-Type が `text/plain` のみになる。ファイルの中身は正しいUTF-8だが、日本語環境のブラウザがcharset無しのtext/plainをShift_JISとして解釈し文字化けしていた。
-
-**対処**: `_headers` に `/llms.txt` 向けのルールを追加し、`Content-Type: text/plain; charset=utf-8` を明示した。BOM追加は代替案として温存し、まず_headersの上書きを試す。
-
-robots.txtについても同じ原因で文字化けしている可能性があるが、Cloudflare AI Crawl Controlの管理robots.txtが前置される構成のため_headersの効き方が異なる可能性があり、今回は触らず別issueとして起票します。
-
-引き続き平野さんの本番確認待ちのため、このissueはまだクローズしません。
 
 ---
 

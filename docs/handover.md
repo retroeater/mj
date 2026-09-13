@@ -367,7 +367,7 @@ Workers & Pages → `mj` → Settings → Builds:
 | Production branch | `cloudflare` |
 | Builds for non-production branches | OFF（2026-09-12にOFFへ変更） |
 | Build watch paths: Include | `*` |
-| Build watch paths: Exclude | `node_modules/**, .git/` |
+| Build watch paths: Exclude | `node_modules/**, .git/, docs/**`（`docs/**`は2026-09-12に平野さんが追加、#171） |
 | API token | `mj build token` |
 | Cache | Disabled |
 
@@ -376,7 +376,9 @@ Workers & Pages → `mj` → Settings → Builds:
   即座に本番へ反映される。** ワンクッションを置く仕組みは無い
   （ゲートを設けるかどうかは#170で検討中、保留）
 - Build watch pathsのIncludeが`*`のため、ドキュメントのみのコミットでも
-  ビルドが走る（`docs/**`をExcludeに追加する案は#171、保留）
+  ビルドが走っていた（`docs/**`をExcludeに追加する案は#171、平野さんが
+  2026-09-12にExclude pathsへ`docs/**`を追加し完了。設定値自体はセッション
+  からは検証できないため申告の記録として残す）
 
 ### APIトークンの棚卸し（2026-09-12）
 

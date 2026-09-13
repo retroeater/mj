@@ -1,6 +1,6 @@
 # GitHub Issues スナップショット（全件）
 
-生成日時: 2026-09-12 23:25 JST
+生成日時: 2026-09-13 09:57 JST
 
 このファイルは会話でissueの内容を共有するためのスナップショットです。
 本文・コメントを含みます（他のClaudeチャットに経緯まで正しく
@@ -189,7 +189,7 @@ YouTubeチャンネル「日本プロ麻雀連盟」の企画「帰り道つい�
 
 ## #171 Workers Builds の Build watch paths を見直す
 
-- 状態: OPEN / 作成: 2026-09-12
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-12 / クローズ: 2026-09-13
 - ラベル: 分野: 整理・保守
 
 ### 本文
@@ -214,7 +214,7 @@ Include pathsが`*`のため、`chore: regenerate issues snapshot`のような
 
 **ダッシュボード側の設定変更のため、実施は平野さんの作業になる。**
 
-### コメント (1件)
+### コメント (2件)
 
 **retroeater** (2026-09-12):
 
@@ -225,6 +225,10 @@ Include pathsが`*`のため、`chore: regenerate issues snapshot`のような
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
+
+**retroeater** (2026-09-13):
+
+平野さんが Exclude paths に docs/** を設定済み（2026-09-12 申告）。設定値はセッションから検証できないため申告の記録として残す。以後 docs/** のみの push でビルドがスキップされない事象があれば再オープン
 
 ---
 
@@ -3937,7 +3941,7 @@ https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 ## #161 llms.txt の設置を検討する
 
-- 状態: OPEN / 作成: 2026-09-12
+- 状態: CLOSED (COMPLETED) / 作成: 2026-09-12 / クローズ: 2026-09-13
 - ラベル: 分野: SEO/AIO
 
 ### 本文
@@ -3946,7 +3950,7 @@ https://claude.ai/code/session_01Tp6w3RZZoBPCnAAaKchVtV
 
 SEO/AIO施策10件には**含めていない**。導入コストはほぼゼロだが、主要なAI検索が現時点で参照している証拠が弱いため。新サイトのビルド（#21）で自動生成できるなら「ついでに出す」程度でよい。判断の経緯を残すために起票。
 
-### コメント (3件)
+### コメント (4件)
 
 **retroeater** (2026-09-12):
 
@@ -3974,6 +3978,15 @@ SEO/AIO施策10件には**含めていない**。導入コストはほぼゼロ�
 robots.txtについても同じ原因で文字化けしている可能性があるが、Cloudflare AI Crawl Controlの管理robots.txtが前置される構成のため_headersの効き方が異なる可能性があり、今回は触らず別issueとして起票します。
 
 引き続き平野さんの本番確認待ちのため、このissueはまだクローズしません。
+
+**retroeater** (2026-09-13):
+
+本番 https://ryoei.pro/llms.txt を平野さんが目視確認し、文字化けが解消していることを確認しました（2026-09-12、スクリーンショットで確認済み）。
+
+- `_headers` での `Content-Type: text/plain; charset=utf-8` 上書きは、Cloudflare Workers の静的アセット配信に対して有効だった。代替案として温存していたBOM追加は不要だった
+- `llms.txt` は手書きの静的ファイル1枚のまま。生成スクリプトは持たない（#21の新サイトビルド側で自動生成する余地を残す判断は変更なし）
+
+クローズします。
 
 ---
 
